@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Luminary Labs — Dev Studio</title>
+    <meta
+      name="description"
+      content="Luminary Labs — Interactive development studio. We craft bold web experiences, apps, and emerging tech demos."
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <a href="index.html" class="brand" aria-label="Luminary Labs Home">
+          <span class="logo-spark" aria-hidden="true">✦</span>
+          Luminary Labs
+        </a>
+        <button
+          class="nav-toggle"
+          aria-expanded="false"
+          aria-controls="site-nav"
+        >
+          Menu
+        </button>
+        <nav id="site-nav" class="site-nav">
+          <a href="index.html" class="active">Home</a>
+          <a href="projects.html">Projects</a>
+          <a href="team.html">Meet the Team</a>
+          <a href="demo.html">Three.js Demo</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-inner">
+          <h1>
+            <span class="accent">Bold</span> interactive products that spark
+            delight
+          </h1>
+          <p>
+            We design and build dynamic web experiences, performance-focused
+            apps, and playful experiments that move audiences.
+          </p>
+          <div class="cta-row">
+            <a class="btn primary" href="projects.html">See All Projects</a>
+            <a class="btn ghost" href="demo.html">Play the Demo</a>
+          </div>
+        </div>
+        <div class="hero-bg" aria-hidden="true"></div>
+      </section>
+
+      <section class="featured">
+        <div class="container">
+          <header class="section-header">
+            <h2>Featured Projects</h2>
+            <p>A quick peek at some recent highlights.</p>
+          </header>
+          <div id="featured-grid" class="card-grid reveal"></div>
+        </div>
+      </section>
+
+      <section class="capabilities">
+        <div class="container">
+          <header class="section-header">
+            <h2>What we do</h2>
+            <p>
+              From brand sites to immersive prototypes, we bring ideas to life.
+            </p>
+          </header>
+          <div class="cap-grid">
+            <article class="cap-card reveal">
+              <h3>Websites</h3>
+              <p>
+                Accessible, SEO-savvy, and visually rich sites that perform.
+              </p>
+            </article>
+            <article class="cap-card reveal">
+              <h3>Apps</h3>
+              <p>Reliable frontends powered by pragmatic, secure backends.</p>
+            </article>
+            <article class="cap-card reveal">
+              <h3>Experiments</h3>
+              <p>
+                Prototypes and R&D to validate ideas and inspire stakeholders.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          © <span id="year"></span> Luminary Labs • Building delightful,
+          interactive products.
+        </p>
+      </div>
+    </footer>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/home.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>

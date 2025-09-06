@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projects — Luminary Labs</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <a href="index.html" class="brand"
+          ><span class="logo-spark">✦</span> Luminary Labs</a
+        >
+        <button
+          class="nav-toggle"
+          aria-expanded="false"
+          aria-controls="site-nav"
+        >
+          Menu
+        </button>
+        <nav id="site-nav" class="site-nav">
+          <a href="index.html">Home</a>
+          <a href="projects.html" class="active">Projects</a>
+          <a href="team.html">Meet the Team</a>
+          <a href="demo.html">Three.js Demo</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <h1>All Projects</h1>
+          <p>Browse our work across websites, apps, and experiments.</p>
+          <div class="filters" role="tablist" aria-label="Project filters">
+            <button
+              class="chip active"
+              data-filter="all"
+              role="tab"
+              aria-selected="true"
+            >
+              All
+            </button>
+            <button class="chip" data-filter="websites" role="tab">
+              Websites
+            </button>
+            <button class="chip" data-filter="apps" role="tab">Apps</button>
+            <button class="chip" data-filter="experiments" role="tab">
+              Experiments
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="projects-section">
+        <div class="container">
+          <div id="projects-grid" class="card-grid"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>© <span id="year"></span> Luminary Labs</p>
+      </div>
+    </footer>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/projects.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>

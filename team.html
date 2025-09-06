@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meet the Team — Luminary Labs</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <a href="index.html" class="brand"
+          ><span class="logo-spark">✦</span> Luminary Labs</a
+        >
+        <button
+          class="nav-toggle"
+          aria-expanded="false"
+          aria-controls="site-nav"
+        >
+          Menu
+        </button>
+        <nav id="site-nav" class="site-nav">
+          <a href="index.html">Home</a>
+          <a href="projects.html">Projects</a>
+          <a href="team.html" class="active">Meet the Team</a>
+          <a href="demo.html">Three.js Demo</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <h1>Meet the Team</h1>
+          <p>
+            We’re a multidisciplinary crew of designers, engineers, and
+            tinkerers.
+          </p>
+        </div>
+      </section>
+
+      <section class="team-grid-section">
+        <div class="container">
+          <div id="team-grid" class="team-grid"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>© <span id="year"></span> Luminary Labs</p>
+      </div>
+    </footer>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/team.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
