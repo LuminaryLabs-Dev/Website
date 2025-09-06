@@ -233,7 +233,7 @@ body {
 /* Page hero */
 .page-hero {
   padding: 36px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.06);
   background: linear-gradient(
     180deg,
     rgba(21, 26, 43, 0.6),
