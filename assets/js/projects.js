@@ -11,8 +11,15 @@
     for (const p of list) {
       const card = document.createElement("article");
       card.className = "card reveal";
+      let imgHtml = "";
+      if (p.slides && p.slides.length > 0) {
+        // Remove 'public/' prefix for web path
+        const imgSrc = p.slides[0].replace(/^public\//, "");
+        imgHtml = `<img src="${imgSrc}" alt="${p.title} preview" class="card-thumb" style="width:100%;max-height:140px;object-fit:cover;border-radius:10px 10px 0 0;" />`;
+      }
       card.innerHTML = `
         <div class="card-media">
+          ${imgHtml}
           <span class="badge">${p.type}</span>
         </div>
         <div class="card-body">

@@ -2,53 +2,29 @@
 
 const PROJECTS = [
   {
-    id: "p1",
-    title: "Aurora Commerce",
-    type: "websites",
-    tagline: "A vivid retail site with playful UI micro-interactions",
-    img: "",
-    url: "#",
+    id: "duke",
+    title: "Duke's Adventure",
+    type: "portfolio",
+    tagline: "A photo journey through DAHA events.",
+    slides: [
+      "public/PortfolioImages/DAHASept.png",
+      "public/PortfolioImages/DAHASept2.png",
+      "public/PortfolioImages/DAHASept3.png",
+      "public/PortfolioImages/DAHASept4.png"
+    ],
+    url: "#duke"
   },
   {
-    id: "p2",
-    title: "Nimbus Notes",
-    type: "apps",
-    tagline: "A fast notes app with offline sync and web workers",
-    img: "",
-    url: "#",
-  },
-  {
-    id: "p3",
-    title: "Photon Playground",
-    type: "experiments",
-    tagline: "WebGL shader toys exploring light and shadow",
-    img: "",
-    url: "#",
-  },
-  {
-    id: "p4",
-    title: "Helios Docs",
-    type: "websites",
-    tagline: "Docs site with search, versioning, and great DX",
-    img: "",
-    url: "#",
-  },
-  {
-    id: "p5",
-    title: "Orbit Tasks",
-    type: "apps",
-    tagline: "Realtime collaboration via CRDTs and websockets",
-    img: "",
-    url: "#",
-  },
-  {
-    id: "p6",
-    title: "Voxel Garden",
-    type: "experiments",
-    tagline: "Procedural terrain generation sandbox",
-    img: "",
-    url: "#",
-  },
+    id: "windrider",
+    title: "Wind Rider",
+    type: "portfolio",
+    tagline: "DG event highlights in photos.",
+    slides: [
+      "public/PortfolioImages/DGJuly.png",
+      "public/PortfolioImages/DGSept.png"
+    ],
+    url: "#windrider"
+  }
 ];
 
 const TEAM = [

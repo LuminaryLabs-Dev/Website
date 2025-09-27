@@ -22,6 +22,7 @@
         <nav id="site-nav" class="site-nav">
           <a href="index.html">Home</a>
           <a href="projects.html" class="active">Projects</a>
+          <a href="client-projects.html">Client Features</a>
           <a href="team.html">Meet the Team</a>
           <a href="demo.html">Three.js Demo</a>
         </nav>
@@ -32,30 +33,82 @@
       <section class="page-hero">
         <div class="container">
           <h1>All Projects</h1>
-          <p>Browse our work across websites, apps, and experiments.</p>
-          <div class="filters" role="tablist" aria-label="Project filters">
-            <button
-              class="chip active"
-              data-filter="all"
-              role="tab"
-              aria-selected="true"
-            >
-              All
-            </button>
-            <button class="chip" data-filter="websites" role="tab">
-              Websites
-            </button>
-            <button class="chip" data-filter="apps" role="tab">Apps</button>
-            <button class="chip" data-filter="experiments" role="tab">
-              Experiments
-            </button>
           </div>
         </div>
       </section>
 
       <section class="projects-section">
         <div class="container">
-          <div id="projects-grid" class="card-grid"></div>
+          <div class="project-slideshow-block">
+            <h2>Duke's Adventure</h2>
+            <div class="slideshow static-slideshow wide-slideshow" id="duke-slideshow">
+              <input type="radio" name="duke-slide" id="duke-slide1" checked>
+              <input type="radio" name="duke-slide" id="duke-slide2">
+              <input type="radio" name="duke-slide" id="duke-slide3">
+              <input type="radio" name="duke-slide" id="duke-slide4">
+              <div class="slides">
+                <div class="slide s1">
+                  <img src="public/PortfolioImages/DAHASept.png" alt="Duke's Adventure 1" />
+                  <div class="slide-caption">Wandering the meadows</div>
+                  <label class="arrow left" for="duke-slide4">&#8592;</label>
+                  <label class="arrow right" for="duke-slide2">&#8594;</label>
+                </div>
+                <div class="slide s2">
+                  <img src="public/PortfolioImages/DAHASept2.png" alt="Duke's Adventure 2" />
+                  <div class="slide-caption">A trip through the hills</div>
+                  <label class="arrow left" for="duke-slide1">&#8592;</label>
+                  <label class="arrow right" for="duke-slide3">&#8594;</label>
+                </div>
+                <div class="slide s3">
+                  <img src="public/PortfolioImages/DAHASept3.png" alt="Duke's Adventure 3" />
+                  <div class="slide-caption">Explore mystical forests and lakes</div>
+                  <label class="arrow left" for="duke-slide2">&#8592;</label>
+                  <label class="arrow right" for="duke-slide4">&#8594;</label>
+                </div>
+                <div class="slide s4">
+                  <img src="public/PortfolioImages/DAHASept4.png" alt="Duke's Adventure 4" />
+                  <div class="slide-caption">Duke always comes home</div>
+                  <label class="arrow left" for="duke-slide3">&#8592;</label>
+                  <label class="arrow right" for="duke-slide1">&#8594;</label>
+                </div>
+              </div>
+            </div>
+            <div class="project-description">
+              <h3>About the Game</h3>
+              <p>
+                <strong>Duke's Adventure</strong> is a whimsical exploration game where you guide Duke, a curious canine, through vibrant meadows, rolling hills, and mystical forests. Discover hidden secrets, meet quirky characters, and help Duke find his way home. The game blends relaxing exploration with light puzzle elements, all set in a beautifully stylized world.
+              </p>
+            </div>
+            </div>
+          </div>
+          <div class="project-slideshow-block">
+            <h2>Wind Rider</h2>
+            <div class="slideshow static-slideshow wide-slideshow" id="windrider-slideshow">
+              <input type="radio" name="windrider-slide" id="windrider-slide1" checked>
+              <input type="radio" name="windrider-slide" id="windrider-slide2">
+              <div class="slides">
+                <div class="slide s1">
+                  <img src="public/PortfolioImages/DGJuly.png" alt="Wind Rider 1" />
+                  <div class="slide-caption">Visit the famous driving range near the gazebo!</div>
+                  <label class="arrow left" for="windrider-slide2">&#8592;</label>
+                  <label class="arrow right" for="windrider-slide2">&#8594;</label>
+                </div>
+                <div class="slide s2">
+                  <img src="public/PortfolioImages/DGSept.png" alt="Wind Rider 2" />
+                  <div class="slide-caption">Observe spectacular views from great heights!</div>
+                  <label class="arrow left" for="windrider-slide1">&#8592;</label>
+                  <label class="arrow right" for="windrider-slide1">&#8594;</label>
+                </div>
+              </div>
+            </div>
+            <div class="project-description">
+              <h3>About the Game</h3>
+              <p>
+                <strong>Wind Rider</strong> is a disc golf experience at its core, but staged in a serene and atmospheric experience where you soar above breathtaking landscapes, gliding through clouds and exploring new heights. Master the winds, discover hidden locations, and enjoy the freedom of disc flight professionally, or casually.
+              </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
