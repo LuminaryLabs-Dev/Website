@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact — Luminary Labs</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <a href="index.html" class="brand" aria-label="Luminary Labs Home">
+          <img src="public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" style="height: 32px; width: 32px; vertical-align: middle; margin-right: 8px;" />
+          Luminary Labs
+        </a>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+        <nav id="site-nav" class="site-nav">
+          <a href="index.html">Home</a>
+          <a href="projects.html">Projects</a>
+          <a href="client-projects.html">Client Features</a>
+          <a href="team.html">Meet the Team</a>
+          <a href="demo.html">Three.js Demo</a>
+          <a href="contact.html" class="active">Contact</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <h1>Contact Us</h1>
+          <p>We'd love to hear from you! Please fill out the form below and we'll get back to you as soon as possible.</p>
+        </div>
+      </section>
+      <section class="contact-section">
+        <div class="container">
+          <form class="contact-form" action="https://formsubmit.co/crimson@luminarylabsllc.com" method="POST">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" required />
+
+            <label for="email">Your Email</label>
+            <input type="email" id="email" name="email" required />
+
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" required />
+
+            <label for="message">Description</label>
+            <textarea id="message" name="message" rows="6" required></textarea>
+
+            <!-- FormSubmit hidden fields for formatting and spam protection -->
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_subject" value="New Contact Form Submission from Luminary Labs">
+            <input type="hidden" name="_autoresponse" value="Thank you for contacting Luminary Labs! We have received your message and will get back to you soon.">
+            <input type="hidden" name="_captcha" value="false">
+
+            <button type="submit" class="btn primary">Send Message</button>
+          </form>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <p>© <span id="year"></span> Luminary Labs • Building delightful, interactive products.</p>
+      </div>
+    </footer>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>

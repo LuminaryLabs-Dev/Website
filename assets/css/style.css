@@ -1,3 +1,402 @@
+/* Contact form styles */
+.contact-section {
+  padding: 48px 0 64px 0;
+}
+.contact-form {
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--panel-2, #232323);
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+  padding: 36px 32px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.contact-form label {
+  font-weight: 600;
+  color: var(--accent, #7fffd4);
+  margin-bottom: 4px;
+}
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #181818;
+  color: var(--text, #f5f5f5);
+  font-size: 1em;
+  margin-bottom: 8px;
+  resize: vertical;
+}
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: 2px solid var(--accent, #7fffd4);
+  border-color: var(--accent, #7fffd4);
+}
+.contact-form button {
+  margin-top: 10px;
+  align-self: flex-end;
+}
+.mission-quote-left {
+  /* ...existing code... */
+}
+
+/* Stylize the mission quote scrollbar */
+.mission-quote-left::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+.mission-quote-left::-webkit-scrollbar-thumb {
+  background: var(--accent, #7fffd4);
+  border-radius: 6px;
+  min-height: 40px;
+  box-shadow: none;
+}
+.mission-quote-left::-webkit-scrollbar-track {
+  background: transparent;
+}
+.mission-quote-left {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent, #7fffd4) transparent;
+}
+
+/* Hide scrollbar by default, show on hover/scroll */
+.mission-quote-left::-webkit-scrollbar {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.mission-quote-left:hover::-webkit-scrollbar,
+.mission-quote-left:focus-within::-webkit-scrollbar {
+  opacity: 1;
+}
+.bg-video-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  overflow: hidden;
+  background: #111;
+}
+.bg-video-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.93;
+  transition: opacity 0.7s;
+}
+.mission-quote-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 38vw;
+  min-width: 320px;
+  max-width: 540px;
+  height: 100vh;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  pointer-events: none;
+  background: #000 !important;
+  box-shadow: 4px 0 32px rgba(0,0,0,0.22);
+  padding-top: 100px;
+  padding-bottom: 100px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.mission-quote-left {
+  background: none;
+  box-shadow: none;
+  border-left: 6px solid var(--accent, #7fffd4);
+  border-radius: 0 14px 14px 0;
+  padding: 0 1.5vw 0 1.5vw;
+  margin: 0;
+  max-width: 92%;
+  width: 100%;
+  font-size: clamp(0.85em, 1.25vw, 1.05em);
+  font-style: italic;
+  color: var(--text, #f5f5f5);
+  line-height: 1.35;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2em;
+  pointer-events: auto;
+  backdrop-filter: none;
+  justify-content: flex-start;
+  height: calc(100vh - 200px);
+  min-height: 0;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+/* Background video carousel for homepage */
+.bg-video-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  overflow: hidden;
+  background: #111;
+}
+.bg-video-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.93;
+  transition: opacity 0.7s;
+}
+
+/* Overlay quote box at bottom third */
+
+.mission-quote-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  background: none;
+}
+.mission-quote-centered {
+  margin: 0 auto;
+  background: #181818;
+  border-left: 6px solid var(--accent, #7fffd4);
+  border-radius: 0 18px 18px 0;
+  padding: 40px 48px 40px 44px;
+  max-width: 900px;
+  font-size: 1.25em;
+  font-style: italic;
+  color: var(--text, #f5f5f5);
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.2em;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+}
+.mission-quote-centered .quote-mark {
+  font-size: 1.5em;
+  color: var(--accent, #7fffd4);
+  font-family: serif;
+  font-style: normal;
+  line-height: 1;
+  vertical-align: top;
+}
+.mission-quote-centered .quote-text {
+  display: inline;
+  font-style: italic;
+}
+.mission-quote .quote-mark {
+  font-size: 1.5em;
+  color: var(--accent, #7fffd4);
+  font-family: serif;
+  font-style: normal;
+  line-height: 1;
+  vertical-align: top;
+}
+.mission-quote .quote-text {
+  display: inline;
+  font-style: italic;
+}
+/* Mission statement quote style for homepage */
+.mission-quote-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  background: none;
+}
+.mission-quote-section .container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.mission-quote {
+  position: relative;
+  font-size: 2.1em;
+  font-style: italic;
+  color: var(--text, #f5f5f5);
+  background: none;
+  padding: 36px 48px 36px 44px;
+  border-left: 6px solid var(--accent, #7fffd4);
+  border-radius: 0 18px 18px 0;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  line-height: 1.4;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.2em;
+}
+.mission-quote .quote-mark {
+  font-size: 1.5em;
+  color: var(--accent, #7fffd4);
+  font-family: serif;
+  font-style: normal;
+  line-height: 1;
+  vertical-align: top;
+}
+.mission-quote .quote-text {
+  display: inline;
+  font-style: italic;
+}
+/* Brand logo and text size adjustment */
+.brand {
+  font-size: 1.45em;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-logo {
+  height: 40px !important;
+  width: 40px !important;
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 44px;
+  max-height: 44px;
+}
+/* Team biopics with popup descriptors */
+.biopics-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 36px;
+}
+.biopic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 140px;
+  position: relative;
+}
+.biopic-img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--accent, #7fffd4);
+  background: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2em;
+  color: #fff;
+  font-weight: bold;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+.biopic-placeholder {
+  background: #444;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2em;
+  font-weight: bold;
+}
+.biopic-name {
+  text-align: center;
+  font-size: 1.08em;
+  margin-top: 0;
+  color: var(--text);
+  font-weight: 600;
+}
+.biopic-role {
+  text-align: center;
+  font-size: 0.98em;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.biopic-popup-content {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 120px;
+  transform: translateX(-50%);
+  min-width: 220px;
+  max-width: 320px;
+  background: var(--panel-2, #232323);
+  color: var(--text);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  padding: 18px 22px;
+  z-index: 10;
+  font-size: 1em;
+  line-height: 1.5;
+  pointer-events: none;
+}
+.biopic-popup:hover .biopic-popup-content,
+.biopic-popup:focus-within .biopic-popup-content {
+  display: block;
+}
+/* Biopics section for homepage */
+.biopics-section {
+  margin: 64px 0 32px 0;
+}
+.biopics-section .section-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.biopics-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 36px;
+}
+.biopic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 120px;
+}
+.biopic-img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--accent, #7fffd4);
+  background: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2em;
+  color: #fff;
+  font-weight: bold;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+.biopic-placeholder {
+  background: #444;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2em;
+  font-weight: bold;
+}
+.biopic-name {
+  text-align: center;
+  font-size: 1.08em;
+  margin-top: 0;
+  color: var(--text);
+}
 .client-projects-grid {
   display: flex;
   flex-direction: column;
