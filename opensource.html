@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Open Source — Nexus Suite — Luminary Labs</title>
+    <meta
+      name="description"
+      content="Explore the Nexus open-source suite by Luminary Labs — Nexus Engine, Nexus AR Dashboard, and NexusCentral. Free, interoperable tools for developers."
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <a href="index.html" class="brand" aria-label="Luminary Labs Home">
+          <img src="public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" />
+          Luminary Labs
+        </a>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+        <nav id="site-nav" class="site-nav">
+          <a href="index.html">Home</a>
+          <a href="solutions.html">Solutions</a>
+          <a href="opensource.html" class="active">Open Source</a>
+          <a href="services.html">Services</a>
+          <a href="portfolio.html">Portfolio</a>
+          <a href="team.html">Team</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- ===== PAGE HERO ===== -->
+      <section class="page-hero">
+        <div class="container">
+          <div class="oss-badge" style="margin-bottom: 16px;">💚 Donationware — Free & Open Source</div>
+          <h1>Nexus Open Source Suite</h1>
+          <p>Interoperable, modular tools for game development, AI orchestration, and augmented reality — built in the open, for the community.</p>
+        </div>
+      </section>
+
+      <!-- ===== NEXUS ENGINE ===== -->
+      <section id="nexus-engine">
+        <div class="container">
+          <div class="flagship-inner">
+            <div class="flagship-content reveal">
+              <span class="section-label">⚙️ Flagship Engine</span>
+              <h2>Nexus Engine</h2>
+              <span class="oss-status pre-release" style="margin-bottom: 20px; display: inline-flex;">Pre-Release · Q3 2026 Target</span>
+              <p>
+                The Nexus Engine is a <strong style="color: var(--text);">standalone, interoperable orchestration engine</strong>
+                designed for modular game development and AI logic pipelines. It operates on the principle that logic
+                is a sequence of asynchronous phases, decoupled from the underlying rendering or physics runtimes.
+              </p>
+              <p>
+                Unlike traditional game engines, Nexus treats <em>sequencing as the core engine</em> and rendering/logic-backends
+                as swappable modules — providing unprecedented portability across Unity, Dart CLI, and future C++ environments.
+              </p>
+
+              <div class="arch-detail">
+                <h4>🧬 Core Architecture</h4>
+                <div class="arch-grid">
+                  <div class="arch-item">
+                    <h5>Phase-Driven Lifecycle</h5>
+                    <p>Idle → Initialize → Running → Finished → Unload → Unloaded — deterministic execution on any platform</p>
+                  </div>
+                  <div class="arch-item">
+                    <h5>Hierarchical Flow</h5>
+                    <p>Logic is composed, not inherited. Complexity arises from parent-child node arrangement</p>
+                  </div>
+                  <div class="arch-item">
+                    <h5>Modular Handlers</h5>
+                    <p>Graphics, AI, audio — each capability is an encapsulated module the engine orchestrates</p>
+                  </div>
+                  <div class="arch-item">
+                    <h5>Standalone Runtime</h5>
+                    <p>Runs in any environment with a C# or Dart bridge, with future C++ cores planned</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="arch-detail">
+                <h4>⚡ NexusTask System</h4>
+                <div class="arch-grid">
+                  <div class="arch-item">
+                    <h5>Zero-Allocation Async</h5>
+                    <p>ValueTask-like struct-based awaitables prevent GC pressure in low-latency game loops</p>
+                  </div>
+                  <div class="arch-item">
+                    <h5>Compiler Integration</h5>
+                    <p>[AsyncMethodBuilder] provides native async/await syntax for all handler lifecycle methods</p>
+                  </div>
+                  <div class="arch-item">
+                    <h5>Platform Agnostic</h5>
+                    <p>Portable across .NET environments and mirrored in the Dart LinearRunner implementation</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tech-tags" style="margin-top: 20px;">
+                <span class="tech-tag">C#</span>
+                <span class="tech-tag">Dart</span>
+                <span class="tech-tag">Unity</span>
+                <span class="tech-tag">ValueTask</span>
+                <span class="tech-tag">JSON Sequences</span>
+                <span class="tech-tag">WebAssembly (Planned)</span>
+              </div>
+            </div>
+
+            <div class="flagship-media reveal reveal-delay-2">
+              <!-- PLACEHOLDER: Nexus Engine architecture diagram -->
+              <div class="placeholder-media" data-placeholder="nexus-engine-architecture" style="min-height: 450px;">
+                <span class="placeholder-label">📐 Nexus Engine — Sequence Hierarchy Diagram</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="section-divider" />
+
+      <!-- ===== NEXUS MODULE SYSTEM ===== -->
+      <section id="nexus-modules">
+        <div class="container">
+          <div class="section-header center reveal">
+            <span class="section-label">🧩 Plugin Architecture</span>
+            <h2>Module System</h2>
+            <p>The engine orchestrates — modules provide the capabilities.</p>
+          </div>
+
+          <div class="cap-grid">
+            <div class="cap-card reveal reveal-delay-1">
+              <span class="cap-icon">🎮</span>
+              <h3>Graphics Module</h3>
+              <p>Currently Unity-based. Handles mesh rendering, materials, lighting sequences, and visual effects orchestration.</p>
+              <div class="tech-tags">
+                <span class="tech-tag">Unity</span>
+                <span class="tech-tag">Godot (Planned)</span>
+              </div>
+            </div>
+            <div class="cap-card reveal reveal-delay-2">
+              <span class="cap-icon">🤖</span>
+              <h3>AI Logic Module</h3>
+              <p>Dart-based module handling GGUF model chaining and "Progressive Prompt" pipelines via the Seq-SLM prototype.</p>
+              <div class="tech-tags">
+                <span class="tech-tag">Dart</span>
+                <span class="tech-tag">GGUF</span>
+                <span class="tech-tag">Seq-SLM</span>
+              </div>
+            </div>
+            <div class="cap-card reveal reveal-delay-3">
+              <span class="cap-icon">🔊</span>
+              <h3>Media Module</h3>
+              <p>Handles spatial audio positioning, cinematic orchestration, and media playback synchronization.</p>
+              <div class="tech-tags">
+                <span class="tech-tag">Spatial Audio</span>
+                <span class="tech-tag">Cinematic</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="section-divider" />
+
+      <!-- ===== NEXUS AR DASHBOARD ===== -->
+      <section id="nexus-ar">
+        <div class="container">
+          <div class="flagship-inner" style="grid-template-columns: 1fr 1.2fr;">
+            <div class="flagship-media reveal">
+              <!-- PLACEHOLDER: Nexus AR Dashboard screenshot -->
+              <div class="placeholder-media" data-placeholder="nexus-ar-screenshot" style="min-height: 350px;">
+                <span class="placeholder-label">📷 Nexus AR Dashboard Screenshot</span>
+              </div>
+            </div>
+            <div class="flagship-content reveal reveal-delay-2">
+              <span class="section-label">📱 AR Creation</span>
+              <h2>Nexus AR Dashboard</h2>
+              <span class="oss-status in-dev" style="margin-bottom: 20px; display: inline-flex;">In Development</span>
+              <p>
+                Create easy augmented reality experiences with a visual dashboard. The Nexus AR Dashboard
+                is designed for <strong style="color: var(--text);">rapid prototyping</strong> — enabling creators
+                to build, preview, and deploy AR content without deep technical expertise.
+              </p>
+              <ul class="feature-list">
+                <li>Visual AR experience builder with drag-and-drop interface</li>
+                <li>Live preview on device during development</li>
+                <li>Cross-platform export for mobile and headset AR</li>
+                <li>Integration with Nexus Engine for advanced sequencing</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="section-divider" />
+
+      <!-- ===== NEXUS CENTRAL ===== -->
+      <section id="nexus-central">
+        <div class="container">
+          <div class="flagship-inner">
+            <div class="flagship-content reveal">
+              <span class="section-label">🧠 Agentic AI Platform</span>
+              <h2>NexusCentral</h2>
+              <span class="oss-status pre-release" style="margin-bottom: 20px; display: inline-flex;">Triceratops RC · v1.0 Target Nov 2026</span>
+              <p>
+                NexusCentral is a robust, language-agnostic <strong style="color: var(--text);">Platform for Agentic Orchestration</strong>.
+                Moving beyond simple model runners, NexusCentral provides high-performance, local-first AI capabilities unified
+                by a standardized Tool Namespace Contract.
+              </p>
+
+              <div class="arch-detail">
+                <h4>🏛️ Four-Pillar Architecture</h4>
+                <div class="arch-grid">
+                  <div class="arch-item">
+                    <h5>Desktop (Avalonia)</h5>
+                    <p>Primary orchestrator and user-facing shell. MVVM UI, model management, workflow runs, automation</p>
+                  </div>
+                  <div class="arch-item">
+                    <h5>Runtime (Rust)</h5>
+                    <p>High-performance native sidecar. Memory-safe inference with zero-dependency requirements</p>
+                  </div>
+                  <div class="arch-item">
+                    <h5>Interface (Python)</h5>
+                    <p>First-class CLI + automation surface. Script complex agent behaviors without the GUI</p>
+                  </div>
+                  <div class="arch-item">
+                    <h5>Web (Next.js)</h5>
+                    <p>Lightweight cross-platform web lab. Beta features via local Integration API</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="arch-detail">
+                <h4>🔌 4-Endpoint Protocol</h4>
+                <div class="arch-grid">
+                  <div class="arch-item">
+                    <h5>/Instruct</h5>
+                    <p>General tasks and code generation</p>
+                  </div>
+                  <div class="arch-item">
+                    <h5>/thinking</h5>
+                    <p>High-hop reasoning and planning</p>
+                  </div>
+                  <div class="arch-item">
+                    <h5>/vision</h5>
+                    <p>Multimodal analysis and UI automation</p>
+                  </div>
+                  <div class="arch-item">
+                    <h5>/audio</h5>
+                    <p>TTS/STT for accessible interfaces</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tech-tags" style="margin-top: 20px;">
+                <span class="tech-tag">Rust</span>
+                <span class="tech-tag">C# / Avalonia</span>
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">Next.js</span>
+                <span class="tech-tag">GGUF</span>
+                <span class="tech-tag">YAML Workflows</span>
+              </div>
+            </div>
+
+            <div class="flagship-media reveal reveal-delay-2">
+              <!-- PLACEHOLDER: NexusCentral UI screenshot or architecture diagram -->
+              <div class="placeholder-media" data-placeholder="nexuscentral-screenshot" style="min-height: 500px;">
+                <span class="placeholder-label">📷 NexusCentral — Desktop Shell Screenshot</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="section-divider" />
+
+      <!-- ===== ROADMAP TIMELINE ===== -->
+      <section id="nexus-roadmap">
+        <div class="container-narrow">
+          <div class="section-header center reveal">
+            <span class="section-label">📅 Combined Roadmap</span>
+            <h2>Nexus Suite Milestones</h2>
+            <p>Key milestones across all Nexus open-source products.</p>
+          </div>
+
+          <div class="timeline reveal">
+            <div class="timeline-item current">
+              <div class="timeline-dot"></div>
+              <span class="timeline-date">April 2026</span>
+              <h4>Nexus Engine — Core Decoupling</h4>
+              <p>Abstracting NexusSequence from MonoBehaviour for headless runs. Standardizing the NexusTask API.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <span class="timeline-date">May 2026</span>
+              <h4>NexusCentral — Phase 3 Integration Rollout</h4>
+              <p>Mutations integration for Slack, Trello, Google Calendar, GitHub, Azure DevOps, and Jira.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <span class="timeline-date">July 2026</span>
+              <h4>NexusCentral — Phase 4 Vision/Thinking</h4>
+              <p>Vision and thinking endpoint integration for multimodal AI analysis.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <span class="timeline-date">Q3 2026</span>
+              <h4>Nexus Engine — Open Source Launch</h4>
+              <p>Permissive open-source license. Public repository with core engine and base modules. AI-first documentation.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <span class="timeline-date">September 2026</span>
+              <h4>NexusCentral — Nexus Lab Feature Parity</h4>
+              <p>Web lab reaches feature parity with the desktop application.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <span class="timeline-date">November 2026</span>
+              <h4>NexusCentral — Stable v1.0 (Triceratops)</h4>
+              <p>First stable release of the full platform.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <span class="timeline-date">December 2026</span>
+              <h4>LuminaryLabs Suite SDK V1</h4>
+              <p>Unified SDK for building on top of the Nexus ecosystem.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <span class="timeline-date">2027+</span>
+              <h4>Modular Ecosystem Expansion</h4>
+              <p>Godot and WebAssembly runtime modules. Orchestrator Pattern for distributed multiplayer backend sequences.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CTA ===== -->
+      <section class="cta-banner">
+        <h2>Built in the Open</h2>
+        <p>All Nexus products are donationware. Free to use, free to fork, free to build on.</p>
+        <div class="cta-row">
+          <a href="contact.html" class="btn primary" id="cta-oss-contribute">Get Involved</a>
+          <a href="index.html" class="btn ghost" id="cta-oss-home">Back to Home</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>© <span id="year"></span> Luminary Labs LLC — AI-Accelerated Software Development</p>
+        <div class="footer-links">
+          <a href="opensource.html">Open Source</a>
+          <a href="services.html">Services</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>

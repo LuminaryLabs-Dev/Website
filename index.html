@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Luminary Labs — Dev Studio</title>
+    <title>Luminary Labs — AI-Accelerated Software Development</title>
     <meta
       name="description"
-      content="Luminary Labs — Interactive development studio. We craft bold web experiences, apps, and emerging tech demos."
+      content="Luminary Labs is an AI-accelerated software development studio specializing in XR, AI integration, and full-stack web applications for B2B clients."
     />
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
@@ -14,50 +14,256 @@
     <header class="site-header">
       <div class="container nav">
         <a href="index.html" class="brand" aria-label="Luminary Labs Home">
-          <img src="/public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" style="height: 32px; width: 32px; vertical-align: middle; margin-right: 8px;" />
+          <img src="public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" />
           Luminary Labs
         </a>
-        <button
-          class="nav-toggle"
-          aria-expanded="false"
-          aria-controls="site-nav"
-        >
-          Menu
-        </button>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
         <nav id="site-nav" class="site-nav">
           <a href="index.html" class="active">Home</a>
-          <a href="projects.html">Projects</a>
-          <a href="client-projects.html">Client Features</a>
-          <a href="team.html">Meet the Team</a>
-          <a href="demo.html">Three.js Demo</a>
+          <a href="solutions.html">Solutions</a>
+          <a href="opensource.html">Open Source</a>
+          <a href="services.html">Services</a>
+          <a href="portfolio.html">Portfolio</a>
+          <a href="team.html">Team</a>
           <a href="contact.html">Contact</a>
         </nav>
       </div>
     </header>
 
-
     <main>
-      <div class="bg-video-wrap"></div>
-      <section class="mission-quote-section mission-quote-overlay">
-        <blockquote class="mission-quote mission-quote-left">
-          <span class="quote-mark">“</span>
-          <span class="quote-text"><em>Luminary Labs LLC transforms visionary concepts into reality by developing advanced XR and Desktop Applications for local and remote partners. We achieve market-leading efficiency by strategically integrating AI and automation into all workflows, while simultaneously fostering a culture built on equity, continuous education, and authentic interpersonal relationships. We eliminate hierarchy to empower every collaborator, relentlessly pushing the limits of existing technology to create the future.</em></span>
-          <span class="quote-mark">”</span>
-        </blockquote>
+      <!-- ===== HERO ===== -->
+      <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="container hero-inner">
+          <span class="hero-badge">
+            <span class="pulse"></span>
+            AI-Accelerated Dev Studio
+          </span>
+          <h1>
+            Software That<br />
+            <span class="gradient-text">Makes You Money</span>
+          </h1>
+          <p class="hero-sub">
+            We build XR experiences, AI-integrated applications, and full-stack web products for businesses that need to ship fast and scale smart. From MVP to production — accelerated by AI at every step.
+          </p>
+          <div class="cta-row">
+            <a href="solutions.html" class="btn primary" id="cta-solutions">Explore Solutions</a>
+            <a href="services.html" class="btn secondary" id="cta-hire">Hire Us</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== FLAGSHIP: PROJECT ARROWHEAD ===== -->
+      <section class="flagship-banner" id="arrowhead-preview">
+        <div class="container flagship-inner">
+          <div class="flagship-content reveal">
+            <span class="status-badge">
+              <span class="pulse"></span>
+              Approaching Production
+            </span>
+            <h2>Project Arrowhead</h2>
+            <p>
+              A revolutionary XR marketplace and MDM-Lite service built for the Steam Frame ecosystem. Connecting vendors and end-users through a unified platform — with content management, subscription services, and enterprise-grade device orchestration.
+            </p>
+            <div class="cta-row">
+              <a href="solutions.html#arrowhead" class="btn primary sm" id="cta-arrowhead">Learn More</a>
+              <a href="contact.html" class="btn ghost sm" id="cta-arrowhead-contact">Partner With Us</a>
+            </div>
+          </div>
+          <div class="flagship-media reveal reveal-delay-2">
+            <!-- PLACEHOLDER: Arrowhead/Agora hero concept — XR marketplace visualization -->
+            <div class="placeholder-media" data-placeholder="arrowhead-hero-concept">
+              <span class="placeholder-label">📷 Arrowhead / Agora — XR Marketplace Concept</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="section-divider" />
+
+      <!-- ===== CORE CAPABILITIES ===== -->
+      <section id="capabilities">
+        <div class="container">
+          <div class="section-header center reveal">
+            <span class="section-label">What We Build</span>
+            <h2>Core Capabilities</h2>
+            <p>We specialize in the technologies that move the needle for B2B clients.</p>
+          </div>
+          <div class="cap-grid">
+            <div class="cap-card reveal reveal-delay-1">
+              <span class="cap-icon">🥽</span>
+              <h3>XR & Spatial Computing</h3>
+              <p>Quest, Steam Frame, WebXR — we build immersive applications from prototype to published product across every major platform.</p>
+            </div>
+            <div class="cap-card reveal reveal-delay-2">
+              <span class="cap-icon">🤖</span>
+              <h3>AI Integration</h3>
+              <p>Local GGUF models, cloud APIs, agentic pipelines — we embed AI into your product so it actually adds value, not just buzzwords.</p>
+            </div>
+            <div class="cap-card reveal reveal-delay-3">
+              <span class="cap-icon">🌐</span>
+              <h3>Full-Stack Web & Apps</h3>
+              <p>From HTML5 embeddable games to backend-integrated web apps. Rapid MVPs delivered in 1-2 weeks, ready to pitch or deploy.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="section-divider" />
+
+      <!-- ===== OPEN SOURCE SPOTLIGHT ===== -->
+      <section id="oss-spotlight">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="section-label">Open Source</span>
+            <h2>The Nexus Suite</h2>
+            <p>Interoperable, modular tools for developers — free and open source.</p>
+          </div>
+          <div class="oss-badge reveal">💚 Donationware</div>
+          <div class="oss-grid">
+            <div class="oss-card reveal reveal-delay-1">
+              <span class="oss-icon">⚙️</span>
+              <h3>Nexus Engine</h3>
+              <span class="oss-status pre-release">Pre-Release · Q3 2026</span>
+              <p>Standalone orchestration engine for modular game development and AI logic pipelines. Phase-driven, hierarchical sequencing across C# and Dart runtimes.</p>
+              <div class="tech-tags">
+                <span class="tech-tag">C#</span>
+                <span class="tech-tag">Dart</span>
+                <span class="tech-tag">Unity</span>
+              </div>
+            </div>
+            <div class="oss-card reveal reveal-delay-2">
+              <span class="oss-icon">📱</span>
+              <h3>Nexus AR Dashboard</h3>
+              <span class="oss-status in-dev">In Development</span>
+              <p>Visual dashboard for creating easy AR experiences. Rapid prototyping and cross-platform export for augmented reality content.</p>
+              <div class="tech-tags">
+                <span class="tech-tag">AR</span>
+                <span class="tech-tag">WebXR</span>
+              </div>
+            </div>
+            <div class="oss-card reveal reveal-delay-3">
+              <span class="oss-icon">🧠</span>
+              <h3>NexusCentral</h3>
+              <span class="oss-status pre-release">Triceratops RC</span>
+              <p>Platform for agentic orchestration. Desktop shell, Rust runtime, Python CLI, and web lab — unified by a tool namespace contract for local-first AI.</p>
+              <div class="tech-tags">
+                <span class="tech-tag">Rust</span>
+                <span class="tech-tag">Avalonia</span>
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">Next.js</span>
+              </div>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 40px;" class="reveal">
+            <a href="opensource.html" class="btn secondary" id="cta-oss">Explore Open Source →</a>
+          </div>
+        </div>
+      </section>
+
+      <hr class="section-divider" />
+
+      <!-- ===== ACTIVE CLIENT WORK ===== -->
+      <section id="active-work">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="section-label">Client Work</span>
+            <h2>Active Projects</h2>
+            <p>Current engagements across XR, IoT, and spatial computing.</p>
+          </div>
+          <div class="card-grid">
+            <article class="card reveal reveal-delay-1">
+              <div class="card-media">
+                <!-- PLACEHOLDER: Vending Backpack product photo -->
+                <div class="placeholder-media" data-placeholder="vending-backpack" style="aspect-ratio:16/9; border-radius:0; border:none;">
+                  <span class="placeholder-label">📷 Vending Backpack Product</span>
+                </div>
+                <span class="badge"><span class="status-dot gaining"></span> Gaining</span>
+              </div>
+              <div class="card-body">
+                <h3 class="card-title">Vending Backpack</h3>
+                <p class="card-sub">IoT-integrated vending solutions with Aldervon Systems. Subscription-based revenue model with monthly recurring income per deployed machine.</p>
+              </div>
+            </article>
+            <article class="card reveal reveal-delay-2">
+              <div class="card-media">
+                <img src="public/PortfolioImages/MuseumMultiverse.png" alt="Museum Multiverse — Quest Store VR Experience" />
+                <span class="badge"><span class="status-dot active"></span> Active</span>
+              </div>
+              <div class="card-body">
+                <h3 class="card-title">Museum Multiverse</h3>
+                <p class="card-sub">Published on Quest Store. A third-person VR experience with MadeInBrooklynGames — ongoing milestone-based development.</p>
+              </div>
+            </article>
+            <article class="card reveal reveal-delay-3">
+              <div class="card-media">
+                <!-- PLACEHOLDER: Westfield Spatial XR concept -->
+                <div class="placeholder-media" data-placeholder="westfield-spatial" style="aspect-ratio:16/9; border-radius:0; border:none;">
+                  <span class="placeholder-label">📷 Westfield Spatial XR</span>
+                </div>
+                <span class="badge"><span class="status-dot cold"></span> Opportunity</span>
+              </div>
+              <div class="card-body">
+                <h3 class="card-title">Westfield Spatial XR</h3>
+                <p class="card-sub">Spatial XR experience for retail environments with Wooly Studios. Leveraging new SLAM technology for competitive pricing.</p>
+              </div>
+            </article>
+          </div>
+          <div style="text-align: center; margin-top: 40px;" class="reveal">
+            <a href="portfolio.html" class="btn ghost" id="cta-portfolio">View Full Portfolio →</a>
+          </div>
+        </div>
+      </section>
+
+      <hr class="section-divider" />
+
+      <!-- ===== STATS BAR ===== -->
+      <section id="stats">
+        <div class="container">
+          <div class="stats-bar">
+            <div class="stat-item reveal reveal-delay-1">
+              <span class="stat-number">4+</span>
+              <span class="stat-label">Active Projects</span>
+            </div>
+            <div class="stat-item reveal reveal-delay-2">
+              <span class="stat-number">✓</span>
+              <span class="stat-label">Published on Quest Store</span>
+            </div>
+            <div class="stat-item reveal reveal-delay-3">
+              <span class="stat-number">3</span>
+              <span class="stat-label">Open Source Products</span>
+            </div>
+            <div class="stat-item reveal reveal-delay-4">
+              <span class="stat-number">B2B</span>
+              <span class="stat-label">Enterprise Focus</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CTA BANNER ===== -->
+      <section class="cta-banner" id="cta-bottom">
+        <h2>Ready to Build Something?</h2>
+        <p>From $750 portfolio setups to $4,000 XR apps — we ship fast and we ship quality.</p>
+        <div class="cta-row">
+          <a href="services.html" class="btn primary" id="cta-services-bottom">View Pricing</a>
+          <a href="contact.html" class="btn ghost" id="cta-contact-bottom">Get In Touch</a>
+        </div>
       </section>
     </main>
 
     <footer class="site-footer">
       <div class="container">
-        <p>
-          © <span id="year"></span> Luminary Labs • Building delightful,
-          interactive products.
-        </p>
+        <p>© <span id="year"></span> Luminary Labs LLC — AI-Accelerated Software Development</p>
+        <div class="footer-links">
+          <a href="opensource.html">Open Source</a>
+          <a href="services.html">Services</a>
+          <a href="contact.html">Contact</a>
+        </div>
       </div>
     </footer>
 
-  <script src="assets/js/data.js"></script>
-  <script src="assets/js/home-bg-videos.js"></script>
-  <script src="assets/js/main.js"></script>
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/main.js"></script>
   </body>
 </html>

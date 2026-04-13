@@ -4,102 +4,140 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Meet the Team — Luminary Labs</title>
+    <meta
+      name="description"
+      content="Meet the Luminary Labs team — a multidisciplinary crew of developers, designers, and 3D artists building AI-accelerated XR and web experiences."
+    />
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
   <body>
     <header class="site-header">
       <div class="container nav">
-        <a href="index.html" class="brand">
-          <img src="/public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" style="height: 32px; width: 32px; vertical-align: middle; margin-right: 8px;" />
+        <a href="index.html" class="brand" aria-label="Luminary Labs Home">
+          <img src="public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" />
           Luminary Labs
         </a>
-        <button
-          class="nav-toggle"
-          aria-expanded="false"
-          aria-controls="site-nav"
-        >
-          Menu
-        </button>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
         <nav id="site-nav" class="site-nav">
           <a href="index.html">Home</a>
-          <a href="projects.html">Projects</a>
-          <a href="client-projects.html">Client Features</a>
-          <a href="team.html" class="active">Meet the Team</a>
-          <a href="demo.html">Three.js Demo</a>
+          <a href="solutions.html">Solutions</a>
+          <a href="opensource.html">Open Source</a>
+          <a href="services.html">Services</a>
+          <a href="portfolio.html">Portfolio</a>
+          <a href="team.html" class="active">Team</a>
           <a href="contact.html">Contact</a>
         </nav>
       </div>
     </header>
 
     <main>
-
+      <!-- ===== PAGE HERO ===== -->
       <section class="page-hero">
         <div class="container">
           <h1>Meet the Team</h1>
           <p>
-            Luminary Labs is powered by a passionate and skilled team dedicated to crafting innovative digital experiences. Our multidisciplinary crew of designers, engineers, and tinkerers work collaboratively to bring bold ideas to life, ensuring every project we undertake is infused with creativity, technical excellence, and a commitment to quality. 
+            Luminary Labs is powered by a passionate and skilled team dedicated to crafting innovative digital experiences.
+            Our multidisciplinary crew of designers, engineers, and artists work collaboratively to bring bold ideas to life —
+            with AI-acceleration at every step.
           </p>
         </div>
       </section>
 
-
+      <!-- ===== TEAM GRID ===== -->
       <section class="team-grid-section">
         <div class="container">
-          <h2 class="section-header">Meet the Team</h2>
+          <div class="section-header center reveal">
+            <span class="section-label">Our People</span>
+            <h2>The Team</h2>
+          </div>
+
           <div class="biopics-grid">
-            <div class="biopic biopic-popup">
-              <img src="public/BioPics/Angel.jpeg" alt="Angel Berger" class="biopic-img" />
+            <!-- Angel -->
+            <div class="biopic reveal reveal-delay-1" id="team-angel">
+              <img src="public/BioPics/Angel.jpeg" alt="Angel Berger — CEO" class="biopic-img" />
               <div class="biopic-name">Angel Berger</div>
               <div class="biopic-role">She/They &mdash; CEO</div>
               <div class="biopic-popup-content">
-                Angel is our approachable and pragmatic leader in executive operations at Luminary Labs. They keep the ship running smoothly and make sure our clients always receive the results they are looking for.
+                Angel is our approachable and pragmatic leader in executive operations at Luminary Labs.
+                They keep the ship running smoothly and make sure our clients always receive the results
+                they are looking for.
               </div>
             </div>
-            <div class="biopic biopic-popup">
-              <img src="public/BioPics/Simon.jpeg" alt="Simon Swartout" class="biopic-img" />
+
+            <!-- Simon -->
+            <div class="biopic reveal reveal-delay-2" id="team-simon">
+              <img src="public/BioPics/Simon.jpeg" alt="Simon Swartout — CVO" class="biopic-img" />
               <div class="biopic-name">Simon Swartout</div>
               <div class="biopic-role">He/Him &mdash; CVO</div>
               <div class="biopic-popup-content">
-                Simon is the Chief Vision Officer of Luminary Labs and a leader developer on the team. The role of Chief Vision Officer was invented to make sure that Luminary Labs never waivers from its mission statement and that the company's interpersonal connections remain strong.
+                Simon is the Chief Vision Officer of Luminary Labs and a lead developer on the team.
+                The role of Chief Vision Officer was invented to make sure that Luminary Labs never
+                waivers from its mission statement and that the company's interpersonal connections remain strong.
               </div>
             </div>
-            <div class="biopic biopic-popup">
-              <img src="public/BioPics/Crimson.jpg" alt="Crimson Wheeler" class="biopic-img" />
+
+            <!-- Crimson -->
+            <div class="biopic reveal reveal-delay-3" id="team-crimson">
+              <img src="public/BioPics/Crimson.jpg" alt="Crimson Wheeler — CTO" class="biopic-img" />
               <div class="biopic-name">Crimson Wheeler</div>
               <div class="biopic-role">He/Him &mdash; CTO</div>
               <div class="biopic-popup-content">
-                Crimson is the chief technical officer of Luminary Labs LLC and therefore heads our technical operations. Our backend software pipeline is managed by Crimson, as he doubles as our studio architect. Crimson plays a pivotal role in automating studio operations and integrating AI into our workflows.
+                Crimson is the chief technical officer of Luminary Labs LLC and therefore heads our
+                technical operations. Our backend software pipeline is managed by Crimson, as he doubles
+                as our studio architect. Crimson plays a pivotal role in automating studio operations
+                and integrating AI into our workflows.
               </div>
             </div>
-            <div class="biopic biopic-popup">
-              <div class="biopic-img biopic-placeholder">RM</div>
-              <div class="biopic-name">Roy Mcgill</div>
-              <div class="biopic-role">He/Him &mdash; 3D Expert/Digital Twin Expert</div>
+
+            <!-- Roy -->
+            <div class="biopic reveal reveal-delay-4" id="team-roy">
+              <div class="biopic-placeholder">RM</div>
+              <div class="biopic-name">Roy McGill</div>
+              <div class="biopic-role">He/Him &mdash; 3D Expert / Digital Twin</div>
               <div class="biopic-popup-content">
-                Roy McGill specializes in the creation of digital twins and a vast variety of 3D models. He is one of our primary artists and has participated in many studio projects.
+                Roy McGill specializes in the creation of digital twins and a vast variety of 3D models.
+                He is one of our primary artists and has participated in many studio projects.
               </div>
             </div>
-            <div class="biopic biopic-popup">
-              <img src="public/BioPics/Xander.jpeg" alt="Xander Swartout" class="biopic-img" />
+
+            <!-- Xander -->
+            <div class="biopic reveal" id="team-xander">
+              <img src="public/BioPics/Xander.jpeg" alt="Xander Swartout — Freelance 3D Artist" class="biopic-img" />
               <div class="biopic-name">Xander Swartout</div>
               <div class="biopic-role">He/Him &mdash; Freelance 3D Artist</div>
               <div class="biopic-popup-content">
-                Xander Swartout is a talented freelance 3D artist that we frequently collaborate with. He brings creative vision and technical skill to our projects, contributing high-quality models and assets for a variety of productions.
+                Xander Swartout is a talented freelance 3D artist that we frequently collaborate with.
+                He brings creative vision and technical skill to our projects, contributing high-quality
+                models and assets for a variety of productions.
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- ===== CTA ===== -->
+      <section class="cta-banner">
+        <h2>Work With Us</h2>
+        <p>We're always looking for talented collaborators and ambitious clients.</p>
+        <div class="cta-row">
+          <a href="contact.html" class="btn primary" id="cta-team-contact">Get In Touch</a>
+          <a href="services.html" class="btn ghost" id="cta-team-services">View Services</a>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
       <div class="container">
-        <p>© <span id="year"></span> Luminary Labs</p>
+        <p>© <span id="year"></span> Luminary Labs LLC — AI-Accelerated Software Development</p>
+        <div class="footer-links">
+          <a href="opensource.html">Open Source</a>
+          <a href="services.html">Services</a>
+          <a href="contact.html">Contact</a>
+        </div>
       </div>
     </footer>
 
     <script src="assets/js/data.js"></script>
-  <script src="assets/js/team.js"></script>
-  <script src="assets/js/main.js"></script>
+    <script src="assets/js/main.js"></script>
   </body>
 </html>

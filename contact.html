@@ -4,64 +4,135 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact — Luminary Labs</title>
+    <meta
+      name="description"
+      content="Contact Luminary Labs for AI-accelerated software development — XR apps, web MVPs, AI integration, and more. Fixed pricing, fast delivery."
+    />
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
   <body>
     <header class="site-header">
       <div class="container nav">
         <a href="index.html" class="brand" aria-label="Luminary Labs Home">
-          <img src="/public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" style="height: 32px; width: 32px; vertical-align: middle; margin-right: 8px;" />
+          <img src="public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" />
           Luminary Labs
         </a>
         <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
         <nav id="site-nav" class="site-nav">
           <a href="index.html">Home</a>
-          <a href="projects.html">Projects</a>
-          <a href="client-projects.html">Client Features</a>
-          <a href="team.html">Meet the Team</a>
-          <a href="demo.html">Three.js Demo</a>
+          <a href="solutions.html">Solutions</a>
+          <a href="opensource.html">Open Source</a>
+          <a href="services.html">Services</a>
+          <a href="portfolio.html">Portfolio</a>
+          <a href="team.html">Team</a>
           <a href="contact.html" class="active">Contact</a>
         </nav>
       </div>
     </header>
+
     <main>
+      <!-- ===== PAGE HERO ===== -->
       <section class="page-hero">
         <div class="container">
-          <h1>Contact Us</h1>
-          <p>We'd love to hear from you! Please fill out the form below and we'll get back to you as soon as possible.</p>
+          <h1>Let's Build Something</h1>
+          <p>Tell us about your project. We'll scope it, price it, and get back to you within 24 hours.</p>
         </div>
       </section>
+
+      <!-- ===== CONTACT FORM ===== -->
       <section class="contact-section">
         <div class="container">
-          <form class="contact-form" action="https://formspree.io/f/mjkagnqv" method="POST">
-            <label for="name">Your Name</label>
-            <input type="text" id="name" name="name" required />
+          <form class="contact-form" action="https://formspree.io/f/mjkagnqv" method="POST" id="contact-form">
 
-            <label for="email">Your Email</label>
-            <input type="email" id="email" name="email" required />
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" placeholder="John Doe" required />
+              </div>
+              <div class="form-group">
+                <label for="email">Your Email</label>
+                <input type="email" id="email" name="email" placeholder="john@company.com" required />
+              </div>
+            </div>
 
-            <label for="subject">Subject</label>
-            <input type="text" id="subject" name="subject" required />
+            <div class="form-group">
+              <label for="service">Which service are you interested in?</label>
+              <select id="service" name="service">
+                <option value="">— Select a service (optional) —</option>
+                <option value="portfolio">Professional Portfolio ($750)</option>
+                <option value="html5">HTML5 Gaming Experience ($1,250)</option>
+                <option value="webapp">Backend-Integrated Web App ($2,000)</option>
+                <option value="ai">AI-Integrated App ($3,500)</option>
+                <option value="xr">XR App Development ($4,000)</option>
+                <option value="partnership">Partnership / Collaboration</option>
+                <option value="other">Other / General Inquiry</option>
+              </select>
+            </div>
 
-            <label for="message">Description</label>
-            <textarea id="message" name="message" rows="6" required></textarea>
+            <div class="form-group">
+              <label for="budget">Estimated Budget Range</label>
+              <select id="budget" name="budget">
+                <option value="">— Select a range (optional) —</option>
+                <option value="under-1k">Under $1,000</option>
+                <option value="1k-2k">$1,000 – $2,000</option>
+                <option value="2k-5k">$2,000 – $5,000</option>
+                <option value="5k-10k">$5,000 – $10,000</option>
+                <option value="10k+">$10,000+</option>
+                <option value="discuss">Let's Discuss</option>
+              </select>
+            </div>
 
-            <!-- FormSubmit hidden fields for formatting and spam protection -->
-            <!-- Formspree hidden field for spam protection -->
-            <input type="text" name="_gotcha" style="display:none">
-            <input type="hidden" name="_subject" value="New Contact Form Submission from Luminary Labs">
-            <input type="hidden" name="_autoresponse" value="Thank you for contacting Luminary Labs! We have received your message and will get back to you soon.">
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" placeholder="Brief project summary" required />
+            </div>
 
-            <button type="submit" class="btn primary">Send Message</button>
+            <div class="form-group">
+              <label for="message">Project Description</label>
+              <textarea id="message" name="message" rows="6" placeholder="Describe your project, goals, and timeline..." required></textarea>
+            </div>
+
+            <!-- Spam protection -->
+            <input type="text" name="_gotcha" style="display:none" />
+            <input type="hidden" name="_subject" value="New Contact Form Submission from Luminary Labs" />
+            <input type="hidden" name="_autoresponse" value="Thank you for contacting Luminary Labs! We have received your message and will get back to you within 24 hours." />
+
+            <button type="submit" class="btn primary" id="btn-submit-contact">Send Message</button>
           </form>
         </div>
       </section>
     </main>
+
     <footer class="site-footer">
       <div class="container">
-        <p>© <span id="year"></span> Luminary Labs • Building delightful, interactive products.</p>
+        <p>© <span id="year"></span> Luminary Labs LLC — AI-Accelerated Software Development</p>
+        <div class="footer-links">
+          <a href="opensource.html">Open Source</a>
+          <a href="services.html">Services</a>
+          <a href="contact.html">Contact</a>
+        </div>
       </div>
     </footer>
+
+    <script src="assets/js/data.js"></script>
     <script src="assets/js/main.js"></script>
+    <script>
+      // Auto-select service from URL params (e.g., contact.html?service=webapp)
+      (function() {
+        const params = new URLSearchParams(window.location.search);
+        const service = params.get('service');
+        if (service) {
+          const select = document.getElementById('service');
+          if (select) {
+            for (const opt of select.options) {
+              if (opt.value === service) {
+                opt.selected = true;
+                break;
+              }
+            }
+          }
+        }
+      })();
+    </script>
   </body>
 </html>
