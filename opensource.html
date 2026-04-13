@@ -337,9 +337,62 @@
         <div class="container">
           <div class="flagship-inner" style="grid-template-columns: 1fr 1.2fr;">
             <div class="flagship-media reveal">
-              <!-- PLACEHOLDER: Nexus AR Dashboard screenshot -->
-              <div class="placeholder-media" data-placeholder="nexus-ar-screenshot" style="min-height: 350px;">
-                <span class="placeholder-label">📷 Nexus AR Dashboard Screenshot</span>
+              <div class="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10 bg-[#08080c] shadow-2xl group">
+                <!-- Ambient Background -->
+                <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-orange-500/10"></div>
+                
+                <!-- Blurred UI Preview -->
+                <div class="absolute inset-0 p-8 flex flex-col gap-6 opacity-40 blur-[2px] pointer-events-none select-none">
+                  <div class="h-12 w-48 bg-white/10 rounded-lg"></div>
+                  <div class="grid grid-cols-3 gap-4 flex-1">
+                    <div class="bg-white/5 rounded-xl border border-white/5"></div>
+                    <div class="bg-white/5 rounded-xl border border-white/5 col-span-2"></div>
+                    <div class="bg-white/5 rounded-xl border border-white/5 col-span-2"></div>
+                    <div class="bg-white/5 rounded-xl border border-white/5 transition-all duration-700"></div>
+                  </div>
+                </div>
+
+                <!-- Central HUD Overlay -->
+                <div class="absolute inset-0 flex items-center justify-center p-6">
+                  <div class="relative w-full max-w-sm">
+                    <!-- Glass Panel -->
+                    <div class="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 flex flex-col items-center text-center shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+                      <div class="w-16 h-16 rounded-full bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center mb-6 relative">
+                        <div class="absolute inset-0 rounded-full bg-cyan-400/20 animate-ping"></div>
+                        <i data-lucide="smartphone" class="w-8 h-8 text-cyan-400"></i>
+                      </div>
+                      
+                      <h4 class="text-2xl font-black text-white mb-2 uppercase tracking-tighter italic">
+                        Nexus <span class="text-orange-500">AR</span> Dashboard
+                      </h4>
+                      <p class="text-slate-400 text-sm font-medium mb-6 leading-relaxed">
+                        Establishing secure WebXR bridge protocol. Initializing spatial mapping kernels.
+                      </p>
+
+                      <div class="flex items-center gap-4">
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-500">
+                          v0.4.2-alpha
+                        </span>
+                        <span class="px-3 py-1 bg-orange-500/20 border border-orange-500/30 rounded-full text-[10px] font-black uppercase tracking-widest text-orange-400 animate-pulse">
+                          COMING SOON
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Corner Accents -->
+                <div class="absolute top-4 left-4 flex gap-1">
+                  <div class="w-1 h-1 bg-cyan-400 rounded-full"></div>
+                  <div class="w-1 h-1 bg-cyan-400/50 rounded-full"></div>
+                  <div class="w-1 h-1 bg-cyan-400/20 rounded-full"></div>
+                </div>
+                <div class="absolute bottom-4 right-4 flex gap-1 items-end">
+                   <div class="text-[8px] font-mono text-cyan-400/40 uppercase tracking-widest mr-2">System: Active</div>
+                   <div class="w-1 h-3 bg-cyan-400/20 rounded-full"></div>
+                   <div class="w-1 h-5 bg-cyan-400/50 rounded-full"></div>
+                   <div class="w-1 h-2 bg-cyan-400 rounded-full"></div>
+                </div>
               </div>
             </div>
             <div class="flagship-content reveal reveal-delay-2">

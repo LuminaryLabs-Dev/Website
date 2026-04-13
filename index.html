@@ -170,20 +170,6 @@
           </div>
         </div>
 
-        <!-- CARD 4: PHASE 3 -->
-        <div class="carousel-card" style="border-top-color: #22d3ee; border-top-width: 4px;">
-          <div class="card-content flex flex-col">
-            <div
-              class="inline-flex items-center px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-sm font-bold uppercase tracking-wider w-max mb-4">
-              Phase 3
-            </div>
-            <h3 class="text-3xl font-bold text-white mb-2">Logistics & Monetization</h3>
-            <p class="text-lg text-slate-400 mb-2 leading-relaxed">Unlocking B2B revenue and telemetry.</p>
-            <div class="chart-wrapper">
-              <canvas id="phase3Chart"></canvas>
-            </div>
-          </div>
-        </div>
 
         <!-- CARD 5: PHASE 4 -->
         <div class="carousel-card" style="border-top-color: #fb923c; border-top-width: 4px;">
@@ -269,10 +255,23 @@
               <span class="tech-tag">Unity</span>
             </div>
           </div>
-          <div class="oss-card reveal reveal-delay-2">
-            <span class="oss-icon">📱</span>
-            <h3>Nexus AR Dashboard</h3>
-            <span class="oss-status in-dev">In Development</span>
+          <div class="oss-card reveal reveal-delay-2 overflow-hidden flex flex-col pt-0 px-0">
+            <div class="h-32 w-full relative bg-[#08080c] border-b border-white/5 flex items-center justify-center overflow-hidden">
+              <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-orange-500/10"></div>
+              <div class="relative z-10 scale-75 opacity-80">
+                <div class="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl p-4 flex flex-col items-center text-center">
+                  <div class="w-10 h-10 rounded-full bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center mb-2">
+                    <i data-lucide="smartphone" class="w-5 h-5 text-cyan-400"></i>
+                  </div>
+                  <span class="px-2 py-0.5 bg-orange-500/20 border border-orange-500/30 rounded-full text-[8px] font-black uppercase tracking-widest text-orange-400 animate-pulse">
+                    COMING SOON
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="mt-0">Nexus AR Dashboard</h3>
+              <span class="oss-status in-dev">In Development</span>
             <p>Visual dashboard for creating easy AR experiences. Rapid prototyping and cross-platform export for
               augmented reality content.</p>
             <div class="tech-tags">
