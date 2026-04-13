@@ -768,102 +768,160 @@ section { padding: 80px 0; }
   color: var(--muted);
 }
 
-/* ---------- Team ---------- */
-.team-grid-section {
-  padding: 60px 0 80px;
+/* ---------- Team Hero ---------- */
+.team-hero-section {
+  padding: 0;
+  background: var(--bg-2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.biopics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 32px;
-  max-width: 900px;
-  margin-inline: auto;
-}
-
-.biopic {
+.team-hero-grid {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  height: clamp(650px, 85vh, 950px);
+  width: 100%;
+}
+
+.team-hero-column {
   position: relative;
-  text-align: center;
-  padding: 28px 16px;
-  border-radius: var(--radius-lg);
-  background: var(--panel-glass);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: var(--transition);
+  flex: 1;
+  overflow: hidden;
+  transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.biopic:hover {
-  border-color: rgba(255, 255, 255, 0.12);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-glow);
+.team-hero-column:last-child {
+  border-right: none;
 }
 
-.biopic-img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--brand);
-  background: #222;
-  margin-bottom: 14px;
-  box-shadow: 0 4px 16px rgba(124, 90, 255, 0.2);
+.team-hero-column:hover {
+  flex: 1.6;
 }
 
-.biopic-placeholder {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2a2f4a, #1a1f35);
-  border: 3px solid var(--brand);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.8em;
-  color: var(--muted);
-  font-weight: bold;
-  margin-bottom: 14px;
-}
-
-.biopic-name {
-  font-size: 1.05em;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-
-.biopic-role {
-  font-size: 0.85em;
-  color: var(--accent);
-  margin-bottom: 8px;
-  font-weight: 500;
-}
-
-.biopic-popup-content {
-  display: none;
+.team-hero-img-container {
   position: absolute;
-  left: 50%;
-  top: calc(100% + 8px);
-  transform: translateX(-50%);
-  min-width: 240px;
-  max-width: 320px;
-  background: var(--panel);
+  inset: 0;
+  z-index: 1;
+}
+
+.team-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), filter 0.8s ease;
+  filter: grayscale(0.15) brightness(0.9);
+}
+
+.team-hero-column:hover .team-hero-img {
+  transform: scale(1.05);
+  filter: grayscale(0) brightness(1.05);
+}
+
+.team-hero-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, 
+    rgba(10, 12, 26, 0.98) 0%, 
+    rgba(10, 12, 26, 0.8) 25%, 
+    rgba(10, 12, 26, 0.3) 50%, 
+    transparent 100%);
+  z-index: 2;
+  transition: opacity 0.6s ease;
+}
+
+.team-hero-column:hover .team-hero-gradient {
+  background: linear-gradient(to top, 
+    rgba(10, 12, 26, 1) 0%, 
+    rgba(10, 12, 26, 0.9) 35%, 
+    rgba(10, 12, 26, 0.4) 65%, 
+    transparent 100%);
+}
+
+.team-hero-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 80px 50px;
+  z-index: 3;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.team-hero-column:hover .team-hero-content {
+  transform: translateY(-20px);
+}
+
+.team-hero-name {
+  font-size: clamp(1.8rem, 3vw, 3.2rem);
+  font-weight: 950;
+  margin-bottom: 0.1em;
+  text-shadow: 0 4px 25px rgba(0, 0, 0, 0.9);
+  line-height: 1;
+}
+
+.team-hero-role {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--accent-2);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-weight: 700;
+  margin-bottom: 1.8em;
+  display: block;
+}
+
+.team-hero-bio {
+  font-size: 1.1rem;
+  line-height: 1.8;
   color: var(--text-dim);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 18px 22px;
-  z-index: 20;
-  font-size: 0.88em;
-  line-height: 1.6;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 480px;
+  opacity: 0.5;
+  transform: translateY(40px);
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.team-hero-column:hover .team-hero-bio {
+  opacity: 1;
+  transform: translateY(10px);
+}
+
+.team-hero-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, var(--brand-glow) 0%, transparent 70%);
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.8s ease;
   pointer-events: none;
 }
 
-.biopic:hover .biopic-popup-content,
-.biopic:focus-within .biopic-popup-content {
-  display: block;
+.team-hero-column:hover .team-hero-glow {
+  opacity: 0.8;
+}
+
+/* Mobile Team Hero */
+@media (max-width: 960px) {
+  .team-hero-grid {
+    flex-direction: column;
+    height: auto;
+  }
+  .team-hero-column {
+    height: 600px;
+    flex: none !important;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .team-hero-content {
+    padding: 60px 40px;
+  }
+  .team-hero-bio {
+    opacity: 1;
+    transform: none;
+    font-size: 1rem;
+  }
 }
 
 /* ---------- Stats Bar ---------- */

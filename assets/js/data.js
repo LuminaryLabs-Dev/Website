@@ -129,23 +129,6 @@ const TEAM = [
     bio: "Crimson is the chief technical officer of Luminary Labs LLC and therefore heads our technical operations. Our backend software pipeline is managed by Crimson, as he doubles as our studio architect. Crimson plays a pivotal role in automating studio operations and integrating AI into our workflows.",
     image: "public/BioPics/Crimson.jpg"
   },
-  {
-    id: "roy",
-    name: "Roy McGill",
-    role: "3D Expert / Digital Twin Expert",
-    pronouns: "He/Him",
-    bio: "Roy McGill specializes in the creation of digital twins and a vast variety of 3D models. He is one of our primary artists and has participated in many studio projects.",
-    image: null,
-    initials: "RM"
-  },
-  {
-    id: "xander",
-    name: "Xander Swartout",
-    role: "Freelance 3D Artist",
-    pronouns: "He/Him",
-    bio: "Xander Swartout is a talented freelance 3D artist that we frequently collaborate with. He brings creative vision and technical skill to our projects, contributing high-quality models and assets for a variety of productions.",
-    image: "public/BioPics/Xander.jpeg"
-  }
 ];
 
 const NEXUS_PRODUCTS = [
