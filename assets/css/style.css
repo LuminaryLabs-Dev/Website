@@ -16,10 +16,10 @@
   --text:      #e9ecf5;
   --text-dim:  #c4c9de;
   --muted:     #8892b3;
-  --accent:    #f0a030;
-  --accent-2:  #5ce0d6;
-  --brand:     #7c5aff;
-  --brand-glow: rgba(124, 90, 255, 0.20);
+  --accent:    #f97316; /* Portal Orange */
+  --accent-2:  #06b6d4; /* Portal Cyan */
+  --brand:     #06b6d4; /* Align brand with Cyan for theme consistency */
+  --brand-glow: rgba(6, 182, 212, 0.20);
   --danger:    #ff5060;
   --success:   #34d399;
   --warning:   #fbbf24;
@@ -241,9 +241,9 @@ section { padding: 80px 0; }
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(900px 400px at 15% 20%, rgba(124, 90, 255, 0.18), transparent),
-    radial-gradient(700px 350px at 85% 10%, rgba(240, 160, 48, 0.12), transparent),
-    radial-gradient(500px 500px at 50% 80%, rgba(92, 224, 214, 0.08), transparent);
+    radial-gradient(900px 400px at 15% 20%, rgba(6, 182, 212, 0.18), transparent),
+    radial-gradient(700px 350px at 85% 10%, rgba(249, 115, 22, 0.12), transparent),
+    radial-gradient(500px 500px at 50% 80%, rgba(6, 182, 212, 0.08), transparent);
   pointer-events: none;
   z-index: 0;
 }
@@ -292,7 +292,7 @@ section { padding: 80px 0; }
 }
 
 .hero h1 .gradient-text {
-  background: linear-gradient(135deg, var(--accent), var(--brand), var(--accent-2));
+  background: linear-gradient(135deg, var(--accent-2), var(--accent));
   background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1388,4 +1388,109 @@ section { padding: 80px 0; }
   .cta-row { flex-direction: column; }
   .cta-row .btn { width: 100%; }
   .biopics-grid { grid-template-columns: 1fr; max-width: 280px; }
+}
+
+/* ---------- Project Agora Carousel ---------- */
+.agora-carousel-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin-inline: auto;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+.agora-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* Firefox */
+  gap: 20px;
+  padding: 10px 0 30px;
+}
+
+.agora-carousel::-webkit-scrollbar {
+  display: none; /* Safari/Chrome */
+}
+
+.carousel-card {
+  flex: 0 0 100%;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  background-color: #0f172a;
+  border: 2px solid #1e293b;
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  scroll-snap-align: start;
+}
+
+/* Ambient corner glows */
+.carousel-card::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, rgba(0,0,0,0) 70%);
+  pointer-events: none;
+}
+.carousel-card::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  right: -100px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, rgba(0,0,0,0) 70%);
+  pointer-events: none;
+}
+
+.card-content {
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-wrapper {
+  flex-grow: 1;
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  margin-top: 20px;
+}
+
+/* Navigation indicators */
+.carousel-nav {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: -20px;
+  position: relative;
+  z-index: 20;
+}
+
+.nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.nav-dot.active {
+  background: var(--accent-2);
+  transform: scale(1.2);
+}
+
+@media (max-width: 600px) {
+  .carousel-card { padding: 30px; }
 }
