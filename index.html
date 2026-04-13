@@ -1,399 +1,423 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Luminary Labs — AI-Accelerated Software Development</title>
-    <meta
-      name="description"
-      content="Luminary Labs is an AI-accelerated software development studio specializing in XR, AI integration, and full-stack web applications for B2B clients."
-    />
-    <link rel="stylesheet" href="assets/css/style.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-      // Configure Tailwind to not conflict with base styles
-      tailwind.config = {
-        corePlugins: {
-          preflight: false,
-        }
-      }
-    </script>
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="container nav">
-        <a href="index.html" class="brand" aria-label="Luminary Labs Home">
-          <img src="public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" />
-          Luminary Labs
-        </a>
-        <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
-        <nav id="site-nav" class="site-nav">
-          <a href="index.html" class="active">Home</a>
-          <a href="solutions.html">Solutions</a>
-          <a href="opensource.html">Open Source</a>
-          <a href="services.html">Services</a>
-          <a href="portfolio.html">Portfolio</a>
-          <a href="team.html">Team</a>
-          <a href="contact.html">Contact</a>
-        </nav>
-      </div>
-    </header>
 
-    <main>
-      <!-- ===== HERO ===== -->
-      <section class="hero" id="hero">
-        <div class="hero-bg"></div>
-        <div class="container hero-inner">
-          <span class="hero-badge">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luminary Labs — AI-Accelerated Software Development</title>
+  <meta name="description"
+    content="Luminary Labs is an AI-accelerated software development studio specializing in XR, AI integration, and full-stack web applications for B2B clients." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Configure Tailwind to not conflict with base styles
+    tailwind.config = {
+      corePlugins: {
+        preflight: false,
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a href="index.html" class="brand" aria-label="Luminary Labs Home">
+        <img src="public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" />
+        Luminary Labs
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav id="site-nav" class="site-nav">
+        <a href="index.html" class="active">Home</a>
+        <a href="solutions.html">Solutions</a>
+        <a href="opensource.html">Open Source</a>
+        <a href="services.html">Services</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="team.html">Team</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="hero">
+      <div class="hero-bg"></div>
+      <div class="container hero-inner">
+        <span class="hero-badge">
+          <span class="pulse"></span>
+          AI-Accelerated Dev Studio
+        </span>
+        <h1>
+          Software That<br />
+          <span class="gradient-text">Makes You Money</span>
+        </h1>
+        <p class="hero-sub">
+          We build XR experiences, AI-integrated applications, and full-stack web products for businesses that need to
+          ship fast and scale smart. From MVP to production — accelerated by AI at every step.
+        </p>
+        <div class="cta-row">
+          <a href="solutions.html" class="btn primary" id="cta-solutions">Explore Solutions</a>
+          <a href="services.html" class="btn secondary" id="cta-hire">Hire Us</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FLAGSHIP: PROJECT ARROWHEAD ===== -->
+    <section class="flagship-banner" id="arrowhead-preview">
+      <div class="container flagship-inner">
+        <div class="flagship-content reveal">
+          <span class="status-badge">
             <span class="pulse"></span>
-            AI-Accelerated Dev Studio
+            Approaching Production
           </span>
-          <h1>
-            Software That<br />
-            <span class="gradient-text">Makes You Money</span>
-          </h1>
-          <p class="hero-sub">
-            We build XR experiences, AI-integrated applications, and full-stack web products for businesses that need to ship fast and scale smart. From MVP to production — accelerated by AI at every step.
+          <h2>Project Agora</h2>
+          <p>
+            A revolutionary XR marketplace and MDM-Lite service built for the Steam Frame ecosystem. Connecting vendors
+            and end-users through a unified platform — with content management, subscription services, and
+            enterprise-grade device orchestration.
           </p>
           <div class="cta-row">
-            <a href="solutions.html" class="btn primary" id="cta-solutions">Explore Solutions</a>
-            <a href="services.html" class="btn secondary" id="cta-hire">Hire Us</a>
+            <a href="solutions.html#arrowhead" class="btn primary sm" id="cta-arrowhead">Learn More</a>
+            <a href="contact.html" class="btn ghost sm" id="cta-arrowhead-contact">Partner With Us</a>
           </div>
         </div>
-      </section>
+        <div class="flagship-media reveal reveal-delay-2">
+          <div class="infographic-container">
+            <div class="glow-cyan"></div>
+            <div class="glow-orange"></div>
 
-      <!-- ===== FLAGSHIP: PROJECT ARROWHEAD ===== -->
-      <section class="flagship-banner" id="arrowhead-preview">
-        <div class="container flagship-inner">
-          <div class="flagship-content reveal">
-            <span class="status-badge">
-              <span class="pulse"></span>
-              Approaching Production
-            </span>
-            <h2>Project Arrowhead</h2>
-            <p>
-              A revolutionary XR marketplace and MDM-Lite service built for the Steam Frame ecosystem. Connecting vendors and end-users through a unified platform — with content management, subscription services, and enterprise-grade device orchestration.
-            </p>
-            <div class="cta-row">
-              <a href="solutions.html#arrowhead" class="btn primary sm" id="cta-arrowhead">Learn More</a>
-              <a href="contact.html" class="btn ghost sm" id="cta-arrowhead-contact">Partner With Us</a>
+            <!-- INFO HEADER -->
+            <div class="p-10 text-center border-b border-white/5 relative z-10">
+              <div class="text-5xl mb-4">🎯</div>
+              <h3
+                class="text-4xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-orange-400 mb-3 leading-tight">
+                Project Agora
+              </h3>
+              <p class="text-lg font-light text-slate-300 leading-relaxed">
+                The Central Infrastructure Hub for Enterprise XR
+              </p>
             </div>
-          </div>
-          <div class="flagship-media reveal reveal-delay-2">
-            <div class="infographic-container">
-              <div class="glow-cyan"></div>
-              <div class="glow-orange"></div>
 
-              <!-- INFO HEADER -->
-              <div class="p-10 text-center border-b border-white/5 relative z-10">
-                <div class="text-5xl mb-4">🎯</div>
-                <h3 class="text-4xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-orange-400 mb-3 leading-tight">
-                  Project Agora
-                </h3>
-                <p class="text-lg font-light text-slate-300 leading-relaxed">
-                  The Central Infrastructure Hub for Enterprise XR
-                </p>
+            <!-- THE MARKET GAP -->
+            <div class="p-10 relative z-10 border-b border-white/5">
+              <div class="text-center mb-8">
+                <h4 class="text-2xl font-bold text-white mb-2">The "Meta" Gap</h4>
+                <p class="text-sm text-slate-400">Inefficient deployment tools vs the Steam Frame era standard.</p>
               </div>
-
-              <!-- THE MARKET GAP -->
-              <div class="p-10 relative z-10 border-b border-white/5">
-                <div class="text-center mb-8">
-                  <h4 class="text-2xl font-bold text-white mb-2">The "Meta" Gap</h4>
-                  <p class="text-sm text-slate-400">Inefficient deployment tools vs the Steam Frame era standard.</p>
-                </div>
-                <div class="info-chart-wrapper bg-slate-900/50 p-4 rounded-xl border border-white/5">
-                  <canvas id="marketChart"></canvas>
-                </div>
+              <div class="info-chart-wrapper bg-slate-900/50 p-4 rounded-xl border border-white/5">
+                <canvas id="marketChart"></canvas>
               </div>
+            </div>
 
-              <!-- THREE PILLARS -->
-              <div class="p-10 bg-white/5 relative z-10 border-b border-white/5">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div class="bg-slate-900/80 p-6 rounded-xl border-t-2 border-cyan-500 shadow-lg">
-                    <div class="text-3xl text-cyan-400 mb-4">💻</div>
-                    <h5 class="text-base font-bold text-white mb-2">Control Plane</h5>
-                    <p class="text-slate-400 text-xs leading-relaxed">Centralized web portal for hardware fleets.</p>
-                  </div>
-                  <div class="bg-slate-900/80 p-6 rounded-xl border-t-2 border-orange-500 shadow-lg">
-                    <div class="text-3xl text-orange-400 mb-4">🔑</div>
-                    <h5 class="text-base font-bold text-white mb-2">Zero-Friction Auth</h5>
-                    <p class="text-slate-400 text-xs leading-relaxed">Passwordless 6-digit PIN enrollment.</p>
-                  </div>
-                  <div class="bg-slate-900/80 p-6 rounded-xl border-t-2 border-cyan-500 shadow-lg">
-                    <div class="text-3xl text-cyan-400 mb-4">☁️</div>
-                    <h5 class="text-base font-bold text-white mb-2">Secure Delivery</h5>
-                    <p class="text-slate-400 text-xs leading-relaxed">Automated binary deployments via signed URLs.</p>
-                  </div>
+            <!-- THREE PILLARS -->
+            <div class="p-10 bg-white/5 relative z-10 border-b border-white/5">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-900/80 p-6 rounded-xl border-t-2 border-cyan-500 shadow-lg">
+                  <div class="text-3xl text-cyan-400 mb-4">💻</div>
+                  <h5 class="text-base font-bold text-white mb-2">Control Plane</h5>
+                  <p class="text-slate-400 text-xs leading-relaxed">Centralized web portal for hardware fleets.</p>
                 </div>
-              </div>
-
-              <!-- ROADMAP -->
-              <div class="p-10 relative z-10">
-                <div class="space-y-6">
-                  <div class="milestone-item">
-                    <div class="milestone-number">1</div>
-                    <div class="milestone-content">
-                      <div class="inline-block px-2 py-0.5 bg-cyan-500/20 text-cyan-400 text-[10px] font-bold uppercase rounded-full mb-2">Live Now</div>
-                      <h5 class="text-lg font-bold text-white mb-1">MVP & Validation</h5>
-                      <p class="text-slate-400 text-xs">Avalonia/Rust clients built. Telemetry validated via Pi3.</p>
-                    </div>
-                  </div>
-                  <div class="milestone-item">
-                    <div class="milestone-number">2</div>
-                    <div class="milestone-content">
-                      <div class="inline-block px-2 py-0.5 bg-slate-800 text-slate-300 text-[10px] font-bold uppercase rounded-full mb-2">Immediate</div>
-                      <h5 class="text-lg font-bold text-white mb-1">Cloud Migration</h5>
-                      <p class="text-slate-400 text-xs">Portals to Google Cloud Run with Postgres databases.</p>
-                    </div>
-                  </div>
-                  <div class="milestone-item">
-                    <div class="milestone-number">3</div>
-                    <div class="milestone-content">
-                      <div class="inline-block px-2 py-0.5 bg-slate-800 text-slate-300 text-[10px] font-bold uppercase rounded-full mb-2">Long-Term</div>
-                      <h5 class="text-lg font-bold text-white mb-1">B2B Monetization</h5>
-                      <p class="text-slate-400 text-xs">Deployment telemetry and Stripe marketplace integration.</p>
-                    </div>
-                  </div>
+                <div class="bg-slate-900/80 p-6 rounded-xl border-t-2 border-orange-500 shadow-lg">
+                  <div class="text-3xl text-orange-400 mb-4">🔑</div>
+                  <h5 class="text-base font-bold text-white mb-2">Zero-Friction Auth</h5>
+                  <p class="text-slate-400 text-xs leading-relaxed">Passwordless 6-digit PIN enrollment.</p>
+                </div>
+                <div class="bg-slate-900/80 p-6 rounded-xl border-t-2 border-cyan-500 shadow-lg">
+                  <div class="text-3xl text-cyan-400 mb-4">☁️</div>
+                  <h5 class="text-base font-bold text-white mb-2">Secure Delivery</h5>
+                  <p class="text-slate-400 text-xs leading-relaxed">Automated binary deployments via signed URLs.</p>
                 </div>
               </div>
             </div>
-          </div>
 
-                <!-- CARD 4: PHASE 3 -->
-                <div class="carousel-card" style="border-top-color: #22d3ee; border-top-width: 4px;">
-                  <div class="card-content flex flex-col">
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-sm font-bold uppercase tracking-wider w-max mb-4">
-                        Phase 3
-                    </div>
-                    <h3 class="text-3xl font-bold text-white mb-2">Logistics & Monetization</h3>
-                    <p class="text-lg text-slate-400 mb-2 leading-relaxed">Unlocking B2B revenue and telemetry.</p>
-                    <div class="chart-wrapper">
-                      <canvas id="phase3Chart"></canvas>
-                    </div>
+            <!-- ROADMAP -->
+            <div class="p-10 relative z-10">
+              <div class="space-y-6">
+                <div class="milestone-item">
+                  <div class="milestone-number">1</div>
+                  <div class="milestone-content">
+                    <div
+                      class="inline-block px-2 py-0.5 bg-cyan-500/20 text-cyan-400 text-[10px] font-bold uppercase rounded-full mb-2">
+                      Live Now</div>
+                    <h5 class="text-lg font-bold text-white mb-1">MVP & Validation</h5>
+                    <p class="text-slate-400 text-xs">Avalonia/Rust clients built. Telemetry validated via Pi3.</p>
                   </div>
                 </div>
-
-                <!-- CARD 5: PHASE 4 -->
-                <div class="carousel-card" style="border-top-color: #fb923c; border-top-width: 4px;">
-                  <div class="card-content flex flex-col">
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-orange-500/20 text-orange-300 text-sm font-bold uppercase tracking-wider w-max mb-4">
-                        Phase 4
-                    </div>
-                    <h3 class="text-3xl font-bold text-white mb-2">The Steam Frame Era</h3>
-                    <p class="text-lg text-slate-400 mb-2 leading-relaxed">Unifying Hub for Enterprise XR.</p>
-                    <div class="chart-wrapper">
-                      <canvas id="phase4Chart"></canvas>
-                    </div>
+                <div class="milestone-item">
+                  <div class="milestone-number">2</div>
+                  <div class="milestone-content">
+                    <div
+                      class="inline-block px-2 py-0.5 bg-slate-800 text-slate-300 text-[10px] font-bold uppercase rounded-full mb-2">
+                      Immediate</div>
+                    <h5 class="text-lg font-bold text-white mb-1">Cloud Migration</h5>
+                    <p class="text-slate-400 text-xs">Portals to Google Cloud Run with Postgres databases.</p>
                   </div>
                 </div>
-              </div>
-              <div class="carousel-nav" id="carousel-nav">
-                <div class="nav-dot active"></div>
-                <div class="nav-dot"></div>
-                <div class="nav-dot"></div>
-                <div class="nav-dot"></div>
-                <div class="nav-dot"></div>
+                <div class="milestone-item">
+                  <div class="milestone-number">3</div>
+                  <div class="milestone-content">
+                    <div
+                      class="inline-block px-2 py-0.5 bg-slate-800 text-slate-300 text-[10px] font-bold uppercase rounded-full mb-2">
+                      Long-Term</div>
+                    <h5 class="text-lg font-bold text-white mb-1">B2B Monetization</h5>
+                    <p class="text-slate-400 text-xs">Deployment telemetry and Stripe marketplace integration.</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
 
-      <hr class="section-divider" />
-
-      <!-- ===== CORE CAPABILITIES ===== -->
-      <section id="capabilities">
-        <div class="container">
-          <div class="section-header center reveal">
-            <span class="section-label">What We Build</span>
-            <h2>Core Capabilities</h2>
-            <p>We specialize in the technologies that move the needle for B2B clients.</p>
-          </div>
-          <div class="cap-grid">
-            <div class="cap-card reveal reveal-delay-1">
-              <span class="cap-icon">🥽</span>
-              <h3>XR & Spatial Computing</h3>
-              <p>Quest, Steam Frame, WebXR — we build immersive applications from prototype to published product across every major platform.</p>
+        <!-- CARD 4: PHASE 3 -->
+        <div class="carousel-card" style="border-top-color: #22d3ee; border-top-width: 4px;">
+          <div class="card-content flex flex-col">
+            <div
+              class="inline-flex items-center px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-sm font-bold uppercase tracking-wider w-max mb-4">
+              Phase 3
             </div>
-            <div class="cap-card reveal reveal-delay-2">
-              <span class="cap-icon">🤖</span>
-              <h3>AI Integration</h3>
-              <p>Local GGUF models, cloud APIs, agentic pipelines — we embed AI into your product so it actually adds value, not just buzzwords.</p>
-            </div>
-            <div class="cap-card reveal reveal-delay-3">
-              <span class="cap-icon">🌐</span>
-              <h3>Full-Stack Web & Apps</h3>
-              <p>From HTML5 embeddable games to backend-integrated web apps. Rapid MVPs delivered in 1-2 weeks, ready to pitch or deploy.</p>
+            <h3 class="text-3xl font-bold text-white mb-2">Logistics & Monetization</h3>
+            <p class="text-lg text-slate-400 mb-2 leading-relaxed">Unlocking B2B revenue and telemetry.</p>
+            <div class="chart-wrapper">
+              <canvas id="phase3Chart"></canvas>
             </div>
           </div>
         </div>
-      </section>
 
-      <hr class="section-divider" />
-
-      <!-- ===== OPEN SOURCE SPOTLIGHT ===== -->
-      <section id="oss-spotlight">
-        <div class="container">
-          <div class="section-header reveal">
-            <span class="section-label">Open Source</span>
-            <h2>The Nexus Suite</h2>
-            <p>Interoperable, modular tools for developers — free and open source.</p>
-          </div>
-          <div class="oss-badge reveal">💚 Donationware</div>
-          <div class="oss-grid">
-            <div class="oss-card reveal reveal-delay-1">
-              <span class="oss-icon">⚙️</span>
-              <h3>Nexus Engine</h3>
-              <span class="oss-status pre-release">Pre-Release · Q3 2026</span>
-              <p>Standalone orchestration engine for modular game development and AI logic pipelines. Phase-driven, hierarchical sequencing across C# and Dart runtimes.</p>
-              <div class="tech-tags">
-                <span class="tech-tag">C#</span>
-                <span class="tech-tag">Dart</span>
-                <span class="tech-tag">Unity</span>
-              </div>
+        <!-- CARD 5: PHASE 4 -->
+        <div class="carousel-card" style="border-top-color: #fb923c; border-top-width: 4px;">
+          <div class="card-content flex flex-col">
+            <div
+              class="inline-flex items-center px-3 py-1 rounded-full bg-orange-500/20 text-orange-300 text-sm font-bold uppercase tracking-wider w-max mb-4">
+              Phase 4
             </div>
-            <div class="oss-card reveal reveal-delay-2">
-              <span class="oss-icon">📱</span>
-              <h3>Nexus AR Dashboard</h3>
-              <span class="oss-status in-dev">In Development</span>
-              <p>Visual dashboard for creating easy AR experiences. Rapid prototyping and cross-platform export for augmented reality content.</p>
-              <div class="tech-tags">
-                <span class="tech-tag">AR</span>
-                <span class="tech-tag">WebXR</span>
-              </div>
-            </div>
-            <div class="oss-card reveal reveal-delay-3">
-              <span class="oss-icon">🧠</span>
-              <h3>NexusCentral</h3>
-              <span class="oss-status pre-release">Triceratops RC</span>
-              <p>Platform for agentic orchestration. Desktop shell, Rust runtime, Python CLI, and web lab — unified by a tool namespace contract for local-first AI.</p>
-              <div class="tech-tags">
-                <span class="tech-tag">Rust</span>
-                <span class="tech-tag">Avalonia</span>
-                <span class="tech-tag">Python</span>
-                <span class="tech-tag">Next.js</span>
-              </div>
+            <h3 class="text-3xl font-bold text-white mb-2">The Steam Frame Era</h3>
+            <p class="text-lg text-slate-400 mb-2 leading-relaxed">Unifying Hub for Enterprise XR.</p>
+            <div class="chart-wrapper">
+              <canvas id="phase4Chart"></canvas>
             </div>
           </div>
-          <div style="text-align: center; margin-top: 40px;" class="reveal">
-            <a href="opensource.html" class="btn secondary" id="cta-oss">Explore Open Source →</a>
-          </div>
-        </div>
-      </section>
-
-      <hr class="section-divider" />
-
-      <!-- ===== ACTIVE CLIENT WORK ===== -->
-      <section id="active-work">
-        <div class="container">
-          <div class="section-header reveal">
-            <span class="section-label">Client Work</span>
-            <h2>Active Projects</h2>
-            <p>Current engagements across XR, IoT, and spatial computing.</p>
-          </div>
-          <div class="card-grid">
-            <article class="card reveal reveal-delay-1">
-              <div class="card-media">
-                <!-- PLACEHOLDER: Vending Backpack product photo -->
-                <div class="placeholder-media" data-placeholder="vending-backpack" style="aspect-ratio:16/9; border-radius:0; border:none;">
-                  <span class="placeholder-label">📷 Vending Backpack Product</span>
-                </div>
-                <span class="badge"><span class="status-dot gaining"></span> Gaining</span>
-              </div>
-              <div class="card-body">
-                <h3 class="card-title">Vending Backpack</h3>
-                <p class="card-sub">IoT-integrated vending solutions with Aldervon Systems. Subscription-based revenue model with monthly recurring income per deployed machine.</p>
-              </div>
-            </article>
-            <article class="card reveal reveal-delay-2">
-              <div class="card-media">
-                <img src="public/PortfolioImages/MuseumMultiverse.png" alt="Museum Multiverse — Quest Store VR Experience" />
-                <span class="badge"><span class="status-dot active"></span> Active</span>
-              </div>
-              <div class="card-body">
-                <h3 class="card-title">Museum Multiverse</h3>
-                <p class="card-sub">Published on Quest Store. A third-person VR experience with MadeInBrooklynGames — ongoing milestone-based development.</p>
-              </div>
-            </article>
-            <article class="card reveal reveal-delay-3">
-              <div class="card-media">
-                <!-- PLACEHOLDER: Westfield Spatial XR concept -->
-                <div class="placeholder-media" data-placeholder="westfield-spatial" style="aspect-ratio:16/9; border-radius:0; border:none;">
-                  <span class="placeholder-label">📷 Westfield Spatial XR</span>
-                </div>
-                <span class="badge"><span class="status-dot cold"></span> Opportunity</span>
-              </div>
-              <div class="card-body">
-                <h3 class="card-title">Westfield Spatial XR</h3>
-                <p class="card-sub">Spatial XR experience for retail environments with Wooly Studios. Leveraging new SLAM technology for competitive pricing.</p>
-              </div>
-            </article>
-          </div>
-          <div style="text-align: center; margin-top: 40px;" class="reveal">
-            <a href="portfolio.html" class="btn ghost" id="cta-portfolio">View Full Portfolio →</a>
-          </div>
-        </div>
-      </section>
-
-      <hr class="section-divider" />
-
-      <!-- ===== STATS BAR ===== -->
-      <section id="stats">
-        <div class="container">
-          <div class="stats-bar">
-            <div class="stat-item reveal reveal-delay-1">
-              <span class="stat-number">4+</span>
-              <span class="stat-label">Active Projects</span>
-            </div>
-            <div class="stat-item reveal reveal-delay-2">
-              <span class="stat-number">✓</span>
-              <span class="stat-label">Published on Quest Store</span>
-            </div>
-            <div class="stat-item reveal reveal-delay-3">
-              <span class="stat-number">3</span>
-              <span class="stat-label">Open Source Products</span>
-            </div>
-            <div class="stat-item reveal reveal-delay-4">
-              <span class="stat-number">B2B</span>
-              <span class="stat-label">Enterprise Focus</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ===== CTA BANNER ===== -->
-      <section class="cta-banner" id="cta-bottom">
-        <h2>Ready to Build Something?</h2>
-        <p>From $750 portfolio setups to $4,000 XR apps — we ship fast and we ship quality.</p>
-        <div class="cta-row">
-          <a href="services.html" class="btn primary" id="cta-services-bottom">View Pricing</a>
-          <a href="contact.html" class="btn ghost" id="cta-contact-bottom">Get In Touch</a>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="container">
-        <p>© <span id="year"></span> Luminary Labs LLC — AI-Accelerated Software Development</p>
-        <div class="footer-links">
-          <a href="opensource.html">Open Source</a>
-          <a href="services.html">Services</a>
-          <a href="contact.html">Contact</a>
         </div>
       </div>
-    </footer>
+      <div class="carousel-nav" id="carousel-nav">
+        <div class="nav-dot active"></div>
+        <div class="nav-dot"></div>
+        <div class="nav-dot"></div>
+        <div class="nav-dot"></div>
+        <div class="nav-dot"></div>
+      </div>
+      </div>
+      </div>
+      </div>
+    </section>
 
-    <script src="assets/js/data.js"></script>
-    <script src="assets/js/main.js"></script>
-    
-    <!-- Agora Infographic Scripts -->
-    <script>
-      (function() {
+    <hr class="section-divider" />
+
+    <!-- ===== CORE CAPABILITIES ===== -->
+    <section id="capabilities">
+      <div class="container">
+        <div class="section-header center reveal">
+          <span class="section-label">What We Build</span>
+          <h2>Core Capabilities</h2>
+          <p>We specialize in the technologies that move the needle for B2B clients.</p>
+        </div>
+        <div class="cap-grid">
+          <div class="cap-card reveal reveal-delay-1">
+            <span class="cap-icon">🥽</span>
+            <h3>XR & Spatial Computing</h3>
+            <p>Quest, Steam Frame, WebXR — we build immersive applications from prototype to published product across
+              every major platform.</p>
+          </div>
+          <div class="cap-card reveal reveal-delay-2">
+            <span class="cap-icon">🤖</span>
+            <h3>AI Integration</h3>
+            <p>Local GGUF models, cloud APIs, agentic pipelines — we embed AI into your product so it actually adds
+              value, not just buzzwords.</p>
+          </div>
+          <div class="cap-card reveal reveal-delay-3">
+            <span class="cap-icon">🌐</span>
+            <h3>Full-Stack Web & Apps</h3>
+            <p>From HTML5 embeddable games to backend-integrated web apps. Rapid MVPs delivered in 1-2 weeks, ready to
+              pitch or deploy.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- ===== OPEN SOURCE SPOTLIGHT ===== -->
+    <section id="oss-spotlight">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Open Source</span>
+          <h2>The Nexus Suite</h2>
+          <p>Interoperable, modular tools for developers — free and open source.</p>
+        </div>
+        <div class="oss-badge reveal">💚 Donationware</div>
+        <div class="oss-grid">
+          <div class="oss-card reveal reveal-delay-1">
+            <span class="oss-icon">⚙️</span>
+            <h3>Nexus Engine</h3>
+            <span class="oss-status pre-release">Pre-Release · Q3 2026</span>
+            <p>Standalone orchestration engine for modular game development and AI logic pipelines. Phase-driven,
+              hierarchical sequencing across C# and Dart runtimes.</p>
+            <div class="tech-tags">
+              <span class="tech-tag">C#</span>
+              <span class="tech-tag">Dart</span>
+              <span class="tech-tag">Unity</span>
+            </div>
+          </div>
+          <div class="oss-card reveal reveal-delay-2">
+            <span class="oss-icon">📱</span>
+            <h3>Nexus AR Dashboard</h3>
+            <span class="oss-status in-dev">In Development</span>
+            <p>Visual dashboard for creating easy AR experiences. Rapid prototyping and cross-platform export for
+              augmented reality content.</p>
+            <div class="tech-tags">
+              <span class="tech-tag">AR</span>
+              <span class="tech-tag">WebXR</span>
+            </div>
+          </div>
+          <div class="oss-card reveal reveal-delay-3">
+            <span class="oss-icon">🧠</span>
+            <h3>NexusCentral</h3>
+            <span class="oss-status pre-release">Triceratops RC</span>
+            <p>Platform for agentic orchestration. Desktop shell, Rust runtime, Python CLI, and web lab — unified by a
+              tool namespace contract for local-first AI.</p>
+            <div class="tech-tags">
+              <span class="tech-tag">Rust</span>
+              <span class="tech-tag">Avalonia</span>
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">Next.js</span>
+            </div>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 40px;" class="reveal">
+          <a href="opensource.html" class="btn secondary" id="cta-oss">Explore Open Source →</a>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- ===== ACTIVE CLIENT WORK ===== -->
+    <section id="active-work">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Client Work</span>
+          <h2>Active Projects</h2>
+          <p>Current engagements across XR, IoT, and spatial computing.</p>
+        </div>
+        <div class="card-grid">
+          <article class="card reveal reveal-delay-1">
+            <div class="card-media">
+              <!-- PLACEHOLDER: Vending Backpack product photo -->
+              <div class="placeholder-media" data-placeholder="vending-backpack"
+                style="aspect-ratio:16/9; border-radius:0; border:none;">
+                <span class="placeholder-label">📷 Vending Backpack Product</span>
+              </div>
+              <span class="badge"><span class="status-dot gaining"></span> Gaining</span>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">Vending Backpack</h3>
+              <p class="card-sub">IoT-integrated vending solutions with Aldervon Systems. Subscription-based revenue
+                model with monthly recurring income per deployed machine.</p>
+            </div>
+          </article>
+          <article class="card reveal reveal-delay-2">
+            <div class="card-media">
+              <img src="public/PortfolioImages/MuseumMultiverse.png"
+                alt="Museum Multiverse — Quest Store VR Experience" />
+              <span class="badge"><span class="status-dot active"></span> Active</span>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">Museum Multiverse</h3>
+              <p class="card-sub">Published on Quest Store. A third-person VR experience with MadeInBrooklynGames —
+                ongoing milestone-based development.</p>
+            </div>
+          </article>
+          <article class="card reveal reveal-delay-3">
+            <div class="card-media">
+              <!-- PLACEHOLDER: Westfield Spatial XR concept -->
+              <div class="placeholder-media" data-placeholder="westfield-spatial"
+                style="aspect-ratio:16/9; border-radius:0; border:none;">
+                <span class="placeholder-label">📷 Westfield Spatial XR</span>
+              </div>
+              <span class="badge"><span class="status-dot cold"></span> Opportunity</span>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">Westfield Spatial XR</h3>
+              <p class="card-sub">Spatial XR experience for retail environments with Wooly Studios. Leveraging new SLAM
+                technology for competitive pricing.</p>
+            </div>
+          </article>
+        </div>
+        <div style="text-align: center; margin-top: 40px;" class="reveal">
+          <a href="portfolio.html" class="btn ghost" id="cta-portfolio">View Full Portfolio →</a>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- ===== STATS BAR ===== -->
+    <section id="stats">
+      <div class="container">
+        <div class="stats-bar">
+          <div class="stat-item reveal reveal-delay-1">
+            <span class="stat-number">4+</span>
+            <span class="stat-label">Active Projects</span>
+          </div>
+          <div class="stat-item reveal reveal-delay-2">
+            <span class="stat-number">✓</span>
+            <span class="stat-label">Published on Quest Store</span>
+          </div>
+          <div class="stat-item reveal reveal-delay-3">
+            <span class="stat-number">3</span>
+            <span class="stat-label">Open Source Products</span>
+          </div>
+          <div class="stat-item reveal reveal-delay-4">
+            <span class="stat-number">B2B</span>
+            <span class="stat-label">Enterprise Focus</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CTA BANNER ===== -->
+    <section class="cta-banner" id="cta-bottom">
+      <h2>Ready to Build Something?</h2>
+      <p>From $750 portfolio setups to $4,000 XR apps — we ship fast and we ship quality.</p>
+      <div class="cta-row">
+        <a href="services.html" class="btn primary" id="cta-services-bottom">View Pricing</a>
+        <a href="contact.html" class="btn ghost" id="cta-contact-bottom">Get In Touch</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year"></span> Luminary Labs LLC — AI-Accelerated Software Development</p>
+      <div class="footer-links">
+        <a href="opensource.html">Open Source</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+
+  <!-- Agora Infographic Scripts -->
+  <script>
+      (function () {
         function initCharts() {
           Chart.defaults.font.family = "'Inter', sans-serif";
           Chart.defaults.color = '#8892b3';
-          
+
           const ctxMarket = document.getElementById('marketChart');
           if (ctxMarket) {
             new Chart(ctxMarket, {
@@ -410,8 +434,8 @@
               options: {
                 maintainAspectRatio: false,
                 scales: {
-                  y: { 
-                    beginAtZero: true, 
+                  y: {
+                    beginAtZero: true,
                     grid: { color: 'rgba(255, 255, 255, 0.05)' },
                     ticks: { font: { size: 10 } },
                     title: { display: true, text: 'Devices / Hr', font: { size: 10 } }
@@ -429,6 +453,7 @@
         // Initialize after a short delay for animations
         setTimeout(initCharts, 500);
       })();
-    </script>
-  </body>
+  </script>
+</body>
+
 </html>

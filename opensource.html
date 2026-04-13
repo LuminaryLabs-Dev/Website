@@ -9,6 +9,16 @@
       content="Explore the Nexus open-source suite by Luminary Labs — Nexus Engine, Nexus AR Dashboard, and NexusCentral. Free, interoperable tools for developers."
     />
     <link rel="stylesheet" href="assets/css/style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      // Configure Tailwind to not conflict with base styles
+      tailwind.config = {
+        corePlugins: {
+          preflight: false,
+        }
+      }
+    </script>
   </head>
   <body>
     <header class="site-header">
@@ -108,10 +118,168 @@
               </div>
             </div>
 
-            <div class="flagship-media reveal reveal-delay-2">
-              <!-- PLACEHOLDER: Nexus Engine architecture diagram -->
-              <div class="placeholder-media" data-placeholder="nexus-engine-architecture" style="min-height: 450px;">
-                <span class="placeholder-label">📐 Nexus Engine — Sequence Hierarchy Diagram</span>
+            <div class="flagship-media reveal reveal-delay-2" style="max-width: none; width: 100%;">
+              <div class="nexus-infographic-container bg-[#020205] text-slate-300 p-8 rounded-2xl border border-white/5 font-sans selection:bg-cyan-500/30">
+                <div class="max-w-7xl mx-auto">
+                  
+                  <!-- Header Section -->
+                  <header class="relative mb-12 border-l-2 border-cyan-500/50 pl-8">
+                    <h3 class="text-4xl font-black tracking-tighter text-white mb-2 uppercase italic">
+                      Nexus <span class="text-cyan-400">Engine</span> Standalone
+                    </h3>
+                    <p class="text-slate-500 text-base font-medium tracking-tight max-w-2xl">
+                      Native Sequence-Based Architecture. A decoupled, event-driven hierarchy for high-performance orchestration.
+                    </p>
+                    
+                    <div class="flex gap-6 mt-6">
+                      <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-cyan-400">
+                        <i data-lucide="circle" class="w-2 h-2 fill-cyan-400"></i> Active Sequence
+                      </div>
+                      <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-orange-500">
+                        <i data-lucide="circle" class="w-2 h-2 fill-orange-500"></i> Resolved Sequence
+                      </div>
+                    </div>
+                  </header>
+
+                  <div class="grid lg:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- Main Hierarchy Column -->
+                    <div class="lg:col-span-7 space-y-3 relative" id="nexus-hierarchy-list">
+                      <!-- Root -->
+                      <div class="nexus-step active group relative z-10 flex items-start gap-4 p-5 rounded-lg border transition-all duration-300 cursor-default border-cyan-400/50 bg-cyan-950/20" 
+                           data-step="root">
+                        <div class="mt-1 p-3 rounded bg-black/40 border border-cyan-400/50 text-cyan-400 transition-all duration-300 icon-box">
+                          <i data-lucide="git-merge" class="w-6 h-6"></i>
+                        </div>
+                        <div class="flex-1">
+                          <div class="flex justify-between items-center mb-1">
+                            <span class="text-[10px] font-black uppercase tracking-widest step-level">CORE LAYER</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 opacity-100 translate-x-0 transition-all"></i>
+                          </div>
+                          <h4 class="text-lg font-bold text-white mb-0.5 tracking-tight">Root Orchestrator</h4>
+                          <p class="text-xs italic font-bold mb-2 step-tagline text-cyan-400">System Authority</p>
+                          <p class="text-sm text-slate-400 leading-snug max-w-md step-desc">
+                            The primary kernel managing global state transitions. It handles the high-level orchestration from Boot → Runtime → Shutdown.
+                          </p>
+                        </div>
+                      </div>
+
+                      <!-- Module -->
+                      <div class="nexus-step group relative z-10 flex items-start gap-4 p-5 rounded-lg border transition-all duration-300 cursor-default border-white/5 bg-white/[0.02] hover:border-white/10" 
+                           data-step="module">
+                        <div class="mt-1 p-3 rounded bg-black/40 border border-white/10 text-slate-600 transition-all duration-300 icon-box">
+                          <i data-lucide="layers" class="w-6 h-6"></i>
+                        </div>
+                        <div class="flex-1">
+                          <div class="flex justify-between items-center mb-1">
+                            <span class="text-[10px] font-black uppercase tracking-widest step-level text-slate-600">SYSTEM LAYER</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 opacity-0 -translate-x-4 transition-all"></i>
+                          </div>
+                          <h4 class="text-lg font-bold text-white mb-0.5 tracking-tight">Module Controllers</h4>
+                          <p class="text-xs italic font-bold mb-2 step-tagline text-slate-600">Sub-system Management</p>
+                          <p class="text-sm text-slate-400 leading-snug max-w-md step-desc">
+                            Localized orchestrators for specific engine systems (e.g., Physics, Audio, Input). These self-organize through native sequence registries.
+                          </p>
+                        </div>
+                      </div>
+
+                      <!-- Handler -->
+                      <div class="nexus-step group relative z-10 flex items-start gap-4 p-5 rounded-lg border transition-all duration-300 cursor-default border-white/5 bg-white/[0.02] hover:border-white/10" 
+                           data-step="handler">
+                        <div class="mt-1 p-3 rounded bg-black/40 border border-white/10 text-slate-600 transition-all duration-300 icon-box">
+                          <i data-lucide="settings" class="w-6 h-6"></i>
+                        </div>
+                        <div class="flex-1">
+                          <div class="flex justify-between items-center mb-1">
+                            <span class="text-[10px] font-black uppercase tracking-widest step-level text-slate-600">LOGIC LAYER</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 opacity-0 -translate-x-4 transition-all"></i>
+                          </div>
+                          <h4 class="text-lg font-bold text-white mb-0.5 tracking-tight">Action Sequences</h4>
+                          <p class="text-xs italic font-bold mb-2 step-tagline text-slate-600">Behavior Logic</p>
+                          <p class="text-sm text-slate-400 leading-snug max-w-md step-desc">
+                            Executable sequences that perform specific tasks. They bridge high-level intent with low-level execution calls.
+                          </p>
+                        </div>
+                      </div>
+
+                      <!-- Primitive -->
+                      <div class="nexus-step group relative z-10 flex items-start gap-4 p-5 rounded-lg border transition-all duration-300 cursor-default border-white/5 bg-white/[0.02] hover:border-white/10" 
+                           data-step="primitive">
+                        <div class="mt-1 p-3 rounded bg-black/40 border border-white/10 text-slate-600 transition-all duration-300 icon-box">
+                          <i data-lucide="radio" class="w-6 h-6"></i>
+                        </div>
+                        <div class="flex-1">
+                          <div class="flex justify-between items-center mb-1">
+                            <span class="text-[10px] font-black uppercase tracking-widest step-level text-slate-600">ATOMIC LAYER</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 opacity-0 -translate-x-4 transition-all"></i>
+                          </div>
+                          <h4 class="text-lg font-bold text-white mb-0.5 tracking-tight">Engine Kernels</h4>
+                          <p class="text-xs italic font-bold mb-2 step-tagline text-slate-600">Native Primitives</p>
+                          <p class="text-sm text-slate-400 leading-snug max-w-md step-desc">
+                            The atomic building blocks. These nodes interface directly with the Native Event Bus and execute low-level memory operations.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Details Sidebar -->
+                    <div class="lg:col-span-5 space-y-6">
+                      
+                      <!-- Native Event Bus -->
+                      <div class="p-8 rounded-lg bg-[#08080c] border border-white/5 relative overflow-hidden">
+                        <h5 class="text-xs font-black uppercase tracking-[0.3em] text-cyan-400 mb-6 flex items-center gap-2">
+                          <i data-lucide="terminal" class="w-4 h-4"></i> Native Event Bus
+                        </h5>
+                        <div class="space-y-3">
+                          <div class="p-4 rounded bg-black/50 border border-white/5">
+                            <div class="text-xs text-slate-500 uppercase font-bold mb-1">Event Dispatch</div>
+                            <div class="text-sm text-slate-300">Native modules broadcast signals across the internal bus.</div>
+                          </div>
+                          <div class="p-4 rounded bg-black/50 border border-white/5">
+                            <div class="text-xs text-slate-500 uppercase font-bold mb-1">Kernel Listener</div>
+                            <div class="text-sm text-slate-300">Atomic Primitives await specific signal signatures to resolve.</div>
+                          </div>
+                          <div class="p-4 rounded bg-black/50 border border-white/5">
+                            <div class="text-xs text-slate-500 uppercase font-bold mb-1">Sequence Resolution</div>
+                            <div class="text-sm text-slate-300"><code>FinishSequence()</code> triggers the next node in the hierarchy.</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Lifecycle Visualizer -->
+                      <div class="p-8 rounded-lg bg-[#08080c] border border-white/5">
+                        <h5 class="text-xs font-black uppercase tracking-[0.3em] text-orange-500 mb-8 flex items-center gap-2">
+                          <i data-lucide="clock" class="w-4 h-4"></i> Runtime Lifecycle
+                        </h5>
+                        <div class="flex items-center justify-between relative px-2" id="nexus-lifecycle-visualizer">
+                          <div class="absolute left-0 right-0 top-1/2 h-[1px] bg-white/5 -translate-y-1/2"></div>
+                          <div class="relative z-10 flex flex-col items-center gap-2 lifecycle-node" data-phase="idle">
+                            <div class="w-2 h-2 rounded-full border bg-black border-slate-800 phase-indicator"></div>
+                            <span class="text-[9px] font-black uppercase tracking-tighter text-slate-600 phase-label">Idle</span>
+                          </div>
+                          <div class="relative z-10 flex flex-col items-center gap-2 lifecycle-node" data-phase="init">
+                            <div class="w-2 h-2 rounded-full border bg-black border-slate-800 phase-indicator"></div>
+                            <span class="text-[9px] font-black uppercase tracking-tighter text-slate-600 phase-label">Init</span>
+                          </div>
+                          <div class="relative z-10 flex flex-col items-center gap-2 lifecycle-node active" data-phase="active">
+                            <div class="w-2 h-2 rounded-full border bg-black border-cyan-400 phase-indicator"></div>
+                            <span class="text-[9px] font-black uppercase tracking-tighter text-cyan-400 phase-label">Active</span>
+                          </div>
+                          <div class="relative z-10 flex flex-col items-center gap-2 lifecycle-node" data-phase="resolved">
+                            <div class="w-2 h-2 rounded-full border bg-black border-slate-800 phase-indicator"></div>
+                            <span class="text-[9px] font-black uppercase tracking-tighter text-slate-600 phase-label">Resolved</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="p-6 rounded-lg bg-cyan-500/5 border border-cyan-500/10 text-center">
+                        <p class="text-cyan-400/80 font-bold italic text-sm">
+                          Modular by Design. Decoupled by Necessity.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -362,5 +530,91 @@
 
     <script src="assets/js/data.js"></script>
     <script src="assets/js/main.js"></script>
+
+    <script>
+      (function() {
+        // Initialize Lucide Icons
+        if (window.lucide) {
+          lucide.createIcons();
+        }
+
+        const steps = document.querySelectorAll('.nexus-step');
+        const visualizer = document.getElementById('nexus-lifecycle-visualizer');
+        
+        const stepConfigs = {
+          root: { border: 'border-cyan-400/50', bg: 'bg-cyan-950/20', color: 'text-cyan-400', activePhase: 2 },
+          module: { border: 'border-cyan-300/40', bg: 'bg-cyan-900/10', color: 'text-cyan-300', activePhase: 2 },
+          handler: { border: 'border-orange-400/40', bg: 'bg-orange-950/10', color: 'text-orange-400', activePhase: 2 },
+          primitive: { border: 'border-orange-500/50', bg: 'bg-orange-900/20', color: 'text-orange-500', activePhase: 3 }
+        };
+
+        steps.forEach(step => {
+          step.addEventListener('mouseenter', () => {
+            const stepId = step.getAttribute('data-step');
+            const config = stepConfigs[stepId];
+            
+            // 1. Update steps classes
+            steps.forEach(s => {
+              s.classList.remove('active', 'border-cyan-400/50', 'bg-cyan-950/20', 'border-cyan-300/40', 'bg-cyan-900/10', 'border-orange-400/40', 'bg-orange-950/10', 'border-orange-500/50', 'bg-orange-900/20');
+              s.classList.add('border-white/5', 'bg-white/[0.02]');
+              
+              const iconBox = s.querySelector('.icon-box');
+              iconBox.classList.remove('border-cyan-400/50', 'text-cyan-400', 'border-cyan-300/40', 'text-cyan-300', 'border-orange-400/40', 'text-orange-400', 'border-orange-500/50', 'text-orange-500');
+              iconBox.classList.add('border-white/10', 'text-slate-600');
+              
+              const level = s.querySelector('.step-level');
+              level.classList.remove('text-cyan-400', 'text-cyan-300', 'text-orange-400', 'text-orange-500');
+              level.classList.add('text-slate-600');
+
+              const tagline = s.querySelector('.step-tagline');
+              tagline.classList.remove('text-cyan-400', 'text-cyan-300', 'text-orange-400', 'text-orange-500');
+              tagline.classList.add('text-slate-600');
+
+              const arrow = s.querySelector('.lucide-chevron-right');
+              arrow.classList.remove('opacity-100', 'translate-x-0');
+              arrow.classList.add('opacity-0', '-translate-x-4');
+            });
+
+            step.classList.remove('border-white/5', 'bg-white/[0.02]');
+            step.classList.add('active', ...config.border.split(' '), ...config.bg.split(' '));
+            
+            const iconBox = step.querySelector('.icon-box');
+            iconBox.classList.remove('border-white/10', 'text-slate-600');
+            iconBox.classList.add(...config.border.split(' '), config.color);
+            
+            const level = step.querySelector('.step-level');
+            level.classList.remove('text-slate-600');
+            level.classList.add(config.color);
+
+            const tagline = step.querySelector('.step-tagline');
+            tagline.classList.remove('text-slate-600');
+            tagline.classList.add(config.color);
+
+            const arrow = step.querySelector('.lucide-chevron-right');
+            arrow.classList.remove('opacity-0', '-translate-x-4');
+            arrow.classList.add('opacity-100', 'translate-x-0');
+
+            // 2. Update Lifecycle Visualizer
+            const nodes = visualizer.querySelectorAll('.lifecycle-node');
+            nodes.forEach((node, i) => {
+              const indicator = node.querySelector('.phase-indicator');
+              const label = node.querySelector('.phase-label');
+              
+              indicator.classList.remove('border-cyan-400', 'border-orange-500');
+              indicator.classList.add('border-slate-800');
+              label.classList.remove('text-cyan-400', 'text-orange-500');
+              label.classList.add('text-slate-600');
+
+              if (i === config.activePhase) {
+                indicator.classList.remove('border-slate-800');
+                indicator.classList.add(config.activePhase === 3 ? 'border-orange-500' : 'border-cyan-400');
+                label.classList.remove('text-slate-600');
+                label.classList.add(config.activePhase === 3 ? 'text-orange-500' : 'text-cyan-400');
+              }
+            });
+          });
+        });
+      })();
+    </script>
   </body>
 </html>
