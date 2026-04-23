@@ -39,66 +39,105 @@
         </div>
       </section>
 
-      <!-- ===== CONTACT FORM ===== -->
+      <!-- ===== CONTACT FORM SECTION ===== -->
       <section class="contact-section">
-        <div class="container">
-          <form class="contact-form" action="https://formspree.io/f/mjkagnqv" method="POST" id="contact-form">
-
-            <div class="form-row">
-              <div class="form-group">
-                <label for="name">Your Name</label>
-                <input type="text" id="name" name="name" placeholder="John Doe" required />
+        <div class="container contact-split">
+          <div class="contact-info reveal">
+            <span class="section-label">Get in Touch</span>
+            <h2>Direct Contact</h2>
+            <p>Prefer to skip the form? Reach out to us directly via email. We monitor this inbox 24/7 and usually respond within a few hours.</p>
+            
+            <div class="info-item">
+              <span class="info-icon">✉️</span>
+              <div class="info-content">
+                <span class="info-label">Email Us</span>
+                <a href="mailto:admin@luminarylabs.dev" class="info-link">admin@luminarylabs.dev</a>
               </div>
-              <div class="form-group">
-                <label for="email">Your Email</label>
-                <input type="email" id="email" name="email" placeholder="john@company.com" required />
+            </div>
+
+            <div class="info-item">
+              <span class="info-icon">⏱️</span>
+              <div class="info-content">
+                <span class="info-label">Response Time</span>
+                <span class="info-text">Within 24 Hours</span>
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="service">Which service are you interested in?</label>
-              <select id="service" name="service">
-                <option value="">— Select a service (optional) —</option>
-                <option value="portfolio">Professional Portfolio ($750)</option>
-                <option value="html5">HTML5 Gaming Experience ($1,250)</option>
-                <option value="webapp">Backend-Integrated Web App ($2,000)</option>
-                <option value="ai">AI-Integrated App ($3,500)</option>
-                <option value="xr">XR App Development ($4,000)</option>
-                <option value="partnership">Partnership / Collaboration</option>
-                <option value="other">Other / General Inquiry</option>
-              </select>
+            <div class="info-item">
+              <span class="info-icon">🌍</span>
+              <div class="info-content">
+                <span class="info-label">Availability</span>
+                <span class="info-text">Global / Remote</span>
+              </div>
             </div>
+          </div>
 
-            <div class="form-group">
-              <label for="budget">Estimated Budget Range</label>
-              <select id="budget" name="budget">
-                <option value="">— Select a range (optional) —</option>
-                <option value="under-1k">Under $1,000</option>
-                <option value="1k-2k">$1,000 – $2,000</option>
-                <option value="2k-5k">$2,000 – $5,000</option>
-                <option value="5k-10k">$5,000 – $10,000</option>
-                <option value="10k+">$10,000+</option>
-                <option value="discuss">Let's Discuss</option>
-              </select>
+          <div class="form-container reveal reveal-delay-1">
+            <form class="contact-form" action="https://formsubmit.co/admin@luminarylabs.dev" method="POST" id="contact-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="name">Your Name</label>
+                  <input type="text" id="name" name="name" placeholder="John Doe" required />
+                </div>
+                <div class="form-group">
+                  <label for="email">Your Email</label>
+                  <input type="email" id="email" name="email" placeholder="john@company.com" required />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="service">Which service are you interested in?</label>
+                <select id="service" name="service">
+                  <option value="">— Select a service (optional) —</option>
+                  <option value="portfolio">Professional Portfolio ($750)</option>
+                  <option value="html5">HTML5 Gaming Experience ($1,250)</option>
+                  <option value="webapp">Backend-Integrated Web App ($2,000)</option>
+                  <option value="ai">AI-Integrated App ($3,500)</option>
+                  <option value="xr">XR App Development ($4,000)</option>
+                  <option value="partnership">Partnership / Collaboration</option>
+                  <option value="other">Other / General Inquiry</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="budget">Estimated Budget Range</label>
+                <select id="budget" name="budget">
+                  <option value="">— Select a range (optional) —</option>
+                  <option value="under-1k">Under $1,000</option>
+                  <option value="1k-2k">$1,000 – $2,000</option>
+                  <option value="2k-5k">$2,000 – $5,000</option>
+                  <option value="5k-10k">$5,000 – $10,000</option>
+                  <option value="10k+">$10,000+</option>
+                  <option value="discuss">Let's Discuss</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject" placeholder="Brief project summary" required />
+              </div>
+
+              <div class="form-group">
+                <label for="message">Project Description</label>
+                <textarea id="message" name="message" rows="6" placeholder="Describe your project, goals, and timeline..." required></textarea>
+              </div>
+
+              <!-- Configuration -->
+              <input type="hidden" name="_subject" value="Luminary Labs — New Contact Submission" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="text" name="_honey" style="display:none" />
+              <input type="hidden" name="_next" value="https://luminarylabs.dev/contact.html?success=true" />
+
+              <button type="submit" class="btn primary" id="btn-submit-contact">Send Message</button>
+            </form>
+            
+            <div id="form-success-message" class="success-message" style="display:none;">
+              <h3>Message Sent!</h3>
+              <p>Thank you for reaching out. We've received your request and will be in touch shortly.</p>
+              <button class="btn ghost sm" onclick="location.reload()">Send Another</button>
             </div>
-
-            <div class="form-group">
-              <label for="subject">Subject</label>
-              <input type="text" id="subject" name="subject" placeholder="Brief project summary" required />
-            </div>
-
-            <div class="form-group">
-              <label for="message">Project Description</label>
-              <textarea id="message" name="message" rows="6" placeholder="Describe your project, goals, and timeline..." required></textarea>
-            </div>
-
-            <!-- Spam protection -->
-            <input type="text" name="_gotcha" style="display:none" />
-            <input type="hidden" name="_subject" value="New Contact Form Submission from Luminary Labs" />
-            <input type="hidden" name="_autoresponse" value="Thank you for contacting Luminary Labs! We have received your message and will get back to you within 24 hours." />
-
-            <button type="submit" class="btn primary" id="btn-submit-contact">Send Message</button>
-          </form>
+          </div>
         </div>
       </section>
     </main>
@@ -117,9 +156,24 @@
     <script src="assets/js/data.js"></script>
     <script src="assets/js/main.js"></script>
     <script>
-      // Auto-select service from URL params (e.g., contact.html?service=webapp)
+      // Handle URL params: ?service=webapp (auto-select) and ?success=true (show success UI)
       (function() {
         const params = new URLSearchParams(window.location.search);
+        
+        // 1. Handle success state
+        if (params.get('success') === 'true') {
+          const form = document.getElementById('contact-form');
+          const success = document.getElementById('form-success-message');
+          if (form && success) {
+            form.style.display = 'none';
+            success.style.display = 'block';
+            
+            // Optional: Scroll to success message
+            success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+
+        // 2. Auto-select service
         const service = params.get('service');
         if (service) {
           const select = document.getElementById('service');
