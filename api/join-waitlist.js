@@ -1,39 +1,46 @@
 const nodemailer = require('nodemailer');
 
 export default async function handler(req, res) {
-    // 1. Only allow POST requests
+    // 1. Set CORS headers to allow the browser's Preflight Check
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS,POST');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    // 2. Intercept and approve the browser's 'OPTIONS' request instantly
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
+    // 3. Keep our security guard for the actual submission
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    // 2. Extract the email from the frontend request
     const { email } = req.body;
     if (!email) {
         return res.status(400).json({ error: 'Email is required' });
     }
 
-    // 3. Connect to Google Workspace SMTP securely
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,
         secure: true,
         auth: {
-            user: process.env.GMAIL_USER,         // e.g., hello@nexuscentral.com
-            pass: process.env.GMAIL_APP_PASSWORD  // Your 16-character Google App Password
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_APP_PASSWORD
         }
     });
 
     try {
-        // 4. Send the notification email to your team
         await transporter.sendMail({
             from: `"NexusCentral" <${process.env.GMAIL_USER}>`,
-            to: process.env.GMAIL_USER, // Sending it to yourself
-            replyTo: email,             // Makes it easy to reply directly to the user
+            to: process.env.GMAIL_USER,
+            replyTo: email,
             subject: 'New Waitlist Signup 🎉',
             text: `A new user has joined the waitlist: ${email}`
         });
 
-        // 5. Tell the frontend it was successful
         return res.status(200).json({ message: 'Successfully joined waitlist' });
     } catch (error) {
         console.error('SMTP Error:', error);
