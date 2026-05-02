@@ -196,11 +196,11 @@
             <div class="mt-12 max-w-2xl mx-auto relative z-20 reveal">
                 <form id="earlyAccessForm"
                     class="flex flex-col sm:flex-row gap-3 shadow-xl shadow-blue-500/10 rounded-2xl bg-white p-2 border border-slate-200">
-                    <input type="email" id="emailInput" placeholder="Enter your email to join the waitlist" required
+                    <input type="email" id="emailInput" placeholder="Enter your email to join the news list" required
                         class="w-full px-6 py-4 rounded-xl bg-transparent border-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 placeholder-slate-400 outline-none flex-1 text-lg">
                     <button type="submit" id="submitBtn"
                         class="w-full sm:w-auto px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg transition-all hover:bg-blue-700 shadow-lg shadow-blue-500/20 hover:-translate-y-0.5 flex-shrink-0 flex items-center justify-center gap-2">
-                        <span class="btn-text">Join Waitlist</span>
+                        <span class="btn-text">Join News</span>
                         <svg class="btn-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
@@ -505,7 +505,6 @@
                         submitBtn.classList.remove('opacity-80', 'cursor-not-allowed', 'bg-emerald-500');
                         submitBtn.classList.add('bg-blue-600');
                         submitBtn.disabled = false;
-                        btnText.textContent = 'Join Waitlist';
                         btnIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>';
                         statusText.classList.replace('text-emerald-600', 'text-slate-500');
                         statusText.classList.replace('text-red-500', 'text-slate-500');
