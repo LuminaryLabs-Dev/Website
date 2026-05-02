@@ -21,9 +21,9 @@
                     colors: {
                         nexus: {
                             bg: '#F8FAFC',
-                            text: '#0F172A', // Deep slate for "Black"
+                            text: '#0F172A',
                             muted: '#64748B',
-                            primary: '#2563EB', // Blue
+                            primary: '#2563EB',
                             secondary: '#7C3AED',
                             accent: '#0EA5E9',
                             border: '#E2E8F0'
@@ -78,7 +78,6 @@
             height: 100vh;
             z-index: -1;
             opacity: 0.3;
-            /* Softened for cleaner look */
         }
 
         .organic-shape {
@@ -323,12 +322,10 @@
 
     <script src="assets/js/nexus-central-data.js"></script>
     <script>
-        // Render Function (Trimmed to only inject Features to avoid overwriting new Hero design)
         function renderPage() {
             if (typeof NEXUS_CENTRAL_DATA !== 'undefined' && NEXUS_CENTRAL_DATA.features) {
                 const data = NEXUS_CENTRAL_DATA;
 
-                // Features Injection
                 const featuresHtml = data.features.map(f => `
                     <div class="relative py-24 reveal">
                         ${f.skew ? `<div class="skew-bg" style="${f.skewConfig || ''}"></div>` : ''}
@@ -376,7 +373,6 @@
             reveal();
         }
 
-        // Scroll Reveal Logic
         function reveal() {
             var reveals = document.querySelectorAll(".reveal");
             for (var i = 0; i < reveals.length; i++) {
@@ -390,7 +386,6 @@
         }
         window.addEventListener("scroll", reveal);
 
-        // Three.js Logic
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0xF8FAFC, 0.0012);
@@ -407,8 +402,8 @@
         const particlePositions = new Float32Array(particleCount * 3);
         const particleColors = new Float32Array(particleCount * 3);
         const particleVelocities = [];
-        const colorPrimary = new THREE.Color(0x2563EB); // Blue
-        const colorSecondary = new THREE.Color(0x0EA5E9); // Sky
+        const colorPrimary = new THREE.Color(0x2563EB);
+        const colorSecondary = new THREE.Color(0x0EA5E9);
 
         for (let i = 0; i < particleCount; i++) {
             particlePositions[i * 3] = (Math.random() - 0.5) * 2500;
@@ -498,7 +493,6 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // Form Interaction linked to Vercel API
         const form = document.getElementById('earlyAccessForm');
         const submitBtn = document.getElementById('submitBtn');
         const btnText = submitBtn.querySelector('.btn-text');
@@ -510,39 +504,34 @@
                 e.preventDefault();
                 const email = document.getElementById('emailInput').value;
 
-                // Loading State
                 btnText.textContent = 'Joining...';
                 submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
                 submitBtn.disabled = true;
 
                 try {
-                    // Calls your Vercel Serverless Function
-                    const response = await fetch('/api/join-waitlist.js', {
+                    // Using mode: 'no-cors' bypasses browser preflight blocks for Google Scripts
+                    await fetch('https://script.google.com/macros/s/AKfycbxGgXipM1zM3Mc3DClq71jN20ZyG-dh6e_sbp-1Kg4ZHpY6NtTAcQX_jYKEaxdLdi3QIA/exec', {
                         method: 'POST',
+                        mode: 'no-cors',
                         headers: {
-                            'Content-Type': 'application/json',
+                            'Content-Type': 'text/plain;charset=utf-8',
                         },
                         body: JSON.stringify({ email: email })
                     });
 
-                    if (response.ok) {
-                        // Success
-                        form.reset();
-                        btnText.textContent = 'Added!';
-                        submitBtn.classList.replace('bg-blue-600', 'bg-emerald-500');
-                        btnIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
-                        statusText.textContent = "You're on the list! Keep an eye on your inbox.";
-                        statusText.classList.replace('text-slate-500', 'text-emerald-600');
-                    } else {
-                        throw new Error('Network response was not ok');
-                    }
+                    // Because of 'no-cors', we assume success if the network request didn't throw an error.
+                    form.reset();
+                    btnText.textContent = 'Added!';
+                    submitBtn.classList.replace('bg-blue-600', 'bg-emerald-500');
+                    btnIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
+                    statusText.textContent = "You're on the list! Keep an eye on your inbox.";
+                    statusText.classList.replace('text-slate-500', 'text-emerald-600');
+
                 } catch (error) {
-                    // Error
                     btnText.textContent = 'Try Again';
                     statusText.textContent = "Something went wrong. Please try again later.";
                     statusText.classList.replace('text-slate-500', 'text-red-500');
                 } finally {
-                    // Reset UI after delay
                     setTimeout(() => {
                         submitBtn.classList.remove('opacity-80', 'cursor-not-allowed', 'bg-emerald-500');
                         submitBtn.classList.add('bg-blue-600');
@@ -557,7 +546,6 @@
             });
         }
 
-        // Initialize
         window.onload = function () {
             renderPage();
             animate();
