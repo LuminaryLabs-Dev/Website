@@ -33,7 +33,6 @@
                         'blob': 'blob 10s infinite',
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'progress': 'progress 1.5s ease-out forwards',
                         'fade-in-delayed': 'fadeIn 1.5s ease-in 0.5s forwards',
                     },
                     keyframes: {
@@ -46,10 +45,6 @@
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
                             '50%': { transform: 'translateY(-15px)' },
-                        },
-                        progress: {
-                            '0%': { width: '0%' },
-                            '100%': { width: '73.8%' }
                         },
                         fadeIn: {
                             '0%': { opacity: '0', transform: 'translateY(10px)' },
@@ -129,16 +124,6 @@
             transform-origin: top left;
             z-index: -1;
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.02);
-        }
-
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%) skewX(-12deg);
-            }
-
-            100% {
-                transform: translateX(200%) skewX(-12deg);
-            }
         }
     </style>
 </head>
@@ -238,26 +223,10 @@
                 </div>
                 <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                     <div class="flex-1 w-full">
-                        <div class="flex justify-between items-end mb-4">
-                            <div>
-                                <h2 class="text-2xl font-bold text-slate-900">Support the Platform</h2>
-                                <p class="text-slate-500 mt-1">Help us keep AI accessible, secure, and user-centric.</p>
-                            </div>
-                        </div>
-                        <div
-                            class="w-full bg-slate-100 rounded-full h-6 border border-slate-200 overflow-hidden relative">
-                            <div
-                                class="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-600 to-sky-400 rounded-full animate-progress">
-                            </div>
-                            <div
-                                class="absolute top-0 left-0 h-full w-full bg-white/20 transform -skew-x-12 -translate-x-full animate-[shimmer_2s_infinite]">
-                            </div>
-                        </div>
-                        <div
-                            class="flex justify-between mt-2 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                            <span>Started</span>
-                            <span>73.8% Funded</span>
-                            <span>$25k Goal</span>
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-900">Support the Platform</h2>
+                            <p class="text-slate-500 mt-2 text-lg">Help us keep AI accessible, secure, and user-centric.
+                            </p>
                         </div>
                     </div>
                     <div class="w-full md:w-auto flex-shrink-0">
@@ -402,8 +371,8 @@
         const particlePositions = new Float32Array(particleCount * 3);
         const particleColors = new Float32Array(particleCount * 3);
         const particleVelocities = [];
-        const colorPrimary = new THREE.Color(0x2563EB);
-        const colorSecondary = new THREE.Color(0x0EA5E9);
+        const colorPrimary = new THREE.Color(0x2563EB); // Blue
+        const colorSecondary = new THREE.Color(0x0EA5E9); // Sky
 
         for (let i = 0; i < particleCount; i++) {
             particlePositions[i * 3] = (Math.random() - 0.5) * 2500;
