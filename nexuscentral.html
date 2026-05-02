@@ -4,16 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusCentral | Democratizing AI Workflows</title>
+    <title>Operational AI by you | NexusCentral</title>
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -21,17 +17,15 @@
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
                         nexus: {
-                            bg: '#F8FAFC', // slate-50
-                            text: '#0F172A', // slate-900
-                            muted: '#64748B', // slate-500
-                            primary: '#2563EB', // blue-600
-                            secondary: '#7C3AED', // violet-600
-                            accent: '#0EA5E9', // sky-500
-                            surface: '#FFFFFF',
+                            bg: '#F8FAFC',
+                            text: '#0F172A', // Deep slate for "Black"
+                            muted: '#64748B',
+                            primary: '#2563EB', // Blue
+                            secondary: '#7C3AED',
+                            accent: '#0EA5E9',
                             border: '#E2E8F0'
                         }
                     },
@@ -40,6 +34,7 @@
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'progress': 'progress 1.5s ease-out forwards',
+                        'fade-in-delayed': 'fadeIn 1.5s ease-in 0.5s forwards',
                     },
                     keyframes: {
                         blob: {
@@ -54,7 +49,11 @@
                         },
                         progress: {
                             '0%': { width: '0%' },
-                            '100%': { width: '73.8%' } /* 18450 / 25000 */
+                            '100%': { width: '73.8%' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         }
                     }
                 }
@@ -62,7 +61,6 @@
         }
     </script>
 
-    <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <style>
@@ -79,29 +77,8 @@
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            opacity: 0.4;
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, #2563EB, #7C3AED, #0EA5E9);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradient-x 4s linear infinite;
-        }
-
-        @keyframes gradient-x {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
+            opacity: 0.3;
+            /* Softened for cleaner look */
         }
 
         .organic-shape {
@@ -109,10 +86,10 @@
         }
 
         .app-screenshot-placeholder {
-            box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.25);
+            box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.15);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(226, 232, 240, 0.8);
-            background: #f1f5f9;
+            background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -122,7 +99,7 @@
 
         .app-screenshot-placeholder:hover {
             transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 30px 60px -12px rgba(124, 58, 237, 0.3);
+            box-shadow: 0 30px 60px -12px rgba(37, 99, 235, 0.2);
         }
 
         .app-screenshot-placeholder img {
@@ -142,7 +119,6 @@
             transform: translateY(0);
         }
 
-        /* Diagonal section backgrounds */
         .skew-bg {
             position: absolute;
             top: 0;
@@ -153,7 +129,7 @@
             transform: skewY(-3deg);
             transform-origin: top left;
             z-index: -1;
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.02);
         }
 
         @keyframes shimmer {
@@ -170,254 +146,233 @@
 
 <body class="antialiased font-sans selection:bg-nexus-primary selection:text-white">
 
-    <!-- 3D Interactive Background -->
     <div id="canvas-container"></div>
 
-    <!-- Navigation -->
     <nav
         class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-nexus-border transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <a href="index.html"
-                    class="flex-shrink-0 font-bold text-2xl tracking-tight flex items-center gap-2 text-nexus-text hover:opacity-80 transition-opacity">
-                    <div
-                        class="w-4 h-4 rounded-full bg-gradient-to-br from-nexus-primary to-nexus-secondary animate-pulse-slow">
+                    class="flex-shrink-0 font-bold text-2xl tracking-tight flex items-center gap-2 text-slate-900 hover:opacity-80 transition-opacity">
+                    <div class="w-4 h-4 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 animate-pulse-slow">
                     </div>
-                    Nexus<span class="text-nexus-muted font-light">Central</span>
+                    Nexus<span class="text-slate-500 font-light">Central</span>
                 </a>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-8 font-medium">
-                        <a href="index.html"
-                            class="text-nexus-muted hover:text-nexus-primary transition-colors">Home</a>
-                        <a href="#mission"
-                            class="text-nexus-muted hover:text-nexus-primary transition-colors">Mission</a>
-                        <a href="#features"
-                            class="text-nexus-muted hover:text-nexus-primary transition-colors">Platform</a>
-                        <a href="#donate" class="text-nexus-muted hover:text-nexus-primary transition-colors">Support
-                            Open Source</a>
+                        <a href="index.html" class="text-slate-500 hover:text-blue-600 transition-colors">Home</a>
+                        <a href="#features" class="text-slate-500 hover:text-blue-600 transition-colors">Platform</a>
                     </div>
                 </div>
                 <div>
-                    <a href="#donate" id="nav-donate-btn"
-                        class="px-5 py-2.5 font-medium bg-nexus-primary text-white rounded-full hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50">
-                        Back on Stripe
+                    <a href="https://donate.stripe.com/8x214m2HybZz1mBcE7bQY00" target="_blank"
+                        rel="noopener noreferrer"
+                        class="px-5 py-2.5 font-semibold bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                        Support Us
                     </a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <main class="relative pt-32 pb-16 lg:pt-48 lg:pb-24 overflow-hidden">
         <div
-            class="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-200/50 organic-shape mix-blend-multiply filter blur-[80px] animate-blob pointer-events-none -translate-x-1/2 -translate-y-1/2">
+            class="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-100/60 organic-shape mix-blend-multiply filter blur-[80px] animate-blob pointer-events-none -translate-x-1/2 -translate-y-1/2">
         </div>
-        <div class="absolute top-40 right-0 w-[400px] h-[400px] bg-purple-200/50 organic-shape mix-blend-multiply filter blur-[80px] animate-blob pointer-events-none translate-x-1/3"
+        <div class="absolute top-40 right-0 w-[400px] h-[400px] bg-indigo-100/50 organic-shape mix-blend-multiply filter blur-[80px] animate-blob pointer-events-none translate-x-1/3"
             style="animation-delay: 2s;"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <div id="hero-badge"
-                class="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full border border-blue-200 bg-white shadow-sm text-sm font-medium text-nexus-primary animate-float">
-                <!-- Content injected via JS -->
+            <div
+                class="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full border border-blue-200 bg-white shadow-sm text-sm font-medium text-blue-600 animate-float">
+                <svg class="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                        clip-rule="evenodd"></path>
+                </svg>
+                Sign up for early access today
             </div>
 
-            <h1 id="hero-title"
-                class="text-6xl md:text-8xl font-extrabold tracking-tight mb-8 text-nexus-text leading-tight">
-                <!-- Content injected via JS -->
+            <h1 class="text-6xl md:text-8xl font-extrabold tracking-tight mb-8 text-slate-900 leading-tight">
+                Operational AI <br />
+                <span class="text-blue-600 opacity-0 animate-fade-in-delayed inline-block italic font-bold">by
+                    you</span>
             </h1>
 
-            <p id="hero-subtitle" class="mt-6 max-w-3xl text-xl md:text-2xl text-nexus-muted mx-auto leading-relaxed">
-                <!-- Content injected via JS -->
+            <p class="mt-6 max-w-3xl text-xl md:text-2xl text-slate-500 mx-auto leading-relaxed font-light">
+                Experience the power of advanced AI orchestration with an interface designed for everyone. Automate your
+                daily tasks and build intelligent routines with absolute simplicity.
             </p>
 
-            <!-- Early Access Form -->
             <div class="mt-12 max-w-2xl mx-auto relative z-20 reveal">
                 <form id="earlyAccessForm"
-                    class="flex flex-col sm:flex-row gap-3 shadow-2xl shadow-blue-500/10 rounded-2xl bg-white/80 backdrop-blur p-2 border border-nexus-border/80">
-                    <input type="email" placeholder="Enter email for early repository access" required
-                        class="w-full px-6 py-4 rounded-xl bg-transparent border-none focus:ring-2 focus:ring-nexus-primary/50 text-nexus-text placeholder-nexus-muted outline-none flex-1 text-lg">
-                    <button type="submit"
-                        class="w-full sm:w-auto px-8 py-4 bg-nexus-primary text-white rounded-xl font-bold text-lg transition-all hover:bg-blue-700 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 flex-shrink-0 flex items-center justify-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="flex flex-col sm:flex-row gap-3 shadow-xl shadow-blue-500/10 rounded-2xl bg-white p-2 border border-slate-200">
+                    <input type="email" id="emailInput" placeholder="Enter your email to join the waitlist" required
+                        class="w-full px-6 py-4 rounded-xl bg-transparent border-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 placeholder-slate-400 outline-none flex-1 text-lg">
+                    <button type="submit" id="submitBtn"
+                        class="w-full sm:w-auto px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg transition-all hover:bg-blue-700 shadow-lg shadow-blue-500/20 hover:-translate-y-0.5 flex-shrink-0 flex items-center justify-center gap-2">
+                        <span class="btn-text">Join Waitlist</span>
+                        <svg class="btn-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                         </svg>
-                        <span class="btn-text">Request Access</span>
                     </button>
                 </form>
-                <p id="early-access-note" class="mt-4 text-sm font-medium text-nexus-muted">
-                    <!-- Content injected via JS -->
+                <p id="formStatus" class="mt-4 text-sm font-medium text-slate-500 transition-colors duration-300">
+                    Join thousands of everyday users discovering the future of personal AI.
                 </p>
             </div>
         </div>
     </main>
 
-    <!-- Fundraiser Tracker Section -->
     <section id="donate" class="relative z-20 -mt-8 pb-20">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
             <div id="fundraiser-card"
-                class="bg-white rounded-3xl p-8 md:p-12 shadow-2xl shadow-blue-900/5 border border-nexus-border relative overflow-hidden">
-                <!-- Content injected via JS -->
+                class="bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-200 relative overflow-hidden">
+                <div class="absolute inset-0 opacity-[0.02] pointer-events-none"
+                    style="background-image: radial-gradient(#2563EB 1px, transparent 1px); background-size: 20px 20px;">
+                </div>
+                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="flex-1 w-full">
+                        <div class="flex justify-between items-end mb-4">
+                            <div>
+                                <h2 class="text-2xl font-bold text-slate-900">Support the Platform</h2>
+                                <p class="text-slate-500 mt-1">Help us keep AI accessible, secure, and user-centric.</p>
+                            </div>
+                        </div>
+                        <div
+                            class="w-full bg-slate-100 rounded-full h-6 border border-slate-200 overflow-hidden relative">
+                            <div
+                                class="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-600 to-sky-400 rounded-full animate-progress">
+                            </div>
+                            <div
+                                class="absolute top-0 left-0 h-full w-full bg-white/20 transform -skew-x-12 -translate-x-full animate-[shimmer_2s_infinite]">
+                            </div>
+                        </div>
+                        <div
+                            class="flex justify-between mt-2 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                            <span>Started</span>
+                            <span>73.8% Funded</span>
+                            <span>$25k Goal</span>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-auto flex-shrink-0">
+                        <a href="https://donate.stripe.com/8x214m2HybZz1mBcE7bQY00" target="_blank"
+                            rel="noopener noreferrer"
+                            class="w-full md:w-auto px-8 py-4 bg-[#635BFF] hover:bg-[#4B45C6] text-white rounded-xl font-bold text-lg transition-all shadow-lg shadow-[#635BFF]/30 hover:shadow-[#635BFF]/50 hover:-translate-y-1 flex items-center justify-center gap-3">
+                            <svg class="w-6 h-6" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M19.9805 40C31.0262 40 39.9805 31.0457 39.9805 20C39.9805 8.95431 31.0262 0 19.9805 0C8.93478 0 -0.0195312 8.95431 -0.0195312 20C-0.0195312 31.0457 8.93478 40 19.9805 40Z"
+                                    fill="currentColor" />
+                                <path
+                                    d="M22.0625 15.6875C22.0625 14.5 21.0312 13.625 19.4688 13.625C17.6562 13.625 16.25 14.7812 16.25 16.5938C16.25 19.7812 25.1875 18.25 25.1875 23.5938C25.1875 26.6562 22.8438 29.0312 19.2812 29.0312C15.9375 29.0312 13.3438 27.2812 12.3125 24.5L15.5312 22.8438C16.125 24.625 17.5625 25.8125 19.3438 25.8125C21.125 25.8125 22.0625 24.9688 22.0625 23.875C22.0625 20.3125 13.125 22 13.125 16.6562C13.125 13.7812 15.6875 10.9688 19.4688 10.9688C22.25 10.9688 24.5938 12.4375 25.5 14.5312L22.0625 15.6875Z"
+                                    fill="white" />
+                            </svg>
+                            Back with Stripe
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Section (Vertical Storytelling) -->
     <section id="features" class="py-24 relative z-10">
         <div id="features-container">
-            <!-- Content injected via JS -->
         </div>
     </section>
 
-    <!-- Footer / Final CTA -->
     <footer class="relative bg-white border-t border-nexus-border pt-20 pb-10 overflow-hidden">
         <div
-            class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-t from-blue-100 to-transparent rounded-full filter blur-[100px] pointer-events-none">
+            class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-t from-blue-50 to-transparent rounded-full filter blur-[100px] pointer-events-none">
         </div>
 
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 reveal">
-            <h2 id="footer-title" class="text-4xl md:text-5xl font-extrabold text-nexus-text mb-6">Join the Open Source
-                Revolution</h2>
-            <p id="footer-subtitle" class="text-xl text-nexus-muted mb-10 font-light">
-                <!-- Content injected via JS -->
+            <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6">Empower Your Routine</h2>
+            <p class="text-xl text-slate-500 mb-10 font-light">
+                Join the community of users taking control of their digital lives through accessible, operational AI.
             </p>
 
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-16">
-                <button onclick="document.getElementById('donate').scrollIntoView({behavior: 'smooth'})"
-                    class="px-8 py-4 bg-nexus-primary text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-1 w-full sm:w-auto">
-                    Donate via Stripe
-                </button>
-                <a href="https://github.com" target="_blank"
-                    class="px-8 py-4 bg-slate-100 text-nexus-text rounded-xl font-bold text-lg hover:bg-slate-200 transition-all w-full sm:w-auto flex items-center justify-center gap-2">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z">
+                <a href="https://donate.stripe.com/8x214m2HybZz1mBcE7bQY00" target="_blank" rel="noopener noreferrer"
+                    class="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-1 w-full sm:w-auto flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                         </path>
                     </svg>
-                    View on GitHub
+                    Donate via Stripe
                 </a>
             </div>
 
             <div
-                class="border-t border-nexus-border pt-8 flex flex-col md:flex-row justify-between items-center text-sm font-medium text-nexus-muted">
-                <p id="copyright-text"></p>
-                <div id="footer-links" class="flex space-x-6 mt-4 md:mt-0">
-                    <!-- Links injected via JS -->
+                class="border-t border-slate-200 pt-8 flex flex-col md:flex-row justify-between items-center text-sm font-medium text-slate-500">
+                <p>© 2026 Luminary Labs LLC. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-blue-600 transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-blue-600 transition-colors">Terms of Service</a>
+                    <a href="contact.html" class="hover:text-blue-600 transition-colors">Contact</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Load Data and Render Scripts -->
     <script src="assets/js/nexus-central-data.js"></script>
     <script>
-        // Render Function
+        // Render Function (Trimmed to only inject Features to avoid overwriting new Hero design)
         function renderPage() {
-            const data = NEXUS_CENTRAL_DATA;
+            if (typeof NEXUS_CENTRAL_DATA !== 'undefined' && NEXUS_CENTRAL_DATA.features) {
+                const data = NEXUS_CENTRAL_DATA;
 
-            // Hero
-            document.getElementById('hero-badge').innerHTML = `
-                <svg class="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
-                Official Open Source Release: <span class="font-bold text-nexus-text">${data.hero.releaseDate}</span>
-            `;
-            document.getElementById('hero-title').innerHTML = `
-                ${data.hero.title} <br/>
-                <span class="gradient-text">${data.hero.titleAccent}</span>
-            `;
-            document.getElementById('hero-subtitle').textContent = data.hero.subtitle;
-            document.getElementById('early-access-note').textContent = `Join ${data.hero.earlyAccessCount} developers testing NexusCentral before the ${data.hero.releaseDate} release.`;
-
-            // Fundraiser
-            const progress = (data.fundraiser.raised / data.fundraiser.goal) * 100;
-            document.getElementById('fundraiser-card').innerHTML = `
-                <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#2563EB 1px, transparent 1px); background-size: 20px 20px;"></div>
-                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div class="flex-1 w-full">
-                        <div class="flex justify-between items-end mb-4">
-                            <div>
-                                <h2 class="text-2xl font-bold text-nexus-text">${data.fundraiser.title}</h2>
-                                <p class="text-nexus-muted mt-1">${data.fundraiser.description}</p>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-3xl font-extrabold text-nexus-primary">${data.fundraiser.currency}${data.fundraiser.raised.toLocaleString()}</span>
-                                <span class="text-nexus-muted font-medium block">raised of ${data.fundraiser.currency}${data.fundraiser.goal.toLocaleString()} goal</span>
-                            </div>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-6 border border-slate-200 overflow-hidden relative">
-                            <div class="absolute top-0 left-0 h-full bg-gradient-to-r from-nexus-primary to-nexus-accent rounded-full animate-progress" style="width: ${progress}%;"></div>
-                            <div class="absolute top-0 left-0 h-full w-full bg-white/20 transform -skew-x-12 -translate-x-full animate-[shimmer_2s_infinite]"></div>
-                        </div>
-                        <div class="flex justify-between mt-2 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                            <span>Started</span>
-                            <span>${progress.toFixed(1)}% Funded</span>
-                            <span>${data.fundraiser.currency}${data.fundraiser.goal / 1000}k</span>
-                        </div>
-                    </div>
-                    <div class="w-full md:w-auto flex-shrink-0">
-                        <button class="w-full md:w-auto px-8 py-4 bg-[#635BFF] hover:bg-[#4B45C6] text-white rounded-xl font-bold text-lg transition-all shadow-lg shadow-[#635BFF]/30 hover:shadow-[#635BFF]/50 hover:-translate-y-1 flex items-center justify-center gap-3">
-                            <svg class="w-6 h-6" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19.9805 40C31.0262 40 39.9805 31.0457 39.9805 20C39.9805 8.95431 31.0262 0 19.9805 0C8.93478 0 -0.0195312 8.95431 -0.0195312 20C-0.0195312 31.0457 8.93478 40 19.9805 40Z" fill="currentColor"/>
-                                <path d="M22.0625 15.6875C22.0625 14.5 21.0312 13.625 19.4688 13.625C17.6562 13.625 16.25 14.7812 16.25 16.5938C16.25 19.7812 25.1875 18.25 25.1875 23.5938C25.1875 26.6562 22.8438 29.0312 19.2812 29.0312C15.9375 29.0312 13.3438 27.2812 12.3125 24.5L15.5312 22.8438C16.125 24.625 17.5625 25.8125 19.3438 25.8125C21.125 25.8125 22.0625 24.9688 22.0625 23.875C22.0625 20.3125 13.125 22 13.125 16.6562C13.125 13.7812 15.6875 10.9688 19.4688 10.9688C22.25 10.9688 24.5938 12.4375 25.5 14.5312L22.0625 15.6875Z" fill="white"/>
-                            </svg>
-                            Back with Stripe
-                        </button>
-                    </div>
-                </div>
-            `;
-
-            // Features
-            const featuresHtml = data.features.map(f => `
-                <div class="relative py-24 reveal">
-                    ${f.skew ? `<div class="skew-bg" style="${f.skewConfig || ''}"></div>` : ''}
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div class="flex flex-col lg:flex-row${f.reverse ? '-reverse' : ''} items-center gap-16">
-                            <div class="flex-1 ${f.reverse ? 'lg:pl-12' : 'lg:pr-8'}">
-                                <div class="w-14 h-14 rounded-2xl ${f.iconColor} flex items-center justify-center mb-6 shadow-inner">
-                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${f.iconPath}"></path></svg>
-                                </div>
-                                <h3 class="text-4xl font-extrabold mb-6 text-nexus-text">${f.title}</h3>
-                                <p class="text-xl text-nexus-muted leading-relaxed mb-6 font-light">
-                                    ${f.description}
-                                </p>
-                                ${f.points && f.points.length > 0 ? `
-                                    <ul class="space-y-4 font-medium text-nexus-text mt-8">
-                                        ${f.points.map(p => `
-                                            <li class="flex items-center gap-3">
-                                                <span class="flex-shrink-0 w-6 h-6 rounded-full ${f.iconColor} flex items-center justify-center">✓</span> 
-                                                ${p}
-                                            </li>
-                                        `).join('')}
-                                    </ul>
-                                ` : ''}
-                                ${f.note ? `
-                                    <div class="mt-8 p-6 bg-white rounded-2xl shadow-sm border border-nexus-border flex items-start gap-4">
-                                        <div class="mt-1 w-3 h-3 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e] animate-pulse"></div>
-                                        <div>
-                                            <h4 class="font-bold text-nexus-text mb-1">${f.note.title}</h4>
-                                            <p class="text-sm text-nexus-muted">${f.note.text}</p>
-                                        </div>
+                // Features Injection
+                const featuresHtml = data.features.map(f => `
+                    <div class="relative py-24 reveal">
+                        ${f.skew ? `<div class="skew-bg" style="${f.skewConfig || ''}"></div>` : ''}
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div class="flex flex-col lg:flex-row${f.reverse ? '-reverse' : ''} items-center gap-16">
+                                <div class="flex-1 ${f.reverse ? 'lg:pl-12' : 'lg:pr-8'}">
+                                    <div class="w-14 h-14 rounded-2xl ${f.iconColor} flex items-center justify-center mb-6 shadow-inner">
+                                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${f.iconPath}"></path></svg>
                                     </div>
-                                ` : ''}
-                            </div>
-                            <div class="flex-1 w-full perspective-1000">
-                                <div class="app-screenshot-placeholder w-full rounded-2xl ${f.rotation}">
-                                    <img src="${f.image}" alt="${f.title} Concept Abstract" />
+                                    <h3 class="text-4xl font-extrabold mb-6 text-slate-900">${f.title}</h3>
+                                    <p class="text-xl text-slate-500 leading-relaxed mb-6 font-light">
+                                        ${f.description}
+                                    </p>
+                                    ${f.points && f.points.length > 0 ? `
+                                        <ul class="space-y-4 font-medium text-slate-900 mt-8">
+                                            ${f.points.map(p => `
+                                                <li class="flex items-center gap-3">
+                                                    <span class="flex-shrink-0 w-6 h-6 rounded-full ${f.iconColor} flex items-center justify-center">✓</span> 
+                                                    ${p}
+                                                </li>
+                                            `).join('')}
+                                        </ul>
+                                    ` : ''}
+                                    ${f.note ? `
+                                        <div class="mt-8 p-6 bg-white rounded-2xl shadow-sm border border-slate-200 flex items-start gap-4">
+                                            <div class="mt-1 w-3 h-3 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e] animate-pulse"></div>
+                                            <div>
+                                                <h4 class="font-bold text-slate-900 mb-1">${f.note.title}</h4>
+                                                <p class="text-sm text-slate-500">${f.note.text}</p>
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                                <div class="flex-1 w-full perspective-1000">
+                                    <div class="app-screenshot-placeholder w-full rounded-2xl ${f.rotation}">
+                                        <img src="${f.image}" alt="${f.title} Concept Abstract" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
-            document.getElementById('features-container').innerHTML = featuresHtml;
-
-            // Footer
-            document.getElementById('footer-subtitle').textContent = data.hero.subtitle;
-            document.getElementById('copyright-text').textContent = data.footer.copy;
-            document.getElementById('footer-links').innerHTML = data.footer.links.map(l => `
-                <a href="${l.href}" class="hover:text-nexus-primary transition-colors">${l.label}</a>
-            `).join('');
-
-            // Re-trigger reveal after content injection
+                `).join('');
+                document.getElementById('features-container').innerHTML = featuresHtml;
+            }
             reveal();
         }
 
@@ -435,7 +390,7 @@
         }
         window.addEventListener("scroll", reveal);
 
-        // Three.js Logic (Same as before but moved to end)
+        // Three.js Logic
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0xF8FAFC, 0.0012);
@@ -446,37 +401,37 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         container.appendChild(renderer.domElement);
 
-        const particleCount = 200;
-        const maxDistance = 180;
+        const particleCount = 150;
+        const maxDistance = 200;
         const particlesGeometry = new THREE.BufferGeometry();
         const particlePositions = new Float32Array(particleCount * 3);
         const particleColors = new Float32Array(particleCount * 3);
         const particleVelocities = [];
-        const colorPrimary = new THREE.Color(0x2563EB);
-        const colorSecondary = new THREE.Color(0x7C3AED);
+        const colorPrimary = new THREE.Color(0x2563EB); // Blue
+        const colorSecondary = new THREE.Color(0x0EA5E9); // Sky
 
         for (let i = 0; i < particleCount; i++) {
             particlePositions[i * 3] = (Math.random() - 0.5) * 2500;
             particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 2500;
             particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 1000;
-            const mixedColor = Math.random() > 0.4 ? colorPrimary : colorSecondary;
+            const mixedColor = Math.random() > 0.5 ? colorPrimary : colorSecondary;
             particleColors[i * 3] = mixedColor.r;
             particleColors[i * 3 + 1] = mixedColor.g;
             particleColors[i * 3 + 2] = mixedColor.b;
             particleVelocities.push({
-                x: (Math.random() - 0.5) * 0.5,
-                y: (Math.random() - 0.5) * 0.5,
-                z: (Math.random() - 0.5) * 0.5
+                x: (Math.random() - 0.5) * 0.3,
+                y: (Math.random() - 0.5) * 0.3,
+                z: (Math.random() - 0.5) * 0.3
             });
         }
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
         particlesGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
-        const particleMaterial = new THREE.PointsMaterial({ size: 4, transparent: true, opacity: 0.6, vertexColors: true, sizeAttenuation: true });
+        const particleMaterial = new THREE.PointsMaterial({ size: 4, transparent: true, opacity: 0.4, vertexColors: true, sizeAttenuation: true });
         const particleSystem = new THREE.Points(particlesGeometry, particleMaterial);
         scene.add(particleSystem);
 
         const linesGeometry = new THREE.BufferGeometry();
-        const linesMaterial = new THREE.LineBasicMaterial({ color: 0x94A3B8, transparent: true, opacity: 0.15 });
+        const linesMaterial = new THREE.LineBasicMaterial({ color: 0x94A3B8, transparent: true, opacity: 0.1 });
         let linePositions = new Float32Array(particleCount * particleCount * 3);
         linesGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
         const linesMesh = new THREE.LineSegments(linesGeometry, linesMaterial);
@@ -491,8 +446,8 @@
 
         function animate() {
             requestAnimationFrame(animate);
-            scene.rotation.y += 0.0005;
-            scene.rotation.x += 0.0002;
+            scene.rotation.y += 0.0003;
+            scene.rotation.x += 0.0001;
             const positions = particleSystem.geometry.attributes.position.array;
             targetObj.x = mouseX * 1200;
             targetObj.y = mouseY * 1200;
@@ -510,8 +465,8 @@
                 const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
                 if (distMouse < 300) {
                     const force = (300 - distMouse) / 300;
-                    positions[i * 3] += dxMouse * force * 0.03;
-                    positions[i * 3 + 1] += dyMouse * force * 0.03;
+                    positions[i * 3] += dxMouse * force * 0.02;
+                    positions[i * 3 + 1] += dyMouse * force * 0.02;
                 }
             }
             for (let i = 0; i < particleCount; i++) {
@@ -543,19 +498,64 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // Form Interaction
-        document.getElementById('earlyAccessForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const btn = this.querySelector('button');
-            const textSpan = btn.querySelector('.btn-text');
-            btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <span class="btn-text">Access Granted</span>`;
-            btn.classList.replace('bg-nexus-primary', 'bg-emerald-500');
-            setTimeout(() => {
-                this.reset();
-                btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg> <span class="btn-text">Request Access</span>`;
-                btn.classList.replace('bg-emerald-500', 'bg-nexus-primary');
-            }, 3000);
-        });
+        // Form Interaction linked to Vercel API
+        const form = document.getElementById('earlyAccessForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const btnIcon = submitBtn.querySelector('.btn-icon');
+        const statusText = document.getElementById('formStatus');
+
+        if (form) {
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const email = document.getElementById('emailInput').value;
+
+                // Loading State
+                btnText.textContent = 'Joining...';
+                submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                submitBtn.disabled = true;
+
+                try {
+                    // Calls your Vercel Serverless Function
+                    const response = await fetch('/api/join-waitlist', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email: email })
+                    });
+
+                    if (response.ok) {
+                        // Success
+                        form.reset();
+                        btnText.textContent = 'Added!';
+                        submitBtn.classList.replace('bg-blue-600', 'bg-emerald-500');
+                        btnIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
+                        statusText.textContent = "You're on the list! Keep an eye on your inbox.";
+                        statusText.classList.replace('text-slate-500', 'text-emerald-600');
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                } catch (error) {
+                    // Error
+                    btnText.textContent = 'Try Again';
+                    statusText.textContent = "Something went wrong. Please try again later.";
+                    statusText.classList.replace('text-slate-500', 'text-red-500');
+                } finally {
+                    // Reset UI after delay
+                    setTimeout(() => {
+                        submitBtn.classList.remove('opacity-80', 'cursor-not-allowed', 'bg-emerald-500');
+                        submitBtn.classList.add('bg-blue-600');
+                        submitBtn.disabled = false;
+                        btnText.textContent = 'Join Waitlist';
+                        btnIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>';
+                        statusText.classList.replace('text-emerald-600', 'text-slate-500');
+                        statusText.classList.replace('text-red-500', 'text-slate-500');
+                        statusText.textContent = "Join thousands of everyday users discovering the future of personal AI.";
+                    }, 4000);
+                }
+            });
+        }
 
         // Initialize
         window.onload = function () {
