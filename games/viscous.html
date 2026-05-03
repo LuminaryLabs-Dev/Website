@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VISCOUS: INDUSTRIAL DUCTS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #0a0a0a; color: #e5e5e5; font-family: 'Courier New', Courier, monospace; touch-action: none; /* Prevents mobile scrolling */ }
+        #gameCanvas { display: block; width: 100vw; height: 100vh; }
+        
+        .industrial-panel {
+            background: #171717;
+            border: 2px solid #333;
+            border-top: 4px solid #f59e0b;
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.8);
+        }
+
+        .form-active {
+            background: #f59e0b !important;
+            color: #000 !important;
+            border-color: #f59e0b !important;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        }
+
+        /* Scanline Overlay for Gritty Feel */
+        .scanlines {
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.4;
+        }
+
+        #level-screen { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="scanlines"></div>
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Detailed Left HUD -->
+    <div class="absolute top-4 left-4 industrial-panel p-4 z-10 flex flex-col w-72 max-w-full">
+        <div class="flex justify-between items-end border-b border-gray-700 pb-2 mb-3">
+            <div>
+                <h1 class="text-3xl font-black text-amber-500 tracking-tighter m-0 leading-none">VISCOUS</h1>
+            </div>
+            <div class="text-right">
+                <span class="text-[10px] text-gray-400">SECTOR</span>
+                <span id="hud-level" class="text-2xl font-bold text-white ml-1">01</span>
+            </div>
+        </div>
+        
+        <!-- Form Cycle List -->
+        <div class="space-y-1 mb-3">
+            <div id="btn-form-1" class="bg-gray-800 p-2 text-xs border border-gray-700 flex items-center transition-colors">
+                <span class="w-3 h-3 rounded-full bg-blue-500 mr-2 border border-black"></span> WATER
+            </div>
+            <div id="btn-form-2" class="bg-gray-800 p-2 text-xs border border-gray-700 flex items-center transition-colors">
+                <span class="w-3 h-3 rounded-full bg-cyan-200 mr-2 border border-black"></span> ICE
+            </div>
+            <div id="btn-form-3" class="bg-gray-800 p-2 text-xs border border-gray-700 flex items-center transition-colors">
+                <span class="w-3 h-3 rounded-full bg-white mr-2 border border-black"></span> STEAM
+            </div>
+            <div id="btn-form-4" class="bg-gray-800 p-2 text-xs border border-gray-700 flex items-center transition-colors">
+                <span class="w-3 h-3 rounded-full bg-slate-500 mr-2 border border-black"></span> SLUDGE
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center border-t border-gray-700 pt-3">
+            <span class="text-xs font-bold text-blue-400" id="current-tension">TENSION: NORMAL</span>
+            <span class="text-xs font-bold text-amber-500" id="mass-readout">MASS: 100%</span>
+        </div>
+    </div>
+
+    <!-- On-Screen Arcade Controls (Hidden by default, shown if mobile) -->
+    <div id="virtual-controls" class="absolute inset-0 pointer-events-none z-30 hidden">
+        <!-- Virtual Joystick -->
+        <div id="joystick-zone" class="absolute bottom-8 left-8 w-32 h-32 bg-white/10 rounded-full border-2 border-white/20 pointer-events-auto shadow-lg backdrop-blur-sm touch-none">
+            <div id="joystick-stick" class="absolute top-1/2 left-1/2 w-12 h-12 bg-white/50 rounded-full transform -translate-x-1/2 -translate-y-1/2 shadow-[0_0_15px_rgba(255,255,255,0.4)] pointer-events-none transition-transform duration-75"></div>
+        </div>
+        
+        <!-- Virtual Buttons -->
+        <div class="absolute bottom-8 right-8 flex gap-6 pointer-events-auto touch-none">
+            <!-- Button B (Tension) -->
+            <button id="btn-tension" class="w-20 h-20 bg-blue-600/40 rounded-full border-2 border-blue-400/50 text-white font-bold text-xs flex flex-col items-center justify-center active:bg-blue-500/70 active:scale-95 shadow-[0_0_15px_rgba(59,130,246,0.3)] transition-all select-none backdrop-blur-sm">
+                <span class="text-2xl mb-1 text-blue-200">B</span>
+                <span class="text-[9px]">TENSION</span>
+            </button>
+            <!-- Button A (Form) -->
+            <button id="btn-form" class="w-20 h-20 bg-amber-600/40 rounded-full border-2 border-amber-400/50 text-white font-bold text-xs flex flex-col items-center justify-center active:bg-amber-500/70 active:scale-95 shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all select-none relative top-[-30px] backdrop-blur-sm">
+                <span class="text-2xl mb-1 text-amber-200">A</span>
+                <span class="text-[9px]">FORM</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Controls Tutorial Note -->
+    <div id="controls-note" class="absolute top-4 right-4 industrial-panel p-3 z-10 flex flex-col gap-2 text-xs transition-opacity duration-1000 max-w-xs text-right">
+        <!-- Will be populated dynamically based on device -->
+    </div>
+
+    <!-- Level Complete / End Screen -->
+    <div id="level-screen" class="absolute inset-0 bg-black/90 z-20 flex items-center justify-center">
+        <div class="industrial-panel p-8 max-w-lg w-full text-center border-t-8 border-t-amber-500">
+            <h2 id="end-title" class="text-4xl font-black text-white mb-2 tracking-widest">SECTOR CLEAR</h2>
+            <p class="text-gray-400 mb-8 font-bold" id="end-subtitle">EXTRACTION COMPLETE</p>
+            
+            <div class="flex justify-center gap-4 mb-8" id="star-container"></div>
+            
+            <div class="bg-neutral-900 p-4 border border-neutral-800 mb-8 text-left">
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-500">INITIAL MASS:</span>
+                    <span class="text-white font-bold" id="stat-initial">100 u</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-500">EXTRACTED MASS:</span>
+                    <span class="text-amber-500 font-bold" id="stat-extracted">85 u</span>
+                </div>
+                <div class="flex justify-between border-t border-neutral-700 pt-2 mt-2">
+                    <span class="text-gray-500">EFFICIENCY RATING:</span>
+                    <span class="text-white font-bold text-xl" id="stat-percent">85%</span>
+                </div>
+            </div>
+            
+            <p id="action-prompt" class="text-amber-500 animate-pulse font-bold">PRESS [A/ENTER] TO PROCEED</p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+
+        // Device Detection
+        const isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+        
+        if (isMobile) {
+            document.getElementById('virtual-controls').classList.remove('hidden');
+            document.getElementById('controls-note').innerHTML = `
+                <span id="ctrl-joystick" class="text-gray-400 transition-colors">Use <span class="text-white font-bold">JOYSTICK</span> to Flow</span>
+                <span id="ctrl-btnA" class="text-gray-400 transition-colors">Press <span class="text-amber-500 font-bold">A</span> to Cycle Form</span>
+                <span id="ctrl-btnB" class="text-gray-400 transition-colors">Press <span class="text-blue-500 font-bold">B</span> to Cycle Tension</span>
+            `;
+        } else {
+            document.getElementById('controls-note').innerHTML = `
+                <span id="ctrl-joystick" class="text-gray-400 transition-colors">Use <span class="text-white font-bold">WASD</span> to Flow</span>
+                <span id="ctrl-btnA" class="text-gray-400 transition-colors">Press <span class="text-amber-500 font-bold">X</span> to Cycle Form</span>
+                <span id="ctrl-btnB" class="text-gray-400 transition-colors">Press <span class="text-blue-500 font-bold">Z</span> to Cycle Tension</span>
+            `;
+        }
+
+        // Game Configuration & State
+        const Config = {
+            numParticles: 120,
+            particleRadius: 7,
+            gravity: 0.4,
+            moveForce: 0.2,
+            drag: 0.95,
+            baseTension: 0.08
+        };
+
+        const tensionModes = ['NORMAL', 'FLATTEN', 'CLUMP'];
+        const State = {
+            level: 1,
+            form: 1, // 1:Water, 2:Ice, 3:Steam, 4:Sludge
+            tensionIndex: 0,
+            tension: Config.baseTension,
+            keys: {},
+            joystick: { x: 0, y: 0 },
+            cameraX: 0, cameraY: 0,
+            gameState: 'playing', 
+            extractedCount: 0,
+            deadCount: 0
+        };
+
+        // Tutorial Tracking
+        const Tut = { joystick: false, btnA: false, btnB: false };
+
+        function markTut(id) {
+            if(Tut[id]) return;
+            Tut[id] = true;
+            let el = document.getElementById('ctrl-' + id);
+            if(el) { el.style.opacity = '0.3'; }
+            
+            if(Object.values(Tut).every(v => v)) {
+                let note = document.getElementById('controls-note');
+                if (note) {
+                    note.style.opacity = '0';
+                    setTimeout(() => { note.style.display = 'none'; }, 1000);
+                }
+            }
+        }
+
+        // UI Bindings
+        function updateHUD() {
+            for(let i=1; i<=4; i++) {
+                document.getElementById(`btn-form-${i}`).classList.remove('form-active');
+            }
+            document.getElementById(`btn-form-${State.form}`).classList.add('form-active');
+            
+            document.getElementById('hud-level').innerText = State.level.toString().padStart(2, '0');
+            document.getElementById('current-tension').innerText = `TENSION: ${tensionModes[State.tensionIndex]}`;
+            
+            let total = particles.length + State.extractedCount;
+            let percent = total > 0 ? Math.floor((total / Config.numParticles) * 100) : 0;
+            document.getElementById('mass-readout').innerText = `MASS: ${percent}%`;
+        }
+
+        // Input Systems (Virtual Joystick & Buttons)
+        const joystickZone = document.getElementById('joystick-zone');
+        const joystickStick = document.getElementById('joystick-stick');
+        let stickActive = false;
+        let stickTouchId = null;
+        let stickCenter = { x: 0, y: 0 };
+        const maxStickDist = 40;
+
+        function handleJoystickMove(clientX, clientY) {
+            let dx = clientX - stickCenter.x;
+            let dy = clientY - stickCenter.y;
+            let dist = Math.sqrt(dx*dx + dy*dy);
+            if(dist > maxStickDist) {
+                dx = (dx/dist) * maxStickDist;
+                dy = (dy/dist) * maxStickDist;
+            }
+            joystickStick.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+            State.joystick.x = dx / maxStickDist;
+            State.joystick.y = dy / maxStickDist;
+            if(Math.abs(State.joystick.x) > 0.1 || Math.abs(State.joystick.y) > 0.1) markTut('joystick');
+        }
+
+        function handleJoystickEnd() {
+            stickActive = false;
+            stickTouchId = null;
+            joystickStick.style.transform = `translate(-50%, -50%)`;
+            State.joystick.x = 0;
+            State.joystick.y = 0;
+        }
+
+        // Mouse Joystick
+        joystickZone.addEventListener('mousedown', (e) => {
+            stickActive = true;
+            let rect = joystickZone.getBoundingClientRect();
+            stickCenter = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 };
+            handleJoystickMove(e.clientX, e.clientY);
+        });
+        window.addEventListener('mousemove', (e) => { if(stickActive && stickTouchId === null) handleJoystickMove(e.clientX, e.clientY); });
+        window.addEventListener('mouseup', () => { if(stickActive && stickTouchId === null) handleJoystickEnd(); });
+
+        // Touch Joystick
+        joystickZone.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            let rect = joystickZone.getBoundingClientRect();
+            for(let touch of e.changedTouches) {
+                if(!stickActive) {
+                    stickActive = true;
+                    stickTouchId = touch.identifier;
+                    stickCenter = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 };
+                    handleJoystickMove(touch.clientX, touch.clientY);
+                    break;
+                }
+            }
+        });
+        window.addEventListener('touchmove', (e) => { 
+            if(stickActive) {
+                for(let touch of e.changedTouches) {
+                    if(touch.identifier === stickTouchId) {
+                        e.preventDefault();
+                        handleJoystickMove(touch.clientX, touch.clientY);
+                    }
+                }
+            }
+        }, {passive: false});
+        window.addEventListener('touchend', (e) => { 
+            for(let touch of e.changedTouches) {
+                if(touch.identifier === stickTouchId) handleJoystickEnd();
+            }
+        });
+
+        // Virtual Buttons
+        function actionButtonA() {
+            if(State.gameState === 'playing') {
+                State.form = (State.form % 4) + 1; // Cycle Form
+                updateHUD();
+                markTut('btnA');
+            } else if (State.gameState === 'summary') {
+                proceedNextLevel();
+            }
+        }
+
+        function actionButtonB() {
+            if(State.gameState === 'playing') {
+                State.tensionIndex = (State.tensionIndex + 1) % 3; // Cycle Tension
+                if(State.tensionIndex === 0) State.tension = Config.baseTension; // Normal
+                if(State.tensionIndex === 1) State.tension = 0.0; // Flatten
+                if(State.tensionIndex === 2) State.tension = 0.25; // Clump
+                updateHUD();
+                markTut('btnB');
+            }
+        }
+
+        document.getElementById('btn-form').addEventListener('mousedown', actionButtonA);
+        document.getElementById('btn-form').addEventListener('touchstart', (e) => { e.preventDefault(); actionButtonA(); });
+        
+        document.getElementById('btn-tension').addEventListener('mousedown', actionButtonB);
+        document.getElementById('btn-tension').addEventListener('touchstart', (e) => { e.preventDefault(); actionButtonB(); });
+
+        // Keyboard Fallback (Arcade mapped)
+        window.addEventListener('keydown', (e) => { 
+            let key = e.key.toLowerCase();
+            State.keys[key] = true; 
+            
+            if(['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(key)) markTut('joystick');
+            
+            if(key === 'x') actionButtonA();
+            if(key === 'z') actionButtonB();
+            if(key === 'enter' && State.gameState === 'summary') proceedNextLevel();
+        });
+        window.addEventListener('keyup', (e) => { 
+            State.keys[e.key.toLowerCase()] = false; 
+        });
+
+        function proceedNextLevel() {
+            if(State.extractedCount > 0) {
+                State.level++;
+                generateLevel(State.level);
+            } else {
+                generateLevel(State.level); // Retry
+            }
+        }
+
+        // Physics Entities
+        class Particle {
+            constructor(x, y) {
+                this.x = x; this.y = y;
+                this.vx = (Math.random() - 0.5) * 4;
+                this.vy = (Math.random() - 0.5) * 4;
+                this.radius = Config.particleRadius;
+                this.active = true;
+            }
+
+            update() {
+                if(!this.active) return;
+
+                if (State.form === 2) { // ICE
+                    this.vx *= 0.7; this.vy *= 0.7;
+                    this.vy += Config.gravity * 2;
+                } else if (State.form === 3) { // STEAM
+                    this.vy -= 0.3; 
+                    if (this.vy < -4) this.vy = -4; 
+                    this.vx *= 0.85; this.vy *= 0.95;
+                } else if (State.form === 4) { // SLUDGE
+                    this.vy += Config.gravity * 1.5;
+                    this.vx *= 0.9; this.vy *= 0.9;
+                } else { // WATER
+                    this.vy += Config.gravity;
+                    this.vx *= Config.drag; this.vy *= Config.drag;
+                }
+
+                // Apply Flow Force combining Virtual Joystick & Keyboard Fallback
+                let fx = State.joystick.x * Config.moveForce;
+                let fy = State.joystick.y * Config.moveForce;
+
+                let kx = 0, ky = 0;
+                if (State.keys['arrowleft'] || State.keys['a']) kx -= 1;
+                if (State.keys['arrowright'] || State.keys['d']) kx += 1;
+                if (State.keys['arrowup'] || State.keys['w']) ky -= 1;
+                if (State.keys['arrowdown'] || State.keys['s']) ky += 1;
+
+                // Normalize keyboard input so diagonals aren't faster, and override joystick if used
+                if (kx !== 0 || ky !== 0) {
+                    let kMag = Math.sqrt(kx*kx + ky*ky);
+                    fx = (kx / kMag) * Config.moveForce;
+                    fy = (ky / kMag) * Config.moveForce;
+                }
+
+                let multiplier = State.form===2 ? 0.1 : (State.form===3 ? 1.5 : (State.form===4 ? 0.6 : 1.2));
+                this.vx += fx * multiplier;
+                this.vy += fy * multiplier;
+
+                if(State.form === 3 && Math.abs(this.vy) < 0.5) this.vx += (Math.random()-0.5)*0.5;
+
+                this.x += this.vx; this.y += this.vy;
+            }
+        }
+
+        class Obstacle {
+            constructor(x, y, w, h, type) {
+                this.x = x; this.y = y; this.w = w; this.h = h;
+                this.type = type; 
+                this.active = true;
+            }
+            draw(ctx) {
+                if (!this.active) return;
+                
+                if (this.type === 'wall') {
+                    ctx.fillStyle = '#262626';
+                    ctx.fillRect(this.x, this.y, this.w, this.h);
+                    ctx.strokeStyle = '#111';
+                    ctx.lineWidth = 6;
+                    ctx.strokeRect(this.x, this.y, this.w, this.h);
+                    ctx.strokeStyle = '#3a3a3a';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(this.x+3, this.y+3, this.w-6, this.h-6);
+                    if(this.w >= 100 && this.h >= 100) {
+                        ctx.fillStyle = '#000';
+                        for(let i=20; i<this.w-10; i+=60) {
+                            for(let j=20; j<this.h-10; j+=60) {
+                                ctx.fillRect(this.x+i, this.y+j, 4, 4);
+                            }
+                        }
+                    }
+                } else if (this.type === 'glass') {
+                    ctx.fillStyle = 'rgba(100, 200, 255, 0.15)';
+                    ctx.fillRect(this.x, this.y, this.w, this.h);
+                    ctx.strokeStyle = '#93c5fd';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(this.x, this.y, this.w, this.h);
+                    ctx.beginPath();
+                    ctx.moveTo(this.x + 10, this.y); ctx.lineTo(this.x, this.y + 10);
+                    ctx.moveTo(this.x + 30, this.y); ctx.lineTo(this.x, this.y + 30);
+                    ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.stroke();
+                } else if (this.type === 'goal') {
+                    ctx.fillStyle = 'rgba(245, 158, 11, 0.1)'; 
+                    ctx.fillRect(this.x, this.y, this.w, this.h);
+                    ctx.strokeStyle = '#f59e0b';
+                    ctx.lineWidth = 4;
+                    ctx.strokeRect(this.x, this.y, this.w, this.h);
+                    ctx.fillStyle = '#f59e0b';
+                    ctx.font = '20px Courier';
+                    ctx.fillText("EXTRACTION", this.x + 10, this.y + 30);
+                } else if (this.type === 'danger') {
+                    if (this.w > this.h) {
+                        ctx.fillStyle = '#ef4444'; ctx.fillRect(this.x, this.y + this.h/2 - 4, this.w, 8);
+                        ctx.fillStyle = '#fff'; ctx.fillRect(this.x, this.y + this.h/2 - 1, this.w, 2);
+                        ctx.fillStyle = '#171717';
+                        ctx.fillRect(this.x - 10, this.y - 5, 20, this.h + 10);
+                        ctx.fillRect(this.x + this.w - 10, this.y - 5, 20, this.h + 10);
+                    } else {
+                        ctx.fillStyle = '#ef4444'; ctx.fillRect(this.x + this.w/2 - 4, this.y, 8, this.h);
+                        ctx.fillStyle = '#fff'; ctx.fillRect(this.x + this.w/2 - 1, this.y, 2, this.h);
+                        ctx.fillStyle = '#171717';
+                        ctx.fillRect(this.x - 5, this.y - 10, this.w + 10, 20);
+                        ctx.fillRect(this.x - 5, this.y + this.h - 10, this.w + 10, 20);
+                    }
+                }
+            }
+        }
+
+        let particles = [];
+        let obstacles = [];
+        let shatterFX = [];
+
+        // PROCEDURAL LEVEL GENERATION
+        function generateLevel(levelNum) {
+            particles = [];
+            obstacles = [];
+            shatterFX = [];
+            State.extractedCount = 0;
+            State.deadCount = 0;
+            State.form = 1;
+            State.tensionIndex = 0;
+            State.tension = Config.baseTension;
+            State.gameState = 'playing';
+            document.getElementById('level-screen').style.display = 'none';
+            updateHUD();
+
+            let cursorX = 0;
+            let cursorY = 800;
+            
+            for(let i=0; i<Config.numParticles; i++) {
+                particles.push(new Particle(cursorX + 200 + Math.random()*100, cursorY - 100 + Math.random()*50));
+            }
+
+            obstacles.push(new Obstacle(cursorX - 200, cursorY - 1000, 200, 2000, 'wall')); 
+            obstacles.push(new Obstacle(cursorX, cursorY, 600, 800, 'wall')); 
+            obstacles.push(new Obstacle(cursorX, cursorY - 600, 600, 200, 'wall')); 
+            cursorX += 600;
+
+            let numBlocks = 2 + Math.floor(levelNum * 1.5); 
+            let blockTypes = ['squeeze', 'vent', 'glass', 'gauntlet'];
+
+            for(let i=0; i<numBlocks; i++) {
+                let type = levelNum === 1 && i < 3 ? ['squeeze', 'vent', 'glass'][i] : blockTypes[Math.floor(Math.random() * blockTypes.length)];
+
+                if (type === 'squeeze') {
+                    let gap = 50 + Math.random() * 40; 
+                    obstacles.push(new Obstacle(cursorX, cursorY, 1200, 800, 'wall')); 
+                    obstacles.push(new Obstacle(cursorX - 200, cursorY - 800, 1400, 800 - gap, 'wall')); 
+                    
+                    let numLasers = 2 + Math.floor(Math.random() * 3);
+                    for(let j=0; j<numLasers; j++) {
+                        let lx = cursorX + 200 + (800 / numLasers) * j + Math.random()*100;
+                        let isTop = Math.random() > 0.5;
+                        if (isTop) obstacles.push(new Obstacle(lx, cursorY - gap, 100, 15, 'danger')); 
+                        else obstacles.push(new Obstacle(lx, cursorY - 15, 100, 15, 'danger')); 
+                    }
+                    cursorX += 1200;
+                } 
+                else if (type === 'vent') {
+                    let upH = 1400 + Math.random() * 600;
+                    obstacles.push(new Obstacle(cursorX, cursorY, 200, 800, 'wall')); 
+                    obstacles.push(new Obstacle(cursorX - 200, cursorY - upH, 200, upH - 200, 'wall')); 
+                    obstacles.push(new Obstacle(cursorX + 200, cursorY - upH + 800, 200, upH - 800, 'wall')); 
+                    obstacles.push(new Obstacle(cursorX - 200, cursorY - upH, 1000, 600, 'wall')); 
+                    
+                    if (Math.random() > 0.4) obstacles.push(new Obstacle(cursorX, cursorY - upH + 600, 200, 15, 'danger')); 
+                    if (Math.random() > 0.4) obstacles.push(new Obstacle(cursorX + 400, cursorY - upH + 1000, 200, 15, 'danger')); 
+
+                    obstacles.push(new Obstacle(cursorX + 600, cursorY - upH, 200, upH - 200, 'wall')); 
+                    obstacles.push(new Obstacle(cursorX + 400, cursorY, 400, 800, 'wall')); 
+                    cursorX += 800;
+                } 
+                else if (type === 'glass') {
+                    obstacles.push(new Obstacle(cursorX, cursorY, 200, 800, 'wall')); 
+                    obstacles.push(new Obstacle(cursorX - 200, cursorY - 800, 1000, 400, 'wall')); 
+                    obstacles.push(new Obstacle(cursorX, cursorY + 800, 200, 1200, 'wall')); 
+                    obstacles.push(new Obstacle(cursorX + 400, cursorY - 400, 200, 1400, 'wall')); 
+                    
+                    let pitLasers = Math.floor(Math.random() * 3);
+                    for(let j=0; j<pitLasers; j++) {
+                        let alignLeft = Math.random() > 0.5;
+                        let lx = alignLeft ? cursorX + 200 : cursorX + 300;
+                        let ly = cursorY + 200 + j*200;
+                        obstacles.push(new Obstacle(lx, ly, 100, 15, 'danger'));
+                    }
+
+                    obstacles.push(new Obstacle(cursorX + 200, cursorY + 800, 200, 30, 'glass')); 
+                    obstacles.push(new Obstacle(cursorX + 200, cursorY + 1200, 600, 800, 'wall')); 
+                    obstacles.push(new Obstacle(cursorX + 600, cursorY + 400, 200, 600, 'wall')); 
+                    
+                    cursorY += 1200; 
+                    cursorX += 800;
+                }
+                else if (type === 'gauntlet') {
+                    obstacles.push(new Obstacle(cursorX, cursorY, 1200, 800, 'wall')); 
+                    obstacles.push(new Obstacle(cursorX - 200, cursorY - 800, 1400, 400, 'wall')); 
+                    
+                    let numLasers = 3 + Math.floor(Math.random() * 4);
+                    for(let j=0; j<numLasers; j++) {
+                        let lx = cursorX + 300 + (600 / numLasers) * j;
+                        let isTop = Math.random() > 0.5;
+                        let ly = isTop ? cursorY - 400 : cursorY - 100;
+                        let lh = isTop ? 200 : 100;
+                        obstacles.push(new Obstacle(lx, ly, 20, lh, 'danger')); 
+                    }
+                    cursorX += 1200;
+                }
+            }
+
+            obstacles.push(new Obstacle(cursorX, cursorY, 800, 800, 'wall')); 
+            obstacles.push(new Obstacle(cursorX - 200, cursorY - 800, 1000, 400, 'wall')); 
+            obstacles.push(new Obstacle(cursorX + 200, cursorY - 400, 300, 400, 'goal')); 
+            obstacles.push(new Obstacle(cursorX + 800, cursorY - 1600, 400, 3500, 'wall')); 
+
+            State.cameraX = 0;
+            State.cameraY = 800 - canvas.height/2;
+        }
+
+        function applyFluidDynamics() {
+            if(particles.length === 0) return;
+            let cx = 0, cy = 0;
+            for (let p of particles) { cx += p.x; cy += p.y; }
+            cx /= particles.length; cy /= particles.length;
+
+            for (let i = 0; i < particles.length; i++) {
+                let p1 = particles[i];
+
+                if (State.form !== 3) { 
+                    let dxCoM = cx - p1.x; let dyCoM = cy - p1.y;
+                    let distCoM = Math.sqrt(dxCoM * dxCoM + dyCoM * dyCoM);
+                    if (distCoM > 0) {
+                        p1.vx += (dxCoM / distCoM) * State.tension;
+                        p1.vy += (dyCoM / distCoM) * State.tension * 1.5; 
+                    }
+                } else { 
+                    let dxCoM = cx - p1.x; let dyCoM = cy - p1.y;
+                    let distCoM = Math.sqrt(dxCoM * dxCoM + dyCoM * dyCoM);
+                    if (distCoM > 80) { p1.vx += (dxCoM / distCoM) * 0.05; p1.vy += (dyCoM / distCoM) * 0.05; }
+                    else if (distCoM < 30) { p1.vx -= (dxCoM / distCoM) * 0.02; }
+                }
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    let p2 = particles[j];
+                    let dx = p2.x - p1.x; let dy = p2.y - p1.y;
+                    let distSq = dx * dx + dy * dy;
+                    let minDist = p1.radius + p2.radius;
+
+                    if (distSq < minDist * minDist) {
+                        let dist = Math.sqrt(distSq);
+                        if (dist === 0) { dx = Math.random(); dy = Math.random(); dist = 1; }
+                        let overlap = minDist - dist;
+                        let force = overlap * 0.25; 
+                        
+                        if (State.form === 3) force *= 0.3; 
+                        if (State.form === 4) force *= 1.5; 
+
+                        let fx = (dx / dist) * force; let fy = (dy / dist) * force;
+                        p1.vx -= fx; p1.vy -= fy;
+                        p2.vx += fx; p2.vy += fy;
+                    }
+                }
+            }
+        }
+
+        function resolveCollisions() {
+            let hitGoalCountThisFrame = 0;
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                if (p.y < -5000) p.vy = Math.abs(p.vy); 
+                
+                if (p.y > State.cameraY + 3000) {
+                    State.deadCount++;
+                    particles.splice(i, 1);
+                    continue;
+                }
+
+                for (let obs of obstacles) {
+                    if (!obs.active) continue;
+
+                    if (p.x + p.radius > obs.x && p.x - p.radius < obs.x + obs.w &&
+                        p.y + p.radius > obs.y && p.y - p.radius < obs.y + obs.h) {
+                        
+                        if (obs.type === 'goal') {
+                            State.extractedCount++;
+                            hitGoalCountThisFrame++;
+                            particles.splice(i, 1); 
+                            break; 
+                        }
+
+                        if (obs.type === 'danger') {
+                            p.radius -= 1;
+                            p.vy += 2;
+                            if(p.radius <= 2) {
+                                State.deadCount++;
+                                particles.splice(i, 1);
+                                break;
+                            }
+                            continue;
+                        }
+
+                        let overlapL = (p.x + p.radius) - obs.x;
+                        let overlapR = (obs.x + obs.w) - (p.x - p.radius);
+                        let overlapT = (p.y + p.radius) - obs.y;
+                        let overlapB = (obs.y + obs.h) - (p.y - p.radius);
+                        let minOverlap = Math.min(overlapL, overlapR, overlapT, overlapB);
+                        let impactSpeed = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+
+                        if (obs.type === 'glass') {
+                            if (State.form === 4 && impactSpeed > 6) { 
+                                obs.active = false;
+                                for(let k=0; k<30; k++) shatterFX.push({x: obs.x+Math.random()*obs.w, y: obs.y+Math.random()*obs.h, vx:(Math.random()-0.5)*15, vy:(Math.random()-0.5)*15, life:1});
+                                continue;
+                            }
+                        }
+
+                        if (minOverlap === overlapT) { p.y -= overlapT; p.vy *= -0.3; } 
+                        else if (minOverlap === overlapB) { p.y += overlapB; p.vy *= -0.3; } 
+                        else if (minOverlap === overlapL) { p.x -= overlapL; p.vx *= -0.3; } 
+                        else if (minOverlap === overlapR) { p.x += overlapR; p.vx *= -0.3; }
+
+                        if (State.form === 2) { p.vx *= 0.1; p.vy *= 0.1; } 
+                    }
+                }
+            }
+
+            if (State.gameState === 'playing' && particles.length === 0) endLevel();
+        }
+
+        function endLevel() {
+            State.gameState = 'summary';
+            const screen = document.getElementById('level-screen');
+            const title = document.getElementById('end-title');
+            const sub = document.getElementById('end-subtitle');
+            
+            let percent = Math.floor((State.extractedCount / Config.numParticles) * 100);
+            
+            document.getElementById('stat-initial').innerText = Config.numParticles + ' units';
+            document.getElementById('stat-extracted').innerText = State.extractedCount + ' units';
+            document.getElementById('stat-percent').innerText = percent + '%';
+            
+            let stars = 0;
+            if(percent >= 90) stars = 3;
+            else if(percent >= 60) stars = 2;
+            else if(percent > 0) stars = 1;
+
+            if(stars > 0) {
+                title.innerText = "SECTOR CLEAR";
+                title.className = "text-5xl font-black text-amber-500 mb-2 tracking-widest";
+                sub.innerText = "EXTRACTION SUCCESSFUL";
+            } else {
+                title.innerText = "SYSTEM FAILURE";
+                title.className = "text-5xl font-black text-red-600 mb-2 tracking-widest";
+                sub.innerText = "TOTAL MASS LOSS DETECTED";
+            }
+
+            let starHTML = '';
+            for(let i=0; i<3; i++) {
+                if(i < stars) starHTML += `<svg class="w-16 h-16 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`;
+                else starHTML += `<svg class="w-16 h-16 text-neutral-800" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`;
+            }
+            document.getElementById('star-container').innerHTML = starHTML;
+            screen.style.display = 'flex';
+        }
+
+        function updateCamera() {
+            if(particles.length === 0) return;
+            let cx = 0, cy = 0;
+            for (let p of particles) { cx += p.x; cy += p.y; }
+            cx /= particles.length; cy /= particles.length;
+
+            let targetX = cx - canvas.width * 0.4;
+            let targetY = cy - canvas.height * 0.5;
+
+            State.cameraX += (targetX - State.cameraX) * 0.08;
+            State.cameraY += (targetY - State.cameraY) * 0.08;
+        }
+
+        function drawFX() {
+            ctx.fillStyle = '#94a3b8';
+            for (let i = shatterFX.length - 1; i >= 0; i--) {
+                let fx = shatterFX[i];
+                fx.x += fx.vx; fx.y += fx.vy; fx.vy += 0.8; fx.life -= 0.02;
+                if (fx.life <= 0) { shatterFX.splice(i, 1); continue; }
+                ctx.globalAlpha = fx.life; ctx.fillRect(fx.x, fx.y, 6, 6); ctx.globalAlpha = 1.0;
+            }
+        }
+
+        function gameLoop() {
+            if(State.gameState === 'playing') {
+                for (let p of particles) p.update();
+                applyFluidDynamics();
+                resolveCollisions();
+            }
+            updateCamera();
+
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#111';
+            let parallaxOffset = State.cameraX * 0.05;
+            ctx.fillRect((canvas.width*0.1) - parallaxOffset, 0, 80, canvas.height);
+            ctx.fillRect((canvas.width*0.5) - parallaxOffset, 0, 120, canvas.height);
+            ctx.fillRect((canvas.width*0.8) - parallaxOffset, 0, 50, canvas.height);
+
+            ctx.save();
+            ctx.translate(-State.cameraX, -State.cameraY);
+
+            for (let obs of obstacles) obs.draw(ctx);
+            drawFX();
+
+            if (State.form === 1) ctx.fillStyle = '#3b82f6'; 
+            else if (State.form === 2) ctx.fillStyle = '#bae6fd'; 
+            else if (State.form === 3) ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'; 
+            else if (State.form === 4) ctx.fillStyle = '#475569'; 
+
+            for (let p of particles) {
+                if (p.radius <= 2) continue;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.restore();
+            requestAnimationFrame(gameLoop);
+        }
+
+        generateLevel(1);
+        gameLoop();
+
+    </script>
+</body>
+</html>
