@@ -1,0 +1,131 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Luminary Labs Home" [ref=e4] [cursor=pointer]:
+        - /url: index.html
+        - img "Luminary Labs Logo" [ref=e5]
+        - text: Luminary Labs
+      - navigation [ref=e6]:
+        - link "Home" [ref=e7] [cursor=pointer]:
+          - /url: index.html
+        - link "Nexus Arcade" [ref=e8] [cursor=pointer]:
+          - /url: gemini-arcade.html
+        - link "Open Source" [ref=e9] [cursor=pointer]:
+          - /url: opensource.html
+        - link "NexusCentral" [ref=e10] [cursor=pointer]:
+          - /url: nexuscentral.html
+        - link "Services" [ref=e11] [cursor=pointer]:
+          - /url: services.html
+        - link "Portfolio" [ref=e12] [cursor=pointer]:
+          - /url: portfolio.html
+        - link "Team" [ref=e13] [cursor=pointer]:
+          - /url: team.html
+        - link "Contact" [ref=e14] [cursor=pointer]:
+          - /url: contact.html
+  - main [ref=e15]:
+    - generic [ref=e17]:
+      - generic [ref=e18]: AI-Accelerated Dev Studio
+      - heading "Software That Makes You Money" [level=1] [ref=e20]:
+        - text: Software That
+        - text: Makes You Money
+      - paragraph [ref=e21]: We build XR experiences, AI-integrated applications, and full-stack web products for businesses that need to ship fast and scale smart. From MVP to production — accelerated by AI at every step.
+      - link "Hire Us" [ref=e23] [cursor=pointer]:
+        - /url: services.html
+    - generic [ref=e25]:
+      - generic [ref=e26]:
+        - generic [ref=e27]: What We Build
+        - heading "Core Capabilities" [level=2] [ref=e28]
+        - paragraph [ref=e29]: We specialize in the technologies that move the needle for B2B clients.
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]: 🥽
+          - heading "XR & Spatial Computing" [level=3] [ref=e33]
+          - paragraph [ref=e34]: Quest, Steam Frame, WebXR — we build immersive applications from prototype to published product across every major platform.
+        - generic [ref=e35]:
+          - generic [ref=e36]: 🤖
+          - heading "AI Integration" [level=3] [ref=e37]
+          - paragraph [ref=e38]: Local GGUF models, cloud APIs, agentic pipelines — we embed AI into your product so it actually adds value, not just buzzwords.
+        - generic [ref=e39]:
+          - generic [ref=e40]: 🌐
+          - heading "Full-Stack Web & Apps" [level=3] [ref=e41]
+          - paragraph [ref=e42]: From HTML5 embeddable games to backend-integrated web apps. Rapid MVPs delivered in 1-2 weeks, ready to pitch or deploy.
+    - separator [ref=e43]
+    - generic [ref=e45]:
+      - generic [ref=e46]:
+        - generic [ref=e47]: Open Source
+        - heading "The Nexus Suite" [level=2] [ref=e48]
+        - paragraph [ref=e49]: Interoperable, modular tools for developers — free and open source.
+      - generic [ref=e50]: 💚 Donationware
+      - generic [ref=e52]:
+        - generic [ref=e53]:
+          - img "NexusCentral Laboratory Preview" [ref=e54]
+          - generic [ref=e57]:
+            - img [ref=e59]
+            - generic [ref=e61]: WAITLIST OPEN
+        - generic [ref=e62]:
+          - heading "NexusCentral" [level=3] [ref=e63]
+          - generic [ref=e64]: Early Access
+          - paragraph [ref=e65]: Operational AI by you. Automate your daily tasks and build intelligent routines with absolute simplicity—no coding or technical expertise required.
+          - generic [ref=e66]:
+            - generic [ref=e67]:
+              - generic [ref=e68]: No-Code
+              - generic [ref=e69]: Personal AI
+            - link "Learn More →" [ref=e70] [cursor=pointer]:
+              - /url: nexuscentral.html
+      - link "Explore Open Source →" [ref=e72] [cursor=pointer]:
+        - /url: opensource.html
+    - separator [ref=e73]
+    - generic [ref=e75]:
+      - generic [ref=e76]:
+        - generic [ref=e77]: Client Work
+        - heading "Active Projects" [level=2] [ref=e78]
+        - paragraph [ref=e79]: Current engagements across XR, IoT, and spatial computing.
+      - generic [ref=e80]:
+        - article [ref=e81]:
+          - generic [ref=e82]:
+            - img "Vending Backpack Dashboard" [ref=e83]
+            - generic [ref=e84]: Gaining
+          - generic [ref=e86]:
+            - heading "Vending Backpack" [level=3] [ref=e87]
+            - paragraph [ref=e88]: IoT-integrated vending solutions with Aldervon Systems. Subscription-based revenue model with monthly recurring income per deployed machine.
+        - article [ref=e89]:
+          - generic [ref=e90]:
+            - img "Museum Multiverse — Quest Store VR Experience" [ref=e91]
+            - generic [ref=e92]: Active
+          - generic [ref=e94]:
+            - heading "Museum Multiverse" [level=3] [ref=e95]
+            - paragraph [ref=e96]: Published on Quest Store. A third-person VR experience with MadeInBrooklynGames — ongoing milestone-based development.
+      - link "View Full Portfolio →" [ref=e98] [cursor=pointer]:
+        - /url: portfolio.html
+    - separator [ref=e99]
+    - generic [ref=e102]:
+      - generic [ref=e103]:
+        - generic [ref=e104]: 4+
+        - text: Active Projects
+      - generic [ref=e105]:
+        - generic [ref=e106]: ✓
+        - text: Published on Quest Store
+      - generic [ref=e107]:
+        - generic [ref=e108]: "3"
+        - text: Open Source Products
+      - generic [ref=e109]:
+        - generic [ref=e110]: B2B
+        - text: Enterprise Focus
+    - generic [ref=e111]:
+      - heading "Ready to Build Something?" [level=2] [ref=e112]
+      - paragraph [ref=e113]: From $750 portfolio setups to $4,000 XR apps — we ship fast and we ship quality.
+      - generic [ref=e114]:
+        - link "View Pricing" [ref=e115] [cursor=pointer]:
+          - /url: services.html
+        - link "Get In Touch" [ref=e116] [cursor=pointer]:
+          - /url: contact.html
+  - contentinfo [ref=e117]:
+    - generic [ref=e118]:
+      - paragraph [ref=e119]: © 2026 Luminary Labs LLC — AI-Accelerated Software Development
+      - generic [ref=e120]:
+        - link "Open Source" [ref=e121] [cursor=pointer]:
+          - /url: opensource.html
+        - link "Services" [ref=e122] [cursor=pointer]:
+          - /url: services.html
+        - link "Contact" [ref=e123] [cursor=pointer]:
+          - /url: contact.html

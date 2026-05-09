@@ -1,0 +1,91 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e4]:
+    - generic [ref=e6]:
+      - link "Nexus Central" [ref=e7] [cursor=pointer]:
+        - /url: index.html
+        - text: Nexus
+        - generic [ref=e9]: Central
+      - generic [ref=e11]:
+        - link "Home" [ref=e12] [cursor=pointer]:
+          - /url: index.html
+        - link "Platform" [ref=e13] [cursor=pointer]:
+          - /url: "#features"
+      - link "Support Us" [ref=e15] [cursor=pointer]:
+        - /url: https://donate.stripe.com/8x214m2HybZz1mBcE7bQY00
+        - img [ref=e16]
+        - text: Support Us
+  - main [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e19]:
+        - img [ref=e20]
+        - text: Sign up for the news letter!
+      - heading "Operational AI by you" [level=1] [ref=e22]:
+        - text: Operational AI
+        - generic [ref=e23]: by you
+      - paragraph [ref=e24]: Experience the power of advanced AI orchestration with an interface designed for everyone. Automate your daily tasks and build intelligent routines with absolute simplicity.
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - textbox "Enter your email to join the news list" [ref=e27]
+          - button "Join News" [ref=e28] [cursor=pointer]:
+            - generic [ref=e29]: Join News
+            - img [ref=e30]
+        - paragraph [ref=e32]: Join thousands of everyday users discovering the future of personal AI.
+  - generic [ref=e36]:
+    - generic [ref=e38]:
+      - heading "Support the Platform" [level=2] [ref=e39]
+      - paragraph [ref=e40]: Help us keep AI accessible, secure, and user-centric.
+    - link "Back with Stripe" [ref=e42] [cursor=pointer]:
+      - /url: https://donate.stripe.com/8x214m2HybZz1mBcE7bQY00
+      - img [ref=e43]
+      - text: Back with Stripe
+  - generic [ref=e47]:
+    - generic [ref=e51]:
+      - generic [ref=e52]:
+        - img [ref=e54]
+        - heading "Operational Discipline" [level=3] [ref=e56]
+        - paragraph [ref=e57]: Moving beyond simple 'chat bubbles'. The NexusCentral desktop console (built in C#/Avalonia) provides a high-density operator view. Monitor agents, read live reasoning traces, and manage memory context like a true system admin.
+        - list [ref=e58]:
+          - listitem [ref=e59]:
+            - generic [ref=e60]: ✓
+            - text: Real-time reasoning traces
+          - listitem [ref=e61]:
+            - generic [ref=e62]: ✓
+            - text: High-density information layout
+      - img "Operational Discipline Concept Abstract" [ref=e65]
+    - generic [ref=e68]:
+      - generic [ref=e69]:
+        - img [ref=e71]
+        - heading "The \"Wrapper\" Standard" [level=3] [ref=e73]
+        - paragraph [ref=e74]: Bridging the gap between static scripts and AI. Our innovative wrapper standard allows you to turn any existing CLI tool, Python script, or local program into a fully functional, self-documenting "Nexus Agent".
+        - list [ref=e75]:
+          - listitem [ref=e76]:
+            - generic [ref=e77]: ✓
+            - text: Instant CLI integration
+          - listitem [ref=e78]:
+            - generic [ref=e79]: ✓
+            - text: Standardized input/output schemas
+      - img "The" [ref=e82]
+    - generic [ref=e86]:
+      - generic [ref=e87]:
+        - img [ref=e89]
+        - heading "LAN-Aware Routing" [level=3] [ref=e91]
+        - paragraph [ref=e92]: True distributed AI. NexusCentral features built-in peer discovery. Share models and delegate agent tasks seamlessly across multiple machines on your local network—no complicated cloud setups required.
+        - generic [ref=e95]:
+          - heading "Local API Nervous System" [level=4] [ref=e96]
+          - paragraph [ref=e97]: Powered by a local integration core on port 3005, enabling instant cross-device communication.
+      - img "LAN-Aware Routing Concept Abstract" [ref=e100]
+    - generic [ref=e103]:
+      - generic [ref=e104]:
+        - img [ref=e106]
+        - heading "Workflow Ladders" [level=3] [ref=e108]
+        - paragraph [ref=e109]: Design complex, multi-step agent chaining visually. The automation platform maps directly to human-readable YAML/JSON, letting you orchestrate sophisticated operations without writing boilerplate code.
+      - img "Workflow Ladders Concept Abstract" [ref=e112]
+  - contentinfo [ref=e113]:
+    - generic [ref=e114]:
+      - heading "Empower Your Routine" [level=2] [ref=e115]
+      - paragraph [ref=e116]: Join the community of users taking control of their digital lives through accessible, operational AI.
+      - link "Donate via Stripe" [ref=e118] [cursor=pointer]:
+        - /url: https://donate.stripe.com/8x214m2HybZz1mBcE7bQY00
+        - img [ref=e119]
+        - text: Donate via Stripe
+      - paragraph [ref=e121]: © 2026 Luminary Labs LLC. All rights reserved.
