@@ -35,6 +35,8 @@
                             neonCyan: '#00F0FF',
                             neonMagenta: '#FF003C',
                             neonYellow: '#FCEE09',
+                            neonGreen: '#00FF7F',
+                            neonRed: '#FF2400',
                         }
                     },
                     backgroundImage: {
@@ -47,6 +49,8 @@
                     boxShadow: {
                         'neon-cyan': '0 0 15px rgba(0, 240, 255, 0.5), inset 0 0 10px rgba(0, 240, 255, 0.2)',
                         'neon-magenta': '0 0 15px rgba(255, 0, 60, 0.5), inset 0 0 10px rgba(255, 0, 60, 0.2)',
+                        'neon-green': '0 0 15px rgba(0, 255, 127, 0.5), inset 0 0 10px rgba(0, 255, 127, 0.2)',
+                        'neon-red': '0 0 15px rgba(255, 36, 0, 0.5), inset 0 0 10px rgba(255, 36, 0, 0.2)',
                     }
                 }
             }
@@ -349,6 +353,39 @@
                         <div class="p-6 relative z-20">
                             <h3 class="font-display text-xl font-bold text-white mb-1 uppercase tracking-wider group-hover:text-arcade-neonYellow transition-colors">Cosmic Invaders</h3>
                             <p class="text-sm text-gray-400">Wave-based planet defense shooter</p>
+                        </div>
+                    </div>
+
+                    <div class="min-w-[300px] md:min-w-[400px] glass-panel rounded-xl overflow-hidden group cursor-pointer snap-start shrink-0 border border-white/10 hover:border-arcade-neonCyan transition-all duration-300" onclick="openGame('games/aether-threads/', 'AETHER THREADS')">
+                        <div class="h-48 bg-[#0D0D14] flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60 z-10"></div>
+                            <i data-lucide="spline-pointer" class="w-16 h-16 text-arcade-neonCyan opacity-50 relative z-0"></i>
+                            </div>
+                        <div class="p-6 relative z-20">
+                            <h3 class="font-display text-xl font-bold text-white mb-1 uppercase tracking-wider group-hover:text-arcade-neonCyan transition-colors">Aether Threads</h3>
+                            <p class="text-sm text-gray-400">Tactical quantum web simulator</p>
+                        </div>
+                    </div>
+
+                    <div class="min-w-[300px] md:min-w-[400px] glass-panel rounded-xl overflow-hidden group cursor-pointer snap-start shrink-0 border border-white/10 hover:border-arcade-neonGreen transition-all duration-300" onclick="openGame('games/infinity-bean-stalk/', 'SKYBEAN ASCENT: INFINITE')">
+                        <div class="h-48 bg-[#0D0D14] flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60 z-10"></div>
+                            <i data-lucide="bean" class="w-16 h-16 text-arcade-neonGreen opacity-50 relative z-0"></i>
+                        </div>
+                        <div class="p-6 relative z-20">
+                            <h3 class="font-display text-xl font-bold text-white mb-1 uppercase tracking-wider group-hover:text-arcade-neonGreen transition-colors">Infinity Bean Stalk</h3>
+                            <p class="text-sm text-gray-400">Endless cel-shaded pendulum climbing odyssey</p>
+                        </div>
+                    </div>
+
+                    <div class="min-w-[300px] md:min-w-[400px] glass-panel rounded-xl overflow-hidden group cursor-pointer snap-start shrink-0 border border-white/10 hover:border-arcade-neonMagenta transition-all duration-300" onclick="openGame('games/industrial-overgrowth-flight/', 'INDUSTRIAL OVERGROWTH FLIGHT')">
+                        <div class="h-48 bg-[#0D0D14] flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60 z-10"></div>
+                            <i data-lucide="tree-pine" class="w-16 h-16 text-arcade-neonMagenta opacity-50 relative z-0"></i>
+                        </div>
+                        <div class="p-6 relative z-20">
+                            <h3 class="font-display text-xl font-bold text-white mb-1 uppercase tracking-wider group-hover:text-arcade-neonMagenta transition-colors">Industrial Overgrowth</h3>
+                            <p class="text-sm text-gray-400">High-risk clockwork propulsion racer</p>
                         </div>
                     </div>
 
