@@ -56,6 +56,20 @@
     if (gateMessage) gateMessage.textContent = message;
   }
 
+  function renderLoadingDemo() {
+    document.body.classList.add("moonlit-unlocked");
+    app.innerHTML = `
+      <section class="moonlit-project-view">
+        <div class="moonlit-project-toolbar">
+          <strong>Opening SIGGRAPH Demo</strong>
+        </div>
+        <div style="min-height:calc(100vh - 55px);display:grid;place-items:center;background:#050716;color:#dbeafe;font:800 13px/1.4 Inter,system-ui,sans-serif;letter-spacing:0.12em;text-transform:uppercase;">
+          Decrypting demo...
+        </div>
+      </section>
+    `;
+  }
+
   function installStyle(id, css) {
     let style = document.getElementById(id);
     if (!style) {
@@ -137,10 +151,11 @@
     }
 
     setGateMessage("Opening demo...");
+    renderLoadingDemo();
     try {
       topPassword = config.topPassword;
       const shell = await unlockShell(topPassword);
-      renderShell(shell);
+      shellPayload = shell;
       const project = shell.manifest.find((item) => item.slug === config.projectSlug);
       if (!project) throw new Error("Demo project missing from manifest.");
       const payload = await unlockProject(project, config.projectPassword);
