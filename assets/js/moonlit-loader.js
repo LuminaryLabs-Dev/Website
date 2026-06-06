@@ -176,7 +176,7 @@
     app.innerHTML = `
       <section class="moonlit-project-view${options.hideToolbar ? " moonlit-project-view--demo" : ""}">
         ${toolbar}
-        <iframe class="moonlit-project-frame" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox" referrerpolicy="no-referrer" title="${project.title}"></iframe>
+        <iframe class="moonlit-project-frame" sandbox="allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox" referrerpolicy="no-referrer" title="${project.title}"></iframe>
       </section>
     `;
     const frame = app.querySelector("iframe");
