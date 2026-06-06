@@ -1,0 +1,17 @@
+{
+  "name": "Sylvaloom - Ant Ascent",
+  "short_name": "Sylvaloom",
+  "description": "An infinite, cel-shaded arcade game where you control an ant climbing and grappling up a towering, procedurally generated beanstalk.",
+  "start_url": "index.html",
+  "display": "fullscreen",
+  "background_color": "#090d14",
+  "theme_color": "#78e9ff",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%235df29a'/></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}

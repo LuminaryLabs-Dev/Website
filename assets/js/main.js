@@ -15,6 +15,9 @@
 
     // Close nav when clicking outside
     document.addEventListener("click", (e) => {
+      // Guard clause: If the mobile nav isn't open, exit immediately to keep execution light
+      if (!nav.classList.contains("open")) return;
+
       if (!toggle.contains(e.target) && !nav.contains(e.target)) {
         nav.classList.remove("open");
         toggle.setAttribute("aria-expanded", "false");
@@ -62,4 +65,17 @@
       }
     });
   });
+
+  // Horizontal scroll hook for the arcade card row
+  const gameTrack = document.querySelector(".hide-scrollbar");
+  if (gameTrack) {
+    gameTrack.addEventListener("wheel", (e) => {
+      // If the trackpad or mouse is already sending a native horizontal scrolling vector, respect it
+      if (e.deltaX !== 0) return;
+      
+      // Otherwise, catch the vertical scroll input and translate it sideways
+      e.preventDefault();
+      gameTrack.scrollLeft += e.deltaY;
+    }, { passive: false });
+  }
 })();

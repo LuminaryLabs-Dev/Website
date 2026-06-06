@@ -1,0 +1,34 @@
+{
+  "title": "AETHER THREADS",
+  "engine_profile": {
+    "version": "1.0.0-alpha",
+    "target_framerate": 60,
+    "renderer": "WebGL2",
+    "audio": "WebAudioAPI_Synth_V2",
+    "post_processing": {
+      "unreal_bloom": true,
+      "chromatic_aberration": true,
+      "vignette": true
+    }
+  },
+  "gameplay_parameters": {
+    "time_climax_limit_seconds": 300,
+    "initial_base_speed": 8.0,
+    "energy_capacity_maximum": 100.0,
+    "spawn_density_limit": 80,
+    "difficulty_curve": "logarithmic"
+  },
+  "input_mapping": {
+    "gamepad": {
+      "navigation": "left_analog_stick",
+      "action_select": "button_0"
+    },
+    "keyboard_fallback": {
+      "up": ["ArrowUp", "w"],
+      "down": ["ArrowDown", "s"],
+      "left": ["ArrowLeft", "a"],
+      "right": ["ArrowRight", "d"],
+      "select": ["Enter", " "]
+    }
+  }
+}

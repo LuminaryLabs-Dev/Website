@@ -10,10 +10,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Mixing a modern sans (Inter) with a slightly techy/retro display font (Outfit or Orbitron) -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Orbitron:wght@400;700;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="assets/css/style.css" />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -35,6 +32,8 @@
                             neonCyan: '#00F0FF',
                             neonMagenta: '#FF003C',
                             neonYellow: '#FCEE09',
+                            neonGreen: '#00FF7F',
+                            neonRed: '#FF2400',
                         }
                     },
                     backgroundImage: {
@@ -47,6 +46,8 @@
                     boxShadow: {
                         'neon-cyan': '0 0 15px rgba(0, 240, 255, 0.5), inset 0 0 10px rgba(0, 240, 255, 0.2)',
                         'neon-magenta': '0 0 15px rgba(255, 0, 60, 0.5), inset 0 0 10px rgba(255, 0, 60, 0.2)',
+                        'neon-green': '0 0 15px rgba(0, 255, 127, 0.5), inset 0 0 10px rgba(0, 255, 127, 0.2)',
+                        'neon-yellow': '0 0 15px rgba(252, 238, 9, 0.5), inset 0 0 10px rgba(252, 238, 9, 0.2)',
                     }
                 }
             }
@@ -55,7 +56,6 @@
     <style>
         body {
             background-color: #05050A;
-            /* arcade.dark */
             color: #ffffff;
         }
 
@@ -126,20 +126,11 @@
             color: #ffffff;
             box-shadow: 0 0 20px rgba(255, 0, 60, 0.8), inset 0 0 20px rgba(255, 0, 60, 0.5);
         }
-
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
     </style>
 </head>
 
 <body class="antialiased overflow-x-hidden">
 
-    <!-- Global Navigation (Kept consistent but styled for dark mode where needed) -->
     <header class="site-header" style="background: rgba(5,5,10,0.9); border-bottom: 1px solid rgba(0,240,255,0.2);">
         <div class="container nav">
             <a href="index.html" class="brand" aria-label="Luminary Labs Home"
@@ -147,21 +138,17 @@
                 <img src="public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" />
                 Luminary Labs
             </a>
-            <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav"
-                style="color: white;">Menu</button>
+            <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" style="color: white;">Menu</button>
             <nav id="site-nav" class="site-nav dark-nav">
                 <a href="index.html" style="color: #aaa;">Home</a>
-                <a href="gemini-arcade.html" class="active"
-                    style="color: #00F0FF; text-shadow: 0 0 8px rgba(0,240,255,0.5);">Nexus Arcade</a>
+                <a href="gemini-arcade.html" class="active" style="color: #00F0FF; text-shadow: 0 0 8px rgba(0,240,255,0.5);">Nexus Arcade</a>
                 <a href="nexuscentral.html" style="color: #aaa;">NexusCentral</a>
             </nav>
         </div>
     </header>
 
     <main class="relative z-10 pt-20">
-        <!-- Hero Section -->
         <section class="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-20">
-            <!-- Background Image Placeholder (Using the generated image if copied, or fallback) -->
             <div class="absolute inset-0 z-0 opacity-40">
                 <img src="public/NexusArcadePics/arcade_hero.png" alt="Gemini Arcade Hero"
                     class="w-full h-full object-cover"
@@ -172,17 +159,12 @@
             <div class="retro-grid-bg"></div>
 
             <div class="container mx-auto px-4 relative z-10 text-center flex flex-col items-center">
-
-                <h1
-                    class="font-display text-5xl md:text-7xl lg:text-9xl font-black uppercase tracking-tighter mb-4 text-glow leading-none">
-                    Nexus<br /><span
-                        class="text-transparent bg-clip-text bg-gradient-to-r from-arcade-neonMagenta to-arcade-neonYellow text-glow-magenta">Arcade</span>
+                <h1 class="font-display text-5xl md:text-7xl lg:text-9xl font-black uppercase tracking-tighter mb-4 text-glow leading-none">
+                    Nexus<br /><span class="text-transparent bg-clip-text bg-gradient-to-r from-arcade-neonMagenta to-arcade-neonYellow text-glow-magenta">Arcade</span>
                 </h1>
 
-                <p class="max-w-2xl mx-auto text-xl md:text-3xl text-white font-medium mb-12"
-                    style="text-shadow: 0 2px 10px rgba(0,0,0,0.8);">
-                    Modern console performance meets retro arcade soul. The next evolution of intelligent gaming
-                    hardware is here.
+                <p class="max-w-2xl mx-auto text-xl md:text-3xl text-white font-medium mb-12" style="text-shadow: 0 2px 10px rgba(0,0,0,0.8);">
+                    Modern console performance meets retro arcade soul. The next evolution of intelligent gaming hardware is here.
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-6 justify-center items-center w-full">
@@ -190,14 +172,13 @@
                         onclick="document.getElementById('waitlist-modal').classList.remove('hidden')">
                         Pre-Order Now
                     </button>
-                    <button class="btn-arcade btn-arcade-magenta px-10 py-4 clip-edges text-lg w-full sm:w-auto" onclick="document.getElementById('specs-grid').scrollIntoView({behavior: 'smooth'})">
-                        View Specs
+                    <button class="btn-arcade btn-arcade-magenta px-10 py-4 clip-edges text-lg w-full sm:w-auto" onclick="document.getElementById('library-section').scrollIntoView({behavior: 'smooth'})">
+                        Browse System Library
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- Product Showcase Section -->
         <section class="py-24 relative bg-arcade-dark">
             <div class="container mx-auto px-4">
                 <div class="text-center mb-16">
@@ -206,149 +187,163 @@
                     </h2>
                     <div class="h-1 w-24 bg-arcade-neonCyan mx-auto shadow-neon-cyan"></div>
                     <p class="text-gray-400 mt-6 max-w-2xl mx-auto text-lg">
-                        Built for fun in all settings—whether you're bringing the arcade home or powering a business
-                        floor.
+                        Built for fun in all settings—whether you're bringing the arcade home or powering a business floor.
                     </p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <!-- Image Area -->
                     <div class="relative group">
-                        <div
-                            class="absolute -inset-1 bg-gradient-to-r from-arcade-neonCyan to-arcade-neonMagenta rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200">
-                        </div>
-                        <div
-                            class="relative rounded-xl overflow-hidden glass-panel flex items-center justify-center p-2">
-                            <!-- Raspberry Pi 5 Breakdown Image -->
-                            <img src="public/NexusArcadePics/pi5_breakdown.png" alt="Raspberry Pi 5 Breakdown"
-                                class="w-full h-auto object-contain rounded-lg opacity-90" />
+                        <div class="absolute -inset-1 bg-gradient-to-r from-arcade-neonCyan to-arcade-neonMagenta rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                        <div class="relative rounded-xl overflow-hidden glass-panel flex items-center justify-center p-2">
+                            <img src="public/NexusArcadePics/pi5_breakdown.png" alt="Raspberry Pi 5 Breakdown" class="w-full h-auto object-contain rounded-lg opacity-90" />
                         </div>
                     </div>
 
-                    <!-- Content Area -->
                     <div class="space-y-8">
                         <div class="glass-panel p-8 clip-edges border-l-4 border-l-arcade-neonCyan">
-                            <h3
-                                class="font-display text-2xl font-bold text-arcade-neonCyan mb-3 uppercase tracking-wider">
-                                The AI-Driven Heart</h3>
-                            <p class="text-gray-200 font-medium leading-relaxed">Powered by the cutting-edge Raspberry
-                                Pi 5 and optimized for 1-bit LLMs. The Nexus Arcade uses swarm architecture to let you
-                                build, iterate, and play games generated entirely on the fly.</p>
+                            <h3 class="font-display text-2xl font-bold text-arcade-neonCyan mb-3 uppercase tracking-wider">The AI-Driven Heart</h3>
+                            <p class="text-gray-200 font-medium leading-relaxed">Powered by the cutting-edge Raspberry Pi 5 and optimized for 1-bit LLMs. The Nexus Arcade uses swarm architecture to let you build, iterate, and play games generated entirely on the fly.</p>
                         </div>
 
                         <div class="glass-panel p-8 clip-edges border-l-4 border-l-arcade-neonMagenta">
-                            <h3
-                                class="font-display text-2xl font-bold text-arcade-neonMagenta mb-3 uppercase tracking-wider">
-                                Home or Business</h3>
-                            <p class="text-gray-200 font-medium leading-relaxed">Perfectly suited for any environment.
-                                The locked-down Lubuntu OS ensures distraction-free gaming at home, while integrated
-                                secure payments and 2-player controls make it ready for commercial deployment.
-                                <br /><br /><span
-                                    class="text-xs text-arcade-neonMagenta uppercase tracking-widest font-bold">Note:
-                                    Home editions come without the integrated card reader.</span></p>
+                            <h3 class="font-display text-2xl font-bold text-arcade-neonMagenta mb-3 uppercase tracking-wider">Home or Business</h3>
+                            <p class="text-gray-200 font-medium leading-relaxed">Perfectly suited for any environment. The locked-down Lubuntu OS ensures distraction-free gaming at home, while integrated secure payments and 2-player controls make it ready for commercial deployment.<br /><br /><span class="text-xs text-arcade-neonMagenta uppercase tracking-widest font-bold">Note: Home editions come without the integrated card reader.</span></p>
                         </div>
 
                         <div class="glass-panel p-8 clip-edges border-l-4 border-l-arcade-neonYellow">
-                            <h3
-                                class="font-display text-2xl font-bold text-arcade-neonYellow mb-3 uppercase tracking-wider">
-                                Creator Toolbench</h3>
-                            <p class="text-gray-200 font-medium leading-relaxed">Not just a console—a studio. Harness
-                                multiple AI agents to generate art, levels, code, and mechanics instantly. Test your
-                                games as you build them, unlocking endless possibilities.</p>
+                            <h3 class="font-display text-2xl font-bold text-arcade-neonYellow mb-3 uppercase tracking-wider">Creator Toolbench</h3>
+                            <p class="text-gray-200 font-medium leading-relaxed">Not just a console—a studio. Harness multiple AI agents to generate art, levels, code, and mechanics instantly. Test your games as you build them, unlocking endless possibilities.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Specs Grid -->
         <section id="specs-grid" class="py-24 relative bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIi8+PC9zdmc+')]">
             <div class="absolute inset-0 bg-arcade-dark/80"></div>
-
             <div class="container mx-auto px-4 relative z-10">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Stat Card 1 -->
-                    <div
-                        class="glass-panel p-8 text-center border-t-2 border-t-arcade-neonCyan hover:-translate-y-2 transition-transform duration-300">
-                        <div class="text-arcade-neonCyan mb-4 flex justify-center">
-                            <i data-lucide="cpu" class="w-12 h-12"></i>
-                        </div>
-                        <h4 class="font-display text-4xl font-bold text-white mb-2 text-glow">60<span
-                                class="text-xl">FPS</span></h4>
+                    <div class="glass-panel p-8 text-center border-t-2 border-t-arcade-neonCyan hover:-translate-y-2 transition-transform duration-300">
+                        <div class="text-arcade-neonCyan mb-4 flex justify-center"><i data-lucide="cpu" class="w-12 h-12"></i></div>
+                        <h4 class="font-display text-4xl font-bold text-white mb-2 text-glow">60<span class="text-xl">FPS</span></h4>
                         <p class="text-sm text-gray-500 uppercase tracking-widest">1080p IPS Display</p>
                     </div>
 
-                    <!-- Stat Card 2 -->
-                    <div
-                        class="glass-panel p-8 text-center border-t-2 border-t-arcade-neonMagenta hover:-translate-y-2 transition-transform duration-300">
-                        <div class="text-arcade-neonMagenta mb-4 flex justify-center">
-                            <i data-lucide="zap" class="w-12 h-12"></i>
-                        </div>
+                    <div class="glass-panel p-8 text-center border-t-2 border-t-arcade-neonMagenta hover:-translate-y-2 transition-transform duration-300">
+                        <div class="text-arcade-neonMagenta mb-4 flex justify-center"><i data-lucide="zap" class="w-12 h-12"></i></div>
                         <h4 class="font-display text-4xl font-bold text-white mb-2 text-glow-magenta">1ms</h4>
                         <p class="text-sm text-gray-500 uppercase tracking-widest">Zero-Delay Input</p>
                     </div>
 
-                    <!-- Stat Card 3 -->
-                    <div
-                        class="glass-panel p-8 text-center border-t-2 border-t-arcade-neonYellow hover:-translate-y-2 transition-transform duration-300">
-                        <div class="text-arcade-neonYellow mb-4 flex justify-center">
-                            <i data-lucide="layers" class="w-12 h-12"></i>
-                        </div>
-                        <h4 class="font-display text-4xl font-bold text-white mb-2"
-                            style="text-shadow: 0 0 20px rgba(252, 238, 9, 0.6);">250<span class="text-xl">GB</span>
-                        </h4>
+                    <div class="glass-panel p-8 text-center border-t-2 border-t-arcade-neonYellow hover:-translate-y-2 transition-transform duration-300">
+                        <div class="text-arcade-neonYellow mb-4 flex justify-center"><i data-lucide="layers" class="w-12 h-12"></i></div>
+                        <h4 class="font-display text-4xl font-bold text-white mb-2" style="text-shadow: 0 0 20px rgba(252, 238, 9, 0.6);">250<span class="text-xl">GB</span></h4>
                         <p class="text-sm text-gray-500 uppercase tracking-widest">SSD Storage</p>
                     </div>
 
-                    <!-- Stat Card 4 -->
-                    <div
-                        class="glass-panel p-8 text-center border-t-2 border-t-white hover:-translate-y-2 transition-transform duration-300">
-                        <div class="text-white mb-4 flex justify-center">
-                            <i data-lucide="wifi" class="w-12 h-12"></i>
-                        </div>
-                        <h4 class="font-display text-4xl font-bold text-white mb-2"
-                            style="text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);">Wi-Fi 5</h4>
+                    <div class="glass-panel p-8 text-center border-t-2 border-t-white hover:-translate-y-2 transition-transform duration-300">
+                        <div class="text-white mb-4 flex justify-center"><i data-lucide="wifi" class="w-12 h-12"></i></div>
+                        <h4 class="font-display text-4xl font-bold text-white mb-2" style="text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);">Wi-Fi 5</h4>
                         <p class="text-sm text-gray-500 uppercase tracking-widest">Multiplayer Integrated</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Game Library Section -->
-        <section class="py-24 relative bg-arcade-dark border-t border-white/5">
+        <section id="library-section" class="py-24 relative bg-arcade-dark border-t border-white/5">
             <div class="container mx-auto px-4">
-                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-                    <div>
-                        <h2 class="font-display text-3xl md:text-5xl font-bold uppercase tracking-wide text-white mb-2">
-                            The <span class="text-arcade-neonCyan">Library</span>
-                        </h2>
-                        <div class="h-1 w-24 bg-arcade-neonCyan shadow-neon-cyan"></div>
-                    </div>
-                    <p class="text-gray-400 text-sm font-medium uppercase tracking-widest">Scroll to explore games &rarr;</p>
+                <div class="mb-12">
+                    <h2 class="font-display text-3xl md:text-5xl font-bold uppercase tracking-wide text-white mb-2">
+                        The <span class="text-arcade-neonCyan">System Library</span>
+                    </h2>
+                    <div class="h-1 w-24 bg-arcade-neonCyan shadow-neon-cyan"></div>
+                    <p class="text-gray-400 mt-4 max-w-xl text-sm font-medium uppercase tracking-widest">Select an execution module to initialize gameplay. All cards are fully exposed.</p>
                 </div>
                 
-                <div class="flex overflow-x-auto gap-6 pb-8 snap-x hide-scrollbar">
-                    <!-- Game Card 1 -->
-                    <div class="min-w-[300px] md:min-w-[400px] glass-panel rounded-xl overflow-hidden group cursor-pointer snap-start shrink-0 border border-white/10 hover:border-arcade-neonCyan transition-all duration-300" onclick="openGame('games/viscous.html', 'VISCOUS: INDUSTRIAL DUCTS')">
-                        <div class="h-48 bg-[#0D0D14] flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60 z-10"></div>
-                            <i data-lucide="droplet" class="w-16 h-16 text-arcade-neonCyan opacity-50 relative z-0"></i>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <div class="glass-panel rounded-xl overflow-hidden group cursor-pointer border border-white/10 hover:border-arcade-neonCyan hover:shadow-neon-cyan transition-all duration-300 flex flex-col justify-between" onclick="openGame('games/viscous/', 'VISCOUS: INDUSTRIAL DUCTS')">
+                        <div>
+                            <div class="h-44 bg-[#0D0D14] flex items-center justify-center relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60 z-10"></div>
+                                <i data-lucide="droplet" class="w-16 h-16 text-arcade-neonCyan opacity-50 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 relative z-0"></i>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="font-display text-xl font-bold text-white mb-1 uppercase tracking-wider group-hover:text-arcade-neonCyan transition-colors">Viscous</h3>
+                                <p class="text-sm text-gray-400 mb-0">Fluid dynamics puzzle platformer</p>
+                            </div>
                         </div>
-                        <div class="p-6 relative z-20">
-                            <h3 class="font-display text-xl font-bold text-white mb-1 uppercase tracking-wider group-hover:text-arcade-neonCyan transition-colors">Viscous</h3>
-                            <p class="text-sm text-gray-400">Fluid dynamics puzzle platformer</p>
+                        <div class="px-6 py-4 bg-[#08080C] border-t border-white/5 max-h-0 opacity-0 group-hover:max-h-24 group-hover:opacity-100 overflow-hidden transition-all duration-500 ease-in-out">
+                            <span class="text-xs font-mono text-arcade-neonCyan uppercase tracking-widest block mb-1">SYSTEM REQUIREMENT:</span>
+                            <p class="text-xs text-gray-400 m-0 font-sans">60 FPS target // Requires analog joystick precision maps.</p>
                         </div>
                     </div>
 
-                    <!-- Game Card 2 -->
-                    <div class="min-w-[300px] md:min-w-[400px] glass-panel rounded-xl overflow-hidden group cursor-pointer snap-start shrink-0 border border-white/10 hover:border-arcade-neonYellow transition-all duration-300" onclick="openGame('games/cosmic-invaders.html', 'COSMIC INVADERS')">
-                        <div class="h-48 bg-[#0D0D14] flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60 z-10"></div>
-                            <i data-lucide="rocket" class="w-16 h-16 text-arcade-neonYellow opacity-50 relative z-0"></i>
+                    <div class="glass-panel rounded-xl overflow-hidden group cursor-pointer border border-white/10 hover:border-arcade-neonYellow hover:shadow-neon-yellow transition-all duration-300 flex flex-col justify-between" onclick="openGame('games/cosmic-invaders/', 'COSMIC INVADERS')">
+                        <div>
+                            <div class="h-44 bg-[#0D0D14] flex items-center justify-center relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60 z-10"></div>
+                                <i data-lucide="rocket" class="w-16 h-16 text-arcade-neonYellow opacity-50 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 relative z-0"></i>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="font-display text-xl font-bold text-white mb-1 uppercase tracking-wider group-hover:text-arcade-neonYellow transition-colors">Cosmic Invaders</h3>
+                                <p class="text-sm text-gray-400 mb-0">Wave-based planet defense shooter</p>
+                            </div>
                         </div>
-                        <div class="p-6 relative z-20">
-                            <h3 class="font-display text-xl font-bold text-white mb-1 uppercase tracking-wider group-hover:text-arcade-neonYellow transition-colors">Cosmic Invaders</h3>
-                            <p class="text-sm text-gray-400">Wave-based planet defense shooter</p>
+                        <div class="px-6 py-4 bg-[#08080C] border-t border-white/5 max-h-0 opacity-0 group-hover:max-h-24 group-hover:opacity-100 overflow-hidden transition-all duration-500 ease-in-out">
+                            <span class="text-xs font-mono text-arcade-neonYellow uppercase tracking-widest block mb-1">SYSTEM REQUIREMENT:</span>
+                            <p class="text-xs text-gray-400 m-0 font-sans">1ms response validation // Retro scalar audio drivers active.</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel rounded-xl overflow-hidden group cursor-pointer border border-white/10 hover:border-arcade-neonCyan hover:shadow-neon-cyan transition-all duration-300 flex flex-col justify-between" onclick="openGame('games/aether-threads/', 'AETHER THREADS')">
+                        <div>
+                            <div class="h-44 bg-[#0D0D14] flex items-center justify-center relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60 z-10"></div>
+                                <i data-lucide="activity" class="w-16 h-16 text-arcade-neonCyan opacity-50 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 relative z-0"></i>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="font-display text-xl font-bold text-white mb-1 uppercase tracking-wider group-hover:text-arcade-neonCyan transition-colors">Aether Threads</h3>
+                                <p class="text-sm text-gray-400 mb-0">Tactical quantum web simulator</p>
+                            </div>
+                        </div>
+                        <div class="px-6 py-4 bg-[#08080C] border-t border-white/5 max-h-0 opacity-0 group-hover:max-h-24 group-hover:opacity-100 overflow-hidden transition-all duration-500 ease-in-out">
+                            <span class="text-xs font-mono text-arcade-neonCyan uppercase tracking-widest block mb-1">SYSTEM REQUIREMENT:</span>
+                            <p class="text-xs text-gray-400 m-0 font-sans">2-Player shared terminal map configuration loaded.</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel rounded-xl overflow-hidden group cursor-pointer border border-white/10 hover:border-arcade-neonGreen hover:shadow-neon-green transition-all duration-300 flex flex-col justify-between" onclick="openGame('games/the-infinity-bean-stalk/', 'SKYBEAN ASCENT: INFINITE')">
+                        <div>
+                            <div class="h-44 bg-[#0D0D14] flex items-center justify-center relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60 z-10"></div>
+                                <i data-lucide="tree-pine" class="w-16 h-16 text-arcade-neonGreen opacity-50 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 relative z-0"></i>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="font-display text-xl font-bold text-white mb-1 uppercase tracking-wider group-hover:text-arcade-neonGreen transition-colors">Infinity Bean Stalk</h3>
+                                <p class="text-sm text-gray-400 mb-0">Endless pendulum climbing odyssey</p>
+                            </div>
+                        </div>
+                        <div class="px-6 py-4 bg-[#08080C] border-t border-white/5 max-h-0 opacity-0 group-hover:max-h-24 group-hover:opacity-100 overflow-hidden transition-all duration-500 ease-in-out">
+                            <span class="text-xs font-mono text-arcade-neonGreen uppercase tracking-widest block mb-1">SYSTEM REQUIREMENT:</span>
+                            <p class="text-xs text-gray-400 m-0 font-sans">Procedural rendering vectors // Custom tracking engine active.</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel rounded-xl overflow-hidden group cursor-pointer border border-white/10 hover:border-arcade-neonMagenta hover:shadow-neon-magenta transition-all duration-300 flex flex-col justify-between md:col-span-2 lg:col-span-2" onclick="openGame('games/industrial-overgrowth-flight/', 'INDUSTRIAL OVERGROWTH FLIGHT')">
+                        <div>
+                            <div class="h-44 bg-[#0D0D14] flex items-center justify-center relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60 z-10"></div>
+                                <i data-lucide="zap" class="w-16 h-16 text-arcade-neonMagenta opacity-50 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 relative z-0"></i>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="font-display text-xl font-bold text-white mb-1 uppercase tracking-wider group-hover:text-arcade-neonMagenta transition-colors">Industrial Overgrowth</h3>
+                                <p class="text-sm text-gray-400 mb-0">High-risk clockwork propulsion racer</p>
+                            </div>
+                        </div>
+                        <div class="px-6 py-4 bg-[#08080C] border-t border-white/5 max-h-0 opacity-0 group-hover:max-h-24 group-hover:opacity-100 overflow-hidden transition-all duration-500 ease-in-out">
+                            <span class="text-xs font-mono text-arcade-neonMagenta uppercase tracking-widest block mb-1">SYSTEM REQUIREMENT:</span>
+                            <p class="text-xs text-gray-400 m-0 font-sans">Custom fluid shader materials initialized // Gamepad API required.</p>
                         </div>
                     </div>
 
@@ -356,19 +351,14 @@
             </div>
         </section>
 
-        <!-- Footer Call to Action -->
         <section class="py-32 relative flex items-center justify-center overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-t from-arcade-neonMagenta/20 to-transparent z-0"></div>
-
-            <div
-                class="glass-panel p-12 md:p-20 text-center relative z-10 max-w-4xl mx-auto border border-arcade-neonMagenta/30 shadow-neon-magenta clip-edges">
+            <div class="glass-panel p-12 md:p-20 text-center relative z-10 max-w-4xl mx-auto border border-arcade-neonMagenta/30 shadow-neon-magenta clip-edges">
                 <h2 class="font-display text-4xl md:text-6xl font-black uppercase text-white mb-6 tracking-tight">
                     Ready to <span class="text-arcade-neonMagenta">Insert Coin</span>?
                 </h2>
-                <p class="text-xl text-white font-medium mb-10 max-w-2xl mx-auto"
-                    style="text-shadow: 0 2px 10px rgba(0,0,0,0.8);">
-                    We are currently conducting an experimental limited run of Nexus Arcade units. Secure your place in
-                    the high score tables.
+                <p class="text-xl text-white font-medium mb-10 max-w-2xl mx-auto" style="text-shadow: 0 2px 10px rgba(0,0,0,0.8);">
+                    We are currently conducting an experimental limited run of Nexus Arcade units. Secure your place in the high score tables.
                 </p>
                 <button onclick="document.getElementById('waitlist-modal').classList.remove('hidden')"
                     class="btn-arcade btn-arcade-magenta px-12 py-5 clip-edges text-xl font-black tracking-widest">
@@ -377,66 +367,47 @@
             </div>
         </section>
 
-        <!-- Waitlist Modal -->
-        <div id="waitlist-modal"
-            class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div
-                class="glass-panel w-full max-w-md p-8 clip-edges border-t-4 border-t-arcade-neonMagenta relative shadow-[0_0_50px_rgba(255,0,60,0.3)]">
-                <button onclick="document.getElementById('waitlist-modal').classList.add('hidden')"
-                    class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+        <div id="waitlist-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+            <div class="glass-panel w-full max-w-md p-8 clip-edges border-t-4 border-t-arcade-neonMagenta relative shadow-[0_0_50px_rgba(255,0,60,0.3)]">
+                <button onclick="document.getElementById('waitlist-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
-                <h3 class="font-display text-2xl font-bold text-arcade-neonMagenta mb-2 uppercase tracking-wider">
-                    Experimental Run</h3>
-                <p class="text-gray-300 mb-6 text-sm font-medium">Join the exclusive waitlist for our first batch of
-                    experimental Nexus Arcade units.</p>
+                <h3>Experimental Run</h3>
+                <p class="text-gray-300 mb-6 text-sm font-medium">Join the exclusive waitlist for our first batch of experimental Nexus Arcade units.</p>
 
                 <form id="waitlist-form" class="space-y-4" onsubmit="submitWaitlist(event)">
                     <div>
-                        <label
-                            class="block text-xs font-bold text-arcade-neonCyan uppercase tracking-widest mb-1">Name</label>
-                        <input type="text" id="wl-name" required
-                            class="w-full bg-black/50 border border-white/20 rounded p-3 text-white focus:border-arcade-neonCyan focus:outline-none transition-colors" />
+                        <label class="block text-xs font-bold text-arcade-neonCyan uppercase tracking-widest mb-1">Name</label>
+                        <input type="text" id="wl-name" required class="w-full bg-black/50 border border-white/20 rounded p-3 text-white focus:border-arcade-neonCyan focus:outline-none transition-colors" />
                     </div>
                     <div>
-                        <label
-                            class="block text-xs font-bold text-arcade-neonCyan uppercase tracking-widest mb-1">Email</label>
-                        <input type="email" id="wl-email" required
-                            class="w-full bg-black/50 border border-white/20 rounded p-3 text-white focus:border-arcade-neonCyan focus:outline-none transition-colors" />
+                        <label class="block text-xs font-bold text-arcade-neonCyan uppercase tracking-widest mb-1">Email</label>
+                        <input type="email" id="wl-email" required class="w-full bg-black/50 border border-white/20 rounded p-3 text-white focus:border-arcade-neonCyan focus:outline-none transition-colors" />
                     </div>
                     <div>
-                        <label
-                            class="block text-xs font-bold text-arcade-neonCyan uppercase tracking-widest mb-1">Edition</label>
-                        <select id="wl-edition" required
-                            class="w-full bg-black/50 border border-white/20 rounded p-3 text-white focus:border-arcade-neonCyan focus:outline-none transition-colors">
+                        <label class="block text-xs font-bold text-arcade-neonCyan uppercase tracking-widest mb-1">Edition</label>
+                        <select id="wl-edition" required class="w-full bg-black/50 border border-white/20 rounded p-3 text-white focus:border-arcade-neonCyan focus:outline-none transition-colors">
                             <option value="Home">Home Edition</option>
                             <option value="Business">Business Edition</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-arcade-neonCyan uppercase tracking-widest mb-1">Form
-                            Factor</label>
-                        <select id="wl-form-factor" required
-                            class="w-full bg-black/50 border border-white/20 rounded p-3 text-white focus:border-arcade-neonCyan focus:outline-none transition-colors">
+                        <label class="block text-xs font-bold text-arcade-neonCyan uppercase tracking-widest mb-1">Form Factor</label>
+                        <select id="wl-form-factor" required class="w-full bg-black/50 border border-white/20 rounded p-3 text-white focus:border-arcade-neonCyan focus:outline-none transition-colors">
                             <option value="Standing">Standing Model</option>
                             <option value="Desk">Desk Model</option>
                         </select>
                     </div>
-                    <button type="submit" id="wl-submit"
-                        class="w-full btn-arcade px-6 py-3 clip-edges text-lg mt-6 font-bold tracking-widest">
+                    <button type="submit" id="wl-submit" class="w-full btn-arcade px-6 py-3 clip-edges text-lg mt-6 font-bold tracking-widest">
                         Submit
                     </button>
-                    <div id="wl-success" class="hidden text-arcade-neonCyan text-sm text-center font-bold mt-4">Details
-                        submitted successfully!</div>
+                    <div id="wl-success" class="hidden text-arcade-neonCyan text-sm text-center font-bold mt-4">Details submitted successfully!</div>
                 </form>
             </div>
         </div>
 
-        <!-- Game Player Modal -->
         <div id="game-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 md:p-12 bg-black/95 backdrop-blur-md transition-opacity">
             <div id="game-modal-content" class="w-full max-w-6xl h-[85vh] flex flex-col relative bg-[#05050A] border border-white/20 rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,240,255,0.15)] transition-all duration-300">
-                
-                <!-- Modal Header -->
                 <div id="game-modal-header" class="flex items-center justify-between p-4 border-b border-white/10 bg-[#0D0D14] z-10">
                     <h3 id="game-title" class="font-display text-xl font-bold text-arcade-neonCyan uppercase tracking-widest">Loading...</h3>
                     <div class="flex items-center gap-4">
@@ -449,25 +420,19 @@
                     </div>
                 </div>
                 
-                <!-- Iframe Container -->
                 <div class="flex-1 w-full bg-black relative">
                     <iframe id="game-iframe" src="about:blank" class="absolute inset-0 w-full h-full border-0" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
-
     </main>
 
-    <!-- Global Footer -->
-    <footer class="site-footer"
-        style="background: #05050A; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 0; text-align: center;">
+    <footer class="site-footer" style="background: #05050A; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 0; text-align: center;">
         <div class="container flex justify-center items-center py-8">
-            <p style="color: #888; font-weight: 500;">© <span id="year">2026</span> Luminary Labs LLC — Nexus Arcade
-                Division</p>
+            <p style="color: #888; font-weight: 500;">© <span id="year">2026</span> Luminary Labs LLC — Nexus Arcade Division</p>
         </div>
     </footer>
 
-    <!-- Initialize Scripts -->
     <script src="assets/js/main.js"></script>
     <script>
         if (window.lucide) {
@@ -485,31 +450,22 @@
             const edition = document.getElementById('wl-edition').value;
             const formFactor = document.getElementById('wl-form-factor').value;
 
-            // REPLACE THIS with your deployed Google Apps Script Web App URL
             const scriptURL = 'https://script.google.com/macros/s/AKfycbyJb1wyrGyaw3OZKgdIi6ZIa_NRow2-BKSOXRZuTeW_bTzoiUV2aMgtI8vzaxvZTVwA3g/exec';
-
-            // For now, we simulate a network request. 
-            // Once you have the real scriptURL, uncomment the fetch block below:
-
 
             fetch(scriptURL, {
                 method: 'POST',
-                mode: 'no-cors', // Essential for Google Apps Script to avoid CORS issues
+                mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: name, email: email, edition: edition, formFactor: formFactor, product: "Nexus Arcade" })
             })
-                .then(() => { showSuccess(); })
-                .catch(error => {
-                    console.error('Error!', error.message);
-                    btn.innerText = "Error - Try Again";
-                    btn.disabled = false;
-                });
+            .then(() => { showSuccess(); })
+            .catch(error => {
+                console.error('Error!', error.message);
+                btn.innerText = "Error - Try Again";
+                btn.disabled = false;
+            });
 
-
-            // Simulated success
-            setTimeout(() => {
-                showSuccess();
-            }, 800);
+            setTimeout(() => { showSuccess(); }, 800);
 
             function showSuccess() {
                 btn.classList.add('hidden');
@@ -525,7 +481,6 @@
             }
         }
 
-        // --- Game Modal Logic ---
         const gameModal = document.getElementById('game-modal');
         const gameIframe = document.getElementById('game-iframe');
         const gameTitle = document.getElementById('game-title');
@@ -540,7 +495,7 @@
 
         function closeGame() {
             gameModal.classList.add('hidden');
-            setTimeout(() => { gameIframe.src = 'about:blank'; }, 300); // Clear iframe after fade out
+            setTimeout(() => { gameIframe.src = 'about:blank'; }, 300);
             if (document.fullscreenElement) {
                 document.exitFullscreen();
             }
@@ -556,7 +511,6 @@
             }
         }
 
-        // Listen for fullscreen changes to hide/show the header
         document.addEventListener('fullscreenchange', () => {
             if (document.fullscreenElement) {
                 gameModalHeader.classList.add('hidden');
@@ -568,5 +522,4 @@
         });
     </script>
 </body>
-
 </html>

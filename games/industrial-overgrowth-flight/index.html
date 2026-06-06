@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Industrial Forest Flight</title>
+    <link rel="manifest" href="game.json">
+    <style>
+        :root {
+            --color-brass: #b5a642;
+            --color-dark: #0f1412;
+            --color-parchment: #e0e5d8;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Georgia', serif;
+            touch-action: none;
+            user-select: none;
+        }
+        #game-canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+        .ui-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(15, 20, 18, 0.85);
+            transition: opacity 0.5s ease-in-out;
+            z-index: 10;
+        }
+        .parchment-box {
+            background-color: var(--color-parchment);
+            background-image: linear-gradient(135deg, rgba(0,0,0,0.03) 0%, rgba(45,60,40,0.1) 100%);
+            border: 4px solid #2d3c28;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8), inset 0 0 30px rgba(45,60,40,0.15);
+            pointer-events: auto;
+            max-width: 550px;
+            width: 90%;
+            box-sizing: border-box;
+        }
+        h1 { margin: 0 0 10px 0; color: #1a2517; font-size: 2.2em; letter-spacing: 1px; line-height: 1.1;}
+        p { color: #354a2e; line-height: 1.5; font-size: 1.05em; margin: 10px 0; }
+        .stats {
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            background: #151e13;
+            color: #d1e2c3;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: left;
+            font-size: 0.85em;
+            line-height: 1.4;
+            border-left: 4px solid var(--color-brass);
+        }
+        .controls-hint {
+            font-size: 0.9em;
+            color: #4a6341;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 14px 36px;
+            font-size: 1.15em;
+            background: #8b2b00;
+            color: #ffedd5;
+            border: 2px solid #4a1700;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        button:hover, button:focus { background: #b33900; transform: translateY(-2px); outline: 2px solid #ffd700; }
+        button:active { transform: translateY(1px); }
+        button:disabled { background: #4a4a4a; color: #888; border-color: #333; cursor: not-allowed; transform: none; box-shadow: none; outline: none; }
+        
+        #hud-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            color: #efe3b5;
+            pointer-events: none;
+            display: none;
+            background: rgba(15, 20, 18, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(181, 166, 66, 0.3);
+            font-size: 0.9em;
+            z-index: 5;
+        }
+        .hud-row { margin-bottom: 5px; }
+        .hud-value { color: #d1e2c3; font-weight: bold; }
+
+        #altitude-warning {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ff3333;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2.0em;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 20;
+            text-align: center;
+            transition: opacity 0.2s;
+            white-space: pre-wrap;
+            background: rgba(20, 0, 0, 0.75);
+            padding: 15px 30px;
+            border: 2px solid #ff0000;
+            border-radius: 8px;
+        }
+        #vignette {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 15;
+            box-shadow: inset 0 0px rgba(255,0,0,0);
+            transition: box-shadow 0.2s;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="game-canvas"></canvas>
+    
+    <div id="vignette"></div>
+    <div id="altitude-warning">WARNING: ALTITUDE EXCEEDS INTENDED BOUNDS</div>
+
+    <div id="hud-container">
+        <div class="hud-row">DISTANCE: <span id="hud-dist" class="hud-value">00000</span>m</div>
+        <div class="hud-row">COMBS: <span id="hud-combs" class="hud-value">0</span></div>
+        <div class="hud-row">SPEED: <span id="hud-speed" class="hud-value">0</span> kn</div>
+    </div>
+
+    <div id="ui-start" class="ui-overlay">
+        <div class="parchment-box">
+            <h1>Industrial Overgrowth</h1>
+            <p>Pilot your clockwork dragonfly. Collect brass honeycombs to buy continuous upgrades at every 500m milestone. Avoid crashing into the forest floor or climbing above active Tesla limits!</p>
+            <div class="stats">
+                • <b>Gamepad Support:</b> Left Stick to Steer<br>
+                • <b>[A] Button:</b> Boost Engine / Buy Menu Items<br>
+                • <b>[X] Button:</b> Overdrive Boost (Risk of crashing!)<br>
+                • Keyboard: WASD to steer, SPACE to Boost, SHIFT to activate Overdrive.<br>
+                • Ground collision deals damage. Peak hazard density at 10,000m.
+            </div>
+            <p class="controls-hint">Press [A] on Controller or Click below to Ignite Engine</p>
+            <button id="start-btn">Ignite Engine</button>
+        </div>
+    </div>
+
+    <div id="ui-upgrade" class="ui-overlay" style="display: none; opacity: 0;">
+        <div class="parchment-box">
+            <h1>Chassis Modification</h1>
+            <p>Upgrade systems continuously. When finished, select "Resume Flight".</p>
+            <div class="stats" style="text-align: center;">
+                AVAILABLE HONEYCOMBS: <span id="upgrade-combs" style="color:#ffd700; font-weight:bold; font-size:1.2em;">0</span>
+            </div>
+            <button class="upg-btn" id="upg-repair">Repair Integrity (Cost: 15 Combs)</button>
+            <button class="upg-btn" id="upg-speed">Overclock Engine Speed (Cost: 25 Combs)</button>
+            <button class="upg-btn" id="upg-dodge">Overdrive Coolant Systems (Cost: 25 Combs)</button>
+            <button class="upg-btn" id="upg-skip" style="background:#2d3c28; border-color:#1a2517; margin-top: 25px;">Resume Flight</button>
+        </div>
+    </div>
+
+    <div id="ui-gameover" class="ui-overlay" style="display: none; opacity: 0;">
+        <div class="parchment-box">
+            <h1 style="color: #8b2b00;">Chassis Destroyed</h1>
+            <p id="gameover-reason">Your journey has ended in the smog and pines.</p>
+            <div class="stats" style="text-align: center;">
+                DISTANCE COVERED: <span id="final-distance" style="color:#d1e2c3; font-weight:bold;">0</span> meters
+            </div>
+            <button id="restart-btn">Press [A] to Rebuild & Restart</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script src="game.js"></script>
+</body>
+</html>
