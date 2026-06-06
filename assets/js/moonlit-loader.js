@@ -164,13 +164,18 @@
     renderProjectCards(payload.manifest);
   }
 
-  function renderProject(project) {
-    app.innerHTML = `
-      <section class="moonlit-project-view">
+  function renderProject(project, options = {}) {
+    const toolbar = options.hideToolbar
+      ? ""
+      : `
         <div class="moonlit-project-toolbar">
           <button type="button" data-back-to-shell>Back to Moonlit Labs</button>
           <strong>${project.title}</strong>
         </div>
+      `;
+    app.innerHTML = `
+      <section class="moonlit-project-view">
+        ${toolbar}
         <iframe class="moonlit-project-frame" sandbox="allow-scripts" referrerpolicy="no-referrer" title="${project.title}"></iframe>
       </section>
     `;
@@ -207,7 +212,7 @@
       const project = shell.manifest.find((item) => item.slug === config.projectSlug);
       if (!project) throw new Error("Demo project missing from manifest.");
       const payload = await unlockProject(project, config.projectPassword);
-      renderProject(payload);
+      renderProject(payload, { hideToolbar: true });
       return true;
     } catch {
       topPassword = "";
