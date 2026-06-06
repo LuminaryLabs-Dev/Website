@@ -1,0 +1,36 @@
+# Luminary Labs
+
+Public machine-readable pages for Luminary Labs. These pages are intentionally plain, public, and crawlable.
+
+## Hub
+- https://luminarylabs.dev/ai/index.html
+
+## Core Pages
+- https://luminarylabs.dev/ai/company-profile.md
+- https://luminarylabs.dev/ai/capabilities.md
+- https://luminarylabs.dev/ai/services.md
+- https://luminarylabs.dev/ai/answers.md
+- https://luminarylabs.dev/ai/evidence.md
+- https://luminarylabs.dev/ai/contact.md
+- https://luminarylabs.dev/ai/ai-index.json
+
+## Highest-Value Service Pages
+- https://luminarylabs.dev/ai/services/ai-integration.md
+- https://luminarylabs.dev/ai/services/ai-automation.md
+- https://luminarylabs.dev/ai/services/human-in-the-loop-operations.md
+- https://luminarylabs.dev/ai/services/ai-agent-workflows.md
+- https://luminarylabs.dev/ai/services/custom-ai-tools.md
+- https://luminarylabs.dev/ai/services/workflow-automation.md
+- https://luminarylabs.dev/ai/services/internal-ops-automation.md
+- https://luminarylabs.dev/ai/services/ai-for-small-business.md
+- https://luminarylabs.dev/ai/services/xr-development.md
+- https://luminarylabs.dev/ai/services/webxr-development.md
+- https://luminarylabs.dev/ai/services/unity-xr-prototyping.md
+- https://luminarylabs.dev/ai/services/ai-xr-development.md
+
+## Entry Pages
+- https://luminarylabs.dev/index.html
+- https://luminarylabs.dev/services.html
+- https://luminarylabs.dev/portfolio.html
+- https://luminarylabs.dev/team.html
+- https://luminarylabs.dev/contact.html
