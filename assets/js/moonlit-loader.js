@@ -56,16 +56,65 @@
     if (gateMessage) gateMessage.textContent = message;
   }
 
-  function renderLoadingDemo() {
+  function getRoute() {
+    const params = new URLSearchParams(window.location.search);
+    const demo = params.get("demo");
+    if (demo) return { type: "demo", token: demo.toLowerCase() };
+    return { type: "gate" };
+  }
+
+  function installRouteLoaderStyle() {
+    installStyle("moonlit-route-loader-style", `
+      .moonlit-route-loader {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle at center, rgba(96, 165, 250, 0.08), transparent 18rem),
+          #050716;
+        overflow: hidden;
+      }
+      .moonlit-route-loader__pulse {
+        width: 66px;
+        height: 66px;
+        position: relative;
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(219, 234, 254, 0.94) 0 18%, rgba(96, 165, 250, 0.22) 44%, transparent 68%);
+        filter: drop-shadow(0 0 22px rgba(147, 197, 253, 0.68));
+        animation: moonlit-route-pulse 1.4s ease-in-out infinite;
+      }
+      .moonlit-route-loader__pulse::before,
+      .moonlit-route-loader__pulse::after {
+        content: "";
+        position: absolute;
+        inset: -18px;
+        border-radius: inherit;
+        border: 1px solid rgba(147, 197, 253, 0.42);
+        filter: blur(2px);
+        animation: moonlit-route-ring 1.4s ease-out infinite;
+      }
+      .moonlit-route-loader__pulse::after {
+        inset: -34px;
+        border-color: rgba(167, 139, 250, 0.24);
+        animation-delay: 0.28s;
+      }
+      @keyframes moonlit-route-pulse {
+        0%, 100% { transform: scale(0.92); opacity: 0.72; }
+        50% { transform: scale(1.04); opacity: 1; }
+      }
+      @keyframes moonlit-route-ring {
+        0% { transform: scale(0.7); opacity: 0.74; }
+        100% { transform: scale(1.12); opacity: 0; }
+      }
+    `);
+  }
+
+  function renderRouteLoader() {
     document.body.classList.add("moonlit-unlocked");
+    installRouteLoaderStyle();
     app.innerHTML = `
-      <section class="moonlit-project-view">
-        <div class="moonlit-project-toolbar">
-          <strong>Opening SIGGRAPH Demo</strong>
-        </div>
-        <div style="min-height:calc(100vh - 55px);display:grid;place-items:center;background:#050716;color:#dbeafe;font:800 13px/1.4 Inter,system-ui,sans-serif;letter-spacing:0.12em;text-transform:uppercase;">
-          Decrypting demo...
-        </div>
+      <section class="moonlit-route-loader" aria-label="Opening encrypted demo">
+        <div class="moonlit-route-loader__pulse" aria-hidden="true"></div>
       </section>
     `;
   }
@@ -140,18 +189,17 @@
   }
 
   async function openDemoFromUrl() {
-    const params = new URLSearchParams(window.location.search);
-    const demo = params.get("demo");
-    if (!demo) return false;
+    const route = getRoute();
+    if (route.type !== "demo") return false;
 
-    const config = demoTokens.get(demo.toLowerCase());
+    const config = demoTokens.get(route.token);
     if (!config) {
       setGateMessage("Unknown demo token.");
       return false;
     }
 
     setGateMessage("Opening demo...");
-    renderLoadingDemo();
+    renderRouteLoader();
     try {
       topPassword = config.topPassword;
       const shell = await unlockShell(topPassword);
