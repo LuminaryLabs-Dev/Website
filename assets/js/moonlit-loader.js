@@ -4,6 +4,13 @@
   const gateMessage = document.querySelector("[data-gate-message]");
   let topPassword = "";
   let shellPayload = null;
+  const demoTokens = new Map([
+    ["siggraph", {
+      topPassword: "password",
+      projectSlug: "siggraph-2026-leads",
+      projectPassword: "siggraph2026"
+    }]
+  ]);
 
   function base64ToBytes(base64) {
     const binary = atob(base64);
@@ -118,6 +125,34 @@
     return decryptEnvelope(envelope, `${topPassword}\u001f${projectPassword}`);
   }
 
+  async function openDemoFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const demo = params.get("demo");
+    if (!demo) return false;
+
+    const config = demoTokens.get(demo.toLowerCase());
+    if (!config) {
+      setGateMessage("Unknown demo token.");
+      return false;
+    }
+
+    setGateMessage("Opening demo...");
+    try {
+      topPassword = config.topPassword;
+      const shell = await unlockShell(topPassword);
+      renderShell(shell);
+      const project = shell.manifest.find((item) => item.slug === config.projectSlug);
+      if (!project) throw new Error("Demo project missing from manifest.");
+      const payload = await unlockProject(project, config.projectPassword);
+      renderProject(payload);
+      return true;
+    } catch {
+      topPassword = "";
+      setGateMessage("Unable to open demo token.");
+      return false;
+    }
+  }
+
   if (gate) {
     gate.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -169,4 +204,6 @@
       }, 1600);
     }
   });
+
+  openDemoFromUrl();
 })();
