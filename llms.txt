@@ -34,3 +34,6 @@ Public machine-readable pages for Luminary Labs. These pages are intentionally p
 - https://luminarylabs.dev/portfolio.html
 - https://luminarylabs.dev/team.html
 - https://luminarylabs.dev/contact.html
+
+## Static Apps
+- https://luminarylabs.dev/apps/lost-pages/
