@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Operational AI by you | NexusCentral</title>
+    <meta name="description" content="NexusCentral helps you automate everyday work with personal AI routines, no-code flows, and lightweight operational tools." />
+    <link rel="canonical" href="https://luminarylabs.dev/nexuscentral.html" />
+    <link rel="icon" type="image/png" href="public/LL_logo_transparent.png" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20260618-19" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -125,44 +129,86 @@
             z-index: -1;
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.02);
         }
+
+        body.nexus-central-page {
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        .nexus-central-page #canvas-container {
+            opacity: 0.22;
+        }
+
+        .nexus-central-page .bg-white,
+        .nexus-central-page .bg-white\/80,
+        .nexus-central-page .bg-slate-50,
+        .nexus-central-page .bg-slate-100,
+        .nexus-central-page .bg-blue-50,
+        .nexus-central-page .bg-indigo-50,
+        .nexus-central-page .bg-blue-100,
+        .nexus-central-page .bg-indigo-100 {
+            background-color: rgba(17, 21, 40, 0.92) !important;
+            background-image: none !important;
+        }
+
+        .nexus-central-page .text-slate-900,
+        .nexus-central-page .text-slate-800 {
+            color: var(--text) !important;
+        }
+
+        .nexus-central-page .text-slate-700,
+        .nexus-central-page .text-slate-600,
+        .nexus-central-page .text-slate-500,
+        .nexus-central-page .text-slate-400 {
+            color: var(--muted) !important;
+        }
+
+        .nexus-central-page .border-slate-200,
+        .nexus-central-page .border-slate-100,
+        .nexus-central-page .border-nexus-border {
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        .nexus-central-page .app-screenshot-placeholder {
+            background: linear-gradient(180deg, rgba(17, 21, 40, 0.96), rgba(13, 16, 37, 0.92));
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .nexus-central-page .skew-bg {
+            background: linear-gradient(180deg, rgba(17, 21, 40, 0.96), rgba(13, 16, 37, 0.92));
+        }
+
+        .nexus-central-page .glass-panel {
+            background: rgba(17, 21, 40, 0.9);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
     </style>
 </head>
 
-<body class="antialiased font-sans selection:bg-nexus-primary selection:text-white">
+<body class="nexus-central-page antialiased font-sans selection:bg-nexus-primary selection:text-white">
 
     <div id="canvas-container"></div>
 
-    <nav
-        class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-nexus-border transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <a href="index.html"
-                    class="flex-shrink-0 font-bold text-2xl tracking-tight flex items-center gap-2 text-slate-900 hover:opacity-80 transition-opacity">
-                    <div class="w-4 h-4 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 animate-pulse-slow">
-                    </div>
-                    Nexus<span class="text-slate-500 font-light">Central</span>
-                </a>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-8 font-medium">
-                        <a href="index.html" class="text-slate-500 hover:text-blue-600 transition-colors">Home</a>
-                        <a href="#features" class="text-slate-500 hover:text-blue-600 transition-colors">Platform</a>
-                    </div>
-                </div>
-                <div>
-                    <a href="https://donate.stripe.com/8x214m2HybZz1mBcE7bQY00" target="_blank"
-                        rel="noopener noreferrer"
-                        class="px-5 py-2.5 font-semibold bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                            </path>
-                        </svg>
-                        Support Us
-                    </a>
-                </div>
-            </div>
+    <header class="site-header">
+        <div class="container nav">
+            <a href="index.html" class="brand" aria-label="Luminary Labs Home">
+                <img src="public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" />
+                Luminary Labs
+            </a>
+            <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+            <nav id="site-nav" class="site-nav">
+                <a href="index.html">Home</a>
+                <a href="gemini-arcade.html">Nexus Arcade</a>
+                <a href="opensource.html">Open Source</a>
+                <a href="nexuscentral.html" class="active">NexusCentral</a>
+                <a href="services.html">Services</a>
+                <a href="portfolio.html">Portfolio</a>
+                <a href="team.html">Team</a>
+                <a href="contact.html">Contact</a>
+            </nav>
         </div>
-    </nav>
+    </header>
 
     <main class="relative pt-32 pb-16 lg:pt-48 lg:pb-24 overflow-hidden">
         <div
@@ -254,32 +300,13 @@
         </div>
     </section>
 
-    <footer class="relative bg-white border-t border-nexus-border pt-20 pb-10 overflow-hidden">
-        <div
-            class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-t from-blue-50 to-transparent rounded-full filter blur-[100px] pointer-events-none">
-        </div>
-
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 reveal">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6">Empower Your Routine</h2>
-            <p class="text-xl text-slate-500 mb-10 font-light">
-                Join the community of users taking control of their digital lives through accessible, operational AI.
-            </p>
-
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-16">
-                <a href="https://donate.stripe.com/8x214m2HybZz1mBcE7bQY00" target="_blank" rel="noopener noreferrer"
-                    class="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-1 w-full sm:w-auto flex items-center justify-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                        </path>
-                    </svg>
-                    Donate via Stripe
-                </a>
-            </div>
-
-            <div
-                class="border-t border-slate-200 pt-8 flex flex-col md:flex-row justify-between items-center text-sm font-medium text-slate-500">
-                <p>© 2026 Luminary Labs LLC. All rights reserved.</p>
+    <footer class="site-footer">
+        <div class="container">
+            <p>© <span id="year"></span> Luminary Labs LLC — NexusCentral Division</p>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="gemini-arcade.html">Nexus Arcade</a>
+                <a href="opensource.html">Open Source</a>
             </div>
         </div>
     </footer>

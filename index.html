@@ -7,7 +7,9 @@
   <title>Luminary Labs — AI-Accelerated Software Development</title>
   <meta name="description"
     content="Luminary Labs is an AI-accelerated software development studio specializing in XR, AI integration, and full-stack web applications for B2B clients." />
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="canonical" href="https://luminarylabs.dev/index.html" />
+  <link rel="icon" type="image/png" href="public/LL_logo_transparent.png" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260618-19" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -46,27 +48,74 @@
     <section class="hero" id="hero">
       <div class="hero-bg"></div>
       <div class="container hero-inner">
-        <span class="hero-badge">
-          <span class="pulse"></span>
-          AI-Accelerated Dev Studio
-        </span>
-        <h1>
-          Software That<br />
-          <span class="gradient-text">Makes You Money</span>
-        </h1>
-        <p class="hero-sub">
-          We build XR experiences, AI-integrated applications, and full-stack web products for businesses that need to
-          ship fast and scale smart. From MVP to production — accelerated by AI at every step.
-        </p>
-        <div class="cta-row">
-          <a href="services.html" class="btn primary" id="cta-hire">Hire Us</a>
+        <div class="hero-copy">
+          <span class="hero-badge">
+            <span class="pulse"></span>
+            AI-Accelerated Dev Studio
+          </span>
+          <h1>
+            Software That<br />
+            <span class="gradient-text">Drives Revenue</span>
+          </h1>
+          <p class="hero-sub">
+            We build XR products, AI-powered applications, and full-stack web experiences for B2B teams that need to
+            ship quickly and look credible.
+          </p>
+          <div class="cta-row">
+            <a href="services.html" class="btn primary" id="cta-hire">Hire Us</a>
+            <a href="portfolio.html" class="btn ghost" id="cta-work">See Work</a>
+          </div>
+          <div class="hero-proof" aria-label="Studio proof points">
+            <div class="hero-proof-item">
+              <span>01</span>
+              <strong>Faster launches</strong>
+              <small>Focused sprints that ship faster.</small>
+            </div>
+            <div class="hero-proof-item">
+              <span>02</span>
+              <strong>Clearer UX</strong>
+              <small>Readable interfaces with clear flow.</small>
+            </div>
+            <div class="hero-proof-item">
+              <span>03</span>
+              <strong>Live proof</strong>
+              <small>Active projects and published work.</small>
+            </div>
+          </div>
         </div>
+
+        <aside class="hero-card" aria-labelledby="hero-card-title">
+          <span class="hero-card-kicker">Studio Snapshot</span>
+          <h2 id="hero-card-title">What clients get</h2>
+          <p>
+            Clear delivery, technical range, and proof you can inspect.
+          </p>
+          <ul class="hero-points" aria-label="Key studio strengths">
+            <li><strong>XR and spatial</strong> prototypes through launch</li>
+            <li><strong>AI integrations</strong> that remove manual work</li>
+            <li><strong>Web apps</strong> built for pitching and shipping</li>
+          </ul>
+          <div class="hero-mini-stats" aria-label="Quick facts">
+            <div>
+              <span>4+</span>
+              <small>Active projects</small>
+            </div>
+            <div>
+              <span>3</span>
+              <small>Open source products</small>
+            </div>
+            <div>
+              <span>Quest Store</span>
+              <small>Published in-store</small>
+            </div>
+          </div>
+        </aside>
       </div>
     </section>
 
     <section id="capabilities">
       <div class="container">
-        <div class="section-header center reveal">
+        <div class="section-header center">
           <span class="section-label">What We Build</span>
           <h2>Core Capabilities</h2>
           <p>We specialize in the technologies that move the needle for B2B clients.</p>
@@ -99,53 +148,62 @@
     <section id="oss-spotlight">
       <div class="container">
         <div class="section-header reveal">
-          <span class="section-label">Open Source</span>
-          <h2>The Nexus Suite</h2>
-          <p>Interoperable, modular tools for developers — free and open source.</p>
+          <span class="section-label">Nexus Suite</span>
+          <h2>Arcade and Automation</h2>
+          <p>Two Luminary Labs products now live in the main site, using the same header, footer, and visual system.</p>
         </div>
-        <div class="oss-badge reveal">💚 Donationware</div>
-        <div class="oss-grid">
-
-
-
-          <div class="oss-card reveal reveal-delay-3 overflow-hidden flex flex-col pt-0 px-0">
-            <div
-              class="h-32 w-full relative bg-[#08080c] border-b border-white/5 flex items-center justify-center overflow-hidden">
-              <img src="public/NexusCentral_Lab.png" alt="NexusCentral Laboratory Preview"
-                class="absolute inset-0 w-full h-full object-cover opacity-40 blur-[1px]">
-              <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] to-transparent"></div>
-              <div class="relative z-10 scale-75">
-                <div
-                  class="bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl p-4 flex flex-col items-center text-center">
-                  <div
-                    class="w-10 h-10 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center mb-2">
-                    <i data-lucide="zap" class="w-5 h-5 text-blue-400"></i>
-                  </div>
-                  <span
-                    class="px-2 py-0.5 bg-blue-500/20 border border-blue-500/30 rounded-full text-[8px] font-black uppercase tracking-widest text-blue-400">
-                    WAITLIST OPEN
-                  </span>
+        <div class="nexus-strip reveal" aria-label="Nexus Suite highlights">
+          <div class="nexus-strip-item">
+            <span>Live on site</span>
+            <small>Same studio shell across both products.</small>
+          </div>
+          <div class="nexus-strip-item">
+            <span>Inspectable previews</span>
+            <small>Users can review the experience before opening it.</small>
+          </div>
+          <div class="nexus-strip-item">
+            <span>Donationware release</span>
+            <small>Built to stay public and easy to discover.</small>
+          </div>
+        </div>
+        <div class="oss-grid nexus-grid">
+          <article class="nexus-card reveal reveal-delay-1">
+            <div class="nexus-card-media">
+              <img src="public/NexusArcadePics/arcade_hero.png" alt="Nexus Arcade hero preview" />
+              <span class="nexus-card-media-badge">Playable Preview</span>
+            </div>
+            <div class="nexus-card-body">
+              <span class="nexus-card-kicker">Nexus Arcade</span>
+              <h3 class="nexus-card-title">Retro energy, modern hardware</h3>
+              <p class="nexus-card-copy">The arcade product page now uses the same site navigation and branding, while keeping its neon character intact.</p>
+              <div class="nexus-card-footer">
+                <div class="tech-tags">
+                  <span class="tech-tag">Arcade</span>
+                  <span class="tech-tag">Hardware</span>
                 </div>
+                <a href="gemini-arcade.html" class="font-bold text-sm hover:underline" style="color: var(--accent-2);">Play →</a>
               </div>
             </div>
-            <div class="p-6">
-              <h3 class="mt-0">NexusCentral</h3>
-              <span class="oss-status pre-release"
-                style="background: rgba(37, 99, 235, 0.1); color: #3b82f6; border-color: rgba(37, 99, 235, 0.2);">Early
-                Access</span>
-              <p>Operational AI by you. Automate your daily tasks and build intelligent routines with absolute
-                simplicity—no coding or technical expertise required.</p>
-              <div class="flex items-center justify-between mt-4">
+          </article>
+
+          <article class="nexus-card reveal reveal-delay-3">
+            <div class="nexus-card-media">
+              <img src="public/NexusCentral_Lab.png" alt="NexusCentral laboratory preview" />
+              <span class="nexus-card-media-badge">Early Access</span>
+            </div>
+            <div class="nexus-card-body">
+              <span class="nexus-card-kicker">NexusCentral</span>
+              <h3 class="nexus-card-title">Operational AI by you</h3>
+              <p class="nexus-card-copy">A local AI orchestration product for routines, wrappers, and workflow automation, now presented inside the same studio shell.</p>
+              <div class="nexus-card-footer">
                 <div class="tech-tags">
                   <span class="tech-tag">No-Code</span>
                   <span class="tech-tag">Personal AI</span>
                 </div>
-                <a href="nexuscentral.html" style="color: #3b82f6;" class="font-bold text-sm hover:underline">Learn More
-                  →</a>
+                <a href="nexuscentral.html" class="font-bold text-sm hover:underline" style="color: var(--accent-2);">Learn More →</a>
               </div>
             </div>
-          </div>
-
+          </article>
         </div>
         <div style="text-align: center; margin-top: 40px;" class="reveal">
           <a href="opensource.html" class="btn secondary" id="cta-oss">Explore Open Source →</a>

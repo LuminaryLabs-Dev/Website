@@ -7,12 +7,14 @@
     <title>Nexus Arcade — The Future of Play</title>
     <meta name="description"
         content="Experience Nexus Arcade: where modern console performance meets retro arcade soul." />
+    <link rel="canonical" href="https://luminarylabs.dev/gemini-arcade.html" />
+    <link rel="icon" type="image/png" href="public/LL_logo_transparent.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260618-19" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -131,18 +133,22 @@
 
 <body class="antialiased overflow-x-hidden">
 
-    <header class="site-header" style="background: rgba(5,5,10,0.9); border-bottom: 1px solid rgba(0,240,255,0.2);">
+    <header class="site-header">
         <div class="container nav">
-            <a href="index.html" class="brand" aria-label="Luminary Labs Home"
-                style="color: white; display: flex; align-items: center; gap: 8px;">
+            <a href="index.html" class="brand" aria-label="Luminary Labs Home">
                 <img src="public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" />
                 Luminary Labs
             </a>
-            <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" style="color: white;">Menu</button>
-            <nav id="site-nav" class="site-nav dark-nav">
-                <a href="index.html" style="color: #aaa;">Home</a>
-                <a href="gemini-arcade.html" class="active" style="color: #00F0FF; text-shadow: 0 0 8px rgba(0,240,255,0.5);">Nexus Arcade</a>
-                <a href="nexuscentral.html" style="color: #aaa;">NexusCentral</a>
+            <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+            <nav id="site-nav" class="site-nav">
+                <a href="index.html">Home</a>
+                <a href="gemini-arcade.html" class="active">Nexus Arcade</a>
+                <a href="opensource.html">Open Source</a>
+                <a href="nexuscentral.html">NexusCentral</a>
+                <a href="services.html">Services</a>
+                <a href="portfolio.html">Portfolio</a>
+                <a href="team.html">Team</a>
+                <a href="contact.html">Contact</a>
             </nav>
         </div>
     </header>
@@ -427,9 +433,14 @@
         </div>
     </main>
 
-    <footer class="site-footer" style="background: #05050A; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 0; text-align: center;">
-        <div class="container flex justify-center items-center py-8">
-            <p style="color: #888; font-weight: 500;">© <span id="year">2026</span> Luminary Labs LLC — Nexus Arcade Division</p>
+    <footer class="site-footer">
+        <div class="container">
+            <p>© <span id="year"></span> Luminary Labs LLC — Nexus Arcade Division</p>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="nexuscentral.html">NexusCentral</a>
+                <a href="opensource.html">Open Source</a>
+            </div>
         </div>
     </footer>
 

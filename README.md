@@ -34,6 +34,20 @@ Then visit http://localhost:8080/
 - Site data: `assets/js/data.js`
 - Page scripts: `assets/js/*.js`
 
+## Content Audit
+
+Run the local audit checker:
+
+```powershell
+node scripts/content-audit.mjs
+```
+
+Run it every 15 minutes on this machine:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/run-content-audit.ps1
+```
+
 ## Notes
 
 - The Three.js demo uses CDN scripts for ease. You can pin versions or move to a bundler later.
