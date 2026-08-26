@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Offer Intake — Luminary Labs</title>
+  <meta name="description" content="Submit the project information needed to begin a Luminary Labs offer."><meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="../../public/LL_logo_transparent.png"><link rel="stylesheet" href="../offers.css">
+</head>
+<body>
+  <header class="offer-header"><a class="offer-brand" href="/" aria-label="Luminary Labs"><img src="../../public/LL_logo_transparent.png" alt=""></a><span class="offer-label">Offers</span></header>
+  <main class="offer-main intake-wrap">
+    <p class="eyebrow">Payment received</p><h1>Let’s get the work started.</h1><p class="lead">This page is for customers who have completed payment. Tell us what we need to know, and we will confirm the next step.</p>
+    <div class="notice">Your delivery target begins after payment and complete, usable inputs. Do not send card information here.</div>
+    <section class="intake-card" aria-labelledby="intake-title"><h2 id="intake-title">Project intake</h2><p class="section-intro">This form is the front-end structure. It will be connected to the order tracker before launch.</p><form class="form-grid" action="#intake-submitted" method="post"><label>Offer<select name="offer"><option value="">Select the offer</option><option value="landing-page-rescue">Landing-Page Rescue</option><option value="spreadsheet-to-dashboard">Spreadsheet-to-Dashboard</option><option value="repository-to-live-demo">Repository-to-Live-Demo</option></select></label><label>Your name<input name="name" autocomplete="name" required></label><label>Email<input name="email" type="email" autocomplete="email" required></label><label>Project link<span class="field-help">Repository, current page, spreadsheet, or shared folder.</span><input name="project-link" type="url" placeholder="https://"></label><label>What should we know?<textarea name="brief" required placeholder="What are you hoping to improve or receive?"></textarea></label><label>Anything else to share?<textarea name="notes" placeholder="Access notes, files, examples, or constraints."></textarea></label><button class="btn btn-primary" type="submit">Submit project details</button><p class="status-message" id="intake-submitted" aria-live="polite">Your submission connection will be enabled before launch.</p></form></section>
+  </main><footer class="offer-footer">© <span data-year></span> Luminary Labs LLC</footer><script src="../offers.js"></script>
+</body></html>
