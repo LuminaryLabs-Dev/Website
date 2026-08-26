@@ -35,5 +35,11 @@ Public machine-readable pages for Luminary Labs. These pages are intentionally p
 - https://luminarylabs.dev/team.html
 - https://luminarylabs.dev/contact.html
 
+## Fixed-Price Offers
+- https://luminarylabs.dev/offers/
+- https://luminarylabs.dev/offers/landing-page-rescue/
+- https://luminarylabs.dev/offers/spreadsheet-to-dashboard/
+- https://luminarylabs.dev/offers/repository-to-live-demo/
+
 ## Static Apps
 - https://luminarylabs.dev/apps/lost-pages/
