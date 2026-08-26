@@ -113,10 +113,23 @@ textarea { min-height: 130px; resize: vertical; }
 .field-help { color: var(--offer-muted); font-size: .82rem; font-weight: 400; }
 .notice { margin: 22px 0 0; padding: 14px 16px; border-left: 3px solid var(--offer-warm); background: rgba(242,184,75,.08); color: var(--offer-muted); }
 .status-message { min-height: 1.5em; margin-top: 12px; color: var(--offer-green); }
+.selection-intro { max-width: 720px; }
+.selection-list { margin-top: 46px; border-top: 1px solid var(--offer-line); }
+.selection-link { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: center; padding: 27px 0; border-bottom: 1px solid var(--offer-line); text-decoration: none; }
+.selection-link:hover .selection-title { color: var(--offer-warm); }
+.selection-title { margin: 0; font: 600 1.3rem/1.2 Outfit, 'DM Sans', sans-serif; transition: color .2s ease; }
+.selection-copy { max-width: 620px; margin: 8px 0 0; color: var(--offer-muted); }
+.selection-meta { display: flex; align-items: center; gap: 18px; color: var(--offer-muted); font-size: .9rem; white-space: nowrap; }
+.selection-meta strong { color: var(--offer-warm); font: 700 1.25rem/1 Outfit, sans-serif; }
+.selection-arrow { color: var(--offer-green); font-size: 1.25rem; }
+.selection-process { margin-top: 86px; }
+.selection-process .steps { margin-top: 28px; }
 @media (max-width: 800px) {
   .offer-main { padding-top: 52px; }
   .offer-hero, .split { grid-template-columns: 1fr; gap: 34px; }
   .steps { grid-template-columns: 1fr; gap: 24px; }
+  .selection-link { grid-template-columns: 1fr; gap: 14px; }
+  .selection-meta { justify-content: space-between; }
   .final-cta { align-items: flex-start; flex-direction: column; }
 }
 @media (max-width: 520px) {
