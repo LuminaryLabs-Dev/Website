@@ -1,0 +1,22 @@
+.home-fractal-mode main > * { display: none !important; }
+.home-fractal-mode main > .fractal-home { display: block !important; }
+.home-fractal-mode .site-footer { display: none !important; }
+.fractal-home { position: relative; height: calc(100svh - 54px); min-height: 560px; overflow: hidden; background: #020205; color: #fff; }
+.fractal-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.fractal-overlay { position: absolute; inset: 0; pointer-events: none; }
+.guide-particles i { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: #fff7de; box-shadow: 0 0 7px 3px #fff, 0 0 18px 7px #ff9a42, 0 0 42px 14px rgba(255,108,25,.35); animation: guide-drift 2.1s ease-in-out infinite, guide-pulse 1.7s ease-in-out infinite; }
+.guide-particles i:nth-child(1) { left: 12%; top: 24%; } .guide-particles i:nth-child(2) { left: 18%; top: 31%; animation-delay: -.7s; } .guide-particles i:nth-child(3) { left: 80%; top: 20%; animation-delay: -1.4s; } .guide-particles i:nth-child(4) { left: 87%; top: 28%; animation-delay: -2s; } .guide-particles i:nth-child(5) { left: 15%; top: 68%; animation-delay: -.4s; } .guide-particles i:nth-child(6) { left: 84%; top: 66%; animation-delay: -1.1s; } .guide-particles i:nth-child(7) { left: 29%; top: 16%; animation-delay: -1.8s; } .guide-particles i:nth-child(8) { left: 72%; top: 15%; animation-delay: -2.5s; }
+.guide-particles.complete { opacity: .15; transition: opacity .6s ease; }
+.bulb-particles { position: absolute; left: 50%; top: 48%; width: 250px; height: 250px; transform: translate(-50%, -50%); border: 2px solid rgba(255,175,88,.7); border-radius: 50%; opacity: 0; pointer-events: none; box-shadow: 0 0 18px 4px rgba(255,126,30,.5), inset 0 0 18px 4px rgba(255,126,30,.3); }
+.bulb-particles::before, .bulb-particles::after { content: ""; position: absolute; inset: -12px; border-radius: 50%; background: radial-gradient(circle at 50% 0, #fff 0 3px, transparent 5px), radial-gradient(circle at 100% 50%, #ff9a42 0 3px, transparent 5px), radial-gradient(circle at 50% 100%, #fff 0 3px, transparent 5px), radial-gradient(circle at 0 50%, #ff9a42 0 3px, transparent 5px); }
+.bulb-particles::after { inset: -27px; opacity: .6; transform: rotate(45deg); }
+.bulb-particles.active { opacity: 1; animation: particle-orbit 4s linear infinite, bulb-pulse 1.5s ease-in-out infinite; }
+.fractal-core { position: absolute; pointer-events: auto; left: 50%; top: 48%; width: 150px; height: 180px; transform: translate(-50%, -50%); border: 0; border-radius: 50%; background: transparent; cursor: pointer; opacity: 0; }
+.fractal-core.active { opacity: .2; box-shadow: 0 0 55px 15px rgba(255,136,45,.65); }
+.fractal-mission { position: absolute; left: 50%; top: calc(48% - 150px); width: min(720px, 82vw); transform: translateX(-50%) translateY(10px); color: #ff9a42; font: 800 clamp(16px, 2vw, 28px)/1.15 var(--font-mono, monospace); text-align: center; text-shadow: 0 0 8px #ff6a16, 0 0 28px rgba(255,78,0,.9); opacity: 0; transition: opacity .8s ease, transform .8s ease; }
+.fractal-mission.revealed { opacity: 1; transform: translateX(-50%) translateY(0); }
+@keyframes guide-drift { 50% { transform: translate(7px, -9px) scale(1.8); opacity: .35; } }
+@keyframes guide-pulse { 50% { box-shadow: 0 0 12px 5px #fff, 0 0 28px 12px #ff9a42, 0 0 58px 20px rgba(255,108,25,.5); } }
+@keyframes particle-orbit { to { transform: translate(-50%, -50%) rotate(360deg); } }
+@keyframes bulb-pulse { 50% { box-shadow: 0 0 32px 10px rgba(255,126,30,.8), inset 0 0 28px 8px rgba(255,126,30,.55); } }
+@media (max-width: 700px) { .fractal-home { min-height: 500px; } }

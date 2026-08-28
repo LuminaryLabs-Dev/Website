@@ -4,10 +4,11 @@
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // Mobile nav toggle
-  const toggle = document.querySelector(".nav-toggle");
-  const nav = document.getElementById("site-nav");
-  if (toggle && nav) {
+  // Mobile nav toggle for legacy headers only.
+  if (!document.querySelector(".universal-nav")) {
+    const toggle = document.querySelector(".nav-toggle");
+    const nav = document.getElementById("site-nav");
+    if (toggle && nav) {
     toggle.addEventListener("click", () => {
       const isOpen = nav.classList.toggle("open");
       toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
@@ -23,6 +24,7 @@
         toggle.setAttribute("aria-expanded", "false");
       }
     });
+    }
   }
 
   // Intersection observer for scroll reveal animations
