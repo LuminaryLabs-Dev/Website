@@ -1,0 +1,133 @@
+{
+ "userName": "simonsdev",
+ "date": "2026-08-28T10:06:26.443Z",
+ "numShaders": 4,
+ "shaders": [
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "fcyXWR",
+    "date": "1787830293",
+    "viewed": 18,
+    "name": "Chromatic Coordinates",
+    "description": "A coordinate experiment built from distance, angle, and time. \nEach pixel is centered around the screen, then measured by its distance and angle from the origin. Distance creates the rings, angle twists them into a spiral. Try changing r, a, and colors.",
+    "likes": 4,
+    "published": "Public API",
+    "usePreview": 0,
+    "tags": [
+     "basicscoordinates"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "/*\n    SHADER 101: CHROMATIC COORDINATES\n\n    A coordinate experiment built from distance, angle, and time.\n\n    Each pixel starts as a screen coordinate. We center that coordinate,\n    measure its distance and angle from the center, then use those values\n    to create animated spiral waves and separated color channels.\n\n    Try changing:\n\n    - radius * 18.0\n      Controls the number of wave bands.\n\n    - angle * 4.0\n      Controls how strongly the bands twist into a spiral.\n\n    - iTime * 0.7\n      Controls the animation speed.\n\n    - 2.1 and 4.2\n      Offset the green and blue channels, creating the chromatic effect.\n*/\n\n\n#define PI 3.14159265359\n\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord)\n{\n    // Convert the current pixel from screen coordinates into 0–1 UV space.\n    vec2 uv = fragCoord / iResolution.xy;\n\n    // Move the origin to the center and preserve circular proportions.\n    vec2 p = uv - 0.5;\n    p.x *= iResolution.x / iResolution.y;\n\n    // Measure the pixel's distance from the center and its angle around it.\n    float radius = length(p);\n    float angle = atan(p.y, p.x);\n\n    // Distance creates the rings. Angle bends them into a spiral.\n    float wave = sin(\n        radius * 18.0\n        - iTime * 0.7\n        + angle * 4.0\n    );\n\n    // Sample the same pattern three times with shifted phases.\n    // The phase offsets separate the red, green, and blue channels.\n    float red = 0.5 + 0.5 * sin(wave * PI + radius * 5.0);\n    float green = 0.5 + 0.5 * sin(wave * PI + radius * 5.0 + 2.1);\n    float blue = 0.5 + 0.5 * sin(wave * PI + radius * 5.0 + 4.2);\n\n    vec3 color = vec3(red, green, blue);\n\n    // Darken the outer edges and keep attention near the center.\n    float vignette = 1.0 - smoothstep(0.25, 0.85, radius);\n    color *= vignette;\n\n    // Add a subtle glow at the center of the coordinate field.\n    color += 0.12 * exp(-radius * 5.0);\n\n    // Output the final color for this pixel.\n    fragColor = vec4(color, 1.0);\n}",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "NfGSDR",
+    "date": "1787830766",
+    "viewed": 23,
+    "name": "Distance Fields Basics",
+    "description": "A circle described entirely by distance. \n\nFor every pixel, we calculate its distance from the circle's surface. Negative values are inside, zero is the edge, and positive values are outside. We can create a fill, outline, glow or animation mask!",
+    "likes": 3,
+    "published": "Public API",
+    "usePreview": 0,
+    "tags": [
+     "basicsdistancecoordinates"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "/*\n    SHADER 101: DISTANCE FIELDS\n\n    A shape can be described by the distance from each pixel\n    to its surface.\n\n    For a circle:\n        length(p) - radius\n\n    The result is:\n    - negative inside the circle\n    - zero on the edge\n    - positive outside the circle\n\n    One distance value can control nearly every visual property\n    of a 2D shape: its fill, outline, glow, and color.\n\n    Try changing:\n    - 0.28  : circle size\n    - 0.015 : outline thickness\n    - 3.0   : glow falloff\n*/\n\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord)\n{\n    // Center the coordinate system and preserve proportions.\n    vec2 p = (fragCoord - 0.5 * iResolution.xy) / iResolution.y;\n\n    // Circle signed distance field:\n    // negative inside, zero on the surface, positive outside.\n    float d = length(p) - 0.28;\n\n    // Use the sign of the distance to fill the inside of the shape.\n    float fill = step(d, 0.0);\n\n    // Use the absolute distance to isolate a thin surface outline.\n    float outline = 1.0 - smoothstep(0.0, 0.015, abs(d));\n\n    // Make the distance fade smoothly into an outer glow.\n    float glow = exp(-abs(d) * 3.0);\n\n    // Animate the surface color by offsetting the RGB channels.\n    vec3 surfaceColor = 0.5 + 0.5 * cos(\n        iTime + vec3(0.0, 2.0, 4.0)\n    );\n\n    vec3 color = vec3(0.01, 0.015, 0.03);\n\n    // Apply the distance field as a solid interior.\n    color += fill * surfaceColor * 0.35;\n\n    // Apply the same distance field as a bright surface rim.\n    color += outline * vec3(0.4, 0.8, 1.0);\n\n    // Apply the same distance field as a soft surrounding glow.\n    color += glow * vec3(0.03, 0.15, 0.3);\n\n    fragColor = vec4(color, 1.0);\n}",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "fcySDR",
+    "date": "1787830931",
+    "viewed": 52,
+    "name": "Boolean Geometry",
+    "description": "Distance fields become powerful when simple shapes can be combined mathematically. Take this eclipse for example, distance fields can be combined like shapes in a drawing program. min() creates a union, while max() can subtract one shape from another.",
+    "likes": 3,
+    "published": "Public API",
+    "usePreview": 0,
+    "tags": [
+     "booleansbasicsgeom"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "/*\n    SHADER 101: BOOLEAN GEOMETRY\n\n    Distance fields let us describe simple shapes mathematically.\n\n    Boolean operations let us combine those shapes:\n\n    - min(a, b)  : union — keep either shape\n    - max(a, -b) : subtraction — cut one shape from another\n\n    This shader creates a moving crescent by subtracting\n    one circle from another.\n\n    Try changing:\n    - 0.30 : main circle size\n    - 0.20 : cutout circle size\n    - 0.12 : cutout offset\n    - 0.7  : movement speed\n*/\n\nfloat circleSDF(vec2 p, float radius)\n{\n    // Negative inside, zero on the edge, positive outside.\n    return length(p) - radius;\n}\n\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord)\n{\n    // Center the coordinate system and preserve proportions.\n    vec2 p = (fragCoord - 0.5 * iResolution.xy) / iResolution.y;\n\n    // First distance field: the main circle.\n    float mainCircle = circleSDF(p, 0.30);\n\n    // Second distance field: the animated cutting circle.\n    vec2 cutoutOffset = vec2(\n        0.12 + sin(iTime * 0.7) * 0.025,\n        0.02\n    );\n\n    float cutoutCircle = circleSDF(p - cutoutOffset, 0.20);\n\n    // Subtract the second shape from the first.\n    // max(a, -b) keeps the main circle but removes the cutout.\n    float crescent = max(mainCircle, -cutoutCircle);\n\n    // Use the final distance to create the interior.\n    float fill = smoothstep(0.01, -0.01, crescent);\n\n    // Isolate the surface of the combined shape.\n    float outline = 1.0 - smoothstep(\n        0.0,\n        0.012,\n        abs(crescent)\n    );\n\n    // Create a soft glow around the surface.\n    float glow = exp(-abs(crescent) * 8.0);\n\n    // Add a gentle vertical color gradient to the crescent.\n    float colorShift = 0.5 + 0.5 * p.y / 0.35;\n\n    vec3 surfaceColor = mix(\n        vec3(0.05, 0.25, 0.75),\n        vec3(0.20, 0.85, 1.00),\n        clamp(colorShift, 0.0, 1.0)\n    );\n\n    // Deep blue background with a subtle central atmosphere.\n    vec3 color = vec3(0.005, 0.01, 0.03);\n    color += vec3(0.015, 0.04, 0.10) * exp(-length(p) * 3.0);\n\n    // Fill, outline, and glow all come from the combined distance field.\n    color += fill * surfaceColor * 0.55;\n    color += outline * vec3(0.35, 0.85, 1.0);\n    color += glow * vec3(0.03, 0.20, 0.55);\n\n    fragColor = vec4(color, 1.0);\n}",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "ffySDR",
+    "date": "1787831255",
+    "viewed": 21,
+    "name": "Tiled Space",
+    "description": "fract() divides coordinate space into repeating local cells. We can then design one shape inside a single cell and receive an entire field of copies. This shader builds one rounded portal, cuts an opening in its center, and repeats the result. ",
+    "likes": 3,
+    "published": "Public API",
+    "usePreview": 0,
+    "tags": [
+     "repetition",
+     "basics",
+     "fraction"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "/*\n    SHADER 101: REPETITION\n\n    `fract()` repeats coordinates into tiles.\n\n    Instead of drawing one shape across the whole screen,\n    we create one local shape inside a single tile.\n    The repeated coordinate space automatically copies it.\n\n    Try changing:\n\n    - 3.2  : tile density\n    - 0.30 : portal size\n    - 0.08 : inner opening size\n    - 0.6  : animation speed\n*/\n\nmat2 rotate(float angle)\n{\n    float s = sin(angle);\n    float c = cos(angle);\n\n    return mat2(c, -s, s, c);\n}\n\nfloat roundedBox(vec2 p, vec2 size, float radius)\n{\n    vec2 q = abs(p) - size + radius;\n    return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - radius;\n}\n\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord)\n{\n    // Center the screen and preserve proportions.\n    vec2 p = (fragCoord - 0.5 * iResolution.xy) / iResolution.y;\n\n    // Repeat the coordinate space into equal tiles.\n    vec2 cellId = floor(p * 3.2);\n    vec2 q = fract(p * 3.2) - 0.5;\n\n    // Rotate the local shape very slightly over time.\n    q *= rotate(iTime * 0.12);\n\n    // Create a rounded diamond-like outer portal.\n    float outer = roundedBox(q, vec2(0.29), 0.075);\n\n    // Cut a smaller opening out of its center.\n    float inner = roundedBox(q, vec2(0.105), 0.035);\n\n    // Boolean subtraction: outer shape minus inner opening.\n    float portal = max(outer, -inner);\n\n    // Fill the portal body.\n    float fill = smoothstep(0.015, -0.015, portal);\n\n    // Bright edge around the complete shape.\n    float edge = 1.0 - smoothstep(\n        0.0,\n        0.018,\n        abs(portal)\n    );\n\n    // Traveling color variation shared across the pattern.\n    float flow = 0.5 + 0.5 * sin(\n        q.x * 10.0\n        + q.y * 7.0\n        + iTime * 1.2\n    );\n\n    vec3 portalColor = mix(\n        vec3(0.08, 0.12, 0.75),\n        vec3(0.05, 0.85, 0.95),\n        flow\n    );\n\n    // Dark atmospheric background.\n    vec3 color = vec3(0.004, 0.006, 0.025);\n\n    // Subtle tile-local atmosphere.\n    color += exp(-length(q) * 3.0) * vec3(0.015, 0.04, 0.13);\n\n    // Add the repeated portal shapes.\n    color += fill * portalColor * 0.45;\n    color += edge * vec3(0.25, 0.75, 1.0);\n\n    // Warm glow inside each opening.\n    float opening = 1.0 - smoothstep(0.0, 0.11, length(q));\n    color += opening * vec3(0.35, 0.08, 0.025) * 0.35;\n\n    // Add a gentle diagonal light sweep across the whole composition.\n    float sweep = exp(\n        -abs(p.x + p.y - sin(iTime * 0.4) * 0.8) * 4.0\n    );\n\n    color += sweep * vec3(0.04, 0.10, 0.25);\n\n    fragColor = vec4(color, 1.0);\n}",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  }
+ ]
+}
