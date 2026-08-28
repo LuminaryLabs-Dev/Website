@@ -1,0 +1,11 @@
+.contact-shader-page { background:#050914; }
+.contact-shader-page main { position:relative; min-height:calc(100svh - 54px); overflow:hidden; background:#050914; }
+.contact-shader-page main > * { display:none!important; }
+.contact-shader-page main > .contact-shader-scene { display:block!important; }
+.contact-shader-scene { position:relative; min-height:calc(100svh - 54px); display:grid; place-items:center; }
+.contact-shader-canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+.contact-shader-wash { position:absolute; inset:0; background:radial-gradient(ellipse at center, transparent 12%, rgba(5,9,20,.16) 55%, rgba(5,9,20,.7) 100%); pointer-events:none; }
+.contact-shader-copy { position:relative; z-index:1; width:min(620px,calc(100% - 48px)); margin-top:clamp(-12vh,-90px,-40px); padding:32px 38px 34px; border:1px solid rgba(255,255,255,.22); background:rgba(78,84,88,.82); text-align:center; color:#fff; text-shadow:0 2px 24px rgba(0,0,0,.9); }
+.contact-shader-copy h1 { margin:0; font:800 clamp(42px,7vw,88px)/.92 var(--font-display,sans-serif); letter-spacing:-.06em; }
+.contact-shader-copy p { margin:24px auto 0; color:rgba(255,255,255,.82); font-size:18px; line-height:1.5; }
+.contact-shader-copy a { display:inline-block; margin-top:28px; color:#fff; font-weight:800; text-decoration:underline; text-decoration-color:#54d87b; text-underline-offset:6px; }

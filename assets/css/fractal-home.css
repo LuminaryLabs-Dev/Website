@@ -4,6 +4,8 @@
 .fractal-home { position: relative; height: calc(100svh - 54px); min-height: 560px; overflow: hidden; background: #020205; color: #fff; }
 .fractal-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .fractal-overlay { position: absolute; inset: 0; pointer-events: none; }
+.fractal-guide { position: absolute; top: clamp(22px, 5vh, 48px); left: 50%; transform: translateX(-50%); color: rgba(255,255,255,.9); font: 700 clamp(12px, 1.3vw, 17px)/1 var(--font-mono, monospace); letter-spacing: .14em; text-transform: uppercase; text-align: center; text-shadow: 0 0 12px rgba(255,145,55,.95), 0 2px 14px rgba(0,0,0,.9); animation: fractal-guide-pulse 2.2s ease-in-out infinite; white-space: nowrap; }
+@keyframes fractal-guide-pulse { 0%, 100% { opacity: .58; transform: translateX(-50%) scale(.98); } 50% { opacity: 1; transform: translateX(-50%) scale(1.02); } }
 .guide-particles i { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: #fff7de; box-shadow: 0 0 7px 3px #fff, 0 0 18px 7px #ff9a42, 0 0 42px 14px rgba(255,108,25,.35); animation: guide-drift 2.1s ease-in-out infinite, guide-pulse 1.7s ease-in-out infinite; }
 .guide-particles i:nth-child(1) { left: 12%; top: 24%; } .guide-particles i:nth-child(2) { left: 18%; top: 31%; animation-delay: -.7s; } .guide-particles i:nth-child(3) { left: 80%; top: 20%; animation-delay: -1.4s; } .guide-particles i:nth-child(4) { left: 87%; top: 28%; animation-delay: -2s; } .guide-particles i:nth-child(5) { left: 15%; top: 68%; animation-delay: -.4s; } .guide-particles i:nth-child(6) { left: 84%; top: 66%; animation-delay: -1.1s; } .guide-particles i:nth-child(7) { left: 29%; top: 16%; animation-delay: -1.8s; } .guide-particles i:nth-child(8) { left: 72%; top: 15%; animation-delay: -2.5s; }
 .guide-particles.complete { opacity: .15; transition: opacity .6s ease; }
@@ -20,3 +22,4 @@
 @keyframes particle-orbit { to { transform: translate(-50%, -50%) rotate(360deg); } }
 @keyframes bulb-pulse { 50% { box-shadow: 0 0 32px 10px rgba(255,126,30,.8), inset 0 0 28px 8px rgba(255,126,30,.55); } }
 @media (max-width: 700px) { .fractal-home { min-height: 500px; } }
+@media (max-width: 440px) { .fractal-guide { letter-spacing: .08em; font-size: 11px; } }

@@ -131,3 +131,49 @@ Public static apps can live under `/apps/` when they are generated outputs from 
 - Validation: `node --check assets/js/fractal-home.js` passed; local source and asset files exist with expected content.
 - Refinement: removed the added HTML star controls, bulb conversion, mission reveal, and all filament/live/star-count labels; native shader stars now pulse and shift between warm and cool colors directly in GLSL.
 - Refinement: added native canvas hit-testing for the three procedural stars; repeated clicks expand them and brighten the filament, while the camera target adds a subtle bulb wobble.
+
+## 2026-08-28 Nexus Arcade Layout Direction
+
+- Intent: define a minimal monotonic layout direction for Nexus Arcade using the current page and connected Drive references.
+- Finding: the current page is a long neon marketing scroll, while Drive references emphasize a compact upright, original rotating game library, operator platform, and first launch-partner pilot.
+- Direction: reduce the page to one product claim, one cabinet visual, one playable game index, one operator value section, and one pilot CTA with a consistent left rail and restrained monochrome hierarchy.
+- Change: linked the primary arcade CTA to the hosted NexusArcade prototypes and added a monotonic visual treatment with cabinet-led presentation and distinct CSS cover panels for the five local game entries.
+- Refinement: removed the hero background image and preorder action; the hero is now left-aligned with an `INSERT COIN` link and the existing technical cabinet sheet displayed beside the copy.
+- Refinement: replaced the generic technical sheet in the hero with the user-provided FreeCAD perspective and front-elevation drawings as a paired cabinet header visual.
+- Refinement: added technical dimension annotations to the CAD header: 68 cm width, 76 cm depth, and 175 cm total height.
+- Refinement: converted dimensions to feet/inches and repositioned the callouts around the small front-view drawing with a full-height line and lower-right depth line.
+- Refinement: corrected the callout anchors so width, height, and depth markings align with the smaller front-view image instead of the full CAD image group.
+- Refinement: removed measurement lines in favor of a compact W/H/D label, replaced the Arcade Revival section with side-view CAD images 3 and 4 plus the three requested middle cards, and hid the system library and later sections pending the schematic.
+- Refinement: rewrote the three Arcade Revival cards as The Collection, The AI Driven Heart, and Evolution of Gaming using the supplied product narrative and supporting detail.
+- Refinement: set “Built for fun. Built to thrive.” as the Arcade Revival subheading.
+- Change: removed NexusCentral from the universal navigation and homepage promotion, and deleted the standalone NexusCentral page to eliminate its primary public route.
+- Change: replaced the Open Source page runtime body with a white-and-green structural skeleton: hero, interwoven systems list, shader placeholder, and contribution links; no shaders or chips added.
+- Refinement: added Bop-It Skills as a first-class ecosystem row, explicitly connecting skill orchestration to Game Kit and repeatable Nexus Engine implementation.
+- Change: replaced the Services page runtime body with a minimalist outcome-and-capability structure covering XR, web, AI, and GTM services, transparent rates, outputs, engagement models, and process steps.
+- Change: replaced the Portfolio page runtime body with an alternating minimalist case-study sequence covering all four featured projects, retaining existing imagery and descriptions without cards or badges.
+- Refinement: removed the “Active engagement” label, increased image dominance, and added restrained offset frames and shadows for more depth.
+- Refinement: removed the offset image frames that created the misshapen window effect; retained larger images and natural shadow depth.
+- Refinement: added generous vertical spacing and divider rules between portfolio case-study text sections for clearer separation.
+- Refinement: added deliberate spacing and a narrower measure between the final portfolio CTA heading and supporting paragraph.
+- Refinement: changed the Services footer descriptor to “AI Consultants and Software Developers.”
+- Change: added five standalone Shadertoy-compatible studies for Engine sequencing, Runtime execution, Interfaces, AR spatial input, and Bop-It Skills; each uses restrained white/green rendering and a distinct `iMouse` interaction hook.
+- Refinement: removed the green mini kicker headings from the Open Source skeleton, leaving the primary headings and restrained green accents.
+- Refinement: added final robot presentation polish with identity-specific rim shadows, soft studio backdrop, and stronger grounded shadow treatment.
+- Change: replaced Contact page body with a minimal full-screen Cluster Bots shader scene, storing the supplied pass locally and compiling a capped-performance variant with reduced raymarch and cell-neighbor work.
+- Correction: restored the contact shader controller with WebGL-compatible cell indexing and added a sharp-corner semi-opaque gray panel near the top for contact copy readability.
+- Correction: locked the Contact shader camera, moved it backward, restored the full eight-cell neighborhood and 55 march steps to remove artifacts, and lowered the copy panel below the navbar-safe area.
+- Performance pass: reduced the Contact shader to 34 march steps, rendered at 58% resolution, and capped animation to 30 FPS while retaining all eight neighboring cells for structure.
+- Quality adjustment: raised internal Contact canvas resolution from 58% to 78% while retaining the 34-step raymarch and 30 FPS cap.
+- Refinement: removed all visible robot and presentation shadows and shifted the canvas framing upward to keep animated feet inside the portrait frame.
+- Correction: disabled the internal Three.js floor shadow material, restored the studio background, removed container cropping, and added safety framing around the animated robot canvas.
+- Correction: changed the robot studio background to an elliptical vignette and reduced/lifted the canvas render scale to prevent feet from clipping.
+- Correction: moved the Three.js portrait cameras farther back at construction time, restoring a larger visible robot while providing render-space clearance below the feet.
+- Refinement: removed the closing “Build something meaningful” CTA so the Team page ends after the three concise profiles.
+- Refinement: rebuilt Team robot portraits with rounded shells, visor faces, emissive eyes, chest panels, articulated limbs, antennae, stronger materials, and larger soft shadows.
+- Change: replaced the Team page runtime body with a minimalist three-profile layout using animated Three.js robot portraits, identity colors, lighting, and shadow maps; existing bios are preserved and photos removed.
+- Refinement: mounted the five ecosystem GLSL studies as interactive white-and-green canvases in the Open Source architecture section, replacing the placeholder.
+- Refinement: added the supplied Obsidian Descent concept as a full-screen semi-transparent hero background behind the Open Source header text; local shader and page checks return `200`.
+- Refinement: expanded the shader studies into a two-column systems explorer with larger canvases and concept-specific explanatory captions so the visuals communicate architecture rather than act as decorative thumbnails.
+- Removal: deleted the standalone GLSL Lab page and its page-specific CSS/JS, removed the GLSL Lab entry from the universal navbar and fallback page links, and preserved shared shader assets used by Open Source and Contact.
+- Refinement: added a top-centered pulsing "Click the diamond stars" cue to the homepage shader so the existing interactive stars are discoverable without adding new shader objects.
+- Refinement: added a persistent right-aligned `LL` signature with a lightweight CSS glowing bulb in the shared navbar, linking the mark home without introducing a raster asset.

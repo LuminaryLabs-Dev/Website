@@ -14,7 +14,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="assets/css/style.css?v=20260828-3" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20260828-3" />
+    <link rel="stylesheet" href="assets/css/nexus-arcade.css?v=20260828-1" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -149,7 +150,6 @@
                 <a href="portfolio.html">Portfolio</a>
                 <a href="team.html">Team</a>
         <a href="contact.html">Contact</a>
-        <a href="glsl.html">GLSL Lab</a>
             </nav>
         </div>
     </header>
@@ -166,6 +166,7 @@
             <div class="retro-grid-bg"></div>
 
             <div class="container mx-auto px-4 relative z-10 text-center flex flex-col items-center">
+                <div class="nexus-hero-copy">
                 <h1 class="font-display text-5xl md:text-7xl lg:text-9xl font-black uppercase tracking-tighter mb-4 text-glow leading-none">
                     Nexus<br /><span class="text-transparent bg-clip-text bg-gradient-to-r from-arcade-neonMagenta to-arcade-neonYellow text-glow-magenta">Arcade</span>
                 </h1>
@@ -174,14 +175,16 @@
                     Modern console performance meets retro arcade soul. The next evolution of intelligent gaming hardware is here.
                 </p>
 
-                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center w-full">
-                    <button class="btn-arcade px-10 py-4 clip-edges text-lg w-full sm:w-auto"
-                        onclick="document.getElementById('waitlist-modal').classList.remove('hidden')">
-                        Pre-Order Now
-                    </button>
-                    <button class="btn-arcade btn-arcade-magenta px-10 py-4 clip-edges text-lg w-full sm:w-auto" onclick="document.getElementById('library-section').scrollIntoView({behavior: 'smooth'})">
-                        Browse System Library
-                    </button>
+                <a class="btn-arcade btn-arcade-magenta px-10 py-4 clip-edges text-lg w-full sm:w-auto nexus-prototype-link" href="https://luminarylabs-dev.github.io/NexusArcade-Prototypes/" target="_blank" rel="noopener">
+                    Insert Coin <i data-lucide="arrow-up-right" class="inline w-5 h-5 ml-2"></i>
+                </a>
+                </div>
+                <div class="nexus-cabinet-drawing">
+                    <div class="nexus-cad-views">
+                        <img src="public/NexusArcadePics/cad/cabinet-perspective.png" alt="Nexus Arcade cabinet perspective CAD drawing" />
+                        <img src="public/NexusArcadePics/cad/cabinet-front.png" alt="Nexus Arcade cabinet front elevation CAD drawing" />
+                        <span class="cad-dimensions">W 2 ft 2.8 in / H 5 ft 8.9 in / D 2 ft 5.9 in</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -193,33 +196,38 @@
                         Arcade Revival
                     </h2>
                     <div class="h-1 w-24 bg-arcade-neonCyan mx-auto shadow-neon-cyan"></div>
-                    <p class="text-gray-400 mt-6 max-w-2xl mx-auto text-lg">
-                        Built for fun in all settings—whether you're bringing the arcade home or powering a business floor.
+                    <p class="text-gray-400 mt-6 max-w-2xl mx-auto text-lg revival-kicker">
+                        Built for fun. Built to thrive.
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <div class="relative group">
+                <div class="nexus-revival-grid grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                    <div class="relative group nexus-revival-view">
                         <div class="absolute -inset-1 bg-gradient-to-r from-arcade-neonCyan to-arcade-neonMagenta rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
                         <div class="relative rounded-xl overflow-hidden glass-panel flex items-center justify-center p-2">
-                            <img src="public/NexusArcadePics/pi5_breakdown.png" alt="Raspberry Pi 5 Breakdown" class="w-full h-auto object-contain rounded-lg opacity-90" />
+                            <img src="public/NexusArcadePics/cad/cabinet-side.png" alt="Nexus Arcade cabinet side CAD drawing" class="w-full h-auto object-contain rounded-lg opacity-90" />
                         </div>
                     </div>
 
                     <div class="space-y-8">
                         <div class="glass-panel p-8 clip-edges border-l-4 border-l-arcade-neonCyan">
-                            <h3 class="font-display text-2xl font-bold text-arcade-neonCyan mb-3 uppercase tracking-wider">The AI-Driven Heart</h3>
-                            <p class="text-gray-200 font-medium leading-relaxed">Powered by the cutting-edge Raspberry Pi 5 and optimized for 1-bit LLMs. The Nexus Arcade uses swarm architecture to let you build, iterate, and play games generated entirely on the fly.</p>
+                            <h3 class="font-display text-2xl font-bold text-arcade-neonCyan mb-3 uppercase tracking-wider">The Collection</h3>
+                            <p class="text-gray-200 font-medium leading-relaxed">We have created and curated a collection of hundreds of high quality, unique arcade experiences, all in the 1–5 minute playtime zone and immediately viable with a standard credits system or as an independent credit card unit.</p>
                         </div>
 
                         <div class="glass-panel p-8 clip-edges border-l-4 border-l-arcade-neonMagenta">
-                            <h3 class="font-display text-2xl font-bold text-arcade-neonMagenta mb-3 uppercase tracking-wider">Home or Business</h3>
-                            <p class="text-gray-200 font-medium leading-relaxed">Perfectly suited for any environment. The locked-down Lubuntu OS ensures distraction-free gaming at home, while integrated secure payments and 2-player controls make it ready for commercial deployment.<br /><br /><span class="text-xs text-arcade-neonMagenta uppercase tracking-widest font-bold">Note: Home editions come without the integrated card reader.</span></p>
+                            <h3 class="font-display text-2xl font-bold text-arcade-neonMagenta mb-3 uppercase tracking-wider">The AI Driven Heart</h3>
+                            <p class="text-gray-200 font-medium leading-relaxed">Powered by cutting-edge low-power compute, the Raspberry Pi 5 is optimized for LLM usage. Nexus Arcade offers an immense game library and a specialized game-making harness so you can build your own. Spend your credits to build the ecosystem.</p>
                         </div>
 
                         <div class="glass-panel p-8 clip-edges border-l-4 border-l-arcade-neonYellow">
-                            <h3 class="font-display text-2xl font-bold text-arcade-neonYellow mb-3 uppercase tracking-wider">Creator Toolbench</h3>
-                            <p class="text-gray-200 font-medium leading-relaxed">Not just a console—a studio. Harness multiple AI agents to generate art, levels, code, and mechanics instantly. Test your games as you build them, unlocking endless possibilities.</p>
+                            <h3 class="font-display text-2xl font-bold text-arcade-neonYellow mb-3 uppercase tracking-wider">Evolution of Gaming</h3>
+                            <p class="text-gray-200 font-medium leading-relaxed">Gaming is becoming more immersive, and we think a hands-on approach is what makes the most sense in this era. Coming from a background in XR, we see the potential of immersive media like arcade machines and the power of putting creative tools directly at someone’s fingertips.</p>
+                        </div>
+                    </div>
+                    <div class="relative group nexus-revival-view">
+                        <div class="relative rounded-xl overflow-hidden glass-panel flex items-center justify-center p-2">
+                            <img src="public/NexusArcadePics/cad/cabinet-side-right.png" alt="Nexus Arcade cabinet side elevation CAD drawing" class="w-full h-auto object-contain rounded-lg opacity-90" />
                         </div>
                     </div>
                 </div>

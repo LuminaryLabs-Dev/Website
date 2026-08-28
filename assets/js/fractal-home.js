@@ -1,7 +1,7 @@
 (async function () {
   const main = document.querySelector("main");
   if (!main || !document.body.classList.contains("home-fractal-mode")) return;
-  main.innerHTML = `<section class="fractal-home" aria-label="Interactive GLSL shader"><canvas class="fractal-canvas"></canvas><div class="fractal-overlay"><div class="guide-particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><button class="fractal-core" aria-label="Reveal mission"></button><div class="bulb-particles" aria-hidden="true"></div><div class="fractal-mission">Luminary Labs LLC - Embedding Bleeding Edge Technology into Everyday Life for the Greater Social Good</div></div></section>`;
+  main.innerHTML = `<section class="fractal-home" aria-label="Interactive GLSL shader"><canvas class="fractal-canvas"></canvas><div class="fractal-overlay"><div class="fractal-guide" aria-live="polite">Click the diamond stars</div><div class="guide-particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><button class="fractal-core" aria-label="Reveal mission"></button><div class="bulb-particles" aria-hidden="true"></div><div class="fractal-mission">Luminary Labs LLC - Embedding Bleeding Edge Technology into Everyday Life for the Greater Social Good</div></div></section>`;
   const canvas = main.querySelector("canvas"), gl = canvas.getContext("webgl", { antialias: false });
   if (!gl) return;
   const source = await fetch("assets/shaders/fractal-filament.glsl").then(r => r.text());

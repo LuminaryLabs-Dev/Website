@@ -105,6 +105,10 @@ section { padding: 80px 0; }
 .universal-nav .site-nav a { color: #111 !important; background: transparent !important; border: 0 !important; border-radius: 0 !important; padding: 8px 10px !important; font: 800 .78rem/1 var(--font-mono) !important; letter-spacing: .02em; text-transform: uppercase; text-shadow: none !important; }
 .universal-nav .site-nav a:hover, .universal-nav .site-nav a.active { color: #000 !important; background: transparent !important; text-decoration: underline !important; text-decoration-thickness: 2px; text-underline-offset: 4px; text-shadow: none !important; }
 .universal-nav .nav-toggle { color: #111; background: #fff; border: 2px solid #111; border-radius: 0; font: 800 .72rem/1 var(--font-mono); text-transform: uppercase; }
+.universal-signature { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; color: #111; text-decoration: none; font: 900 .88rem/1 var(--font-mono); letter-spacing: .04em; }
+.universal-signature i { position: relative; display: block; width: 15px; height: 18px; border: 2px solid #f39a18; border-radius: 50% 50% 46% 46%; background: radial-gradient(circle at 38% 30%, #fff8bd 0 12%, #ffc83d 30%, #f28b0b 72%); box-shadow: 0 0 7px 2px rgba(255, 174, 27, .72); }
+.universal-signature i::after { content: ""; position: absolute; left: 2px; right: 2px; bottom: -5px; height: 4px; border-top: 2px solid #a4610b; border-bottom: 2px solid #a4610b; }
+.universal-signature:hover { text-decoration: underline; text-underline-offset: 4px; }
 
 .nav {
   display: flex;
