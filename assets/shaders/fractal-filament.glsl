@@ -79,40 +79,168 @@ float wrapPi(float angle)
     return mod(angle + PI, TAU) - PI;
 }
 
-float hermiteRadius(
+float quinticBoundary(
     float radiusA,
     float radiusB,
     float slopeA,
     float slopeB,
+    float curvatureA,
+    float curvatureB,
     float t,
     float span
 )
 {
-    float t2 = t * t;
-    float t3 = t2 * t;
+    float c0 = radiusA;
+    float c1 = slopeA * span;
+    float c2 = 0.5 * curvatureA * span * span;
 
-    float h00 =  2.0 * t3 - 3.0 * t2 + 1.0;
-    float h10 =        t3 - 2.0 * t2 + t;
-    float h01 = -2.0 * t3 + 3.0 * t2;
-    float h11 =        t3 -       t2;
+    float remainingRadius =
+        radiusB - (c0 + c1 + c2);
 
-    return h00 * radiusA
-         + h10 * span * slopeA
-         + h01 * radiusB
-         + h11 * span * slopeB;
+    float remainingSlope =
+        slopeB * span - (c1 + 2.0 * c2);
+
+    float remainingCurvature =
+        curvatureB * span * span - 2.0 * c2;
+
+    float c3 =
+          10.0 * remainingRadius
+        -  4.0 * remainingSlope
+        +  0.5 * remainingCurvature;
+
+    float c4 =
+        -15.0 * remainingRadius
+        +  7.0 * remainingSlope
+        -        remainingCurvature;
+
+    float c5 =
+          6.0 * remainingRadius
+        - 3.0 * remainingSlope
+        + 0.5 * remainingCurvature;
+
+    return c0
+         + c1 * t
+         + c2 * t * t
+         + c3 * t * t * t
+         + c4 * t * t * t * t
+         + c5 * t * t * t * t * t;
+}
+
+float directionalGlobeRadius(vec3 p)
+{
+    float angle = atan(p.z, p.x);
+    float directionX = cos(angle);
+    float directionZ = sin(angle);
+
+    return inversesqrt(
+        directionX * directionX / (0.73 * 0.73)
+        + directionZ * directionZ / (0.71 * 0.71)
+    );
+}
+
+float globeProfileRadius(vec3 p)
+{
+    float horizontalRadius =
+        directionalGlobeRadius(p);
+
+    float normalizedY =
+        (p.y - 0.40) / 0.80;
+
+    return horizontalRadius
+        * sqrt(max(
+            0.0,
+            1.0 - normalizedY * normalizedY
+        ));
 }
 
 float glassProfileRadius(vec3 p)
 {
-    // Candidate 08 profile.
-    const float neckRadius = 0.245;
-    const float shoulderStart = -0.46;
-    const float shoulderEnd = -0.13;
-    const float shoulderRadius = 0.61;
-    const float startSlope = 0.02;
-    const float endSlope = 0.70;
+    const float neckRadius = 0.320;
 
-    float span = shoulderEnd - shoulderStart;
+    // Hidden fourth section.
+    const float insertionTopY = -0.540;
+    const float insertionBottomY = -0.700;
+    const float insertionRadius = 0.260;
+
+    // Visible shoulder.
+    const float shoulderStart = -0.440;
+    const float globeJoinY = 0.140;
+
+    // Section 4: hidden insertion taper.
+    if (p.y < insertionTopY)
+    {
+        if (p.y <= insertionBottomY)
+        {
+            return insertionRadius;
+        }
+
+        float t = clamp(
+            (p.y - insertionBottomY)
+            / (insertionTopY - insertionBottomY),
+            0.0,
+            1.0
+        );
+
+        // Quintic smootherstep gives zero slope and
+        // zero curvature at both ends.
+        float blend =
+            t * t * t
+            * (t * (t * 6.0 - 15.0) + 10.0);
+
+        return mix(
+            insertionRadius,
+            neckRadius,
+            blend
+        );
+    }
+
+    // Section 3: visible straight neck.
+    if (p.y <= shoulderStart)
+    {
+        return neckRadius;
+    }
+
+    // Section 1: upper globe.
+    if (p.y >= globeJoinY)
+    {
+        return globeProfileRadius(p);
+    }
+
+    // Section 2: curvature-matched shoulder.
+    float horizontalRadius =
+        directionalGlobeRadius(p);
+
+    const float globeCenterY = 0.40;
+    const float globeRadiusY = 0.80;
+
+    float normalizedJoinY =
+        (globeJoinY - globeCenterY)
+        / globeRadiusY;
+
+    float root = sqrt(max(
+        0.000001,
+        1.0 - normalizedJoinY * normalizedJoinY
+    ));
+
+    float joinRadius =
+        horizontalRadius * root;
+
+    float joinSlope =
+        -horizontalRadius * normalizedJoinY
+        / (globeRadiusY * root);
+
+    float joinCurvature =
+        -horizontalRadius
+        / (
+            globeRadiusY
+            * globeRadiusY
+            * root
+            * root
+            * root
+        );
+
+    float span =
+        globeJoinY - shoulderStart;
 
     float t = clamp(
         (p.y - shoulderStart) / span,
@@ -120,45 +248,22 @@ float glassProfileRadius(vec3 p)
         1.0
     );
 
-    float shoulder = hermiteRadius(
+    return quinticBoundary(
         neckRadius,
-        shoulderRadius,
-        startSlope,
-        endSlope,
+        joinRadius,
+        0.0,
+        joinSlope,
+        0.0,
+        joinCurvature,
         t,
         span
     );
-
-    if (p.y <= shoulderStart)
-    {
-        shoulder = neckRadius;
-    }
-
-    // Elliptical globe: X and Z differ slightly so orbit views
-    // retain the shape validated in the sandbox.
-    float angle = atan(p.z, p.x);
-    float directionX = cos(angle);
-    float directionZ = sin(angle);
-
-    float horizontalRadius = inversesqrt(
-        directionX * directionX / (0.74 * 0.74)
-        + directionZ * directionZ / (0.71 * 0.71)
-    );
-
-    float globeY = (p.y - 0.30) / 0.82;
-    float globe = horizontalRadius
-        * sqrt(max(0.0, 1.0 - globeY * globeY));
-
-    // Shoulder ends at -0.13. Blend across +/-0.07.
-    float blend = smoothstep(-0.20, -0.06, p.y);
-
-    return mix(shoulder, globe, blend);
 }
 
 float glassSDF(vec3 p)
 {
-    const float bottomY = -0.74;
-    const float topY = 1.12;
+    const float bottomY = -0.740;
+    const float topY = 1.200;
     const float derivativeStep = 0.002;
 
     float radius = glassProfileRadius(p);
