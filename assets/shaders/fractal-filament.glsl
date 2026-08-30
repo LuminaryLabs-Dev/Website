@@ -72,33 +72,127 @@ float sdCappedCone(vec3 p, float h, float r1, float r2)
     return signValue * sqrt(min(dot(ca, ca), dot(cb, cb)));
 }
 
+#define TAU 6.28318530718
+
+float wrapPi(float angle)
+{
+    return mod(angle + PI, TAU) - PI;
+}
+
+float hermiteRadius(
+    float radiusA,
+    float radiusB,
+    float slopeA,
+    float slopeB,
+    float t,
+    float span
+)
+{
+    float t2 = t * t;
+    float t3 = t2 * t;
+
+    float h00 =  2.0 * t3 - 3.0 * t2 + 1.0;
+    float h10 =        t3 - 2.0 * t2 + t;
+    float h01 = -2.0 * t3 + 3.0 * t2;
+    float h11 =        t3 -       t2;
+
+    return h00 * radiusA
+         + h10 * span * slopeA
+         + h01 * radiusB
+         + h11 * span * slopeB;
+}
+
+float glassProfileRadius(vec3 p)
+{
+    // Candidate 08 profile.
+    const float neckRadius = 0.245;
+    const float shoulderStart = -0.46;
+    const float shoulderEnd = -0.13;
+    const float shoulderRadius = 0.61;
+    const float startSlope = 0.02;
+    const float endSlope = 0.70;
+
+    float span = shoulderEnd - shoulderStart;
+
+    float t = clamp(
+        (p.y - shoulderStart) / span,
+        0.0,
+        1.0
+    );
+
+    float shoulder = hermiteRadius(
+        neckRadius,
+        shoulderRadius,
+        startSlope,
+        endSlope,
+        t,
+        span
+    );
+
+    if (p.y <= shoulderStart)
+    {
+        shoulder = neckRadius;
+    }
+
+    // Elliptical globe: X and Z differ slightly so orbit views
+    // retain the shape validated in the sandbox.
+    float angle = atan(p.z, p.x);
+    float directionX = cos(angle);
+    float directionZ = sin(angle);
+
+    float horizontalRadius = inversesqrt(
+        directionX * directionX / (0.74 * 0.74)
+        + directionZ * directionZ / (0.71 * 0.71)
+    );
+
+    float globeY = (p.y - 0.30) / 0.82;
+    float globe = horizontalRadius
+        * sqrt(max(0.0, 1.0 - globeY * globeY));
+
+    // Shoulder ends at -0.13. Blend across +/-0.07.
+    float blend = smoothstep(-0.20, -0.06, p.y);
+
+    return mix(shoulder, globe, blend);
+}
+
 float glassSDF(vec3 p)
 {
-    float globe = sdEllipsoid(
-        p - vec3(0.0, 0.32, 0.0),
-        vec3(0.73, 0.82, 0.70)
+    const float bottomY = -0.74;
+    const float topY = 1.12;
+    const float derivativeStep = 0.002;
+
+    float radius = glassProfileRadius(p);
+    float radial = length(p.xz);
+
+    // Estimate the profile slope. Dividing by this gradient length
+    // makes the radial profile safer for sphere tracing.
+    vec3 above = p + vec3(0.0, derivativeStep, 0.0);
+    vec3 below = p - vec3(0.0, derivativeStep, 0.0);
+
+    float radiusAbove = glassProfileRadius(above);
+    float radiusBelow = glassProfileRadius(below);
+
+    float radiusSlope = (
+        radiusAbove - radiusBelow
+    ) / (2.0 * derivativeStep);
+
+    float side = (radial - radius)
+        / sqrt(1.0 + radiusSlope * radiusSlope);
+
+    // Close the profile at its top and bottom.
+    float verticalCap = max(
+        bottomY - p.y,
+        p.y - topY
     );
 
-    float shoulder = sdCappedCone(
-        p - vec3(0.0, -0.20, 0.0),
-        0.34,
-        0.245,
-        0.57
-    );
+    float d = max(side, verticalCap);
 
-    float neck = sdCappedCylinder(
-        p - vec3(0.0, -0.58, 0.0),
-        0.16,
-        0.245
-    );
-
-    float d = smin(globe, shoulder, 0.15);
-    d = smin(d, neck, 0.055);
-
-    // Slow liquid deformation: the silhouette stays readable, but never fully freezes.
-    d += 0.003 * sin(p.y * 9.0 + p.x * 5.0 + iTime * 0.7)
+    // Preserve the existing subtle liquid motion.
+    d += 0.003
+       * sin(p.y * 9.0 + p.x * 5.0 + iTime * 0.7)
        * sin(p.z * 7.0 - iTime * 0.43);
 
+    // Conservative sphere-tracing factor.
     return d * 0.86;
 }
 
@@ -177,19 +271,55 @@ float supportSDF(vec3 p)
 
 float baseSDF(vec3 p)
 {
-    vec3 q = p - vec3(0.0, -0.91, 0.0);
+    // Slightly tapered metal shell.
+    vec3 corePoint = p - vec3(0.0, -0.91, 0.0);
 
-    float threadedRadius = 0.305
-        + 0.020 * sin(q.y * 56.0)
-        + 0.006 * sin(q.y * 112.0);
-
-    vec2 threaded = vec2(
-        length(q.xz) - threadedRadius,
-        abs(q.y) - 0.315
+    float core = sdCappedCone(
+        corePoint,
+        0.315,
+        0.270,
+        0.292
     );
 
-    float body = min(max(threaded.x, threaded.y), 0.0)
-               + length(max(threaded, 0.0));
+    // True helical ridge.
+    const float threadBottom = -1.205;
+    const float threadTop = -0.660;
+    const float threadCenterY = -0.9325;
+
+    const float pitch = 0.120;
+    const float ridgeRadius = 0.313;
+    const float threadRadius = 0.028;
+
+    float radial = length(p.xz);
+    float angle = atan(p.z, p.x);
+
+    float phase = wrapPi(
+        angle
+        - TAU * (p.y - threadBottom) / pitch
+    );
+
+    // Convert angular phase into approximate physical distance
+    // perpendicular to the helix.
+    float phaseMetric = sqrt(
+        1.0 / (ridgeRadius * ridgeRadius)
+        + (TAU * TAU) / (pitch * pitch)
+    );
+
+    float acrossHelix = phase / phaseMetric;
+
+    float thread = length(vec2(
+        radial - ridgeRadius,
+        acrossHelix
+    )) - threadRadius;
+
+    float threadBounds = abs(
+        p.y - threadCenterY
+    ) - 0.2725;
+
+    thread = max(thread, threadBounds);
+
+    // Small blend attaches the thread cleanly to the shell.
+    float body = smin(core, thread, 0.008);
 
     float collar = sdCappedCylinder(
         p - vec3(0.0, -0.59, 0.0),
@@ -202,7 +332,7 @@ float baseSDF(vec3 p)
         vec3(0.19, 0.13, 0.19)
     );
 
-    // The sinusoidal threads are only approximately distance-preserving.
+    // Retain the conservative factor for solid tracing.
     return min(min(body, collar), contact) * 0.72;
 }
 
@@ -427,7 +557,28 @@ vec3 shadeSolid(vec3 p, vec3 rd, float material)
 
     if (material < 1.5)
     {
-        float threads = 0.5 + 0.5 * sin((p.y + 1.25) * 56.0);
+        float threadAngle = atan(p.z, p.x);
+
+        float threadPhase = wrapPi(
+            threadAngle
+            - TAU * (p.y + 1.205) / 0.120
+        );
+
+        float helicalHighlight = pow(
+            0.5 + 0.5 * cos(threadPhase),
+            8.0
+        );
+
+        float threadRegion =
+            step(-1.205, p.y)
+            * step(p.y, -0.660);
+
+        float threads = mix(
+            0.32,
+            helicalHighlight,
+            threadRegion
+        );
+
         float movingHighlight = pow(sat(1.0 - abs(p.x - 0.10 * sin(iTime * 0.25)) * 4.8), 6.0);
 
         vec3 metal = mix(
