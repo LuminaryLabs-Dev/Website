@@ -9,6 +9,12 @@
   const fragment = `precision highp float; uniform vec3 iResolution; uniform float iTime; uniform vec4 iMouse; uniform float uPower; uniform float uStarA; uniform float uStarB; uniform float uStarC;\n` + source.replace("vec3 glow = integrateFilamentGlow(ro, rd, fragCoord);", "vec3 glow = integrateFilamentGlow(ro, rd, fragCoord) * (1.0 + uPower * 1.6);") + `\nvoid main(){mainImage(gl_FragColor,gl_FragCoord.xy);}`;
   function compile(type, text) { const shader = gl.createShader(type); gl.shaderSource(shader, text); gl.compileShader(shader); if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) throw Error(gl.getShaderInfoLog(shader)); return shader; }
   const program = gl.createProgram(); gl.attachShader(program, compile(gl.VERTEX_SHADER, vertex)); gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fragment)); gl.linkProgram(program); gl.useProgram(program);
+  const sparkPass = window.createSparkParticlePass
+    ? await window.createSparkParticlePass(gl).catch(error => {
+        console.error("Spark particle pass failed:", error);
+        return null;
+      })
+    : null;
   const buffer = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]), gl.STATIC_DRAW); const position = gl.getAttribLocation(program, "p"); gl.enableVertexAttribArray(position); gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
   const resolution = gl.getUniformLocation(program, "iResolution"), time = gl.getUniformLocation(program, "iTime"), power = gl.getUniformLocation(program, "uPower"), starUniforms = ["uStarA", "uStarB", "uStarC"].map(name => gl.getUniformLocation(program, name)); let started = performance.now(); let charge = [0, 0, 0];
   const nativeStars = [[-0.76, 0.62], [0.78, 0.52], [0.76, -0.30]];
@@ -17,6 +23,6 @@
   core.addEventListener("click", () => { if (charge.every(value => value >= 1)) { mission.classList.add("revealed"); bulbParticles.classList.remove("active"); } });
   function resize() { const rect = canvas.parentElement.getBoundingClientRect(); canvas.width = Math.max(1, rect.width); canvas.height = Math.max(1, rect.height); gl.viewport(0, 0, canvas.width, canvas.height); }
   addEventListener("resize", resize); resize();
-  function frame(now) { gl.uniform3f(resolution, canvas.width, canvas.height, 1); gl.uniform1f(time, (now - started) / 1000); gl.uniform1f(power, Math.min(1.0, (charge[0] + charge[1] + charge[2]) / 2.4)); charge.forEach((value, index) => gl.uniform1f(starUniforms[index], value)); gl.drawArrays(gl.TRIANGLES, 0, 6); requestAnimationFrame(frame); }
+  function frame(now) { const elapsed = (now - started) / 1000; gl.useProgram(program); gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.enableVertexAttribArray(position); gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0); gl.uniform3f(resolution, canvas.width, canvas.height, 1); gl.uniform1f(time, elapsed); gl.uniform1f(power, Math.min(1.0, (charge[0] + charge[1] + charge[2]) / 2.4)); charge.forEach((value, index) => gl.uniform1f(starUniforms[index], value)); gl.drawArrays(gl.TRIANGLES, 0, 6); if (sparkPass) sparkPass.render(elapsed, canvas.width, canvas.height); requestAnimationFrame(frame); }
   requestAnimationFrame(frame);
 })().catch(error => console.error("Fractal Filament failed:", error));
