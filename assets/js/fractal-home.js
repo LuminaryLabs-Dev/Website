@@ -3,6 +3,8 @@
   if (!main || !document.body.classList.contains("home-fractal-mode")) return;
   const bulbMarkup = `<section class="fractal-home" aria-label="Interactive GLSL shader"><canvas class="fractal-canvas"></canvas><div class="fractal-overlay"><div class="fractal-guide" aria-live="polite">Click the diamond stars</div><div class="guide-particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><button class="fractal-core" aria-label="Reveal mission"></button><div class="bulb-particles" aria-hidden="true"></div><div class="fractal-mission">Luminary Labs LLC - Embedding Bleeding Edge Technology into Everyday Life for the Greater Social Good</div></div></section>`;
   main.insertAdjacentHTML("afterbegin", bulbMarkup);
+  const core = main.querySelector(".fractal-core");
+  core.addEventListener("click", () => document.body.classList.add("nav-revealed"));
   const canvas = main.querySelector("canvas"), gl = canvas.getContext("webgl", { antialias: false });
   if (!gl) return;
   const source = await fetch("assets/shaders/fractal-filament.glsl").then(r => r.text());
@@ -19,7 +21,7 @@
   const buffer = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]), gl.STATIC_DRAW); const position = gl.getAttribLocation(program, "p"); gl.enableVertexAttribArray(position); gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
   const resolution = gl.getUniformLocation(program, "iResolution"), time = gl.getUniformLocation(program, "iTime"), power = gl.getUniformLocation(program, "uPower"), starUniforms = ["uStarA", "uStarB", "uStarC"].map(name => gl.getUniformLocation(program, name)); let started = performance.now(); let charge = [0, 0, 0];
   const nativeStars = [[-0.76, 0.62], [0.78, 0.52], [0.76, -0.30]];
-  const core = main.querySelector(".fractal-core"), guideParticles = main.querySelector(".guide-particles"), bulbParticles = main.querySelector(".bulb-particles"), mission = main.querySelector(".fractal-mission");
+  const guideParticles = main.querySelector(".guide-particles"), bulbParticles = main.querySelector(".bulb-particles"), mission = main.querySelector(".fractal-mission");
   canvas.addEventListener("click", event => { const rect = canvas.getBoundingClientRect(); const uv = [(2 * (event.clientX - rect.left) - rect.width) / rect.height, (2 * (rect.height - (event.clientY - rect.top)) - rect.height) / rect.height]; let closest = -1, distance = 0.11; nativeStars.forEach(([x, y], index) => { const current = Math.hypot(uv[0] - x, uv[1] - y); if (current < distance) { distance = current; closest = index; } }); if (closest >= 0) { charge[closest] = 1.0; if (charge.every(value => value >= 1)) { guideParticles.classList.add("complete"); bulbParticles.classList.add("active"); core.classList.add("active"); } } });
   core.addEventListener("click", () => { if (charge.every(value => value >= 1)) { mission.classList.add("revealed"); bulbParticles.classList.remove("active"); } });
   function resize() { const rect = canvas.parentElement.getBoundingClientRect(); canvas.width = Math.max(1, rect.width); canvas.height = Math.max(1, rect.height); gl.viewport(0, 0, canvas.width, canvas.height); }
