@@ -1,6 +1,4 @@
-.home-fractal-mode main > * { display: none !important; }
 .home-fractal-mode main > .fractal-home { display: block !important; }
-.home-fractal-mode .site-footer { display: none !important; }
 .fractal-home { position: relative; height: calc(100svh - 54px); min-height: 560px; overflow: hidden; background: #020205; color: #fff; }
 .fractal-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .fractal-overlay { position: absolute; inset: 0; pointer-events: none; }
