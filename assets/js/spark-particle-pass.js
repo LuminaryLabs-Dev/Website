@@ -214,9 +214,15 @@
   }
 
   async function createSparkParticlePass(gl) {
+    async function loadSource(url) {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Shader request failed (${response.status}): ${url}`);
+      return response.text();
+    }
+
     const [vertexSource, fragmentSource] = await Promise.all([
-      fetch("assets/shaders/spark-particles.vert.glsl").then(response => response.text()),
-      fetch("assets/shaders/spark-particles.frag.glsl").then(response => response.text()),
+      loadSource("assets/shaders/spark-particles.vert.glsl?v=20260901-1"),
+      loadSource("assets/shaders/spark-particles.frag.glsl?v=20260901-1"),
     ]);
 
     const program = link(gl, vertexSource, fragmentSource);
@@ -292,7 +298,12 @@
       gl.uniform1f(locations.cycleDuration, schedule.cycleDuration);
 
       gl.enable(gl.BLEND);
-      gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+      gl.blendFuncSeparate(
+        gl.SRC_ALPHA,
+        gl.ONE,
+        gl.ONE,
+        gl.ONE_MINUS_SRC_ALPHA
+      );
       gl.drawArrays(gl.POINTS, 0, particleCount);
 
       if (!blendWasEnabled) gl.disable(gl.BLEND);

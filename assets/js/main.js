@@ -28,19 +28,24 @@
   }
 
   // Intersection observer for scroll reveal animations
-  const revealObserver = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          revealObserver.unobserve(entry.target);
+  const revealElements = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window) {
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            revealObserver.unobserve(entry.target);
+          }
         }
-      }
-    },
-    { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
-  );
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
+    );
 
-  document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
+    revealElements.forEach((element) => revealObserver.observe(element));
+  } else {
+    revealElements.forEach((element) => element.classList.add("visible"));
+  }
 
   // Header shrink on scroll
   const header = document.querySelector(".site-header");

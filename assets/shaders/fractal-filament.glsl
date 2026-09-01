@@ -14,6 +14,11 @@
 #define GLOW_STEPS 24
 #define OVERSTEP 1.42
 
+uniform float uPower;
+uniform float uStarA;
+uniform float uStarB;
+uniform float uStarC;
+
 float sat(float x) { return clamp(x, 0.0, 1.0); }
 
 mat2 rot(float a)
@@ -756,7 +761,7 @@ float starBurst(vec2 p, float size, float phase)
     return (core * 2.0 + rays) * pulse;
 }
 
-vec3 render(vec2 fragCoord)
+vec4 render(vec2 fragCoord)
 {
     vec2 uv = (2.0 * fragCoord - iResolution.xy) / iResolution.y;
 
@@ -772,7 +777,8 @@ vec3 render(vec2 fragCoord)
     vec3 up = cross(right, forward);
     vec3 rd = normalize(forward * 1.86 + right * uv.x + up * uv.y);
 
-    vec3 color = vec3(0.0004, 0.0006, 0.00045);
+    vec3 color = vec3(0.0);
+    float coverage = 0.0;
 
     // One-cell procedural dust: no particle loop.
     vec2 grid = uv * 22.0;
@@ -784,9 +790,11 @@ vec3 render(vec2 fragCoord)
     dust *= smoothstep(0.955, 1.0, h);
     dust *= max(0.0, 0.45 + 0.55 * sin(iTime * (1.0 + h * 2.0) + h * 50.0));
     color += vec3(1.0, 0.43, 0.025) * dust * 0.8;
+    coverage = max(coverage, sat(dust * 0.8));
 
-    vec3 glow = integrateFilamentGlow(ro, rd, fragCoord);
+    vec3 glow = integrateFilamentGlow(ro, rd, fragCoord) * (1.0 + uPower * 1.6);
     color += glow;
+    coverage = max(coverage, sat(max(glow.r, max(glow.g, glow.b))));
 
     float glassHit = traceGlass(ro, rd);
     vec2 solidHit = traceSolid(ro, rd);
@@ -795,6 +803,7 @@ vec3 render(vec2 fragCoord)
     {
         vec3 p = ro + rd * solidHit.x;
         color = shadeSolid(p, rd, solidHit.y) + glow * 0.62;
+        coverage = 1.0;
     }
 
     if (glassHit < FAR_CLIP && glassHit < solidHit.x)
@@ -807,16 +816,20 @@ vec3 render(vec2 fragCoord)
         // Single clean glass composite; the previous double-add produced muddy bands.
         color = mix(color, color + glass * 0.72, opacity);
         color += glass * 0.18;
+        coverage = max(coverage, sat(opacity + max(glass.r, max(glass.g, glass.b)) * 0.18));
     }
 
-    float starA = starBurst(uv - vec2(-0.76, 0.62), 0.050 * (1.0 + uStarA), 0.0);
-    float starB = starBurst(uv - vec2(0.78, 0.52), 0.044 * (1.0 + uStarB), 2.2);
-    float starC = starBurst(uv - vec2(0.76, -0.30), 0.040 * (1.0 + uStarC), 4.4);
+    // Keep the interactive stars inside narrow portrait viewports.
+    float starX = min(0.76, max(0.18, (iResolution.x / iResolution.y) * 0.34));
+    float starA = starBurst(uv - vec2(-starX, 0.62), 0.050 * (1.0 + uStarA), 0.0);
+    float starB = starBurst(uv - vec2(starX, 0.52), 0.044 * (1.0 + uStarB), 2.2);
+    float starC = starBurst(uv - vec2(starX, -0.30), 0.040 * (1.0 + uStarC), 4.4);
     color += mix(vec3(1.0, 0.16, 0.02), vec3(0.12, 0.72, 1.0), 0.5 + 0.5 * sin(iTime * 1.7)) * starA * 0.9;
     color += mix(vec3(0.22, 0.45, 1.0), vec3(1.0, 0.22, 0.04), 0.5 + 0.5 * sin(iTime * 1.5 + 2.2)) * starB * 0.9;
     color += mix(vec3(1.0, 0.75, 0.08), vec3(0.15, 1.0, 0.62), 0.5 + 0.5 * sin(iTime * 1.9 + 4.4)) * starC * 0.9;
     float stars = starA + starB + starC;
     color += vec3(1.0, 1.0, 0.55) * stars * stars * 0.36;
+    coverage = max(coverage, sat(stars));
 
     float bloom = smoothstep(0.70, 2.2, max(color.r, max(color.g, color.b)));
     color += color * bloom * 0.22;
@@ -831,10 +844,12 @@ vec3 render(vec2 fragCoord)
         vec3(1.0)
     );
 
-    return pow(color, vec3(0.4545));
+    vec3 mapped = pow(color, vec3(0.4545));
+    float opacity = sat(max(coverage, max(mapped.r, max(mapped.g, mapped.b))));
+    return vec4(mapped, opacity);
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord)
 {
-    fragColor = vec4(render(fragCoord), 1.0);
+    fragColor = render(fragCoord);
 }

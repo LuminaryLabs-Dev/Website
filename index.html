@@ -10,16 +10,19 @@
   <link rel="canonical" href="https://luminarylabs.dev/index.html" />
   <link rel="icon" type="image/png" href="public/LL_logo_transparent.png" />
   <link rel="stylesheet" href="assets/css/style.css?v=20260828-3" />
-  <link rel="stylesheet" href="assets/css/fractal-home.css?v=20260828-1" />
+  <link rel="stylesheet" href="assets/css/shader-renderer.css?v=20260901-1" />
+  <link rel="stylesheet" href="assets/css/fractal-home.css?v=20260901-2" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
     // Configure Tailwind to not conflict with base styles
-    tailwind.config = {
-      corePlugins: {
-        preflight: false,
-      }
+    if (window.tailwind) {
+      tailwind.config = {
+        corePlugins: {
+          preflight: false,
+        }
+      };
     }
   </script>
 </head>
@@ -36,7 +39,6 @@
         <a href="index.html" class="active">Home</a>
         <a href="gemini-arcade.html">Nexus Arcade</a>
         <a href="opensource.html">Open Source</a>
-        <a href="nexuscentral.html">NexusCentral</a>
         <a href="services.html">Services</a>
         <a href="portfolio.html">Portfolio</a>
         <a href="team.html">Team</a>
@@ -46,6 +48,22 @@
   </header>
 
   <main>
+    <section class="fractal-home" aria-label="Interactive light bulb animation">
+      <shader-renderer
+        fragment-src="assets/shaders/fractal-filament.glsl?v=20260901-2"
+        passes="spark-particles"
+        pixel-ratio-cap="1.5"
+        transparent
+        aria-hidden="true"></shader-renderer>
+      <div class="fractal-overlay">
+        <div class="fractal-guide" aria-live="polite">Click the stars or activate the bulb</div>
+        <div class="guide-particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <button class="fractal-core" type="button" aria-label="Activate the light and reveal the Luminary Labs mission"></button>
+        <div class="bulb-particles" aria-hidden="true"></div>
+        <div class="fractal-mission">Luminary Labs LLC - Embedding Bleeding Edge Technology into Everyday Life for the Greater Social Good</div>
+      </div>
+    </section>
+
     <section class="hero" id="hero">
       <div class="hero-bg"></div>
       <div class="container hero-inner">
@@ -301,9 +319,10 @@
 
   <script src="assets/js/data.js"></script>
   <script src="assets/js/site-nav.js?v=20260828-4"></script>
-  <script src="assets/js/spark-particle-pass.js?v=20260830-1"></script>
-  <script src="assets/js/fractal-home.js?v=20260830-1"></script>
-  <script src="assets/js/main.js"></script>
+  <script src="assets/js/spark-particle-pass.js?v=20260901-1"></script>
+  <script src="assets/js/shader-renderer.js?v=20260901-1"></script>
+  <script src="assets/js/fractal-home.js?v=20260901-2"></script>
+  <script src="assets/js/main.js?v=20260901-1"></script>
 
   <script>
     // Initialize Lucide Icons
