@@ -1,5 +1,13 @@
 # Website Repo Memory
 
+## 2026-09-02 Favicon Build
+
+- Intent: replace the generic Luminary Labs tab icon with the approved green, orange, and gold bulb artwork.
+- Source: `assets/source/luminary-bulb-favicon-master.png` is the canonical square source supplied and approved for this use.
+- Build: `scripts/build-favicon.mjs` uses pinned Sharp tooling to generate deterministic 16, 32, 48, 180, and 512 pixel PNG assets plus a multi-size root `favicon.ico`.
+- Integration: root marketing pages and Website-owned offer pages reference the new icon set with a `20260902` cache key; generated apps, games, and the AI surface remain unchanged.
+- Validation: builder syntax, repeat hashes, PNG dimensions, ICO contents, scoped static routes, and local HTTP asset responses must pass before publication.
+
 ## Current Run
 
 - Intent: eliminate navbar movement when switching into Services and later pages.

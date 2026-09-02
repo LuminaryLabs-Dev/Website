@@ -1,0 +1,10 @@
+{
+  "name": "luminary-labs-website-tools",
+  "private": true,
+  "scripts": {
+    "build:favicons": "node scripts/build-favicon.mjs"
+  },
+  "devDependencies": {
+    "sharp": "0.35.4"
+  }
+}
