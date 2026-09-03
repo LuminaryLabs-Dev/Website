@@ -14,7 +14,31 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/public/favicons/luminary-bulb-180.png?v=20260902" />
   <link rel="stylesheet" href="assets/css/style.css?v=20260828-3" />
   <link rel="stylesheet" href="assets/css/shader-renderer.css?v=20260901-1" />
-  <link rel="stylesheet" href="assets/css/fractal-home.css?v=20260901-2" />
+  <link rel="stylesheet" href="assets/css/luminary-intro.css?v=20260903-1" />
+  <script>
+    (function () {
+      var version = "20260903-1";
+      var showIntro = !location.hash;
+
+      try {
+        showIntro = showIntro
+          && !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          && localStorage.getItem("luminary:intro:seen") !== version;
+      } catch (error) {
+        // Storage is optional. A failure must never prevent the site from loading.
+      }
+
+      window.__luminaryIntro = { show: showIntro, version: version };
+      document.documentElement.classList.add(showIntro ? "ll-intro-pending" : "ll-intro-bypass");
+      window.__luminaryIntroFallback = window.setTimeout(function () {
+        if (!("customElements" in window) || !customElements.get("luminary-intro")) {
+          window.__luminaryIntro.show = false;
+          document.documentElement.classList.remove("ll-intro-pending");
+          document.documentElement.classList.add("ll-intro-bypass");
+        }
+      }, 1800);
+    })();
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -30,7 +54,7 @@
   </script>
 </head>
 
-<body class="home-fractal-mode">
+<body>
   <header class="site-header">
     <div class="container nav">
       <a href="index.html" class="brand" aria-label="Luminary Labs Home">
@@ -50,23 +74,13 @@
     </div>
   </header>
 
-  <main>
-    <section class="fractal-home" aria-label="Interactive light bulb animation">
-      <shader-renderer
-        fragment-src="assets/shaders/fractal-filament.glsl?v=20260901-2"
-        passes="spark-particles"
-        pixel-ratio-cap="1.5"
-        transparent
-        aria-hidden="true"></shader-renderer>
-      <div class="fractal-overlay">
-        <div class="fractal-guide" aria-live="polite">Click the stars or activate the bulb</div>
-        <div class="guide-particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-        <button class="fractal-core" type="button" aria-label="Activate the light and reveal the Luminary Labs mission"></button>
-        <div class="bulb-particles" aria-hidden="true"></div>
-        <div class="fractal-mission">Luminary Labs LLC - Embedding Bleeding Edge Technology into Everyday Life for the Greater Social Good</div>
-      </div>
-    </section>
+  <luminary-intro
+    version="20260903-1"
+    fragment-src="assets/shaders/fractal-filament.glsl?v=20260901-2"
+    passes="spark-particles"
+    aria-label="Luminary Labs interactive introduction"></luminary-intro>
 
+  <main>
     <section class="hero" id="hero">
       <div class="hero-bg"></div>
       <div class="container hero-inner">
@@ -324,7 +338,7 @@
   <script src="assets/js/site-nav.js?v=20260828-4"></script>
   <script src="assets/js/spark-particle-pass.js?v=20260901-1"></script>
   <script src="assets/js/shader-renderer.js?v=20260901-1"></script>
-  <script src="assets/js/fractal-home.js?v=20260901-2"></script>
+  <script src="assets/js/luminary-intro.js?v=20260903-1"></script>
   <script src="assets/js/main.js?v=20260901-1"></script>
 
   <script>
