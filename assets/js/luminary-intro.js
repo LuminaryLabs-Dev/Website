@@ -1,11 +1,12 @@
 (function () {
   const STORAGE_KEY = "luminary:intro:seen";
   const DEFAULT_VERSION = "20260903-1";
+  const INTRO_MS = 5000;
   const READY_DEADLINE_MS = 1000;
-  const AUTO_ACTIVATE_MS = 1700;
+  const AUTO_ACTIVATE_MS = 4450;
   const FLASH_MS = 150;
   const EXIT_MS = 400;
-  const HARD_LIMIT_MS = 2400;
+  const HARD_LIMIT_MS = INTRO_MS;
 
   class LuminaryIntro extends HTMLElement {
     constructor() {
@@ -15,23 +16,57 @@
       this.abortController = null;
       this.timers = new Set();
       this.pageTargets = [];
+      this.replayControl = null;
+      this.replayFocusTarget = null;
       this.ready = false;
       this.finishing = false;
       this.finished = false;
+      this.running = false;
       this.finishReason = "";
+      this.startedAt = 0;
+      this.boundReplayClick = event => this.onReplayRequest(event);
     }
 
     connectedCallback() {
       window.clearTimeout(window.__luminaryIntroFallback);
+      this.bindReplayControl();
 
       if (this.shouldBypass()) {
         this.commitHome("bypass");
         return;
       }
 
+      this.startIntro();
+    }
+
+    disconnectedCallback() {
+      this.cleanupRun();
+      this.unbindReplayControl();
+      this.setPageInactive(false);
+      document.body.classList.remove("ll-intro-open");
+      document.documentElement.classList.remove("ll-intro-pending");
+      document.documentElement.classList.add("ll-intro-bypass");
+    }
+
+    startIntro({ restoreFocusTo = null } = {}) {
+      if (this.running) return false;
+
+      this.cleanupRun();
+      this.replaceChildren();
+      this.replayFocusTarget = restoreFocusTo?.isConnected ? restoreFocusTo : null;
+      this.ready = false;
+      this.finishing = false;
+      this.finished = false;
+      this.running = true;
+      this.finishReason = "";
+      this.startedAt = performance.now();
+      this.hidden = false;
+      this.classList.remove("is-exiting");
       this.setAttribute("role", "dialog");
       this.setAttribute("aria-modal", "true");
       this.dataset.state = "loading";
+      document.documentElement.classList.remove("ll-intro-bypass");
+      document.documentElement.classList.add("ll-intro-pending");
       document.body.classList.add("ll-intro-open");
       this.setPageInactive(true);
       this.mount();
@@ -41,12 +76,19 @@
       }, READY_DEADLINE_MS);
       this.schedule(() => this.activate("automatic"), AUTO_ACTIVATE_MS);
       this.schedule(() => this.finishIntro({ immediate: true, reason: "hard-limit" }), HARD_LIMIT_MS);
+
+      if (this.replayFocusTarget) {
+        this.schedule(() => {
+          this.querySelector(".luminary-intro__activate")?.focus({ preventScroll: true });
+        }, 0);
+      }
+
+      return true;
     }
 
-    disconnectedCallback() {
-      this.cleanup();
-      this.setPageInactive(false);
-      document.body.classList.remove("ll-intro-open");
+    replay() {
+      if (this.running) return false;
+      return this.startIntro({ restoreFocusTo: this.replayControl });
     }
 
     shouldBypass() {
@@ -65,6 +107,37 @@
 
     get version() {
       return this.getAttribute("version") || window.__luminaryIntro?.version || DEFAULT_VERSION;
+    }
+
+    bindReplayControl() {
+      const control = document.querySelector(".universal-signature");
+      if (!control || control === this.replayControl) return;
+
+      this.unbindReplayControl();
+      this.replayControl = control;
+      control.setAttribute("aria-label", "Replay Luminary Labs intro");
+      control.addEventListener("click", this.boundReplayClick);
+    }
+
+    unbindReplayControl() {
+      this.replayControl?.removeEventListener("click", this.boundReplayClick);
+      this.replayControl = null;
+    }
+
+    onReplayRequest(event) {
+      const isNormalClick = event.button === 0
+        && !event.metaKey
+        && !event.ctrlKey
+        && !event.shiftKey
+        && !event.altKey;
+      if (!isNormalClick) return;
+
+      if (this.running) {
+        event.preventDefault();
+        return;
+      }
+
+      if (this.replay()) event.preventDefault();
     }
 
     mount() {
@@ -102,10 +175,25 @@
         event.stopPropagation();
         this.finishIntro({ immediate: true, reason: "skip" });
       }, { signal });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          this.finishIntro({ immediate: true, reason: "escape" });
+          return;
+        }
+
+        const isActivationKey = event.key === "Enter" || event.key === " ";
+        const interactiveTarget = event.target instanceof Element
+          && event.target.closest("a, button, input, select, textarea, [contenteditable]");
+        if (!isActivationKey || event.repeat || interactiveTarget) return;
+
+        event.preventDefault();
+        this.activate("keyboard");
+      }, { signal });
     }
 
     onRendererReady() {
-      if (this.finished || this.finishing) return;
+      if (!this.running || this.finished || this.finishing) return;
       this.ready = true;
       this.dataset.state = "ready";
       if (this.status) this.status.textContent = "The Luminary Labs light is ready";
@@ -116,7 +204,7 @@
     }
 
     activate(reason) {
-      if (this.finished || this.finishing) return;
+      if (!this.running || this.finished || this.finishing || this.dataset.state === "activating") return;
       this.dataset.state = "activating";
       if (this.status) this.status.textContent = "The light is activating";
       this.renderer?.setUniform("uPower", 1);
@@ -127,7 +215,7 @@
     }
 
     finishIntro({ immediate = false, reason = "complete" } = {}) {
-      if (this.finished) return;
+      if (!this.running || this.finished) return;
       if (this.finishing && !immediate) return;
 
       this.finishing = true;
@@ -146,9 +234,11 @@
     }
 
     commitHome(reason) {
-      if (this.finished) return;
+      if (this.finished && !this.running) return;
+      const focusTarget = this.replayFocusTarget;
       this.finished = true;
       this.finishing = false;
+      this.running = false;
       this.finishReason = reason;
       this.clearTimers();
       this.rememberCompletion();
@@ -158,11 +248,21 @@
       document.documentElement.classList.add("ll-intro-bypass");
       this.dataset.state = "finished";
       this.hidden = true;
-      this.cleanup();
+      this.cleanupRun();
       this.replaceChildren();
+      this.renderer = null;
+      this.status = null;
+      this.replayFocusTarget = null;
       this.dispatchEvent(new CustomEvent("luminary-intro-finished", {
-        detail: { reason },
+        detail: {
+          reason,
+          elapsedMs: this.startedAt ? performance.now() - this.startedAt : 0,
+        },
       }));
+
+      if (focusTarget?.isConnected) {
+        window.requestAnimationFrame(() => focusTarget.focus({ preventScroll: true }));
+      }
     }
 
     setPageInactive(inactive) {
@@ -203,7 +303,7 @@
       this.timers.clear();
     }
 
-    cleanup() {
+    cleanupRun() {
       this.clearTimers();
       this.abortController?.abort();
       this.abortController = null;
