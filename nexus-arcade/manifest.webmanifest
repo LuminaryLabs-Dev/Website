@@ -1,0 +1,13 @@
+{
+  "name": "Nexus Arcade Library",
+  "short_name": "Nexus Arcade",
+  "description": "Install and play integrity-verified Nexus Arcade prototypes.",
+  "start_url": "/nexus-arcade/",
+  "scope": "/nexus-arcade/",
+  "display": "standalone",
+  "background_color": "#0c0c0b",
+  "theme_color": "#e84b2c",
+  "icons": [
+    { "src": "/public/favicons/luminary-bulb-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nexus Arcade Library — Luminary Labs</title>
+  <meta name="description" content="Discover, integrity-check, install and play public Nexus Arcade prototypes directly in your browser.">
+  <link rel="canonical" href="https://luminarylabs.dev/nexus-arcade/">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#library">Skip to game library</a>
+  <header class="topbar">
+    <a class="wordmark" href="/" aria-label="Luminary Labs home">
+      <span class="wordmark-mark" aria-hidden="true">LL</span>
+      <span>Luminary Labs</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="/">Studio</a>
+      <a href="/opensource.html">Open Source</a>
+      <a href="/nexus-arcade/" aria-current="page">Nexus Arcade</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Public prototype registry · verified installs</p>
+        <h1 id="page-title">The arcade lives<br><em>outside the website.</em></h1>
+        <p class="lede">Browse a small public catalog. Install only the game you choose. Every file is checked before it can run, and no game assets are stored in this site.</p>
+        <div class="hero-facts" aria-label="Library facts">
+          <span><strong id="game-count">—</strong> registered games</span>
+          <span><strong>SHA-256</strong> file verification</span>
+          <span><strong>On demand</strong> downloads</span>
+        </div>
+      </div>
+      <div class="cabinet" aria-hidden="true">
+        <div class="cabinet-screen"><span>NXA</span><i></i><b>READY</b></div>
+        <div class="cabinet-controls"><i></i><b></b><b></b></div>
+        <div class="cabinet-base">NEXUS ARCADE</div>
+      </div>
+    </section>
+
+    <section class="library-section" id="library" aria-labelledby="library-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Registry 01</p>
+          <h2 id="library-title">Choose a game</h2>
+        </div>
+        <p id="library-status" class="status" role="status" aria-live="polite">Connecting to the public registry…</p>
+      </div>
+      <div id="game-grid" class="game-grid" aria-live="polite"></div>
+      <noscript>Nexus Arcade requires JavaScript to verify and install game files.</noscript>
+    </section>
+
+    <section class="how-it-works" aria-labelledby="how-title">
+      <div>
+        <p class="eyebrow">One registry, many players</p>
+        <h2 id="how-title">Small now.<br>Cabinet-ready later.</h2>
+      </div>
+      <ol>
+        <li><span>01</span><div><strong>Discover</strong><p>The site fetches a compact, sorted registry—not GitHub’s repository API.</p></div></li>
+        <li><span>02</span><div><strong>Install</strong><p>Your chosen game downloads file-by-file from an immutable source commit.</p></div></li>
+        <li><span>03</span><div><strong>Verify</strong><p>Byte length and SHA-256 must match before the cached version activates.</p></div></li>
+        <li><span>04</span><div><strong>Play</strong><p>A separate click launches the game so audio, fullscreen and pointer lock remain available.</p></div></li>
+      </ol>
+    </section>
+  </main>
+
+  <section id="player-shell" class="player-shell" hidden aria-labelledby="player-title">
+    <div class="player-toolbar">
+      <div><p class="eyebrow">Now playing</p><h2 id="player-title">Nexus Arcade</h2></div>
+      <div class="player-actions">
+        <button id="fullscreen-button" type="button">Fullscreen</button>
+        <a id="new-tab-button" href="#" target="_blank" rel="noopener noreferrer">Open in new tab</a>
+        <button id="close-player" type="button">Close</button>
+      </div>
+    </div>
+    <iframe id="game-frame" title="Installed Nexus Arcade game" allow="autoplay; fullscreen; gamepad" allowfullscreen></iframe>
+  </section>
+
+  <footer>
+    <p>Built by <a href="/">Luminary Labs</a>. Game code and assets remain in their source repositories.</p>
+    <a href="https://github.com/LuminaryLabs-Dev/NexusArcade" target="_blank" rel="noopener noreferrer">Installer source ↗</a>
+  </footer>
+
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>

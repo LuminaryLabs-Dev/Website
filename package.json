@@ -2,7 +2,8 @@
   "name": "luminary-labs-website-tools",
   "private": true,
   "scripts": {
-    "build:favicons": "node scripts/build-favicon.mjs"
+    "build:favicons": "node scripts/build-favicon.mjs",
+    "test:nexus-arcade": "node nexus-arcade/tests.mjs"
   },
   "devDependencies": {
     "sharp": "0.35.4"
