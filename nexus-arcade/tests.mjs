@@ -36,6 +36,8 @@ assert.match(app, /primary\.addEventListener\("click"/);
 assert.match(app, /library\.getManifest\(game\)/);
 assert.match(app, /player\.play\(manifest\)/);
 assert.match(app, /new DOMException\("Install cancelled", "AbortError"\)/);
+assert.match(app, /dataset\.packageRef = PACKAGE_REF/);
+assert.match(app, /sw\.js\?v=\$\{PACKAGE_REF\}/);
 
 const serviceWorker = await read("sw.js");
 assert.match(serviceWorker, new RegExp(PACKAGE_REF));

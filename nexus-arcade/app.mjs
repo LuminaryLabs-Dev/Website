@@ -1,11 +1,12 @@
 import {
   LATEST_URL,
+  PACKAGE_REF,
   PACKAGE_URL,
   REGISTRY_PIN,
   REGISTRY_VERSION,
   hostedGameUrl,
   trustedThumbnailUrl,
-} from "./config.mjs";
+} from "./config.mjs?v=20260904-3";
 
 const grid = document.querySelector("#game-grid");
 const status = document.querySelector("#library-status");
@@ -31,7 +32,7 @@ function setStatus(message, state = "ready") {
 
 async function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return false;
-  const registration = await navigator.serviceWorker.register("./sw.js", { type: "module", scope: "/nexus-arcade/" });
+  const registration = await navigator.serviceWorker.register(`./sw.js?v=${PACKAGE_REF}`, { type: "module", scope: "/nexus-arcade/" });
   await navigator.serviceWorker.ready;
   if (!navigator.serviceWorker.controller) {
     await Promise.race([
@@ -155,6 +156,7 @@ function renderGame(game) {
       setStatus(`${game.title} ${game.version} is verified and ready. Press Play to launch.`);
     } catch (error) {
       console.error("[nexus-arcade] install failed", error);
+      status.title = error.stack || error.message;
       progressWrap.hidden = true;
       primary.textContent = installedVersion(game) ? "Play" : "Install";
       setStatus(error.name === "AbortError" ? `${game.title} installation cancelled. No partial version was activated.` : `${game.title} was not installed: ${error.message}`, error.name === "AbortError" ? "ready" : "error");
@@ -170,6 +172,7 @@ async function initialize() {
   try {
     serviceWorkerReady = await registerServiceWorker();
     const arcade = await import(PACKAGE_URL);
+    document.documentElement.dataset.packageRef = PACKAGE_REF;
     const browserFetch = (input, init) => globalThis.fetch(input, init);
     library = new arcade.ArcadeLibrary({
       latestUrl: LATEST_URL,
