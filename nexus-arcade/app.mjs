@@ -6,7 +6,7 @@ import {
   REGISTRY_VERSION,
   hostedGameUrl,
   trustedThumbnailUrl,
-} from "./config.mjs?v=20260904-3";
+} from "./config.mjs?v=20260904-4";
 
 const grid = document.querySelector("#game-grid");
 const status = document.querySelector("#library-status");
