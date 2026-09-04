@@ -6,7 +6,7 @@ import {
   REGISTRY_VERSION,
   hostedGameUrl,
   trustedThumbnailUrl,
-} from "./config.mjs?v=20260904-5";
+} from "./config.mjs?v=20260904-6";
 
 const grid = document.querySelector("#game-grid");
 const status = document.querySelector("#library-status");
@@ -22,10 +22,28 @@ const manifests = new Map();
 const installs = new Map();
 const CATALOG_STORAGE_KEY = "nexus-arcade-catalog";
 const MANIFEST_STORAGE_KEY = "nexus-arcade-manifests";
+const SESSION_STORAGE_KEY = "nexus-arcade-session";
+const SESSION_ID_PATTERN = /^[a-zA-Z0-9_-]{16,128}$/;
+const gameViews = new Map();
 let serviceWorkerReady = false;
 let library;
 let installer;
 let player;
+let activeGame = null;
+let sessionReleased = false;
+
+function currentSessionId() {
+  let existing = null;
+  try { existing = sessionStorage.getItem(SESSION_STORAGE_KEY); }
+  catch { /* A valid in-memory session still permits temporary installs. */ }
+  if (SESSION_ID_PATTERN.test(existing || "")) return existing;
+  const created = crypto.randomUUID();
+  try { sessionStorage.setItem(SESSION_STORAGE_KEY, created); }
+  catch { /* Startup reconciliation still removes abandoned caches. */ }
+  return created;
+}
+
+const SESSION_ID = currentSessionId();
 
 function setStatus(message, state = "ready") {
   status.textContent = message;
@@ -82,6 +100,20 @@ function installedVersion(game) {
   return installer.storage.listInstalled()[game.id]?.version === game.version;
 }
 
+function syncPrimaryAction(game) {
+  const view = gameViews.get(game.id);
+  if (!view) return;
+  const installed = installedVersion(game);
+  view.primary.className = installed ? "play-button" : "install-button";
+  view.primary.textContent = installed ? "Play" : "Install";
+  view.primary.setAttribute("aria-label", `${view.primary.textContent} ${game.title}`);
+  view.progressWrap.hidden = true;
+  if (!installed) {
+    view.progress.value = 0;
+    view.progressText.textContent = "0%";
+  }
+}
+
 function openPlayer(game, manifest) {
   if (!serviceWorkerReady) throw new Error("The local game service is not ready. Refresh and try again.");
   playerTitle.textContent = game.title;
@@ -89,6 +121,7 @@ function openPlayer(game, manifest) {
   newTabButton.href = launchPath;
   playerShell.hidden = false;
   document.body.style.overflow = "hidden";
+  activeGame = { game, manifest };
   closePlayerButton.focus();
 }
 
@@ -147,6 +180,7 @@ function renderGame(game) {
   actions.append(progressWrap);
   body.append(actions);
   article.append(cover, body);
+  gameViews.set(game.id, { primary, progressWrap, progress, progressText });
 
   primary.addEventListener("click", async () => {
     const active = installs.get(game.id);
@@ -172,16 +206,13 @@ function renderGame(game) {
         progressText.textContent = `${update.percent.toFixed(0)}%`;
         setStatus(`Installing ${game.title}: ${update.completedFiles}/${update.totalFiles} files · ${update.percent.toFixed(0)}%`);
       }, { signal: controller.signal });
-      primary.className = "play-button";
-      primary.textContent = "Play";
-      primary.setAttribute("aria-label", `Play ${game.title}`);
-      progressWrap.hidden = true;
+      syncPrimaryAction(game);
       setStatus(`${game.title} ${game.version} is verified and ready. Press Play to launch.`);
     } catch (error) {
       console.error("[nexus-arcade] install failed", error);
       status.title = error.stack || error.message;
       progressWrap.hidden = true;
-      primary.textContent = installedVersion(game) ? "Play" : "Install";
+      syncPrimaryAction(game);
       setStatus(error.name === "AbortError" ? `${game.title} installation cancelled. No partial version was activated.` : `${game.title} was not installed: ${error.message}`, error.name === "AbortError" ? "ready" : "error");
     } finally {
       installs.delete(game.id);
@@ -203,7 +234,8 @@ async function initialize() {
       registryVersion: REGISTRY_VERSION,
       fetchImpl: browserFetch,
     });
-    installer = new arcade.BrowserInstaller({ fetchImpl: browserFetch });
+    installer = new arcade.BrowserInstaller({ fetchImpl: browserFetch, sessionId: SESSION_ID });
+    await installer.removeStaleSessions(SESSION_ID);
     player = new arcade.ArcadePlayer(frame);
     let games;
     let catalogFromCache = false;
@@ -229,10 +261,51 @@ async function initialize() {
 }
 
 fullscreenButton.addEventListener("click", () => frame.requestFullscreen?.());
-closePlayerButton.addEventListener("click", () => {
-  playerShell.hidden = true;
+async function unloadPlayerFrame() {
+  if (!frame.getAttribute("src") || frame.getAttribute("src") === "about:blank") return;
+  const unloaded = new Promise((resolve) => {
+    const timer = setTimeout(resolve, 1500);
+    frame.addEventListener("load", () => { clearTimeout(timer); resolve(); }, { once: true });
+  });
   frame.src = "about:blank";
+  await unloaded;
+}
+
+async function closePlayer() {
+  const closing = activeGame;
+  playerShell.hidden = true;
   document.body.style.overflow = "";
+  await unloadPlayerFrame();
+  activeGame = null;
+  if (!closing) return;
+  await installer.remove(closing.manifest);
+  syncPrimaryAction(closing.game);
+  setStatus(`${closing.game.title} files were removed. Saved game data was kept.`);
+}
+
+closePlayerButton.addEventListener("click", () => {
+  closePlayer().catch((error) => {
+    console.error("[nexus-arcade] cleanup failed", error);
+    setStatus(`The player closed, but temporary files could not be removed: ${error.message}`, "error");
+  });
+});
+
+function releaseCurrentSession() {
+  if (sessionReleased || !installer) return;
+  sessionReleased = true;
+  for (const controller of installs.values()) controller.abort(new DOMException("Arcade session ended", "AbortError"));
+  frame.src = "about:blank";
+  const games = installer.storage.releaseSessionMetadata(SESSION_ID);
+  navigator.serviceWorker.controller?.postMessage({
+    type: "NEXUS_ARCADE_RELEASE_SESSION",
+    sessionId: SESSION_ID,
+    games,
+  });
+}
+
+window.addEventListener("pagehide", releaseCurrentSession);
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) location.reload();
 });
 
 initialize();
