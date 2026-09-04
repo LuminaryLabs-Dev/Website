@@ -6,7 +6,7 @@ import {
   REGISTRY_VERSION,
   hostedGameUrl,
   trustedThumbnailUrl,
-} from "./config.mjs?v=20260904-4";
+} from "./config.mjs?v=20260904-5";
 
 const grid = document.querySelector("#game-grid");
 const status = document.querySelector("#library-status");
@@ -20,6 +20,8 @@ const closePlayerButton = document.querySelector("#close-player");
 
 const manifests = new Map();
 const installs = new Map();
+const CATALOG_STORAGE_KEY = "nexus-arcade-catalog";
+const MANIFEST_STORAGE_KEY = "nexus-arcade-manifests";
 let serviceWorkerReady = false;
 let library;
 let installer;
@@ -28,6 +30,16 @@ let player;
 function setStatus(message, state = "ready") {
   status.textContent = message;
   status.dataset.state = state;
+}
+
+function readStored(key, fallback) {
+  try { return JSON.parse(localStorage.getItem(key) || "null") || fallback; }
+  catch { return fallback; }
+}
+
+function writeStored(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); }
+  catch { /* Storage is optional; verified runtime caches remain authoritative. */ }
 }
 
 async function registerServiceWorker() {
@@ -44,7 +56,18 @@ async function registerServiceWorker() {
 }
 
 async function manifestFor(game) {
-  if (!manifests.has(game.id)) manifests.set(game.id, library.getManifest(game));
+  if (!manifests.has(game.id)) {
+    manifests.set(game.id, library.getManifest(game).then((manifest) => {
+      const stored = readStored(MANIFEST_STORAGE_KEY, {});
+      stored[game.id] = manifest;
+      writeStored(MANIFEST_STORAGE_KEY, stored);
+      return manifest;
+    }).catch((error) => {
+      const cached = readStored(MANIFEST_STORAGE_KEY, {})[game.id];
+      if (cached?.id === game.id && cached.version === game.version && cached.slug === game.slug) return cached;
+      throw error;
+    }));
+  }
   return manifests.get(game.id);
 }
 
@@ -182,10 +205,22 @@ async function initialize() {
     });
     installer = new arcade.BrowserInstaller({ fetchImpl: browserFetch });
     player = new arcade.ArcadePlayer(frame);
-    const games = await library.load();
+    let games;
+    let catalogFromCache = false;
+    try {
+      games = await library.load();
+      writeStored(CATALOG_STORAGE_KEY, { registryVersion: library.catalogClient.latest.registryVersion, games });
+    } catch (error) {
+      const cached = readStored(CATALOG_STORAGE_KEY, null);
+      if (!cached?.games?.length) throw error;
+      games = cached.games;
+      library.games = games;
+      catalogFromCache = true;
+      setStatus(`${games.length} cached games available. Registry is offline; installed games can still launch.`);
+    }
     count.textContent = String(games.length);
     grid.replaceChildren(...games.map(renderGame));
-    setStatus(`${games.length} games loaded from registry ${library.catalogClient.latest.registryVersion}. Nothing downloads until you choose Install.`);
+    if (!catalogFromCache) setStatus(`${games.length} games loaded from registry ${library.catalogClient.latest.registryVersion}. Nothing downloads until you choose Install.`);
   } catch (error) {
     console.error("[nexus-arcade] initialization failed", error);
     setStatus(`The public registry could not load: ${error.message}`, "error");
