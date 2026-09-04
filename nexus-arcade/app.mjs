@@ -154,6 +154,7 @@ function renderGame(game) {
       progressWrap.hidden = true;
       setStatus(`${game.title} ${game.version} is verified and ready. Press Play to launch.`);
     } catch (error) {
+      console.error("[nexus-arcade] install failed", error);
       progressWrap.hidden = true;
       primary.textContent = installedVersion(game) ? "Play" : "Install";
       setStatus(error.name === "AbortError" ? `${game.title} installation cancelled. No partial version was activated.` : `${game.title} was not installed: ${error.message}`, error.name === "AbortError" ? "ready" : "error");
@@ -169,18 +170,21 @@ async function initialize() {
   try {
     serviceWorkerReady = await registerServiceWorker();
     const arcade = await import(PACKAGE_URL);
+    const browserFetch = (input, init) => globalThis.fetch(input, init);
     library = new arcade.ArcadeLibrary({
       latestUrl: LATEST_URL,
       registryRef: REGISTRY_PIN,
       registryVersion: REGISTRY_VERSION,
+      fetchImpl: browserFetch,
     });
-    installer = new arcade.BrowserInstaller();
+    installer = new arcade.BrowserInstaller({ fetchImpl: browserFetch });
     player = new arcade.ArcadePlayer(frame);
     const games = await library.load();
     count.textContent = String(games.length);
     grid.replaceChildren(...games.map(renderGame));
     setStatus(`${games.length} games loaded from registry ${library.catalogClient.latest.registryVersion}. Nothing downloads until you choose Install.`);
   } catch (error) {
+    console.error("[nexus-arcade] initialization failed", error);
     setStatus(`The public registry could not load: ${error.message}`, "error");
     grid.replaceChildren(textElement("p", "", "Use a game's hosted link after the registry connection is restored."));
   }

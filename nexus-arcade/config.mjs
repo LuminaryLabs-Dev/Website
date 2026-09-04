@@ -1,4 +1,4 @@
-export const PACKAGE_REF = "bc1207f5f0b8e48f48df36a569d6b9927e46806b";
+export const PACKAGE_REF = "89c0b6d6c950212f352e613dab9045f4eb4ae1f5";
 export const PACKAGE_URL = `https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusArcade@${PACKAGE_REF}/dist/browser/nexus-arcade.mjs`;
 export const SERVICE_WORKER_PACKAGE_URL = `https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusArcade@${PACKAGE_REF}/dist/browser/service-worker.mjs`;
 export const LATEST_URL = "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusArcade-Prototypes@main/registry/latest.json";
