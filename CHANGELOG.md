@@ -2,6 +2,8 @@
 
 ## 2026-09-05
 
+- Restore “Explore our work” beneath the hero headline with a white underline, a 200ms rising white fill, black text on hover/focus, and an instant reduced-motion state. Keep portfolio navigation separate from hallway playback.
+- Validate nine localhost checks covering visual states, fixed geometry, keyboard focus, reduced motion, navigation, mobile tapping, and the unchanged GLSL in headless Three.js with SwiftShader.
 - Simplify the hero to its headline, animated hallway, and one centered down arrow. Remove the supporting copy, eyebrow, CTA buttons, and visible pause button.
 - Add a transparent, keyboard-accessible background control that pauses and resumes without moving the camera; keep text selection, drag gestures, and arrow scrolling separate from playback.
 - Rebalance desktop/mobile spacing and retain navigation, intro controls, reduced-motion fallback, and existing shader performance limits.

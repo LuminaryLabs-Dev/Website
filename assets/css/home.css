@@ -52,6 +52,27 @@
   margin: 0;
 }
 .hallway-hero h1 span { display: block; }
+.hallway-work {
+  position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center;
+  min-height: 48px; margin-top: 30px; padding: 12px 22px;
+  color: #fff; background: transparent; border: 0; border-bottom: 1px solid #fff;
+  border-radius: 0; box-shadow: none; text-decoration: none; font-size: 14px; font-weight: 500;
+  transition: color 200ms ease;
+}
+.hallway-work::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; background: #fff;
+  transform: scaleY(0); transform-origin: bottom; transition: transform 200ms ease;
+}
+@media (hover: hover) {
+  .hallway-work:hover { color: #000; }
+  .hallway-work:hover::before { transform: scaleY(1); }
+}
+.hallway-work:focus-visible, .hallway-work:active { color: #000; }
+.hallway-work:focus-visible::before, .hallway-work:active::before { transform: scaleY(1); }
+.hallway-work:focus-visible { outline: 2px solid #ffbd71; outline-offset: 5px; }
+@media (prefers-reduced-motion: reduce) {
+  .hallway-work, .hallway-work::before { transition: none; }
+}
 /* The empty background button sits below selectable text and the scroll link. */
 .hallway-control {
   position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%;
