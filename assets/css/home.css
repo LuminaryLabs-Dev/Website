@@ -1,0 +1,341 @@
+/* Luminary Labs homepage surface.
+   The intro keeps its own dark visual system; this file styles the page revealed after it exits. */
+
+.home-page {
+  background: #ffffff;
+  color: #17212b;
+}
+
+.home-page main {
+  background: #ffffff;
+}
+
+.home-page main > section {
+  padding: 72px 0;
+  background: #ffffff;
+}
+
+.home-page .container {
+  width: min(1200px, calc(100% - 48px));
+}
+
+.home-page .hero {
+  min-height: 0;
+  padding: 82px 0 72px;
+  background: #ffffff;
+}
+
+.home-page .hero-bg,
+.home-page .hero-bg::after {
+  display: none;
+}
+
+.home-page .hero-inner {
+  max-width: 1200px;
+  gap: 48px;
+}
+
+.home-page h1,
+.home-page h2,
+.home-page h3,
+.home-page h4,
+.home-page strong {
+  color: #17212b;
+}
+
+.home-page p,
+.home-page .hero .hero-sub,
+.home-page .section-header p,
+.home-page .card-sub,
+.home-page .nexus-card-copy {
+  color: #52606d;
+}
+
+.home-page .hero-badge,
+.home-page .section-label,
+.home-page .hero-card-kicker,
+.home-page .nexus-card-kicker {
+  color: #087f9b;
+}
+
+.home-page .hero-badge {
+  background: #f2fbfd;
+  border: 1px solid #9edce6;
+  border-radius: 4px;
+  backdrop-filter: none;
+}
+
+.home-page .hero h1 {
+  font-size: clamp(2.4rem, 5vw, 4.4rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.home-page .hero h1 .gradient-text {
+  background: none;
+  color: #087f9b;
+  -webkit-text-fill-color: currentColor;
+  animation: none;
+}
+
+.home-page .hero .hero-sub {
+  max-width: 620px;
+  font-size: 1.05rem;
+}
+
+.home-page .hero-proof-item,
+.home-page .hero-card,
+.home-page .hero-mini-stats div,
+.home-page .cap-card,
+.home-page .nexus-strip-item,
+.home-page .nexus-card,
+.home-page .card,
+.home-page .stats-bar,
+.home-page .cta-banner {
+  background: #ffffff;
+  border: 1px solid #d8dde3;
+  border-radius: 4px;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.home-page .hero-proof-item {
+  padding: 16px;
+}
+
+.home-page .hero-proof-item::before,
+.home-page .cap-card::before {
+  height: 3px;
+  background: linear-gradient(90deg, #08a4bd, #f08a24);
+  opacity: 1;
+}
+
+.home-page .hero-proof-item small,
+.home-page .hero-card p,
+.home-page .hero-points li,
+.home-page .hero-mini-stats small,
+.home-page .nexus-strip-item small,
+.home-page .cap-card p {
+  color: #52606d;
+}
+
+.home-page .hero-card {
+  padding: 28px;
+}
+
+.home-page .hero-card::before,
+.home-page .cap-card::after {
+  display: none;
+}
+
+.home-page .hero-mini-stats div {
+  padding: 12px;
+}
+
+.home-page .hero-mini-stats span,
+.home-page .hero-card h2,
+.home-page .nexus-strip-item span,
+.home-page .cap-card h3,
+.home-page .nexus-card-title,
+.home-page .card-title,
+.home-page .stat-number {
+  color: #17212b;
+}
+
+.home-page .hero-mini-stats span,
+.home-page .stat-number {
+  color: #087f9b;
+}
+
+.home-page .btn {
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.home-page .btn.primary {
+  background: #17212b;
+  color: #ffffff;
+  border: 1px solid #17212b;
+}
+
+.home-page .btn.primary:hover {
+  background: #087f9b;
+  border-color: #087f9b;
+  box-shadow: none;
+}
+
+.home-page .btn.ghost,
+.home-page .btn.secondary {
+  background: #ffffff;
+  color: #17212b;
+  border: 1px solid #aeb8c2;
+}
+
+.home-page .btn.ghost:hover,
+.home-page .btn.secondary:hover {
+  background: #f2fbfd;
+  color: #087f9b;
+  border-color: #087f9b;
+  box-shadow: none;
+}
+
+.home-page .section-divider {
+  width: min(1200px, calc(100% - 48px));
+  margin: 0 auto;
+  border: 0;
+  border-top: 1px solid #d8dde3;
+}
+
+.home-page #capabilities {
+  padding-top: 72px;
+}
+
+.home-page #capabilities::before,
+.home-page #capabilities::after {
+  display: none;
+}
+
+.home-page .section-header {
+  margin-bottom: 32px;
+}
+
+.home-page .cap-grid,
+.home-page .card-grid,
+.home-page .oss-grid {
+  gap: 20px;
+}
+
+.home-page .cap-card {
+  padding: 24px;
+}
+
+.home-page .cap-card:hover,
+.home-page .card:hover,
+.home-page .nexus-card:hover {
+  transform: translateY(-2px);
+  border-color: #087f9b;
+  box-shadow: 0 6px 16px rgba(23, 33, 43, 0.08);
+}
+
+.home-page .cap-icon {
+  border-radius: 4px;
+  background: #f2fbfd;
+  border: 1px solid #b8e5eb;
+  box-shadow: none;
+}
+
+.home-page .nexus-strip-item {
+  padding: 20px;
+}
+
+.home-page .nexus-card-media,
+.home-page .card-media {
+  background: #eef1f3;
+}
+
+.home-page .nexus-card-media::after {
+  background: linear-gradient(180deg, transparent, rgba(23, 33, 43, 0.18));
+}
+
+.home-page .nexus-card-media-badge,
+.home-page .card-media .badge {
+  background: #ffffff;
+  border: 1px solid #d8dde3;
+  border-radius: 4px;
+  color: #17212b;
+  backdrop-filter: none;
+}
+
+.home-page .nexus-card-body,
+.home-page .card-body {
+  padding: 24px;
+}
+
+.home-page .nexus-card-footer {
+  border-top: 1px solid #eef1f3;
+  padding-top: 12px;
+}
+
+.home-page .tech-tag {
+  background: #f2fbfd;
+  border: 1px solid #b8e5eb;
+  color: #087f9b;
+  border-radius: 4px;
+}
+
+.home-page .stats-bar {
+  padding: 28px;
+}
+
+.home-page .stat-item {
+  border-color: #d8dde3;
+}
+
+.home-page .cta-banner {
+  width: min(1200px, calc(100% - 48px));
+  margin: 0 auto 72px;
+  padding: 48px 24px;
+}
+
+.home-page .site-footer {
+  background: #ffffff;
+  color: #52606d;
+  border-top: 1px solid #d8dde3;
+}
+
+.home-page .site-footer p,
+.home-page .site-footer a {
+  color: #52606d;
+}
+
+.home-page .site-footer a:hover {
+  color: #087f9b;
+}
+
+@media (max-width: 960px) {
+  .home-page .hero > .container.hero-inner {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .home-page .hero-card {
+    grid-column: 1;
+  }
+
+  .home-page .cap-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .home-page main > section {
+    padding: 40px 0;
+  }
+
+  .home-page .container,
+  .home-page .section-divider,
+  .home-page .cta-banner {
+    width: min(100% - 40px, 1200px);
+  }
+
+  .home-page .hero {
+    padding: 52px 0 40px;
+  }
+
+  .home-page .hero-proof,
+  .home-page .hero-mini-stats,
+  .home-page .nexus-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .home-page .hero-card,
+  .home-page .cap-card,
+  .home-page .nexus-card-body,
+  .home-page .card-body {
+    padding: 20px;
+  }
+
+  .home-page .cta-banner {
+    margin-bottom: 40px;
+  }
+}
