@@ -23,7 +23,7 @@
   display: flex;
   align-items: center;
   min-height: clamp(660px, 78svh, 860px);
-  padding: 110px 10% 142px;
+  padding: 110px 10%;
   background: #101417;
   color: #f8fafb;
 }
@@ -41,8 +41,7 @@
   background: linear-gradient(90deg, rgba(5,9,12,.77) 0%, rgba(5,9,12,.64) 43%, rgba(5,9,12,.12) 76%),
     linear-gradient(0deg, rgba(5,9,12,.38), transparent 25%);
 }
-.hallway-content { position: relative; width: min(100%, 780px); z-index: 1; }
-.home-page .hallway-eyebrow { color: #d3d9dc; font-size: 11px; letter-spacing: .28em; text-transform: uppercase; margin: 0 0 24px; }
+.hallway-content { position: relative; width: min(100%, 780px); z-index: 2; }
 .home-page .hallway-hero h1 {
   font-family: var(--font-display);
   color: #f8fafb;
@@ -50,38 +49,22 @@
   font-weight: 400;
   line-height: 1.12;
   letter-spacing: -.045em;
-  margin: 0 0 28px;
+  margin: 0;
 }
 .hallway-hero h1 span { display: block; }
-.home-page .hallway-description { max-width: 570px; color: #c6cdd2; font-size: clamp(17px, 1.4vw, 21px); line-height: 1.55; margin-bottom: 34px; }
-.hallway-actions { display: flex; gap: 16px; flex-wrap: wrap; }
-.hallway-actions a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 54px;
-  padding: 13px 25px;
-  font-size: 14px;
-  font-weight: 500;
-  border: 1px solid #b1bac0;
-  border-radius: 0;
+/* The empty background button sits below selectable text and the scroll link. */
+.hallway-control {
+  position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%;
+  padding: 0; border: 0; border-radius: 0; background: transparent; cursor: pointer;
+  touch-action: pan-y pinch-zoom;
 }
-.hallway-actions .hallway-primary { color: #141b20; background: #f8fafb; border-color: #f8fafb; }
-.hallway-actions .hallway-secondary { color: #f8fafb; background: rgba(8,13,16,.45); }
-.hallway-actions a:hover { background: #dceef0; color: #17212b; border-color: #dceef0; }
-.hallway-hero a:focus-visible, .hallway-pause:focus-visible { outline: 2px solid #ffbd71; outline-offset: 5px; }
+.hallway-control[hidden] { display: none; }
+.hallway-control:focus-visible { outline: 2px solid #ffbd71; outline-offset: -6px; }
 .hallway-scroll {
-  position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
-  display: flex; align-items: center; flex-direction: column; gap: 14px;
-  padding: 10px; color: #d8dfe3; font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+  position: absolute; z-index: 3; bottom: 24px; left: 50%; transform: translateX(-50%);
+  display: grid; place-items: center; width: 48px; height: 48px; color: #d8dfe3;
 }
-.hallway-scroll span { height: 24px; width: 1px; background: #a7b5bc; }
-.hallway-pause {
-  position: absolute; right: 28px; bottom: 24px; padding: 12px;
-  min-height: 44px; color: #d8dfe3; background: rgba(9,14,18,.65);
-  border: 1px solid rgba(216,223,227,.25); font: inherit; font-size: 11px; cursor: pointer;
-}
-.hallway-pause[hidden] { display: none; }
+.hallway-scroll:focus-visible { outline: 2px solid #ffbd71; outline-offset: 3px; }
 .home-page #capabilities .section-header h2 { font-size: clamp(30px, 3vw, 44px); font-weight: 400; letter-spacing: -.035em; }
 .home-page #capabilities .section-header { margin-bottom: 36px; }
 .home-page #capabilities .section-label { font-size: 10px; color: #59646e; letter-spacing: .2em; }
@@ -94,14 +77,10 @@
 .home-page .home-delivery-note { border-top: 1px solid #e5e8eb; margin: 34px 0 0; padding-top: 24px; font-size: 14px; }
 .home-page .reveal { opacity: 1; transform: none; }
 @media (max-width: 700px) {
-  .home-page #hero.hallway-hero { min-height: max(650px, calc(100svh - 72px)); padding: 92px 24px 128px; }
+  .home-page #hero.hallway-hero { min-height: max(650px, calc(100svh - 72px)); padding: 96px 24px; }
   .home-page .hallway-hero h1 { font-size: clamp(35px, 8.8vw, 42px); line-height: 1.14; letter-spacing: -.035em; }
   .hallway-hero h1 span { display: inline; }
   .hallway-wash { background: linear-gradient(90deg, rgba(5,9,12,.79), rgba(5,9,12,.5)); }
-  .hallway-actions { gap: 12px; }
-  .hallway-actions a { padding: 13px 18px; }
-  .hallway-scroll { left: 24px; transform: none; align-items: flex-start; font-size: 8px; }
-  .hallway-pause { right: 24px; }
   .home-page #capabilities .cap-card, .home-page #capabilities .cap-card:first-child { border-left: 0; border-top: 1px solid #d8dde3; padding: 22px 0 0; }
 }
 @media (prefers-reduced-motion: reduce) {
