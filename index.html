@@ -15,7 +15,9 @@
   <link rel="stylesheet" href="assets/css/style.css?v=20260828-3" />
   <link rel="stylesheet" href="assets/css/shader-renderer.css?v=20260901-1" />
   <link rel="stylesheet" href="assets/css/luminary-intro.css?v=20260903-1" />
-  <link rel="stylesheet" href="assets/css/home.css?v=20260905-1" />
+  <link rel="stylesheet" href="assets/css/home.css?v=20260905-hallway-1" />
+  <link rel="preload" as="image" href="public/home/luminary-hallway-poster.webp" />
+  <link rel="preload" as="font" href="public/fonts/inter-latin-variable.woff2" type="font/woff2" crossorigin />
   <script>
     (function () {
       var version = "20260903-1";
@@ -40,28 +42,12 @@
       }, 1800);
     })();
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    // Configure Tailwind to not conflict with base styles
-    if (window.tailwind) {
-      tailwind.config = {
-        corePlugins: {
-          preflight: false,
-        }
-      };
-    }
-  </script>
 </head>
 
 <body class="home-page">
+  <noscript><style>.home-page .nav-toggle { display:none; } .home-page .site-nav { display:flex; position:static; flex-wrap:wrap; } .home-page .universal-nav { flex-wrap:wrap; }</style></noscript>
   <header class="site-header">
-    <div class="container nav">
-      <a href="index.html" class="brand" aria-label="Luminary Labs Home">
-        <img src="public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" />
-        Luminary Labs
-      </a>
+    <div class="container nav universal-nav">
       <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
       <nav id="site-nav" class="site-nav">
         <a href="index.html" class="active">Home</a>
@@ -72,6 +58,7 @@
         <a href="team.html">Team</a>
         <a href="contact.html">Contact</a>
       </nav>
+      <a class="universal-signature" href="index.html" aria-label="Luminary Labs home"><span>LL</span><i aria-hidden="true"></i></a>
     </div>
   </header>
 
@@ -82,101 +69,48 @@
     aria-label="Luminary Labs interactive introduction"></luminary-intro>
 
   <main>
-    <section class="hero" id="hero">
-      <div class="hero-bg"></div>
-      <div class="container hero-inner">
-        <div class="hero-copy">
-          <span class="hero-badge">
-            <span class="pulse"></span>
-            AI-Accelerated Dev Studio
-          </span>
-          <h1>
-            Software That<br />
-            <span class="gradient-text">Drives Revenue</span>
-          </h1>
-          <p class="hero-sub">
-            We build XR products, AI-powered applications, and full-stack web experiences for B2B teams that need to
-            ship quickly and look credible.
-          </p>
-          <div class="cta-row">
-            <a href="services.html" class="btn primary" id="cta-hire">Hire Us</a>
-            <a href="portfolio.html" class="btn ghost" id="cta-work">See Work</a>
-          </div>
-          <div class="hero-proof" aria-label="Studio proof points">
-            <div class="hero-proof-item">
-              <span>01</span>
-              <strong>Faster launches</strong>
-              <small>Focused sprints that ship faster.</small>
-            </div>
-            <div class="hero-proof-item">
-              <span>02</span>
-              <strong>Clearer UX</strong>
-              <small>Readable interfaces with clear flow.</small>
-            </div>
-            <div class="hero-proof-item">
-              <span>03</span>
-              <strong>Live proof</strong>
-              <small>Active projects and published work.</small>
-            </div>
-          </div>
+    <section class="hallway-hero" id="hero" aria-labelledby="home-title">
+      <img class="hallway-poster" src="public/home/luminary-hallway-poster.webp" alt="" fetchpriority="high" />
+      <shader-renderer id="home-hallway" fragment-src="assets/shaders/luminary-hallway.glsl?v=20260905-1"
+        paused max-fps="30" max-pixels="921600" pixel-ratio-cap="1" aria-hidden="true"></shader-renderer>
+      <div class="hallway-wash" aria-hidden="true"></div>
+      <div class="hallway-content">
+        <p class="hallway-eyebrow">Luminary Labs</p>
+        <h1 id="home-title"><span>Turning specialized</span> <span>knowledge into</span> <span>working technology.</span></h1>
+        <p class="hallway-description">We help people turn what they know into something others can use.</p>
+        <div class="hallway-actions">
+          <a href="contact.html" class="hallway-primary" id="cta-hire">Start a conversation</a>
+          <a href="portfolio.html" class="hallway-secondary" id="cta-work">Explore our work</a>
         </div>
-
-        <aside class="hero-card" aria-labelledby="hero-card-title">
-          <span class="hero-card-kicker">Studio Snapshot</span>
-          <h2 id="hero-card-title">What clients get</h2>
-          <p>
-            Clear delivery, technical range, and proof you can inspect.
-          </p>
-          <ul class="hero-points" aria-label="Key studio strengths">
-            <li><strong>XR and spatial</strong> prototypes through launch</li>
-            <li><strong>AI integrations</strong> that remove manual work</li>
-            <li><strong>Web apps</strong> built for pitching and shipping</li>
-          </ul>
-          <div class="hero-mini-stats" aria-label="Quick facts">
-            <div>
-              <span>4+</span>
-              <small>Active projects</small>
-            </div>
-            <div>
-              <span>3</span>
-              <small>Open source products</small>
-            </div>
-            <div>
-              <span>Quest Store</span>
-              <small>Published in-store</small>
-            </div>
-          </div>
-        </aside>
       </div>
+      <a class="hallway-scroll" href="#capabilities">Scroll to explore<span aria-hidden="true"></span></a>
+      <button class="hallway-pause" type="button" aria-pressed="false" hidden>Pause animation</button>
     </section>
 
     <section id="capabilities">
       <div class="container">
-        <div class="section-header center">
+        <div class="section-header">
           <span class="section-label">What We Build</span>
-          <h2>Core Capabilities</h2>
-          <p>We specialize in the technologies that move the needle for B2B clients.</p>
+          <h2>Expertise, put to work.</h2>
         </div>
         <div class="cap-grid">
           <div class="cap-card reveal reveal-delay-1">
-            <span class="cap-icon">🥽</span>
             <h3>XR & Spatial Computing</h3>
             <p>Quest, Steam Frame, WebXR — we build immersive applications from prototype to published product across
               every major platform.</p>
           </div>
           <div class="cap-card reveal reveal-delay-2">
-            <span class="cap-icon">🤖</span>
             <h3>AI Integration</h3>
             <p>Local GGUF models, cloud APIs, agentic pipelines — we embed AI into your product so it actually adds
               value, not just buzzwords.</p>
           </div>
           <div class="cap-card reveal reveal-delay-3">
-            <span class="cap-icon">🌐</span>
             <h3>Full-Stack Web & Apps</h3>
             <p>From HTML5 embeddable games to backend-integrated web apps. Rapid MVPs delivered in 1-2 weeks, ready to
               pitch or deploy.</p>
           </div>
         </div>
+        <p class="home-delivery-note">From prototype to launch: focused development, clear interfaces, and working products you can explore.</p>
       </div>
     </section>
 
@@ -338,16 +272,11 @@
   <script src="assets/js/data.js"></script>
   <script src="assets/js/site-nav.js?v=20260828-4"></script>
   <script src="assets/js/spark-particle-pass.js?v=20260901-1"></script>
-  <script src="assets/js/shader-renderer.js?v=20260901-1"></script>
+  <script src="assets/js/shader-renderer.js?v=20260905-hallway-1"></script>
+  <script src="assets/js/home-hero.js?v=20260905-1"></script>
   <script src="assets/js/luminary-intro.js?v=20260903-2"></script>
   <script src="assets/js/main.js?v=20260901-1"></script>
 
-  <script>
-    // Initialize Lucide Icons
-    if (window.lucide) {
-      lucide.createIcons();
-    }
-  </script>
 
 </body>
 

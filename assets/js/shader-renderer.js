@@ -2,6 +2,14 @@
   const VERTEX_SOURCE = "attribute vec2 p; void main(){gl_Position=vec4(p,0.,1.);}";
 
   class ShaderRenderer extends HTMLElement {
+    static get observedAttributes() { return ["paused", "max-pixels", "pixel-ratio-cap"]; }
+
+    attributeChangedCallback(name) {
+      if (!this.ready) return;
+      if (name === "paused") this.syncAnimation();
+      else this.resize();
+    }
+
     static passFactories = new Map();
 
     static registerPass(name, factory) {
@@ -24,6 +32,11 @@
       this.visible = true;
       this.documentVisible = !document.hidden;
       this.reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      this.motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      this.lastDrawAt = null;
+      this.lastElapsed = 0;
+      this.frameCount = 0;
+      this.runGeneration = 0;
       this.ready = false;
       this.disposed = false;
       this.initializing = false;
@@ -44,6 +57,7 @@
       if (this.initializing || this.ready) return;
       this.disposed = false;
       this.initializing = true;
+      const generation = ++this.runGeneration;
       this.dataset.state = "loading";
 
       this.canvas = document.createElement("canvas");
@@ -52,6 +66,10 @@
       this.append(this.canvas);
 
       this.abortController = new AbortController();
+      this.motionQuery.addEventListener("change", event => {
+        this.reduceMotion = event.matches;
+        this.syncAnimation();
+      }, { signal: this.abortController.signal });
       this.canvas.addEventListener("pointermove", event => this.updatePointer(event, this.pointerDown), {
         passive: true,
         signal: this.abortController.signal,
@@ -104,14 +122,16 @@
         this.intersectionObserver.observe(this);
       }
 
-      this.initialize().catch(error => this.fail(error));
+      this.initialize(generation).catch(error => {
+        if (generation === this.runGeneration && !this.disposed) this.fail(error);
+      });
     }
 
     disconnectedCallback() {
       this.dispose();
     }
 
-    async initialize() {
+    async initialize(generation) {
       const fragmentUrl = this.getAttribute("fragment-src");
       if (!fragmentUrl) throw new Error("shader-renderer requires fragment-src");
 
@@ -128,9 +148,10 @@
       this.gl = gl;
       gl.clearColor(0, 0, 0, transparent ? 0 : 1);
 
-      const response = await fetch(fragmentUrl);
+      const response = await fetch(fragmentUrl, { signal: this.abortController.signal });
       if (!response.ok) throw new Error(`Shader request failed (${response.status})`);
       const source = await response.text();
+      if (this.disposed || generation !== this.runGeneration) return;
       const fragmentSource = `precision highp float;
 uniform vec3 iResolution;
 uniform float iTime;
@@ -170,6 +191,7 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);}`;
       };
       this.setUniform("iMouse", [0, 0, 0, 0], false);
       await this.initializePasses();
+      if (this.disposed || generation !== this.runGeneration) return;
 
       this.startedAt = performance.now();
       this.ready = true;
@@ -177,6 +199,7 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);}`;
       this.dataset.state = "ready";
       this.error = null;
       this.resize();
+      this.draw(this.elapsedBeforePause);
       this.dispatchEvent(new CustomEvent("shader-ready", { bubbles: true }));
       this.syncAnimation();
     }
@@ -258,14 +281,18 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);}`;
       const rect = this.getBoundingClientRect();
       const requestedCap = Number.parseFloat(this.getAttribute("pixel-ratio-cap") || "1.5");
       const cap = Number.isFinite(requestedCap) ? Math.max(0.5, requestedCap) : 1.5;
-      const pixelRatio = Math.min(window.devicePixelRatio || 1, cap);
+      let pixelRatio = Math.min(window.devicePixelRatio || 1, cap);
+      const maxPixels = Number.parseInt(this.getAttribute("max-pixels"), 10);
+      if (maxPixels > 0 && rect.width * rect.height > 0) {
+        pixelRatio = Math.min(pixelRatio, Math.sqrt(maxPixels / (rect.width * rect.height)));
+      }
       const width = Math.max(1, Math.round(rect.width * pixelRatio));
       const height = Math.max(1, Math.round(rect.height * pixelRatio));
       if (this.canvas.width !== width || this.canvas.height !== height) {
         this.canvas.width = width;
         this.canvas.height = height;
         this.gl.viewport(0, 0, width, height);
-        if (this.ready && this.reduceMotion) this.draw(this.elapsedBeforePause);
+        if (this.ready && !this.shouldAnimate()) this.draw(this.lastElapsed);
       }
     }
 
@@ -273,12 +300,20 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);}`;
       this.animationFrame = 0;
       if (!this.shouldAnimate()) return;
       const elapsed = this.elapsedBeforePause + (now - this.startedAt) / 1000;
-      this.draw(elapsed);
+      const fps = Number.parseFloat(this.getAttribute("max-fps"));
+      const interval = fps > 0 ? 1000 / fps : 0;
+      if (this.lastDrawAt === null || now - this.lastDrawAt >= interval - 0.5) {
+        this.draw(elapsed);
+        this.lastDrawAt = interval && this.lastDrawAt !== null && now - this.lastDrawAt >= interval
+          ? now - Math.max(0, (now - this.lastDrawAt) % interval) : now;
+      }
       this.animationFrame = requestAnimationFrame(this.boundFrame);
     }
 
     draw(elapsed) {
       if (!this.ready || !this.gl || !this.program) return;
+      this.lastElapsed = elapsed;
+      this.frameCount += 1;
       const gl = this.gl;
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.disable(gl.BLEND);
@@ -297,7 +332,8 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);}`;
     }
 
     shouldAnimate() {
-      return this.ready && !this.disposed && this.visible && this.documentVisible && !this.reduceMotion;
+      return this.ready && !this.disposed && this.visible && this.documentVisible
+        && !this.reduceMotion && !this.hasAttribute("paused");
     }
 
     syncAnimation() {
@@ -305,6 +341,7 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);}`;
       if (this.shouldAnimate()) {
         if (!this.animationFrame) {
           this.startedAt = performance.now();
+          this.lastDrawAt = null;
           this.animationFrame = requestAnimationFrame(this.boundFrame);
         }
       } else {
@@ -313,7 +350,8 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);}`;
           this.animationFrame = 0;
           this.elapsedBeforePause += (performance.now() - this.startedAt) / 1000;
         }
-        this.draw(this.elapsedBeforePause);
+        this.elapsedBeforePause = this.lastElapsed;
+        this.draw(this.lastElapsed);
       }
     }
 
@@ -335,6 +373,7 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);}`;
     dispose() {
       if (this.disposed) return;
       this.disposed = true;
+      this.runGeneration += 1;
       if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
       this.animationFrame = 0;
       this.resizeObserver?.disconnect();
@@ -347,6 +386,9 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);}`;
       }
       this.passes = [];
       this.ready = false;
+      this.initializing = false;
+      this.canvas?.remove();
+      this.canvas = null;
     }
   }
 
