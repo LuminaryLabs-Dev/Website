@@ -52,3 +52,23 @@ powershell -ExecutionPolicy Bypass -File scripts/run-content-audit.ps1
 
 - The Three.js demo uses CDN scripts for ease. You can pin versions or move to a bundler later.
 - The plane vertices animate slightly and normals are recomputed for nicer lighting.
+
+## Nexus Arcade
+
+- `/nexus-arcade/`: cabinet overview, existing CAD drawings, and Play Games links.
+- `/nexus-arcade/play/`: prototype library, installation, verification, and player.
+- `/gemini-arcade.html`: legacy redirect to the cabinet overview.
+- `nexus-arcade/styles.css`: shared minimalist theme and cabinet layout.
+- `nexus-arcade/play/styles.css`: library and player layout.
+
+Serve the exact checkout with `python -m http.server 4173 --bind 127.0.0.1` and visit
+`http://127.0.0.1:4173/nexus-arcade/`. Run `npm run test:nexus-arcade` for route and
+installer contract checks. Use a browser for desktop/mobile layout, navigation,
+installation/cancellation, gameplay/fullscreen, cleanup, and returning-session checks.
+The external catalog and pinned installer require network access.
+
+The player imports `../app.mjs`. The service worker stays at `/nexus-arcade/sw.js`
+with scope `/nexus-arcade/`, covering both routes and preserving existing game URLs.
+The manifest keeps the original application identity (`/nexus-arcade/`) and scope,
+but launches `/nexus-arcade/play/`. Package pins and storage keys are unchanged.
+Temporary game assets are removed on player close/session exit; game saves are retained.

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Play Nexus Arcade — Luminary Labs</title>
+  <meta name="description" content="Explore and play Nexus Arcade prototypes in your browser.">
+  <link rel="canonical" href="https://luminarylabs.dev/nexus-arcade/play/">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="stylesheet" href="../styles.css?v=20260905-1">
+  <link rel="stylesheet" href="./styles.css?v=20260905-1">
+</head>
+<body>
+  <a class="skip-link" href="#library">Skip to game library</a>
+  <header class="topbar">
+    <a class="wordmark" href="/" aria-label="Luminary Labs home"><span class="wordmark-mark" aria-hidden="true">LL</span><span>Luminary Labs</span></a>
+    <nav aria-label="Primary navigation">
+      <a href="/">Studio</a>
+      <a href="/nexus-arcade/" >Nexus Arcade</a>
+      <a href="/nexus-arcade/play/" aria-current="page">Play Games</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="library-intro" aria-labelledby="page-title">
+      <p class="eyebrow">Nexus Arcade / Play</p>
+      <h1 id="page-title">A little time.<br><em>A new adventure.</em></h1>
+      <div class="intro-details"><p class="lede">Explore our public prototypes. Choose a game, install it, and press Play. Your progress stays with you when you close the player.</p>
+      <p class="catalog-count"><strong id="game-count">—</strong><span>games to explore</span></p></div>
+    </section>
+
+    <section class="library-section" id="library" aria-labelledby="library-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">The collection</p>
+          <h2 id="library-title">Choose a game</h2>
+        </div>
+        <p id="library-status" class="status" role="status" aria-live="polite">Loading games…</p>
+      </div>
+      <div id="game-grid" class="game-grid" aria-live="polite"></div>
+      <noscript>Nexus Arcade requires JavaScript to verify and install game files.</noscript>
+    </section>
+
+    <section class="how-it-works" aria-labelledby="how-title">
+      <div><p class="eyebrow">Getting started</p><h2 id="how-title">Pick. Install. Play.</h2></div>
+      <ol>
+        <li><span>01</span><div><strong>Choose your next game</strong><p>Browse the collection. Only the game you choose is downloaded.</p></div></li>
+        <li><span>02</span><div><strong>Install, then press Play</strong><p>Game files are checked before launch. Open lets you play the hosted version in a new tab.</p></div></li>
+        <li><span>03</span><div><strong>Keep your progress</strong><p>Temporary game files are removed when you close the player. Your saved progress and settings stay.</p></div></li>
+      </ol>
+    </section>
+  </main>
+
+  <section id="player-shell" class="player-shell" hidden aria-labelledby="player-title">
+    <div class="player-toolbar">
+      <div><p class="eyebrow">Now playing</p><h2 id="player-title">Nexus Arcade</h2></div>
+      <div class="player-actions">
+        <button id="fullscreen-button" type="button">Fullscreen</button>
+        <a id="new-tab-button" href="#" target="_blank" rel="noopener noreferrer">Open in new tab</a>
+        <button id="close-player" type="button">Close</button>
+      </div>
+    </div>
+    <iframe id="game-frame" title="Installed Nexus Arcade game" allow="autoplay; fullscreen; gamepad" allowfullscreen></iframe>
+  </section>
+
+  <footer>
+    <p>Built by <a href="/">Luminary Labs</a>. Small games. Room to explore.</p>
+    <a href="https://github.com/LuminaryLabs-Dev/NexusArcade" target="_blank" rel="noopener noreferrer">Installer source ↗</a>
+  </footer>
+
+  <script type="module" src="../app.mjs?v=20260905-1"></script>
+</body>
+</html>

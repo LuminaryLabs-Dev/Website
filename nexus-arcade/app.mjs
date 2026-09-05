@@ -62,7 +62,7 @@ function writeStored(key, value) {
 
 async function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return false;
-  const registration = await navigator.serviceWorker.register(`./sw.js?v=${PACKAGE_REF}`, { type: "module", scope: "/nexus-arcade/" });
+  const registration = await navigator.serviceWorker.register(`/nexus-arcade/sw.js?v=${PACKAGE_REF}`, { type: "module", scope: "/nexus-arcade/" });
   await navigator.serviceWorker.ready;
   if (!navigator.serviceWorker.controller) {
     await Promise.race([
