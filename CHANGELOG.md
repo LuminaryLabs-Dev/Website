@@ -2,6 +2,8 @@
 
 ## 2026-09-06
 
+- Tighten the white homepage header gradient from 128px to 80px and slow its opacity and navigation color transitions to one second. Keep reduced-motion transitions instant and preserve the existing layout and four-second idle delay.
+
 - Change the homepage header gradient to white with dark active links; keep light idle links over the hallway and dark idle links over white sections. Preserve the dark mobile menu and no-JavaScript navigation.
 
 - Install the supplied green/gold bulb as the top-right homepage logo. Use image_gen on the selected artwork, then remove its baked checkerboard with an alpha mask in ImageMagick. Preserve the selected image’s RGB pixels and export an optimized PNG with verified alpha transparency.

@@ -120,9 +120,9 @@
   backdrop-filter: none; --nav-ink: #17212b;
 }
 .home-page .site-header::before {
-  content: ''; position: absolute; inset: 0 0 auto; height: 128px; pointer-events: none;
+  content: ''; position: absolute; inset: 0 0 auto; height: 80px; pointer-events: none;
   background: linear-gradient(to bottom, rgba(255,255,255,.85), rgba(255,255,255,.72) 45%, rgba(255,255,255,0));
-  opacity: 1; transition: opacity 350ms ease;
+  opacity: 1; transition: opacity 1s ease;
 }
 .home-page .universal-nav {
   position: relative; min-height: 64px; height: 64px; padding: 0; gap: 16px;
@@ -134,6 +134,9 @@
   color: var(--nav-ink) !important; padding: 8px 8px !important;
   font: 500 11px/1.4 var(--font-body) !important; letter-spacing: .06em;
   text-decoration: none !important;
+}
+.home-page .universal-nav .site-nav a, .home-page .universal-nav .nav-toggle {
+  transition: color 1s ease, border-color 1s ease;
 }
 .home-page .universal-nav .site-nav a::after {
   content: ''; position: absolute; left: 8px; right: 8px; bottom: 8px; height: 1px;
@@ -178,6 +181,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .home-page .site-header::before, .home-page .universal-nav,
+  .home-page .universal-nav .site-nav a, .home-page .universal-nav .nav-toggle,
   .home-page .universal-nav .site-nav a::after, .home-page .universal-signature { transition: none; }
   .home-page .header-idle .universal-nav { transform: none; }
   .home-page .universal-signature:hover img, .home-page .universal-signature:focus-visible img {
