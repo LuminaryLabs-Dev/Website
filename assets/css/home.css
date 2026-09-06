@@ -117,11 +117,11 @@
 .home-page .site-header {
   position: fixed; inset: 0 0 auto; height: 64px;
   background: transparent !important; border: 0 !important; box-shadow: none;
-  backdrop-filter: none; --nav-ink: #edf0f2;
+  backdrop-filter: none; --nav-ink: #17212b;
 }
 .home-page .site-header::before {
   content: ''; position: absolute; inset: 0 0 auto; height: 128px; pointer-events: none;
-  background: linear-gradient(to bottom, rgba(7,11,14,.85), rgba(7,11,14,.72) 45%, rgba(7,11,14,0));
+  background: linear-gradient(to bottom, rgba(255,255,255,.85), rgba(255,255,255,.72) 45%, rgba(255,255,255,0));
   opacity: 1; transition: opacity 350ms ease;
 }
 .home-page .universal-nav {
@@ -166,8 +166,9 @@
   background: transparent; color: var(--nav-ink); min-height: 44px; border: 1px solid currentColor;
 }
 .home-page .site-header.header-idle::before { opacity: 0; }
+.home-page .site-header.header-idle { --nav-ink: #edf0f2; }
 .home-page .header-idle .universal-nav { transform: translateY(-6px); }
-.home-page .header-idle.header-over-light { --nav-ink: #17212b; }
+.home-page .site-header.header-idle.header-over-light { --nav-ink: #17212b; }
 @media (max-width: 760px) {
   .home-page .universal-nav .site-nav {
     top: 60px; right: 0; background: #10171c; border: 1px solid #354047;

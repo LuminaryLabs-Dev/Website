@@ -2,6 +2,8 @@
 
 ## 2026-09-06
 
+- Change the homepage header gradient to white with dark active links; keep light idle links over the hallway and dark idle links over white sections. Preserve the dark mobile menu and no-JavaScript navigation.
+
 - Install the supplied green/gold bulb as the top-right homepage logo. Use image_gen on the selected artwork, then remove its baked checkerboard with an alpha mask in ImageMagick. Preserve the selected image’s RGB pixels and export an optimized PNG with verified alpha transparency.
 
 - Replace the homepage white header with a 64px overlay and a dark-to-transparent gradient. After four seconds without hover or focus, fade the gradient away and move navigation up 6px; restore it on interaction. Use dark idle links over light sections.
