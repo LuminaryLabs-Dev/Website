@@ -113,30 +113,21 @@
   background: #ffffff;
 }
 
-/* Homepage navigation floats over the scene; its decorative tail never catches clicks. */
+/* Compact, persistent homepage navigation. */
 .home-page .site-header {
-  position: fixed; inset: 0 0 auto; height: 64px;
-  background: transparent !important; border: 0 !important; box-shadow: none;
+  position: fixed; inset: 0 0 auto; height: 32px;
+  background: #fff !important; border: 0 !important; box-shadow: none;
   backdrop-filter: none; --nav-ink: #17212b;
 }
-.home-page .site-header::before {
-  content: ''; position: absolute; inset: 0 0 auto; height: 80px; pointer-events: none;
-  background: linear-gradient(to bottom, rgba(255,255,255,.85), rgba(255,255,255,.72) 45%, rgba(255,255,255,0));
-  opacity: 1; transition: opacity 1s ease;
-}
 .home-page .universal-nav {
-  position: relative; min-height: 64px; height: 64px; padding: 0; gap: 16px;
-  transition: transform 350ms ease;
+  position: relative; min-height: 32px; height: 32px; padding: 0; gap: 16px;
 }
 .home-page .universal-nav .site-nav { gap: clamp(0px, .8vw, 12px); }
 .home-page .universal-nav .site-nav a {
-  position: relative; display: inline-flex; align-items: center; min-height: 44px;
+  position: relative; display: inline-flex; align-items: center; min-height: 32px;
   color: var(--nav-ink) !important; padding: 8px 8px !important;
   font: 500 11px/1.4 var(--font-body) !important; letter-spacing: .06em;
   text-decoration: none !important;
-}
-.home-page .universal-nav .site-nav a, .home-page .universal-nav .nav-toggle {
-  transition: color 1s ease, border-color 1s ease;
 }
 .home-page .universal-nav .site-nav a::after {
   content: ''; position: absolute; left: 8px; right: 8px; bottom: 8px; height: 1px;
@@ -146,9 +137,9 @@
 .home-page .universal-nav .site-nav a.active::after,
 .home-page .universal-nav .site-nav a:focus-visible::after { transform: scaleX(1); }
 .home-page .universal-signature {
-  width: 44px; height: 44px; flex: 0 0 44px; justify-content: center; text-decoration: none;
+  width: 44px; height: 32px; flex: 0 0 44px; justify-content: center; text-decoration: none;
 }
-.home-page .universal-signature img { width: 36px; height: 36px; object-fit: contain; }
+.home-page .universal-signature img { width: 28px; height: 28px; object-fit: contain; }
 .home-page .universal-signature {
   filter: drop-shadow(0 0 2px rgba(255,181,64,.12)); transition: filter 350ms ease;
 }
@@ -168,22 +159,21 @@
 .home-page .universal-nav .nav-toggle {
   background: transparent; color: var(--nav-ink); min-height: 44px; border: 1px solid currentColor;
 }
-.home-page .site-header.header-idle::before { opacity: 0; }
-.home-page .site-header.header-idle { --nav-ink: #edf0f2; }
-.home-page .header-idle .universal-nav { transform: translateY(-6px); }
-.home-page .site-header.header-idle.header-over-light { --nav-ink: #17212b; }
 @media (max-width: 760px) {
+  .home-page .site-header { height: 48px; }
+  .home-page .universal-nav { min-height: 48px; height: 48px; }
+  .home-page .universal-nav .site-nav a { min-height: 44px; }
+  .home-page .universal-signature { height: 44px; }
+  .home-page .universal-signature img { width: 36px; height: 36px; }
   .home-page .universal-nav .site-nav {
-    top: 60px; right: 0; background: #10171c; border: 1px solid #354047;
+    top: 48px; right: 0; background: #10171c; border: 1px solid #354047;
     border-radius: 0; padding: 12px; gap: 2px; max-height: calc(100svh - 80px); overflow-y: auto;
   }
   .home-page .universal-nav .site-nav a { color: #edf0f2 !important; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .home-page .site-header::before, .home-page .universal-nav,
   .home-page .universal-nav .site-nav a, .home-page .universal-nav .nav-toggle,
   .home-page .universal-nav .site-nav a::after, .home-page .universal-signature { transition: none; }
-  .home-page .header-idle .universal-nav { transform: none; }
   .home-page .universal-signature:hover img, .home-page .universal-signature:focus-visible img {
     animation: none; filter: brightness(1.1) drop-shadow(0 0 4px rgba(255,181,64,.3));
   }

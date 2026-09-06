@@ -2,6 +2,8 @@
 
 ## 2026-09-06
 
+- Replace the homepage gradient with a persistent solid white header: 32px on desktop and 48px on mobile with 44px touch controls. Remove idle timers, shading changes and upward movement; retain dark links, animated underlines, bulb glow/replay and mobile menu controls.
+
 - Tighten the white homepage header gradient from 128px to 80px and slow its opacity and navigation color transitions to one second. Keep reduced-motion transitions instant and preserve the existing layout and four-second idle delay.
 
 - Change the homepage header gradient to white with dark active links; keep light idle links over the hallway and dark idle links over white sections. Preserve the dark mobile menu and no-JavaScript navigation.
