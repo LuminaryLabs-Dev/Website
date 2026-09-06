@@ -1,66 +1,51 @@
-// Standalone WebGL1 hero. Host supplies iTime, iResolution and iMouse.
-// Bounded scene work; continuous coordinates, no camera resets.
+// Blue-gray shell chambers. Fixed world, C2 waypoint route; no screen-space wash.
 uniform float uDetail;
-float box3(vec3 p,vec3 b){vec3 q=abs(p)-b;return length(max(q,0.))+min(max(q.x,max(q.y,q.z)),0.);}
-float h2(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
-mat2 turn(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}
-vec2 route(float z){return vec2(.55*sin(z*.085),.28*sin(z*.11));}
-vec2 closer(vec2 a,vec2 b){return a.x<b.x?a:b;}
-
-vec2 scene(vec3 p){
- p.xy-=route(p.z);
- float radius=3.7+.65*sin(p.z*.32);
- float theta=atan(p.y,p.x);
- float radial=length(p.xy);
- float shell=radius-radial;
- float spiral=theta*8.+p.z*1.1;
- float ribs=abs(sin(spiral))*.20;
- float coarse=shell-ribs;
- float fine=.025*cos(theta*48.+p.z*6.);
- return vec2(coarse+fine,1.);
+float hash(float n){n=fract(n*.1031);n*=n+33.33;n*=n+n;return fract(n);}
+float ease(float t){return t*t*t*(t*(t*6.-15.)+10.);}
+vec2 waypoint(float n){return (vec2(hash(n),hash(n+73.))-.5)*vec2(5.6,3.8);}
+vec2 route(float z){float k=floor(z/18.),f=fract(z/18.);return mix(waypoint(k),waypoint(k+1.),ease(f));}
+// One local interval, no global nearest-path search. Distance scaled conservatively.
+vec3 shape(vec3 p){
+vec2 q=p.xy-route(p.z);float k=floor(p.z/18.),f=fract(p.z/18.);
+float swell=sin(3.141593*f);swell*=swell;
+float wide=1.25+.65*hash(k+21.);
+float a=atan(q.y,q.x),r=length(q/vec2(1.,1.08));
+float side=pow(max(0.,cos(a-(hash(k+9.)-.5)*4.)),4.);
+float radius=2.85+swell*(wide+.85*side);
+float phase=a*5.+.32*sin(p.z*.14)+.22*sin(a*3.+p.z*.08);
+float rib=pow(.5+.5*cos(phase),10.);
+float lip=pow(.5+.5*cos(p.z*.349066),24.);
+return vec3((radius-r-.16*rib-.12*lip)*.46,rib,swell);
 }
-
-vec3 palette(float id,vec3 p,vec3 n,vec3 rd,float aa){
- vec3 base=vec3(.27,.30,.38),accent=vec3(.50,.66,.94);
- float bands=.5+.5*sin(p.z*2.2+sin(p.x*3.)+p.y*2.);
- float fine=(.5+.5*sin(p.z*34.+p.y*12.))* (1.-smoothstep(.008,.035,aa));
- base*=.86+.14*bands;
- if(uDetail>.5)base*=.96+.04*fine;
- float diff=max(dot(n,normalize(vec3(-.35,.8,-.4))),0.);
- float facing=max(dot(n,-rd),0.);
- float rim=pow(1.-facing,3.);
- float vein=pow(max(0.,sin(p.z*.8+atan(p.y,p.x)*6.)),28.);
- vec3 col=base*(.58+.7*diff)+accent*(.13*rim+.18*vein);
- if(id>1.5)col+=accent*(.12+.14*rim);
- col+=vec3(.28)*pow(max(dot(reflect(rd,n),normalize(vec3(.2,.8,-.5))),0.),48.);
- return col;
-}
-
-vec3 normalAt(vec3 p){vec2 e=vec2(.003,0.);return normalize(vec3(scene(p+e.xyy).x-scene(p-e.xyy).x,scene(p+e.yxy).x-scene(p-e.yxy).x,scene(p+e.yyx).x-scene(p-e.yyx).x));}
+float field(vec3 p){return shape(p).x;}
+vec3 normalAt(vec3 p){vec2 e=vec2(.003,-.003);return normalize(e.xyy*field(p+e.xyy)+e.yyx*field(p+e.yyx)+e.yxy*field(p+e.yxy)+e.xxx*field(p+e.xxx));}
+// Monotonic distance clock. Mild pace variation, independent of frame rate.
+vec3 cameraAt(float t){float z=t*.54+.18*sin(t*.09);return vec3(route(z)+vec2(.20*sin(z*.13),.13*sin(z*.19)),z);}
 void mainImage(out vec4 O,in vec2 f){
- vec2 uv=(2.*f-iResolution.xy)/iResolution.y;
- float z=iTime*.38;
- vec3 ro=vec3(route(z)+vec2(0.),z);
- vec3 target=vec3(route(z+5.)+vec2(0.),z+5.);
- vec3 forward=normalize(target-ro),right=normalize(cross(vec3(0,1,0),forward)),up=cross(forward,right);
- // Optical framing keeps the main reveal to the right of desktop text.
- float shift=iResolution.x/iResolution.y>1.1?.30:0.;
- vec3 rd=normalize(right*(uv.x-shift)+up*(uv.y+.04)+forward*1.65);
- float t=0.;vec2 hit=vec2(1.,0.);vec3 p=ro;
- for(int i=0;i<88;i++){
-  p=ro+rd*t;hit=scene(p);
-  if(hit.x<.0025||t>48.)break;
-  t+=max(hit.x*.68,.001);
- }
- vec3 col=vec3(.07,.105,.14);
- if(hit.x<.012&&t<48.){
-  vec3 n=normalAt(p);float aa=clamp(t/iResolution.y,.001,.08);
-  col=palette(hit.y,p,n,rd,aa);
-  float ao=clamp(scene(p+n*.16).x/.16,.35,1.);
-  col*=.78+.22*ao;
- }
- // Physical distance haze, no screen-space vignette or dimming mask.
- col=mix(col,vec3(.075,.11,.15),1.-exp(-t*t*.00055));
- col=col/(1.+col);
- O=vec4(pow(max(col,0.),vec3(.72)),1.);
+vec2 uv=(2.*f-iResolution.xy)/iResolution.y;
+vec3 ro=cameraAt(iTime),target=cameraAt(iTime+3.4);
+vec3 fw=normalize(target-ro),right=normalize(cross(vec3(0,1,0),fw)),up=cross(fw,right);
+float shift=iResolution.x/iResolution.y>1.1?.30:0.;
+vec3 rd=normalize(right*(uv.x-shift)+up*(uv.y+.04)+fw*1.65);
+float t=0.,d=1.;vec3 p=ro;
+for(int i=0;i<80;i++){p=ro+rd*t;d=field(p);if(d<.002+t*.0012||t>52.)break;t+=max(d,.001);}
+vec3 col=vec3(.045,.065,.095);
+if(t<52.){
+vec3 n=normalAt(p),s=shape(p);vec2 q=p.xy-route(p.z);
+float facing=max(dot(n,-rd),0.),rib=s.y;
+vec3 lamp=normalize(vec3(.55,.8,.25));float dif=max(dot(n,lamp),0.);
+float rim=pow(1.-facing,3.),spec=pow(max(dot(reflect(rd,n),lamp),0.),36.);
+float grain=.5+.5*sin(p.z*23.+q.y*19.+sin(q.x*11.));
+float detail=uDetail>.5?(grain-.5)*.018*(1.-smoothstep(5.,20.,t)):0.;
+vec3 base=mix(vec3(.12,.16,.23),vec3(.32,.39,.49),s.z*.5+.25);
+col=base*(.32+.85*dif+detail)*(1.-.22*rib)+vec3(.28,.42,.62)*rim*.24+spec*vec3(.55,.66,.8)*.38;
+float seam=pow(.5+.5*cos(atan(q.y,q.x)*5.+.32*sin(p.z*.14)+.22*sin(atan(q.y,q.x)*3.+p.z*.08)),60.);
+float ck=floor(p.z/18.);float warm=.5+.5*mix(sin(ck*2.3),sin((ck+1.)*2.3),ease(fract(p.z/18.)));
+vec3 glow=mix(vec3(.30,.66,.92),vec3(.92,.62,.31),warm*.55);
+col+=glow*seam*(.12+.22*s.z);
+col+=vec3(.16,.23,.34)*pow(.5+.5*cos(p.z*.349066),32.)*.25;
+float ao=clamp(field(p+n*.25)/.115,.35,1.);col*=.75+.25*ao;
+}
+col=mix(col,vec3(.045,.065,.095),1.-exp(-t*.013));
+O=vec4(pow(max(col,vec3(0.)),vec3(.72)),1.);
 }
