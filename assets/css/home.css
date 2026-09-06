@@ -113,11 +113,77 @@
   background: #ffffff;
 }
 
-.home-page .universal-nav { min-height: 72px; }
-.home-page .universal-nav .nav-toggle { background: #fff; color: #17212b; min-height: 44px; border: 1px solid #c9cfd4; }
-.home-page .universal-nav .site-nav { gap: clamp(4px, 1.5vw, 24px); }
-.home-page .universal-nav .site-nav a { font: 500 11px/1.4 var(--font-body) !important; letter-spacing: .07em; }
-.home-page .site-header { border-bottom: 1px solid #e1e5e8 !important; }
+/* Homepage navigation floats over the scene; its decorative tail never catches clicks. */
+.home-page .site-header {
+  position: fixed; inset: 0 0 auto; height: 64px;
+  background: transparent !important; border: 0 !important; box-shadow: none;
+  backdrop-filter: none; --nav-ink: #edf0f2;
+}
+.home-page .site-header::before {
+  content: ''; position: absolute; inset: 0 0 auto; height: 128px; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(7,11,14,.85), rgba(7,11,14,.72) 45%, rgba(7,11,14,0));
+  opacity: 1; transition: opacity 350ms ease;
+}
+.home-page .universal-nav {
+  position: relative; min-height: 64px; height: 64px; padding: 0; gap: 16px;
+  transition: transform 350ms ease;
+}
+.home-page .universal-nav .site-nav { gap: clamp(0px, .8vw, 12px); }
+.home-page .universal-nav .site-nav a {
+  position: relative; display: inline-flex; align-items: center; min-height: 44px;
+  color: var(--nav-ink) !important; padding: 8px 8px !important;
+  font: 500 11px/1.4 var(--font-body) !important; letter-spacing: .06em;
+  text-decoration: none !important;
+}
+.home-page .universal-nav .site-nav a::after {
+  content: ''; position: absolute; left: 8px; right: 8px; bottom: 8px; height: 1px;
+  background: currentColor; transform: scaleX(0); transform-origin: left;
+  transition: transform 200ms ease;
+}
+.home-page .universal-nav .site-nav a.active::after,
+.home-page .universal-nav .site-nav a:focus-visible::after { transform: scaleX(1); }
+.home-page .universal-signature {
+  width: 44px; height: 44px; flex: 0 0 44px; justify-content: center; text-decoration: none;
+}
+.home-page .universal-signature img { width: 36px; height: 36px; object-fit: contain; }
+.home-page .universal-signature {
+  filter: drop-shadow(0 0 2px rgba(255,181,64,.12)); transition: filter 350ms ease;
+}
+@keyframes home-bulb-glow {
+  0%, 100% { filter: brightness(1.05) drop-shadow(0 0 3px rgba(255,181,64,.22)); }
+  50% { filter: brightness(1.16) drop-shadow(0 0 6px rgba(255,181,64,.38)); }
+}
+@media (hover: hover) {
+  .home-page .universal-nav .site-nav a:hover::after { transform: scaleX(1); }
+  .home-page .universal-signature:hover img { animation: home-bulb-glow 1.8s ease-in-out infinite; }
+  .home-page .universal-signature:hover { filter: drop-shadow(0 0 3px rgba(255,181,64,.22)); }
+}
+.home-page .universal-signature:focus-visible img { animation: home-bulb-glow 1.8s ease-in-out infinite; }
+.home-page .site-header a:focus-visible, .home-page .site-header button:focus-visible {
+  outline: 2px solid #ffbd71; outline-offset: 2px;
+}
+.home-page .universal-nav .nav-toggle {
+  background: transparent; color: var(--nav-ink); min-height: 44px; border: 1px solid currentColor;
+}
+.home-page .site-header.header-idle::before { opacity: 0; }
+.home-page .header-idle .universal-nav { transform: translateY(-6px); }
+.home-page .header-idle.header-over-light { --nav-ink: #17212b; }
+@media (max-width: 760px) {
+  .home-page .universal-nav .site-nav {
+    top: 60px; right: 0; background: #10171c; border: 1px solid #354047;
+    border-radius: 0; padding: 12px; gap: 2px; max-height: calc(100svh - 80px); overflow-y: auto;
+  }
+  .home-page .universal-nav .site-nav a { color: #edf0f2 !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-page .site-header::before, .home-page .universal-nav,
+  .home-page .universal-nav .site-nav a::after, .home-page .universal-signature { transition: none; }
+  .home-page .header-idle .universal-nav { transform: none; }
+  .home-page .universal-signature:hover img, .home-page .universal-signature:focus-visible img {
+    animation: none; filter: brightness(1.1) drop-shadow(0 0 4px rgba(255,181,64,.3));
+  }
+}
+
 .home-page .nexus-card-footer > a { font-size: 14px; font-weight: 600; }
 
 .home-page main > section {

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-06
+
+- Install the supplied green/gold bulb as the top-right homepage logo. Use image_gen on the selected artwork, then remove its baked checkerboard with an alpha mask in ImageMagick. Preserve the selected image’s RGB pixels and export an optimized PNG with verified alpha transparency.
+
+- Replace the homepage white header with a 64px overlay and a dark-to-transparent gradient. After four seconds without hover or focus, fade the gradient away and move navigation up 6px; restore it on interaction. Use dark idle links over light sections.
+- Add expanding link underlines and a restrained hover/focus glow to the existing transparent Luminary Labs logo. Preserve intro replay, mobile navigation, keyboard access, reduced motion, and no-JavaScript navigation.
+- Validate 21 local Chromium checks covering header states, desktop/mobile interactions, existing hero controls, intro and fallback behavior, unchanged Portfolio navigation, and production GLSL in headless Three.js. Validation uses SwiftShader and mobile emulation; physical-device performance and live deployment are outside this check.
+
 ## 2026-09-05
 
 - Restore “Explore our work” beneath the hero headline with a white underline, a 200ms rising white fill, black text on hover/focus, and an instant reduced-motion state. Keep portfolio navigation separate from hallway playback.
