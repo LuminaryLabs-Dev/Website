@@ -99,3 +99,29 @@ with scope `/nexus-arcade/`, covering both routes and preserving existing game U
 The manifest keeps the original application identity (`/nexus-arcade/`) and scope,
 but launches `/nexus-arcade/play/`. Package pins and storage keys are unchanged.
 Temporary game assets are removed on player close/session exit; game saves are retained.
+
+### Hero scenes
+
+All seven primary pages use `shader-renderer` with separate GLSL sources. The Home
+hallway retains its existing controls and adaptive budgets. Other heroes use
+`page-scenes.js`: 30 FPS cap, 640k / 400k / 260k pixel tiers; ClusterBots uses
+260k / 190k / 130k because its eight-neighbour geometry evaluation is more expensive.
+Two sustained samples below 22 FPS lower the pixel tier. These are limits and targets,
+not a guarantee of device performance. Reduced motion uses an unfiltered poster;
+offscreen and hidden-tab rendering is suspended.
+
+| Page | GLSL source |
+| --- | --- |
+| Home | `assets/shaders/luminary-hallway.glsl` |
+| Nexus Arcade | `assets/shaders/arcade-infinite.glsl` |
+| Open Source | `assets/shaders/obsidian-descent.glsl` |
+| Services | `assets/shaders/services-branches.glsl` |
+| Portfolio | `assets/shaders/portfolio-terraces.glsl` |
+| Team | `assets/shaders/team-chambers.glsl` |
+| Contact | `assets/shaders/contact-scene.glsl` |
+
+The scenes use continuous forward coordinates and bounded repeated geometry. Camera
+routes follow clear space; no loop reset is applied. The Arcade CAD artwork remains
+an ordinary flat image above the scene. No hero darkening overlay or saturation
+filter is used. A tight text-only outline separates hero lettering from bright detail.
+Keep poster versions and shader query versions in step when editing a scene.

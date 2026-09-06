@@ -1,5 +1,19 @@
 # Website Repo Memory
 
+## 2026-09-06 Shader upgrade — local candidate
+
+- Seven full-opacity GLSL heroes share `shader-renderer`; no dark overlay or
+  desaturation filter. Retain existing Home/Obsidian/ClusterBots identities.
+- New scenes: infinite arcade room behind stationary CAD artwork; Services branches;
+  Portfolio terraces/arches; Team shell chambers. The original page copy and controls
+  remain. Hero text uses a tight outline, not a background panel.
+- Page scene budgets: 640k/400k/260k pixels; Contact 260k/190k/130k. Thirty FPS is a cap
+  and target, not proven physical-device performance. Software measurements are below
+  target. Home keeps its existing separate adaptive controller.
+- Five review stages, 17 browser scenarios, seven fallback checks, seven offscreen
+  checks and 12 production shader renders completed locally. Source is based on
+  published commit `19569cf544e3d95cd7068903f4ffa3d4ecc49359`; this upgrade is not pushed.
+
 ## 2026-09-06 Shared studio design
 
 - All seven studio tabs now share static header/footer templates, local Inter,
@@ -20,8 +34,8 @@
   shader renders and scoped static checks are recorded for this migration. Arcade
   service-worker startup fails in both baseline and candidate sandbox runs; actual
   game installation/fullscreen and physical GPU performance remain unverified.
-- Implementation is local until separately authorized for publication. Earlier
-  entries below describe prior iterations and are historical.
+- Shared studio design was published in `19569cf544e3d95cd7068903f4ffa3d4ecc49359`.
+  Earlier entries below describe prior iterations and are historical.
 
 
 ## 2026-09-02 Favicon Build

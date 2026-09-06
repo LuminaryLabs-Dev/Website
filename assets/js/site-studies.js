@@ -17,7 +17,7 @@
     renderer?.remove();renderer=null;
     const i=buttons.indexOf(button);
     buttons.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
-    stage.querySelector('img').src=`/public/studies/${posters[i]}.webp`;
+    stage.querySelector('img').src=`/public/studies/${posters[i]}.webp?v=20260906-scenes-1`;
     stage.querySelector('img').alt=`${button.dataset.studyTitle} visual study`;
     document.getElementById('study-title').textContent=button.dataset.studyTitle;
     document.getElementById('study-caption').textContent=button.dataset.studyCaption;

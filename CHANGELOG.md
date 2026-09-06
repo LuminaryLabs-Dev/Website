@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-09-06 — Full-color hero scenes (local implementation)
+
+- Use seven distinct GLSL heroes with the existing shared renderer. Retain and refine
+  the hex hallway, Obsidian and ClusterBots; add an infinite arcade, branching
+  structures, terraced arches and shell chambers. Keep Arcade artwork flat and intact.
+- Remove hero darkening overlays and saturation filters. Use full-opacity scenes,
+  matching 1440×900 posters, and a tight text-only outline for readable hero copy.
+- Add per-scene adaptive pixel budgets, retain pause/reduced-motion/offscreen behavior,
+  and improve edge stability in the five existing Open Source studies.
+- Complete five visual review stages, 17 browser interaction checks, seven unavailable-
+  WebGL fallback checks, seven offscreen checks, and 12 production shader renders in
+  headless Three.js/SwiftShader. Final 28 desktop/tablet/mobile page captures have no
+  overflow, missing hero images or console errors. Camera clearance was sampled 2,407
+  times across ten simulated minutes per hero; this is bounded, not exhaustive proof.
+- Software rendering measured approximately 2.6–22.5 FPS at initial quality in the
+  reviewed environment. Physical-device 30 FPS and exhaustive moving-text contrast
+  remain unverified. No commit, push, workflow change or deployment was made.
+
 ## 2026-09-06
 
 - Unify the seven studio tabs and Arcade library navigation with generated static
