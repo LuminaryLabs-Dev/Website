@@ -1,4 +1,4 @@
-// Contact: preserved ClusterBots geometry; slow travel and bounded 64-step tracing.
+// Historical website adaptation: 34 steps, backward camera, no pointer steering or vignette.
 //based on Cluster Bots by simonsdev and Crimson Wheeler
 mat2 R(float a){float s=sin(a),c=cos(a);return mat2(c,-s,s,c);}
 float H(vec3 p){return fract(sin(dot(p,vec3(17.,59.,113.)))*43758.5);}
@@ -6,8 +6,29 @@ vec3 K(vec3 p){return vec3(H(p),H(p+19.),H(p+37.));}
 
 // Calculates a safe flight path to avoid colliding with the grid nodes.
 // X and Y axis movements are staggered so the camera strictly crosses boundaries in empty space.
-// Keep the route inside the empty intersection of the bot lattice.
-vec3 path(float t) {return vec3(.12*sin(t*.7),.12*cos(t*.6),t*1.5);}
+vec3 path(float t) {
+    float S = 1.5;
+    float idx = floor(t);
+    float f = fract(t);
+
+    float fX = clamp(f * 2.0, 0.0, 1.0);
+    fX = fX * fX * (3.0 - 2.0 * fX);
+
+    float fY = clamp((f - 0.5) * 2.0, 0.0, 1.0);
+    fY = fY * fY * (3.0 - 2.0 * fY);
+
+    float x_prev = floor(sin((idx - 1.0) * 1.2) * 2.0 + 0.5) * S;
+    float x_next = floor(sin(idx * 1.2) * 2.0 + 0.5) * S;
+
+    float y_prev = floor(cos((idx - 1.0) * 1.5) * 2.0 + 0.5) * S;
+    float y_next = floor(cos(idx * 1.5) * 2.0 + 0.5) * S;
+
+    float X = mix(x_prev, x_next, fX) + sin(t * 0.8) * 0.08;
+    float Y = mix(y_prev, y_next, fY) + cos(t * 0.6) * 0.08;
+    float Z = t * S;
+
+    return vec3(X, Y, Z);
+}
 
 // Tracks the web's distance for the volumetric glow effect.
 float webDist = 100.0;
@@ -76,7 +97,7 @@ void mainImage(out vec4 o, in vec2 f) {
     vec2 m = vec2(0.0);
 
     //global fly time
-    float camTime = iTime * 0.025;
+    float camTime = iTime * 0.05;
 
     // Establishes a smooth, forward-moving camera with an extended look-ahead to prevent jitter.
     vec3 ro = path(camTime) - vec3(0.0, 0.0, 1.5);
@@ -97,12 +118,12 @@ void mainImage(out vec4 o, in vec2 f) {
     float t = 0., d = 0., g = 0., wGlow = 0.;
 
     // Raymarching loop: accumulates distance and volumetric glow.
-    for(int i=0; i<64; i++) {
+    for(int i=0; i<34; i++) {
         p = ro + rd * t;
         d = M(p);
 
-        g += max(d*.8,.001) * 0.018 / (0.04 + d * d * 80.0);
-        wGlow += max(d*.8,.001) * 0.012 / (0.01 + abs(webDist) * 25.0);
+        g += 0.012 / (0.04 + d * d * 80.0);
+        wGlow += 0.008 / (0.01 + abs(webDist) * 25.0);
 
         if(d < 0.002 || t > 18.0) break;
         t += d * 0.8;
@@ -125,15 +146,14 @@ void mainImage(out vec4 o, in vec2 f) {
         float fre = pow(1.0 - max(dot(-rd, n), 0.0), 5.0);
         float sp = pow(max(dot(r, l), 0.0), 28.0);
 
-        col += tint * (0.18 + 0.32 * dif) + vec3(0.55, 0.85, 1.3) * fre + vec3(1.0) * sp * 0.8;
+        col += tint * (0.08 + 0.22 * dif) + vec3(0.55, 0.85, 1.3) * fre + vec3(1.0) * sp * 0.8;
     }
 
-    // Renders distant background stars and a vignette effect.
+    // Renders distant background stars; screen-space vignette intentionally omitted.
     if(t > 17.0) {
         vec3 st = rd * 100.0;
         col += pow(fract(sin(dot(st.xy + st.z, vec2(12.98, 78.23))) * 43758.5), 150.0) * 1.5;
     }
 
-    col = col / (1.0 + col);
-    o = vec4(pow(max(mix(col,vec3(.06,.08,.12),1.-exp(-t*.025)),vec3(0.)), vec3(0.75)), 1.0);
+    o = vec4(pow(col * exp(-t * 0.06), vec3(0.75)), 1.0);
 }

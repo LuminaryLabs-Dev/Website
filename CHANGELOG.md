@@ -1,3 +1,22 @@
+## 2026-09-06 — Restore Obsidian and ClusterBots (local, unpushed)
+
+- Restore Obsidian from `0294c86`: original geometry timing, centered descent,
+  rolling camera, mineral lighting and neon. Keep 110 tracing steps.
+- Restore ClusterBots into `contact-scene.glsl` with the historical website
+  adaptations: 34 steps, camera offset (0,0,-1.5), WebGL1 neighbor indexing,
+  and disabled pointer steering. Omit the screen-space dark vignette.
+- Regenerate both 1440x900 posters; refresh only their shader/poster cache keys.
+- Headless Three.js / SwiftShader: both candidates match adapted historical
+  references pixel-for-pixel at 0, 2, 8, 20, 45 and 90 seconds (12 comparisons).
+- Two pages at four viewports: no overflow or page errors, opacity 1/filter none.
+  Pause, keyboard resume continuity, offscreen suspension, synthetic hidden-tab
+  handling, reduced motion and unavailable-WebGL posters pass. Existing navigation
+  targets and shared control code are preserved. Recorded motion reviewed in samples.
+- Software throughput over 20 seconds: Open Source 6.4 FPS, Contact 5.7 FPS;
+  these are not physical-device benchmarks. Bright moving highlights still compete
+  with text; exhaustive contrast and continuous camera-clearance proof are not claimed.
+- Other shader files and shared control/style files remain unchanged. No GitHub write.
+
 # Changelog
 
 ## 2026-09-06 — Full-color hero scenes (local implementation)
