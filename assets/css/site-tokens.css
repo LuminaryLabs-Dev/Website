@@ -1,0 +1,11 @@
+@font-face{font-family:'Luminary Inter';src:url('/public/fonts/inter-latin-variable.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+.ll-site{--font-body:'Luminary Inter',system-ui,sans-serif;--font-display:var(--font-body);--ink:#17212b;--muted:#56616b;--paper:#fff;--line:#dce1e4;--scene:#101619;--accent:#9c661f;--site-width:1200px;--gutter:24px;--header-height:32px;--motion-fast:200ms;--motion-detail:250ms;--motion-enter:400ms;font-family:var(--font-body);color:var(--ink);background:var(--paper);margin:0;-webkit-font-smoothing:antialiased}
+.ll-site *,.ll-site *::before,.ll-site *::after{box-sizing:border-box}
+.ll-site [hidden]{display:none!important}
+.ll-site h1,.ll-site h2,.ll-site h3,.ll-site h4,.ll-site button,.ll-site input,.ll-site select,.ll-site textarea{font-family:var(--font-body)}
+.ll-site a{color:inherit;text-underline-offset:.3em}.ll-site img{max-width:100%}
+.ll-site button,.ll-site input,.ll-site textarea,.ll-site select{font:inherit}
+.ll-site :where(a,button,input,select,textarea,summary):focus-visible{outline:2px solid #ad731e;outline-offset:5px}
+.ll-site main:focus{outline:0}.ll-site :where(section,[id]){scroll-margin-top:calc(var(--header-height) + 24px)}
+.ll-site .site-inner,.ll-site .container{width:min(var(--site-width),calc(100% - 2 * var(--gutter)));margin-inline:auto}
+@media(max-width:760px){.ll-site{--header-height:48px}}@media(max-width:400px){.ll-site{--gutter:20px}}

@@ -3,7 +3,9 @@
   "private": true,
   "scripts": {
     "build:favicons": "node scripts/build-favicon.mjs",
-    "test:nexus-arcade": "node nexus-arcade/tests.mjs"
+    "test:nexus-arcade": "node nexus-arcade/tests.mjs",
+    "build:shell": "node scripts/build-site-shell.mjs",
+    "check:shell": "node scripts/build-site-shell.mjs --check"
   },
   "devDependencies": {
     "sharp": "0.35.4"

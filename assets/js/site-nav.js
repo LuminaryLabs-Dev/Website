@@ -1,25 +1,27 @@
-(function () {
-  const header = document.querySelector(".site-header");
-  if (!header) return;
-  const links = [["Home","/index.html"],["Nexus Arcade","/nexus-arcade/"],["Open Source","/opensource.html"],["Services","/services.html"],["Portfolio","/portfolio.html"],["Team","/team.html"],["Contact","/contact.html"]];
-  const current = location.pathname === "/" ? "/index.html" : location.pathname;
-  const isActive = href => href === "/nexus-arcade/" ? current.startsWith(href) : href === current;
-  const isHome = document.body.classList.contains("home-page");
-  const signature = isHome
-    ? '<img src="/public/brand/luminary-bulb-transparent.png" width="36" height="36" alt="" />'
-    : '<span>LL</span><i aria-hidden="true"></i>';
-  header.innerHTML = `<div class="container nav universal-nav"><button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button><nav id="site-nav" class="site-nav">${links.map(([label, href]) => `<a href="${href}"${isActive(href) ? ' class="active" aria-current="page"' : ""}>${label}</a>`).join("")}</nav><a class="universal-signature" href="/index.html" aria-label="Luminary Labs home">${signature}</a></div>`;
-  const toggle = header.querySelector(".nav-toggle");
-  const nav = header.querySelector("#site-nav");
-  toggle.addEventListener("click", () => { const open = nav.classList.toggle("open"); toggle.setAttribute("aria-expanded", String(open)); });
-  document.addEventListener("click", event => { if (nav.classList.contains("open") && !nav.contains(event.target) && !toggle.contains(event.target)) { nav.classList.remove("open"); toggle.setAttribute("aria-expanded", "false"); } });
-  if (!isHome) return;
-
-  header.addEventListener("keydown", event => {
-    if (event.key === "Escape" && nav.classList.contains("open")) {
-      nav.classList.remove("open");
-      toggle.setAttribute("aria-expanded", "false");
-      toggle.focus();
-    }
+/* Static markup comes from scripts/build-site-shell.mjs. */
+(() => {
+  const header = document.querySelector('.site-header');
+  const toggle = header?.querySelector('.nav-toggle');
+  const nav = header?.querySelector('#site-nav');
+  if (!toggle || !nav) return;
+  document.body.classList.add('nav-enhanced');
+  toggle.hidden = false;
+  function close(restoreFocus = false) {
+    nav.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) toggle.focus();
+  }
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(open));
   });
+  document.addEventListener('click', event => { if (!header.contains(event.target)) close(); });
+  nav.addEventListener('click', event => { if (event.target.closest('a')) close(); });
+  header.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && nav.classList.contains('open')) { event.preventDefault(); close(true); }
+  });
+  header.addEventListener('focusout', () => requestAnimationFrame(() => {
+    if (!header.contains(document.activeElement)) close();
+  }));
+  matchMedia('(max-width: 760px)').addEventListener('change', () => close());
 })();

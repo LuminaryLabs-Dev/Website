@@ -1,0 +1,18 @@
+/* Animation communicates entry, interaction and background activity. */
+html{scroll-behavior:smooth}
+.ll-site .site-button,.ll-site .text-action{transition:color var(--motion-fast) ease}
+.ll-site .site-button::before{transition:transform var(--motion-fast) ease}
+.ll-site .disclosure-mark{transition:transform var(--motion-detail) ease}
+.ll-site .project-media>img,.ll-site .nexus-card-media>img{transition:transform 350ms ease,filter 350ms ease}
+.ll-site .page-scene .scene-lines{animation:scene-drift 20s ease-in-out infinite alternate;animation-play-state:paused}
+.ll-site .scene-orbits .scene-lines{animation-name:orbit-drift}
+.ll-site .scene-portfolio>img{animation:scene-breathe 20s ease-in-out infinite alternate;animation-play-state:paused}
+.ll-site .page-scene.is-visible .scene-lines,.ll-site .scene-portfolio.is-visible>img{animation-play-state:running}
+.ll-site.motion-paused .page-scene .scene-lines,.ll-site.motion-paused .scene-portfolio>img{animation-play-state:paused}
+.ll-site [data-reveal].entered{animation:section-enter var(--motion-enter) ease-out both}
+@keyframes scene-drift{from{transform:perspective(700px) rotateX(55deg) rotateZ(-18deg) scale(1.4) translateY(0)}to{transform:perspective(700px) rotateX(55deg) rotateZ(-18deg) scale(1.4) translateY(32px)}}
+@keyframes orbit-drift{from{transform:translateX(0)}to{transform:translateX(24px)}}
+@keyframes scene-breathe{from{transform:scale(1)}to{transform:scale(1.035)}}
+@keyframes section-enter{from{opacity:.3;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(hover:hover){.ll-site .project-media:hover>img,.ll-site .project-media:focus-within>img,.ll-site .nexus-card:hover .nexus-card-media>img{transform:scale(1.015)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.ll-site *,.ll-site *::before,.ll-site *::after{animation:none!important;transition:none!important}}

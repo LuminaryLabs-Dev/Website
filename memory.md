@@ -1,5 +1,29 @@
 # Website Repo Memory
 
+## 2026-09-06 Shared studio design
+
+- All seven studio tabs now share static header/footer templates, local Inter,
+  common content geometry and one interaction/motion policy. The compact white
+  header is persistent: 32px desktop, 48px mobile, with 44px mobile targets.
+- Build shared markup with `node scripts/build-site-shell.mjs`; verify with `--check`.
+  Page content is authored in HTML; retired whole-main replacement scripts are removed.
+- Nexus Arcade retains its paired perspective/front cabinet drawings and two side
+  drawings. The game library shares the shell; installer, game and service-worker
+  source remain unchanged. The installed player sits above the fixed navigation.
+- The homepage retains its exact headline, hallway, portfolio CTA, scroll arrow,
+  background pause/resume and optional intro. Other heroes have a shared motion toggle.
+- Existing prices, team biographies, project descriptions and contact address remain.
+  Contact composes mailto drafts and copies the address; there is no sending backend.
+- Robot illustrations retain their original geometry, with clean static posters and
+  optional local Three.js 0.160.0 rendering. Only one portrait is active at a time.
+- Five visual checkpoints (140 captures), 25 browser scenarios, eight production
+  shader renders and scoped static checks are recorded for this migration. Arcade
+  service-worker startup fails in both baseline and candidate sandbox runs; actual
+  game installation/fullscreen and physical GPU performance remain unverified.
+- Implementation is local until separately authorized for publication. Earlier
+  entries below describe prior iterations and are historical.
+
+
 ## 2026-09-02 Favicon Build
 
 - Intent: replace the generic Luminary Labs tab icon with the approved green, orange, and gold bulb artwork.

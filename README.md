@@ -28,11 +28,38 @@ PY
 
 Then visit http://localhost:8080/
 
-## Editing
+## Shared studio pages
 
-- Styles: `assets/css/style.css`
-- Site data: `assets/js/data.js`
-- Page scripts: `assets/js/*.js`
+Home, Nexus Arcade, Open Source, Services, Portfolio, Team and Contact share
+complete static navigation and footer markup, local Inter typography and a
+common set of components. The Arcade library uses the same navigation while
+retaining its existing installer and fullscreen player.
+
+- `templates/site-header.html` and `templates/site-footer.html`: shared markup.
+- `scripts/build-site-shell.mjs`: generates the shared markup into eight HTML files.
+- `assets/css/site-tokens.css`: font, colors, widths, spacing and timings.
+- `assets/css/site-shell.css`: navigation, logo, footer and mobile fallback.
+- `assets/css/site-components.css`: heroes, buttons, content rows and controls.
+- `assets/css/site-motion.css`: transitions, entrances and reduced motion.
+- `assets/js/site-nav.js`: enhances the static mobile navigation.
+- `assets/js/site-ui.js`: disclosures, project previews, clipboard and email drafts.
+- `assets/js/site-motion.js`: visibility-aware decorative motion and portrait scheduling.
+- `assets/js/shader-renderer.js`: bounded WebGL rendering, pause and fallback handling.
+- `assets/js/page-scenes.js` and `site-studies.js`: atmospheric scenes and one selected study.
+- `assets/js/team-portraits.js`: optional portraits using the existing robot geometry.
+- `assets/vendor/three/`: self-hosted Three.js 0.160.0 and its MIT license; loaded on demand.
+- `assets/css/home.css`, `assets/js/home-hero.js`, `assets/js/luminary-intro.js`: homepage-specific hero and intro.
+
+After changing a shared template, run `npm run build:shell`, then
+`npm run check:shell`. Edit page content directly in the corresponding HTML;
+page scripts no longer replace the main content. Essential content and links
+remain available without JavaScript. Contact prepares an email draft; it does
+not submit a form or send email from this site.
+
+Decorative WebGL scenes use a 24 FPS / 260,000-pixel budget; the homepage keeps
+its existing 30 FPS adaptive renderer. Paused, hidden and offscreen scenes stop.
+Reduced motion uses posters. Shader studies and robot illustrations run only
+when selected; switching portraits disposes the previous renderer.
 
 ## Content Audit
 
@@ -58,7 +85,7 @@ powershell -ExecutionPolicy Bypass -File scripts/run-content-audit.ps1
 - `/nexus-arcade/`: cabinet overview, existing CAD drawings, and Play Games links.
 - `/nexus-arcade/play/`: prototype library, installation, verification, and player.
 - `/gemini-arcade.html`: legacy redirect to the cabinet overview.
-- `nexus-arcade/styles.css`: shared minimalist theme and cabinet layout.
+- `nexus-arcade/styles.css`: legacy library base; the cabinet overview uses the shared studio components.
 - `nexus-arcade/play/styles.css`: library and player layout.
 
 Serve the exact checkout with `python -m http.server 4173 --bind 127.0.0.1` and visit

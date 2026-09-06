@@ -2,6 +2,26 @@
 
 ## 2026-09-06
 
+- Unify the seven studio tabs and Arcade library navigation with generated static
+  headers/footers, local Inter, consistent content widths, buttons and motion rules.
+  Keep the 32px desktop / 48px mobile white header and transparent bulb logo.
+- Preserve Nexus Arcade’s paired cabinet drawings, side studies and game routes.
+  Keep installer, service worker, game host logic and existing player styles unchanged;
+  position the player above the shared fixed navigation.
+- Replace page-wide content injection with complete static HTML. Preserve existing
+  service prices, biographies, project descriptions, email address and homepage controls.
+  Add service disclosures, project image previews, copy-email feedback and email drafts.
+- Use the shared capped shader renderer for Open Source and Contact. Load one selected
+  study or robot portrait at a time; retain clean posters, reduced-motion support,
+  visibility suspension and user pause controls. Self-host existing Three.js 0.160.0.
+- Complete five visual checkpoints (140 route/viewport captures), 25 browser scenario
+  checks, the Arcade contract checks and local route/syntax checks. Verify eight production
+  shaders in headless Three.js/SwiftShader, and retain desktop/mobile recordings.
+- Validation limitation: Arcade service-worker startup fails identically in the baseline
+  and candidate sandbox runs, so installation/gameplay/fullscreen remain unverified.
+  Physical-device GPU performance and live deployment are outside this local validation.
+
+
 - Replace the homepage gradient with a persistent solid white header: 32px on desktop and 48px on mobile with 44px touch controls. Remove idle timers, shading changes and upward movement; retain dark links, animated underlines, bulb glow/replay and mobile menu controls.
 
 - Tighten the white homepage header gradient from 128px to 80px and slow its opacity and navigation color transitions to one second. Keep reduced-motion transitions instant and preserve the existing layout and four-second idle delay.

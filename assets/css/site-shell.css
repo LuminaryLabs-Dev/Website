@@ -1,0 +1,44 @@
+/* One persistent studio shell; the player retains its own fullscreen controls. */
+.ll-site{padding-top:var(--header-height)}
+.ll-site .site-header{position:fixed;inset:0 0 auto;z-index:100;height:var(--header-height);background:#fff!important;border:0!important;box-shadow:none!important;backdrop-filter:none}
+.ll-site .site-header .universal-nav{position:relative;display:flex;align-items:center;justify-content:flex-start;width:min(var(--site-width),calc(100% - 2 * var(--gutter)));margin:auto;height:var(--header-height);min-height:var(--header-height);padding:0;gap:16px}
+.ll-site .site-header .site-nav{display:flex;position:static;align-items:center;gap:clamp(0px,.8vw,12px);padding:0;margin:0;border:0;background:transparent;box-shadow:none}
+.ll-site .site-header .site-nav a{position:relative;display:inline-flex;align-items:center;min-height:32px;padding:0 8px!important;color:#17212b!important;font:500 11px/1.4 var(--font-body)!important;letter-spacing:.06em;text-transform:uppercase;text-decoration:none!important;background:none;white-space:nowrap}
+.ll-site .site-header .site-nav a::after{content:'';position:absolute;left:8px;right:8px;bottom:7px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform var(--motion-fast) ease}
+.ll-site .site-header .site-nav a[aria-current=page]::after,.ll-site .site-header .site-nav a:focus-visible::after{transform:scaleX(1)}
+.ll-site .site-header .universal-signature{display:flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;height:32px;margin-left:auto;filter:drop-shadow(0 0 2px #ffb54020);text-decoration:none;transition:filter 350ms ease}
+.ll-site .site-header .universal-signature img{display:block;width:28px;height:28px;object-fit:contain}
+.ll-site .site-header .nav-toggle{display:none;min-height:44px;padding:0 10px;border:0;border-radius:0;background:transparent;color:var(--ink);font:500 12px var(--font-body)}
+.ll-site .skip-link{position:fixed;top:0;left:var(--gutter);z-index:120;transform:translateY(-150%);padding:12px 16px;background:#17212b;color:#fff}
+.ll-site .skip-link:focus{transform:none}
+.ll-site .site-footer{width:100%;min-height:0;margin:0;padding:36px 0;border-top:1px solid var(--line);background:#fff;color:var(--muted);font:400 12px/1.7 var(--font-body)}
+.ll-site .site-footer .site-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.ll-site .site-footer p{margin:0;color:inherit;font:inherit;max-width:400px}
+.ll-site .site-footer .footer-links{display:flex;align-items:center;gap:8px 24px;flex-wrap:wrap}
+.ll-site .site-footer a{display:inline-flex;align-items:center;min-height:44px;font:inherit;color:var(--ink);text-decoration:none}
+.ll-site .site-footer a:hover,.ll-site .site-footer a:focus-visible{text-decoration:underline}
+.ll-site .motion-toggle{border:0;border-bottom:1px solid currentColor;border-radius:0;background:transparent;color:inherit;min-height:44px;padding:8px 0;font-size:12px;cursor:pointer}
+@keyframes site-bulb-glow{0%,100%{filter:brightness(1.05) drop-shadow(0 0 3px #ffb54038)}50%{filter:brightness(1.16) drop-shadow(0 0 6px #ffb54060)}}
+.ll-site .universal-signature:focus-visible img{animation:site-bulb-glow 1.8s ease-in-out infinite}
+@media(hover:hover){.ll-site .site-header .site-nav a:hover::after{transform:scaleX(1)}.ll-site .universal-signature:hover img{animation:site-bulb-glow 1.8s ease-in-out infinite}}
+@media(max-width:760px){
+ .ll-site .site-header .universal-signature{height:44px}.ll-site .site-header .universal-signature img{width:36px;height:36px}
+ .ll-site .site-header .nav-toggle:not([hidden]){display:inline-flex;align-items:center}
+ .ll-site .site-header .site-nav{display:none;position:absolute;top:48px;left:0;right:0;max-height:calc(100svh - 72px);overflow-y:auto;flex-direction:column;align-items:stretch;padding:12px;background:#10171c;border:1px solid #354047;gap:2px}
+ .ll-site .site-header .site-nav.open{display:flex}.ll-site .site-header .site-nav a{min-height:44px;color:#edf0f2!important}
+ .ll-site .site-footer .site-inner{display:block}.ll-site .site-footer .footer-links{margin-top:16px;gap:8px 20px}
+ .ll-site:not(.nav-enhanced){padding-top:0}.ll-site:not(.nav-enhanced) .site-header{position:relative;height:auto}
+ .ll-site:not(.nav-enhanced) .site-header .universal-nav{height:auto;min-height:48px;align-items:flex-start}
+ .ll-site:not(.nav-enhanced) .site-header .site-nav{display:flex;position:static;flex-direction:row;flex-wrap:wrap;max-height:none;padding:4px 0;background:#fff;border:0}
+ .ll-site:not(.nav-enhanced) .site-header .site-nav a{color:#17212b!important;min-height:44px}
+}
+@media(prefers-reduced-motion:reduce){.ll-site .site-header .site-nav a::after{transition:none}.ll-site .universal-signature:hover img,.ll-site .universal-signature:focus-visible img{animation:none;filter:brightness(1.1) drop-shadow(0 0 4px #ffb54050)}}
+
+/* Keep the installed player above the fixed site navigation. */
+.ll-site.arcade-player-page{--panel:#f3f5f4;--mono:var(--font-body)}
+.ll-site.arcade-player-page main{width:min(var(--site-width),calc(100% - 2 * var(--gutter)))}
+.ll-site.arcade-player-page .library-intro h1{font-weight:400;letter-spacing:-.045em}
+.ll-site.arcade-player-page .library-intro h1 em{color:var(--ink)}
+.ll-site.arcade-player-page .arcade-return{display:inline-flex;align-items:center;min-height:44px;margin-bottom:24px;font-size:13px}
+.ll-site.arcade-player-page .player-shell{z-index:200}
+.ll-site.arcade-player-page .installer-source{margin:0 0 40px;font-size:13px}

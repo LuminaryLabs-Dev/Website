@@ -150,7 +150,9 @@
 
       const response = await fetch(fragmentUrl, { signal: this.abortController.signal });
       if (!response.ok) throw new Error(`Shader request failed (${response.status})`);
-      const source = await response.text();
+      // Shared studies can also be opened directly in Shadertoy. The wrapper
+      // supplies standard uniforms, so keep exactly one declaration of each.
+      const source = (await response.text()).replace(/uniform\s+(?:vec3\s+iResolution|float\s+iTime|vec4\s+iMouse)\s*;/g, '');
       if (this.disposed || generation !== this.runGeneration) return;
       const fragmentSource = `precision highp float;
 uniform vec3 iResolution;

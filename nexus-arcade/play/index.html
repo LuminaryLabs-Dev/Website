@@ -10,21 +10,34 @@
   <link rel="manifest" href="../manifest.webmanifest">
   <link rel="stylesheet" href="../styles.css?v=20260905-1">
   <link rel="stylesheet" href="./styles.css?v=20260905-1">
+<link rel="stylesheet" href="/assets/css/site-tokens.css?v=20260906-unified-1">
+<link rel="stylesheet" href="/assets/css/site-shell.css?v=20260906-unified-1">
 </head>
-<body>
-  <a class="skip-link" href="#library">Skip to game library</a>
-  <header class="topbar">
-    <a class="wordmark" href="/" aria-label="Luminary Labs home"><span class="wordmark-mark" aria-hidden="true">LL</span><span>Luminary Labs</span></a>
-    <nav aria-label="Primary navigation">
-      <a href="/">Studio</a>
-      <a href="/nexus-arcade/" >Nexus Arcade</a>
-      <a href="/nexus-arcade/play/" aria-current="page">Play Games</a>
-    </nav>
-  </header>
+<body class="ll-site arcade-player-page">
 
-  <main>
+  <!-- site:header:start -->
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container nav universal-nav">
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden>Menu</button>
+    <nav id="site-nav" class="site-nav" aria-label="Main navigation">
+      <a href="/index.html">Home</a>
+      <a href="/nexus-arcade/" class="active" aria-current="page">Nexus Arcade</a>
+      <a href="/opensource.html">Open Source</a>
+      <a href="/services.html">Services</a>
+      <a href="/portfolio.html">Portfolio</a>
+      <a href="/team.html">Team</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+    <a class="universal-signature" href="/index.html" aria-label="Luminary Labs home"><img src="/public/brand/luminary-bulb-transparent.png" width="36" height="36" alt=""></a>
+  </div>
+</header>
+<!-- site:header:end -->
+
+  <main id="main" tabindex="-1">
     <section class="library-intro" aria-labelledby="page-title">
-      <p class="eyebrow">Nexus Arcade / Play</p>
+      <a class="arcade-return" href="/nexus-arcade/">← Back to the cabinet</a>
+<p class="eyebrow">Nexus Arcade / Play</p>
       <h1 id="page-title">A little time.<br><em>A new adventure.</em></h1>
       <div class="intro-details"><p class="lede">Explore our public prototypes. Choose a game, install it, and press Play. Your progress stays with you when you close the player.</p>
       <p class="catalog-count"><strong id="game-count">—</strong><span>games to explore</span></p></div>
@@ -50,7 +63,8 @@
         <li><span>03</span><div><strong>Keep your progress</strong><p>Temporary game files are removed when you close the player. Your saved progress and settings stay.</p></div></li>
       </ol>
     </section>
-  </main>
+  <p class="installer-source"><a href="https://github.com/LuminaryLabs-Dev/NexusArcade" target="_blank" rel="noopener noreferrer">Installer source ↗</a></p>
+</main>
 
   <section id="player-shell" class="player-shell" hidden aria-labelledby="player-title">
     <div class="player-toolbar">
@@ -64,11 +78,21 @@
     <iframe id="game-frame" title="Installed Nexus Arcade game" allow="autoplay; fullscreen; gamepad" allowfullscreen></iframe>
   </section>
 
-  <footer>
-    <p>Built by <a href="/">Luminary Labs</a>. Small games. Room to explore.</p>
-    <a href="https://github.com/LuminaryLabs-Dev/NexusArcade" target="_blank" rel="noopener noreferrer">Installer source ↗</a>
-  </footer>
+  <!-- site:footer:start -->
+<footer class="site-footer">
+  <div class="site-inner">
+    <p>© <span id="year">2026</span> Luminary Labs LLC<br>AI Consultants and Software Developers</p>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="/opensource.html">Open Source</a>
+      <a href="/services.html">Services</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/ai/index.html">AI Knowledge Base</a>
+    </nav>
+  </div>
+</footer>
+<!-- site:footer:end -->
 
   <script type="module" src="../app.mjs?v=20260905-1"></script>
+<script src="/assets/js/site-nav.js?v=20260906-unified-1"></script>
 </body>
 </html>

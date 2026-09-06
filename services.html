@@ -1,197 +1,315 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Services & Pricing — Luminary Labs</title>
-    <meta
-      name="description"
-      content="Work-for-hire services from Luminary Labs. Portfolio setups from $750, web apps from $2,000, AI integration from $3,500, and XR development from $4,000."
-    />
-  <link rel="canonical" href="https://luminarylabs.dev/services.html" />
-  <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/public/favicons/luminary-bulb-32.png?v=20260902" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/public/favicons/luminary-bulb-16.png?v=20260902" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/public/favicons/luminary-bulb-180.png?v=20260902" />
-  <link rel="stylesheet" href="assets/css/style.css?v=20260828-3" />
-  <link rel="stylesheet" href="assets/css/services-skeleton.css?v=20260828-1" />
-  </head>
-<body class="services-skeleton-page">
-    <header class="site-header">
-      <div class="container nav">
-        <a href="index.html" class="brand" aria-label="Luminary Labs Home">
-          <img src="public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" />
-          Luminary Labs
-        </a>
-        <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
-        <nav id="site-nav" class="site-nav">
-          <a href="index.html">Home</a>
-          
-          <a href="opensource.html">Open Source</a>
-          <a href="nexuscentral.html">NexusCentral</a>
-          <a href="services.html" class="active">Services</a>
-          <a href="portfolio.html">Portfolio</a>
-          <a href="team.html">Team</a>
-        <a href="contact.html">Contact</a>
-        </nav>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Services &amp; Pricing — Luminary Labs
+  </title>
+  <meta content="Work-for-hire services from Luminary Labs. Portfolio setups from $750, web apps from $2,000, AI integration from $3,500, and XR development from $4,000." name="description"/>
+  <link href="https://luminarylabs.dev/services.html" rel="canonical"/>
+  <link href="/favicon.ico" rel="icon" sizes="any"/>
+  <link href="/public/favicons/luminary-bulb-32.png?v=20260902" rel="icon" sizes="32x32" type="image/png"/>
+  <link href="/public/favicons/luminary-bulb-16.png?v=20260902" rel="icon" sizes="16x16" type="image/png"/>
+  <link href="/public/favicons/luminary-bulb-180.png?v=20260902" rel="apple-touch-icon" sizes="180x180"/>
+  <link href="/assets/css/site-tokens.css?v=20260906-unified-1" rel="stylesheet"/>
+  <link href="/assets/css/site-shell.css?v=20260906-unified-1" rel="stylesheet"/>
+  <link href="/assets/css/site-components.css?v=20260906-unified-1" rel="stylesheet"/>
+  <link href="/assets/css/site-motion.css?v=20260906-unified-1" rel="stylesheet"/>
+  <link href="/assets/css/shader-renderer.css?v=20260901-1" rel="stylesheet"/>
+ </head>
+ <body class="ll-site services-page">
+  <!-- site:header:start -->
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container nav universal-nav">
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden>Menu</button>
+    <nav id="site-nav" class="site-nav" aria-label="Main navigation">
+      <a href="/index.html">Home</a>
+      <a href="/nexus-arcade/">Nexus Arcade</a>
+      <a href="/opensource.html">Open Source</a>
+      <a href="/services.html" class="active" aria-current="page">Services</a>
+      <a href="/portfolio.html">Portfolio</a>
+      <a href="/team.html">Team</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+    <a class="universal-signature" href="/index.html" aria-label="Luminary Labs home"><img src="/public/brand/luminary-bulb-transparent.png" width="36" height="36" alt=""></a>
+  </div>
+</header>
+<!-- site:header:end -->
+  <main id="main" tabindex="-1">
+   <section aria-labelledby="page-title" class="page-hero">
+    <div aria-hidden="true" class="page-scene scene-grid" data-ambient="">
+     <div class="scene-lines">
+     </div>
+    </div>
+    <div class="site-inner hero-copy">
+     <p class="eyebrow">
+      Services
+     </p>
+     <h1 id="page-title">
+      Build the system.
+      <br/>
+      Reach the market.
+     </h1>
+     <p class="hero-description">
+      Luminary Labs is an XR-focused consultancy and devshop for games, immersive experiences, web platforms, AI systems, and go-to-market execution.
+     </p>
+     <div class="hero-actions">
+      <a class="site-button" href="#services">
+       Explore our services
+       <span aria-hidden="true">
+        ↗
+       </span>
+      </a>
+     </div>
+    </div>
+    <button class="hero-motion motion-toggle" data-motion-toggle="" hidden="" type="button">
+     Pause motion
+    </button>
+   </section>
+   <section class="site-section" id="services">
+    <div class="site-inner">
+     <div class="section-heading" data-reveal="">
+      <div>
+       <h2>
+        What we build
+       </h2>
       </div>
-    </header>
-
-    <main>
-      <!-- ===== PAGE HERO ===== -->
-      <section class="page-hero">
-        <div class="container">
-          <h1>Ship Your MVP. Fast.</h1>
-          <p>Fixed-price, fixed-timeline development services. No scope creep, no surprises — just results you can pitch, demo, and deploy.</p>
-        </div>
-      </section>
-
-      <!-- ===== PRICING TIERS ===== -->
-      <section id="pricing">
-        <div class="container">
-          <div class="section-header center reveal">
-            <span class="section-label">Work-For-Hire</span>
-            <h2>Service Tiers</h2>
-            <p>Choose the tier that fits your project. Every deliverable is a pitchable MVP.</p>
-          </div>
-
-          <div class="pricing-grid">
-            <!-- Tier 1: Portfolio -->
-            <div class="price-card reveal reveal-delay-1" id="tier-portfolio">
-              <span class="price-icon">🎨</span>
-              <h3>Professional Portfolio</h3>
-              <span class="price-amount">$750</span>
-              <span class="price-timeline">Delivered in 1 week</span>
-              <p>A stunning, custom-built portfolio website that showcases your work and lands you clients. Fully responsive, SEO-optimized, and ready to deploy.</p>
-              <a href="contact.html?service=portfolio" class="btn secondary" id="cta-tier-portfolio">Get Started</a>
-            </div>
-
-            <!-- Tier 2: HTML5 Game -->
-            <div class="price-card reveal reveal-delay-2" id="tier-html5">
-              <span class="price-icon">🌐</span>
-              <h3>HTML5 Gaming Experience</h3>
-              <span class="price-amount">$1,250</span>
-              <span class="price-timeline">Delivered in 1 week</span>
-              <p>An interactive HTML5 game or experience that can be embedded directly into any website. Perfect for marketing campaigns, education, or engagement.</p>
-              <span class="price-note">Embeddable in any website or platform</span>
-              <a href="contact.html?service=html5" class="btn secondary" id="cta-tier-html5">Get Started</a>
-            </div>
-
-            <!-- Tier 3: Web App (FEATURED) -->
-            <div class="price-card featured reveal reveal-delay-3" id="tier-webapp">
-              <span class="price-icon">⚡</span>
-              <h3>Backend-Integrated Web App</h3>
-              <span class="price-amount">$2,000</span>
-              <span class="price-timeline">Delivered in 1 week</span>
-              <p>A full-stack web application with backend integration, database, and API layer. Delivered as a pitchable MVP ready for investor demos or user testing.</p>
-              <span class="price-note">Customer pays for hosting infrastructure</span>
-              <a href="contact.html?service=webapp" class="btn primary" id="cta-tier-webapp">Get Started</a>
-            </div>
-
-            <!-- Tier 4: AI App -->
-            <div class="price-card reveal reveal-delay-4" id="tier-ai">
-              <span class="price-icon">🤖</span>
-              <h3>AI-Integrated App</h3>
-              <span class="price-amount">$3,500</span>
-              <span class="price-timeline">Delivered in 2 weeks</span>
-              <p>We integrate local GGUF models or cloud APIs to build an AI-powered experience — chatbots, content generation, intelligent automation — as a pitchable MVP.</p>
-              <span class="price-note">Customer pays for API costs (if cloud-based)</span>
-              <a href="contact.html?service=ai" class="btn secondary" id="cta-tier-ai">Get Started</a>
-            </div>
-
-            <!-- Tier 5: XR App -->
-            <div class="price-card reveal" id="tier-xr">
-              <span class="price-icon">🥽</span>
-              <h3>XR App Development</h3>
-              <span class="price-amount">$4,000</span>
-              <span class="price-timeline">Delivered in 4 weeks</span>
-              <p>A complete XR application — designed, developed, tested — and delivered as a deployment-ready APK for Quest or other headsets. Full pitchable MVP.</p>
-              <a href="contact.html?service=xr" class="btn secondary" id="cta-tier-xr">Get Started</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <hr class="section-divider" />
-
-      <!-- ===== PROCESS ===== -->
-      <section id="process">
-        <div class="container">
-          <div class="section-header center reveal">
-            <span class="section-label">How We Work</span>
-            <h2>Our Process</h2>
-            <p>Streamlined, transparent, and fast. Every time.</p>
-          </div>
-
-          <div class="process-grid">
-            <div class="process-step reveal reveal-delay-1">
-              <div class="process-number">1</div>
-              <h4>Discovery</h4>
-              <p>We understand your goals, audience, and constraints in a focused kickoff session.</p>
-            </div>
-            <div class="process-step reveal reveal-delay-2">
-              <div class="process-number">2</div>
-              <h4>Build</h4>
-              <p>AI-accelerated development with daily check-ins. No black boxes — you see progress every step.</p>
-            </div>
-            <div class="process-step reveal reveal-delay-3">
-              <div class="process-number">3</div>
-              <h4>Deliver</h4>
-              <p>Polished MVP handoff with documentation, source code, and deployment support.</p>
-            </div>
-            <div class="process-step reveal reveal-delay-4">
-              <div class="process-number">4</div>
-              <h4>Support</h4>
-              <p>Two weeks of post-delivery bug fixes included. Ongoing retainer options available.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <hr class="section-divider" />
-
-      <!-- ===== PLATFORMS ===== -->
-      <section id="platforms">
-        <div class="container">
-          <div class="section-header center reveal">
-            <span class="section-label">Find Us</span>
-            <h2>Where to Hire Us</h2>
-          </div>
-
-          <div class="platforms-strip reveal">
-            <span class="platform-badge">🟢 Upwork</span>
-            <span class="platform-badge">🌐 LuminaryLabs.dev (Direct)</span>
-            <span class="platform-badge">📨 Email / Contact Form</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- ===== CTA ===== -->
-      <section class="cta-banner">
-        <h2>Ready to Ship?</h2>
-        <p>Tell us what you need. We'll scope it, price it, and deliver it — fast.</p>
-        <div class="cta-row">
-          <a href="contact.html" class="btn primary" id="cta-services-contact">Start a Project</a>
-          <a href="portfolio.html" class="btn ghost" id="cta-services-portfolio">See Our Work</a>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="container">
-        <p>© <span id="year"></span> Luminary Labs LLC — AI Consultants and Software Developers</p>
-        <div class="footer-links">
-          <a href="opensource.html">Open Source</a>
-          <a href="services.html">Services</a>
-          <a href="contact.html">Contact</a>
-          <a href="ai/index.html">AI Knowledge Base</a>
-        </div>
+      <p>
+       Specific capabilities, clear outputs, and pricing that reflects the work involved.
+      </p>
+     </div>
+     <details class="disclosure service-row" data-disclosure="" data-reveal="">
+      <summary>
+       <span class="row-number">
+        01
+       </span>
+       <h3>
+        XR Games and Immersive Experiences
+       </h3>
+       <span class="service-rate">
+        $100 / hr
+       </span>
+       <span aria-hidden="true" class="disclosure-mark">
+        +
+       </span>
+      </summary>
+      <div class="disclosure-body">
+       <p>
+        XR prototypes, gameplay systems, spatial interfaces, simulations, training tools, and immersive installations.
+       </p>
+       <p class="service-output">
+        <strong>
+         Outputs:
+        </strong>
+        playable prototype, interaction system, technical foundation, deployment path.
+       </p>
+       <a class="site-button" href="/contact.html?service=XR%20Games%20and%20Immersive%20Experiences">
+        Discuss this service
+        <span aria-hidden="true">
+         ↗
+        </span>
+       </a>
       </div>
-    </footer>
-
-    <script src="assets/js/data.js"></script>
-  <script src="assets/js/site-nav.js?v=20260828-4"></script>
-  <script src="assets/js/services-skeleton.js?v=20260828-1"></script>
-    <script src="assets/js/main.js"></script>
-  </body>
+     </details>
+     <details class="disclosure service-row" data-disclosure="" data-reveal="">
+      <summary>
+       <span class="row-number">
+        02
+       </span>
+       <h3>
+        Web Development
+       </h3>
+       <span class="service-rate">
+        $25 / hr
+       </span>
+       <span aria-hidden="true" class="disclosure-mark">
+        +
+       </span>
+      </summary>
+      <div class="disclosure-body">
+       <p>
+        Marketing sites, dashboards, portals, backend integrations, internal tools, and lightweight web applications.
+       </p>
+       <p class="service-output">
+        <strong>
+         Outputs:
+        </strong>
+        responsive interface, working integration, deployment, maintainable handoff.
+       </p>
+       <a class="site-button" href="/contact.html?service=Web%20Development">
+        Discuss this service
+        <span aria-hidden="true">
+         ↗
+        </span>
+       </a>
+      </div>
+     </details>
+     <details class="disclosure service-row" data-disclosure="" data-reveal="">
+      <summary>
+       <span class="row-number">
+        03
+       </span>
+       <h3>
+        AI Implementation
+       </h3>
+       <span class="service-rate">
+        $50–$150 / hr
+       </span>
+       <span aria-hidden="true" class="disclosure-mark">
+        +
+       </span>
+      </summary>
+      <div class="disclosure-body">
+       <p>
+        Agent workflows, local models, automation, tool calling, orchestration, and custom inference systems.
+       </p>
+       <p class="service-output">
+        <strong>
+         Outputs:
+        </strong>
+        working AI workflow, integration layer, evaluation path, operational documentation.
+       </p>
+       <a class="site-button" href="/contact.html?service=AI%20Implementation">
+        Discuss this service
+        <span aria-hidden="true">
+         ↗
+        </span>
+       </a>
+      </div>
+     </details>
+     <details class="disclosure service-row" data-disclosure="" data-reveal="">
+      <summary>
+       <span class="row-number">
+        04
+       </span>
+       <h3>
+        GTM and Lead Generation
+       </h3>
+       <span class="service-rate">
+        Fixed engagements
+       </span>
+       <span aria-hidden="true" class="disclosure-mark">
+        +
+       </span>
+      </summary>
+      <div class="disclosure-body">
+       <p>
+        Vetted industry research, targeting strategy, outreach systems, CRM structure, and custom go-to-market implementation.
+       </p>
+       <p class="service-output">
+        <strong>
+         Outputs:
+        </strong>
+        500 vetted leads for $1,000, or custom implementation from $10,000–$60,000.
+       </p>
+       <a class="site-button" href="/contact.html?service=GTM%20and%20Lead%20Generation">
+        Discuss this service
+        <span aria-hidden="true">
+         ↗
+        </span>
+       </a>
+      </div>
+     </details>
+    </div>
+   </section>
+   <section class="site-section">
+    <div class="site-inner">
+     <div class="section-heading" data-reveal="">
+      <div>
+       <h2>
+        How we engage
+       </h2>
+      </div>
+      <p>
+       Start with a defined project, continue through a focused retainer, or bring us in to implement a complete operating system.
+      </p>
+     </div>
+     <a class="site-button" href="/contact.html">
+      Describe a project
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+    </div>
+   </section>
+   <section class="site-section">
+    <div class="site-inner">
+     <div class="section-heading" data-reveal="">
+      <div>
+       <h2>
+        How we work
+       </h2>
+      </div>
+     </div>
+     <ol class="process-list">
+      <li>
+       <span class="eyebrow">
+        01
+       </span>
+       <h3>
+        Define
+       </h3>
+       <p>
+        Clarify the outcome and constraints.
+       </p>
+      </li>
+      <li>
+       <span class="eyebrow">
+        02
+       </span>
+       <h3>
+        Prototype
+       </h3>
+       <p>
+        Build the smallest useful proof.
+       </p>
+      </li>
+      <li>
+       <span class="eyebrow">
+        03
+       </span>
+       <h3>
+        Validate
+       </h3>
+       <p>
+        Test with users, data, or market.
+       </p>
+      </li>
+      <li>
+       <span class="eyebrow">
+        04
+       </span>
+       <h3>
+        Ship
+       </h3>
+       <p>
+        Deploy, document, and improve.
+       </p>
+      </li>
+     </ol>
+    </div>
+   </section>
+  </main>
+  <!-- site:footer:start -->
+<footer class="site-footer">
+  <div class="site-inner">
+    <p>© <span id="year">2026</span> Luminary Labs LLC<br>AI Consultants and Software Developers</p>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="/opensource.html">Open Source</a>
+      <a href="/services.html">Services</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/ai/index.html">AI Knowledge Base</a>
+    </nav>
+  </div>
+</footer>
+<!-- site:footer:end -->
+  <script src="/assets/js/site-nav.js?v=20260906-unified-1">
+  </script>
+  <script src="/assets/js/site-motion.js?v=20260906-unified-1">
+  </script>
+  <script src="/assets/js/site-ui.js?v=20260906-unified-1">
+  </script>
+ </body>
 </html>

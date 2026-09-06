@@ -1,137 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact — Luminary Labs</title>
-    <meta
-      name="description"
-      content="Contact Luminary Labs for AI-accelerated software development — XR apps, web MVPs, AI integration, and more. Fixed pricing, fast delivery."
-    />
-  <link rel="canonical" href="https://luminarylabs.dev/contact.html" />
-  <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/public/favicons/luminary-bulb-32.png?v=20260902" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/public/favicons/luminary-bulb-16.png?v=20260902" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/public/favicons/luminary-bulb-180.png?v=20260902" />
-  <link rel="stylesheet" href="assets/css/style.css?v=20260828-3" />
-  <link rel="stylesheet" href="assets/css/contact-shader.css?v=20260828-1" />
-  </head>
-<body class="contact-shader-page">
-    <header class="site-header">
-      <div class="container nav">
-        <a href="index.html" class="brand" aria-label="Luminary Labs Home">
-          <img src="public/LL_logo_transparent.png" alt="Luminary Labs Logo" class="brand-logo" />
-          Luminary Labs
-        </a>
-        <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
-        <nav id="site-nav" class="site-nav">
-          <a href="index.html">Home</a>
-          
-          <a href="opensource.html">Open Source</a>
-          <a href="nexuscentral.html">NexusCentral</a>
-          <a href="services.html">Services</a>
-          <a href="portfolio.html">Portfolio</a>
-          <a href="team.html">Team</a>
-          <a href="contact.html" class="active">Contact</a>
-        </nav>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Contact — Luminary Labs
+  </title>
+  <meta content="Contact Luminary Labs for AI-accelerated software development — XR apps, web MVPs, AI integration, and more. Fixed pricing, fast delivery." name="description"/>
+  <link href="https://luminarylabs.dev/contact.html" rel="canonical"/>
+  <link href="/favicon.ico" rel="icon" sizes="any"/>
+  <link href="/public/favicons/luminary-bulb-32.png?v=20260902" rel="icon" sizes="32x32" type="image/png"/>
+  <link href="/public/favicons/luminary-bulb-16.png?v=20260902" rel="icon" sizes="16x16" type="image/png"/>
+  <link href="/public/favicons/luminary-bulb-180.png?v=20260902" rel="apple-touch-icon" sizes="180x180"/>
+  <link href="/assets/css/site-tokens.css?v=20260906-unified-1" rel="stylesheet"/>
+  <link href="/assets/css/site-shell.css?v=20260906-unified-1" rel="stylesheet"/>
+  <link href="/assets/css/site-components.css?v=20260906-unified-1" rel="stylesheet"/>
+  <link href="/assets/css/site-motion.css?v=20260906-unified-1" rel="stylesheet"/>
+  <link href="/assets/css/shader-renderer.css?v=20260901-1" rel="stylesheet"/>
+ </head>
+ <body class="ll-site contact-page">
+  <!-- site:header:start -->
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container nav universal-nav">
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden>Menu</button>
+    <nav id="site-nav" class="site-nav" aria-label="Main navigation">
+      <a href="/index.html">Home</a>
+      <a href="/nexus-arcade/">Nexus Arcade</a>
+      <a href="/opensource.html">Open Source</a>
+      <a href="/services.html">Services</a>
+      <a href="/portfolio.html">Portfolio</a>
+      <a href="/team.html">Team</a>
+      <a href="/contact.html" class="active" aria-current="page">Contact</a>
+    </nav>
+    <a class="universal-signature" href="/index.html" aria-label="Luminary Labs home"><img src="/public/brand/luminary-bulb-transparent.png" width="36" height="36" alt=""></a>
+  </div>
+</header>
+<!-- site:header:end -->
+  <main id="main" tabindex="-1">
+   <section aria-labelledby="page-title" class="page-hero">
+    <div aria-hidden="true" class="page-scene scene-contact" data-ambient="" data-scene-src="/assets/shaders/contact-scene.glsl">
+     <img alt="" class="scene-poster" height="640" src="/public/scenes/contact.webp" width="960"/>
+     <div class="scene-lines">
+     </div>
+    </div>
+    <div class="site-inner hero-copy">
+     <p class="eyebrow">
+      Contact
+     </p>
+     <h1 id="page-title">
+      Let’s build
+      <br/>
+      something.
+     </h1>
+     <p class="hero-description">
+      Tell us what you want to make and we’ll get back to you within 24 hours.
+     </p>
+     <div class="hero-actions">
+      <a class="site-button" href="mailto:admin@luminarylabs.dev">
+       admin@luminarylabs.dev
+       <span aria-hidden="true">
+        ↗
+       </span>
+      </a>
+     </div>
+    </div>
+    <button class="hero-motion motion-toggle" data-motion-toggle="" hidden="" type="button">
+     Pause motion
+    </button>
+   </section>
+   <section class="site-section" id="contact-details">
+    <div class="site-inner">
+     <div class="section-heading" data-reveal="">
+      <div>
+       <h2>
+        Start with what you know.
+       </h2>
       </div>
-    </header>
-
-    <main>
-      <!-- ===== PAGE HERO ===== -->
-      <section class="page-hero">
-        <div class="container">
-          <h1>Let's Build Something</h1>
-          <p>Tell us about your project. We'll scope it, price it, and get back to you within 24 hours.</p>
-        </div>
-      </section>
-
-      <!-- ===== CONTACT INFO SECTION ===== -->
-      <section class="contact-section">
-        <div class="container">
-          <div class="contact-info reveal" style="max-width: 600px; margin: 0 auto; text-align: center;">
-            <span class="section-label">Get in Touch</span>
-            <h2>Direct Contact</h2>
-            <p>We've temporarily disabled our automated form while we upgrade our systems. Please reach out to us directly via email.</p>
-            
-            <div class="info-grid" style="display: flex; flex-direction: column; gap: 32px; margin-top: 40px; align-items: center;">
-              <div class="info-item" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px;">
-                <span class="info-icon" style="margin: 0;">✉️</span>
-                <div class="info-content">
-                  <span class="info-label">Email Us</span>
-                  <a href="mailto:admin@luminarylabs.dev" class="info-link" style="font-size: 1.4rem;">admin@luminarylabs.dev</a>
-                </div>
-              </div>
-
-              <div class="info-item" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px;">
-                <span class="info-icon" style="margin: 0;">⏱️</span>
-                <div class="info-content">
-                  <span class="info-label">Response Time</span>
-                  <span class="info-text">Within 24 Hours</span>
-                </div>
-              </div>
-
-              <div class="info-item" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px;">
-                <span class="info-icon" style="margin: 0;">🌍</span>
-                <div class="info-content">
-                  <span class="info-label">Availability</span>
-                  <span class="info-text">Global / Remote</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="container">
-        <p>© <span id="year"></span> Luminary Labs LLC — AI-Accelerated Software Development</p>
-        <div class="footer-links">
-          <a href="opensource.html">Open Source</a>
-          <a href="services.html">Services</a>
-        <a href="contact.html">Contact</a>
-          <a href="ai/index.html">AI Knowledge Base</a>
-        </div>
+      <p>
+       A goal, a question, or something you’re already working on.
+      </p>
+     </div>
+     <div class="contact-layout">
+      <div>
+       <h3>
+        Email the studio
+       </h3>
+       <a class="contact-address" href="mailto:admin@luminarylabs.dev">
+        admin@luminarylabs.dev
+       </a>
+       <button class="text-action" data-copy-email="" hidden="" type="button">
+        Copy email address
+       </button>
+       <p aria-live="polite" class="copy-status" role="status">
+       </p>
       </div>
-    </footer>
-
-    <script src="assets/js/data.js"></script>
-    <script src="assets/js/site-nav.js?v=20260828-4"></script>
-    <script src="assets/js/contact-shader.js?v=20260828-1"></script>
-    <script src="assets/js/main.js"></script>
-    <script>
-      // Handle URL params: ?service=webapp (auto-select) and ?success=true (show success UI)
-      (function() {
-        const params = new URLSearchParams(window.location.search);
-        
-        // 1. Handle success state
-        if (params.get('success') === 'true') {
-          const form = document.getElementById('contact-form');
-          const success = document.getElementById('form-success-message');
-          if (form && success) {
-            form.style.display = 'none';
-            success.style.display = 'block';
-            
-            // Optional: Scroll to success message
-            success.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        }
-
-        // 2. Auto-select service
-        const service = params.get('service');
-        if (service) {
-          const select = document.getElementById('service');
-          if (select) {
-            for (const opt of select.options) {
-              if (opt.value === service) {
-                opt.selected = true;
-                break;
-              }
-            }
-          }
-        }
-      })();
-    </script>
-  </body>
+      <form class="draft-form" data-draft-form="" hidden="">
+       <label for="project-service">
+        What would you like to work on?
+       </label>
+       <select id="project-service" name="service">
+        <option value="">
+         Choose a starting point
+        </option>
+        <option>
+         XR Games and Immersive Experiences
+        </option>
+        <option>
+         Web Development
+        </option>
+        <option>
+         AI Implementation
+        </option>
+        <option>
+         GTM and Lead Generation
+        </option>
+        <option>
+         Something else
+        </option>
+       </select>
+       <label for="project-prompt">
+        Tell us a little about it
+       </label>
+       <textarea id="project-prompt" maxlength="3000" name="prompt" placeholder="What do you want to make, and who is it for?" rows="4"></textarea>
+       <p class="form-note">
+        This prepares a draft in your email app. You review and send it there.
+       </p>
+       <a class="site-button" data-draft-link="" href="mailto:admin@luminarylabs.dev">
+        Prepare email draft
+        <span aria-hidden="true">
+         ↗
+        </span>
+       </a>
+      </form>
+     </div>
+    </div>
+   </section>
+  </main>
+  <!-- site:footer:start -->
+<footer class="site-footer">
+  <div class="site-inner">
+    <p>© <span id="year">2026</span> Luminary Labs LLC<br>AI Consultants and Software Developers</p>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="/opensource.html">Open Source</a>
+      <a href="/services.html">Services</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/ai/index.html">AI Knowledge Base</a>
+    </nav>
+  </div>
+</footer>
+<!-- site:footer:end -->
+  <script src="/assets/js/site-nav.js?v=20260906-unified-1">
+  </script>
+  <script src="/assets/js/site-motion.js?v=20260906-unified-1">
+  </script>
+  <script src="/assets/js/site-ui.js?v=20260906-unified-1">
+  </script>
+  <script src="/assets/js/shader-renderer.js?v=20260906-unified-1">
+  </script>
+  <script src="/assets/js/page-scenes.js?v=20260906-unified-1">
+  </script>
+ </body>
 </html>
