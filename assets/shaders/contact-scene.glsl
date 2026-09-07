@@ -145,7 +145,9 @@ void mainImage(out vec4 o, in vec2 f) {
         float dif = max(dot(n, l), 0.0);
         float fre = pow(1.0 - max(dot(-rd, n), 0.0), 5.0);
         float sp = pow(max(dot(r, l), 0.0), 28.0);
+        float shoulder = pow(max(dot(r, normalize(vec3(-.7,.3,.6))), 0.0), 12.0);
 
+        col += vec3(.035,.065,.09) * shoulder;
         col += tint * (0.08 + 0.22 * dif) + vec3(0.55, 0.85, 1.3) * fre + vec3(1.0) * sp * 0.8;
     }
 

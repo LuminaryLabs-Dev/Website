@@ -1,0 +1,58 @@
+/* Seven marketing pages share this frame; embedded applications keep their own shell. */
+@font-face{font-family:'Luminary Display';src:url('/public/fonts/rajdhani-semibold.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+.ll-site.presentation-page{--font-display:'Luminary Display','Luminary Inter',sans-serif;--presentation-width:1408px;--presentation-gutter:clamp(20px,4.1667vw,64px);--presentation-inset:clamp(20px,2.7vw,40px);--site-width:var(--presentation-width);--gutter:var(--presentation-gutter)}
+.presentation-page main{position:relative;width:min(var(--presentation-width),calc(100% - 2 * var(--presentation-gutter)));margin-inline:auto;border-inline:1px solid #cbd1d5}
+.ll-site.presentation-page main .site-inner,.ll-site.presentation-page main .container{width:calc(100% - 2 * var(--presentation-inset));max-width:none}
+.ll-site.presentation-page h1,.ll-site.presentation-page h2,.ll-site.presentation-page h3{font-family:var(--font-display);font-weight:600;letter-spacing:-.015em}
+.ll-site.presentation-page .site-header .universal-nav{padding-inline:var(--presentation-inset)}
+.ll-site.presentation-page .site-header .site-nav a{font-family:var(--font-display)!important;font-size:13px!important;letter-spacing:.03em}
+.ll-site.presentation-page #hero.hallway-hero,.ll-site.presentation-page .presentation-hero{display:block;position:relative;isolation:isolate;min-height:0;padding:0;overflow:visible;background:#fff;color:var(--ink)}
+.presentation-heading{position:relative;isolation:isolate;background:#f2f4f5;overflow:hidden}
+.presentation-panel{position:absolute;inset:0;background:white;z-index:-1;pointer-events:none;transform-origin:top}
+.presentation-copy{padding:54px var(--presentation-inset) 26px}
+.ll-site.presentation-page .presentation-copy .eyebrow{font:600 15px/1.4 var(--font-display);letter-spacing:.15em;color:#56616b;margin:0 0 12px}
+.ll-site.presentation-page .presentation-copy h1{color:var(--ink);font-size:clamp(34px,4.2vw,64px);font-weight:600;line-height:1.08;letter-spacing:-.018em;margin:0;max-width:none;text-wrap:initial;text-shadow:none;-webkit-text-stroke:0}
+.ll-site.presentation-page .presentation-copy h1.long-title{font-size:clamp(30px,3.12vw,48px)}
+.ll-site.presentation-page .presentation-subtitle{font:600 clamp(17px,1.45vw,22px)/1.4 var(--font-display);max-width:none;color:#5a6875;margin:12px 0 0}
+.presentation-visual{position:relative;isolation:isolate;aspect-ratio:13/5;background:#101619;overflow:hidden}
+.ll-site.presentation-page .presentation-visual .page-scene,.ll-site.presentation-page .presentation-visual>shader-renderer,.ll-site.presentation-page .presentation-visual>.hallway-poster{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.presentation-visual>#home-hallway{opacity:0}
+.hallway-live .presentation-visual>#home-hallway[data-state=ready]{opacity:1}
+.presentation-visual>.hallway-control{position:absolute;inset:0}
+.presentation-visual .cabinet-drawing{position:absolute;z-index:2;inset:6% auto 6% 50%;transform:translateX(-50%);width:55%;margin:0;padding:22px;background:#f2f3f0;display:flex;align-items:center;pointer-events:none}
+.presentation-visual .cad-views{width:100%;height:100%;grid-template-columns:1.3fr .7fr}
+.presentation-visual .cad-views img{max-height:100%;height:100%;object-fit:contain}
+.presentation-actions{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:14px var(--presentation-inset) 18px;min-height:74px;background:white}
+.presentation-links{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.ll-site.presentation-page .presentation-actions .site-button,.ll-site.presentation-page .presentation-actions .hallway-work{--button-ink:#17212b;--button-fill:#17212b;--button-hover:#fff;color:var(--ink);border-color:currentColor;min-height:44px;margin:0;padding:8px 0;font:600 19px/1.4 var(--font-display);gap:20px;text-shadow:none;border-radius:0}
+.ll-site.presentation-page .presentation-actions .hallway-work::before{background:var(--ink)}
+.ll-site.presentation-page .presentation-actions .site-button:hover,.ll-site.presentation-page .presentation-actions .site-button:focus-visible,.ll-site.presentation-page .presentation-actions .hallway-work:hover,.ll-site.presentation-page .presentation-actions .hallway-work:focus-visible{color:#fff}
+.ll-site.presentation-page .presentation-actions .text-action{color:var(--ink);margin:0;font:600 17px/1.4 var(--font-display)}
+.ll-site.presentation-page .presentation-actions .motion-toggle{position:static;color:var(--ink);font:600 15px/1.4 var(--font-display);white-space:nowrap}
+.presentation-actions .hallway-scroll{position:static;transform:none;color:var(--ink);width:44px;height:44px}
+.presentation-caption{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:0 var(--presentation-inset) 22px;font-size:12px;color:var(--muted)}
+.ll-site.presentation-page .presentation-context{margin:0 0 38px;max-width:70ch}
+.ll-site.presentation-page .site-section,.ll-site.presentation-page.home-page main>section:not(.hallway-hero){padding-block:54px}
+.ll-site.presentation-page .section-heading h2,.ll-site.presentation-page #capabilities .section-header h2{font-family:var(--font-display);font-weight:600;letter-spacing:-.02em;font-size:clamp(32px,3.3vw,50px)}
+@media(max-width:1100px){.ll-site.presentation-page .presentation-copy h1{font-size:clamp(32px,4vw,44px)}.ll-site.presentation-page .presentation-copy h1.long-title{font-size:clamp(28px,3vw,34px)}}
+@media(max-width:760px){.ll-site.presentation-page{--presentation-gutter:20px;--presentation-inset:20px}.ll-site.presentation-page .site-header .universal-nav{padding-inline:0}.presentation-copy{padding:36px 20px 26px}.ll-site.presentation-page .presentation-copy h1,.ll-site.presentation-page .presentation-copy h1.long-title{font-size:clamp(30px,7.8vw,46px);line-height:1.06}.presentation-visual{aspect-ratio:4/3}.presentation-actions{gap:12px;flex-wrap:wrap;padding:10px 20px 20px}.presentation-links{gap:12px}.presentation-visual .cabinet-drawing{width:86%;inset-block:9%;padding:12px}.presentation-actions .motion-toggle{margin-left:auto}.presentation-caption{font-size:11px}.ll-site.presentation-page .site-section{padding-block:42px}}
+@media(prefers-reduced-motion:reduce){.presentation-panel{transform:none!important}.presentation-copy{opacity:1!important}}
+/* Definite grid tracks keep the technical drawings contained at every aspect ratio. */
+.presentation-visual .cabinet-drawing{top:6%;bottom:auto;height:88%;min-height:0}
+.presentation-visual .cad-views{min-height:0;grid-template-rows:minmax(0,1fr)}
+.ll-site.presentation-page .presentation-visual .cad-views img{min-height:0;max-height:100%;height:100%;width:100%;align-self:stretch}
+@media(max-width:760px){.presentation-visual .cabinet-drawing{top:9%;height:82%}}
+/* Only the enhancement can hide the entry; its head watchdog restores failed loads. */
+.entry-armed .presentation-copy{opacity:0}
+.entry-armed .presentation-panel{transform:scaleY(0)}
+.entry-word{display:inline-block;white-space:nowrap}
+.presentation-heading::before,.presentation-heading::after{content:'';position:absolute;top:0;bottom:0;width:1px;background:#aeb9c2;pointer-events:none;transform-origin:top}
+.presentation-heading::before{left:0}.presentation-heading::after{right:0}
+[data-entry-state=playing] .presentation-heading::before,[data-entry-state=playing] .presentation-heading::after{animation:presentation-rail 650ms ease-out both}
+@keyframes presentation-rail{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+
+/* Keep complete words together throughout the homepage typing sequence. */
+.presentation-page .presentation-copy h1 .entry-word{display:inline-block}
+.presentation-page .presentation-copy h1 .entry-word>span{display:inline}
+/* A fallback poster has no motion to pause after a WebGL failure. */
+.presentation-page .presentation-hero:has(.scene-renderer[data-state=error]) .motion-toggle{display:none}

@@ -122,9 +122,37 @@
         this.intersectionObserver.observe(this);
       }
 
-      this.initialize(generation).catch(error => {
-        if (generation === this.runGeneration && !this.disposed) this.fail(error);
-      });
+      const begin = () => {
+        if (generation !== this.runGeneration || this.disposed) return;
+        this.initialize(generation).catch(error => {
+          if (generation === this.runGeneration && !this.disposed) this.fail(error);
+        });
+      };
+      const entry = document.querySelector("[data-page-entry]");
+      // Let the marketing title paint before synchronous WebGL compilation.
+      // The optional intro and every other renderer consumer keep their lifecycle.
+      if (document.body?.classList.contains("presentation-page") && entry
+        && entry.dataset.entryState !== "complete" && !this.closest("luminary-intro")
+        && !this.reduceMotion) {
+        let released = false;
+        const release = () => {
+          if (released || generation !== this.runGeneration || this.disposed) return;
+          clearTimeout(this.entryTimer);
+          if (document.documentElement.classList.contains("ll-intro-pending")) {
+            this.entryTimer = setTimeout(release, 250);
+            return;
+          }
+          released = true;
+          window.removeEventListener("presentation-entry-finished", release);
+          this.entryFrame = requestAnimationFrame(() => {
+            this.entryFrame = requestAnimationFrame(begin);
+          });
+        };
+        window.addEventListener("presentation-entry-finished", release,
+          { once: true, signal: this.abortController.signal });
+        // Leave room for the existing intro; failed entry text recovers at 3s.
+        this.entryTimer = setTimeout(release, 10000);
+      } else begin();
     }
 
     disconnectedCallback() {
@@ -376,6 +404,8 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);}`;
       if (this.disposed) return;
       this.disposed = true;
       this.runGeneration += 1;
+      clearTimeout(this.entryTimer);
+      if (this.entryFrame) cancelAnimationFrame(this.entryFrame);
       if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
       this.animationFrame = 0;
       this.resizeObserver?.disconnect();

@@ -1,5 +1,32 @@
 # Website Repo Memory
 
+## 2026-09-07 — Presentation ownership and preservation contracts
+
+- `presentation-page` scopes the new frame to the seven marketing pages.
+  Keep embedded players, generated apps and Open Source study shaders outside
+  this scope. `page-presentation.css` reconciles existing styles without a
+  framework migration or global shell rewrite.
+- Opening copy lives above the shader with no punctuation; normal punctuation
+  remains in body copy, addresses and measurements. The navigation stays at
+  its existing 32px desktop / 48px mobile height.
+- `page-entry.js` animates decorative layers and visual glyphs only. Preserve
+  the full semantic heading, safe failure behavior and reduced-motion policy.
+  Home's legacy span rules must not stack words or glyphs while typing.
+- Preserve Contact's 34 tracing steps, path timing 0.05, backward offset 1.5,
+  prongs and original glow. Preserve Obsidian's 110 steps, original map, speed
+  4.0, roll and neon. Preserve Team's 12 sources, 4 hubs, first arrivals at
+  group age 6, growth through 8.2, scale 2.3, dotted connectors and fast pulses.
+- The renderer waits for `presentation-entry-finished` only on opted-in
+  presentation pages. Intro renderers bypass this rule. Preserve the two-frame
+  paint opportunity, bounded failed-entry recovery and disposal cleanup.
+- Current hero posters are 1440x554 GLSL captures at 15s, versioned
+  `20260907-presentation-1`. Team's fallback is the globe, not a shell tunnel.
+- Keep shader artwork comparisons separate from generated concept imagery.
+  Preserve existing geometry when a mockup depicts a different environment.
+- Software timing comparisons were noisy and did not universally meet the 5%
+  target. Retain that limitation in future claims; do not infer hardware FPS.
+
+
 ## 2026-09-06 — Restore Obsidian and ClusterBots (local, unpushed)
 
 - Restore Obsidian from `0294c86`: original geometry timing, centered descent,

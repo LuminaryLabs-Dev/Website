@@ -15,7 +15,7 @@
   <link href="assets/css/shader-renderer.css?v=20260901-1" rel="stylesheet"/>
   <link href="assets/css/luminary-intro.css?v=20260903-1" rel="stylesheet"/>
   <link href="assets/css/home.css?v=20260906-scenes-1" rel="stylesheet"/>
-  <link as="image" href="public/home/luminary-hallway-poster.webp?v=20260906-scenes-1" rel="preload"/>
+  <link as="image" href="public/home/luminary-hallway-poster.webp?v=20260907-presentation-1" rel="preload"/>
   <link as="font" crossorigin="" href="public/fonts/inter-latin-variable.woff2" rel="preload" type="font/woff2"/>
   <script>
    (function () {
@@ -45,8 +45,16 @@
   <link href="/assets/css/site-shell.css?v=20260906-unified-1" rel="stylesheet"/>
   <link href="/assets/css/site-components.css?v=20260906-scenes-1" rel="stylesheet"/>
   <link href="/assets/css/site-motion.css?v=20260906-unified-1" rel="stylesheet"/>
- </head>
- <body class="ll-site home-page">
+ <link rel="preload" href="/public/fonts/rajdhani-semibold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/page-presentation.css?v=20260907-presentation-1">
+<script>
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('entry-armed');
+    window.pageEntrySafety = setTimeout(() => document.documentElement.classList.remove('entry-armed'), 3000);
+  }
+</script>
+</head>
+ <body class="presentation-page ll-site home-page">
   <!-- site:header:start -->
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
@@ -68,37 +76,18 @@
   <luminary-intro aria-label="Luminary Labs interactive introduction" fragment-src="assets/shaders/fractal-filament.glsl?v=20260901-2" passes="spark-particles" version="20260903-1">
   </luminary-intro>
   <main id="main" tabindex="-1">
-   <section aria-labelledby="home-title" class="hallway-hero" id="hero">
-    <img alt="" class="hallway-poster" fetchpriority="high" src="public/home/luminary-hallway-poster.webp?v=20260906-scenes-1"/>
-    <shader-renderer aria-hidden="true" fragment-src="assets/shaders/luminary-hallway.glsl?v=20260906-scenes-1" id="home-hallway" max-fps="30" max-pixels="921600" paused="" pixel-ratio-cap="1">
-    </shader-renderer>
-    <div aria-hidden="true" class="hallway-wash">
-    </div>
-    <div class="hallway-content">
-     <h1 id="home-title">
-      <span>
-       Turning specialized
-      </span>
-      <span>
-       knowledge into
-      </span>
-      <span>
-       working technology.
-      </span>
-     </h1>
-     <a class="hallway-work" href="portfolio.html">
-      Explore our work
-     </a>
-    </div>
-    <button aria-controls="home-hallway" aria-label="Pause hallway animation" class="hallway-control" hidden="" type="button">
-    </button>
-    <a aria-label="Scroll to next section" class="hallway-scroll" href="#capabilities">
-     <svg aria-hidden="true" fill="none" height="24" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24" width="24">
-      <path d="M12 4v16m-6-6 6 6 6-6">
-      </path>
-     </svg>
-    </a>
-   </section>
+   <section class="presentation-hero hallway-hero " id="hero" aria-labelledby="home-title" data-page-entry>
+ <div class="presentation-heading"><div class="presentation-panel" aria-hidden="true"></div><div class="presentation-copy"><p class="eyebrow">Home</p><h1 id="home-title" class="long-title">Turning specialized knowledge into working technology</h1><p class="presentation-subtitle">Good ideas deserve a way forward</p></div></div>
+ <div class="presentation-visual"><img alt="" class="hallway-poster" fetchpriority="high" src="public/home/luminary-hallway-poster.webp?v=20260907-presentation-1"/><shader-renderer aria-hidden="true" fragment-src="assets/shaders/luminary-hallway.glsl?v=20260907-presentation-1" id="home-hallway" max-fps="30" max-pixels="921600" paused="" pixel-ratio-cap="1">
+</shader-renderer><button aria-controls="home-hallway" aria-label="Pause hallway animation" class="hallway-control" hidden="" type="button">
+</button></div>
+ <div class="presentation-actions"><div class="presentation-links"><a class="site-button hallway-work" href="/portfolio.html">Explore our work <span aria-hidden="true">↗</span></a><a aria-label="Scroll to next section" class="hallway-scroll" href="#capabilities">
+<svg aria-hidden="true" fill="none" height="24" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24" width="24">
+<path d="M12 4v16m-6-6 6 6 6-6">
+</path>
+</svg>
+</a></div><button class="motion-toggle" data-home-motion hidden type="button">Pause motion</button></div>
+ </section>
    <section id="capabilities">
     <div class="container">
      <div class="section-header">
@@ -391,9 +380,9 @@
 <!-- site:footer:end -->
   <script src="assets/js/spark-particle-pass.js?v=20260901-1">
   </script>
-  <script src="assets/js/shader-renderer.js?v=20260906-unified-1">
+  <script src="assets/js/shader-renderer.js?v=20260907-presentation-1">
   </script>
-  <script src="assets/js/home-hero.js?v=20260905-minimal-1">
+  <script src="assets/js/home-hero.js?v=20260907-presentation-1">
   </script>
   <script src="assets/js/luminary-intro.js?v=20260903-2">
   </script>
@@ -403,5 +392,6 @@
   </script>
   <script src="/assets/js/site-ui.js?v=20260906-unified-1">
   </script>
- </body>
+ <script src="/assets/js/page-entry.js?v=20260907-presentation-1"></script>
+</body>
 </html>

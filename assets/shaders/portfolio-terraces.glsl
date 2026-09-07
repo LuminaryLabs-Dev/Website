@@ -32,10 +32,10 @@ vec2 scene(vec3 p){
 
 vec3 palette(float id,vec3 p,vec3 n,vec3 rd,float aa){
  vec3 base=vec3(.32,.26,.23),accent=vec3(.95,.60,.30);
- if(id>2.5)base=vec3(.14,.17,.19);
+ if(id>2.5)base=vec3(.20,.23,.25);
  float bands=.5+.5*sin(p.z*2.2+sin(p.x*3.)+p.y*2.);
  float fine=(.5+.5*sin(p.z*34.+p.y*12.))* (1.-smoothstep(.008,.035,aa));
- base*=.86+.14*bands;
+ base*=.82+.18*bands;
  if(uDetail>.5)base*=.96+.04*fine;
  float diff=max(dot(n,normalize(vec3(-.35,.8,-.4))),0.);
  float facing=max(dot(n,-rd),0.);
@@ -43,11 +43,14 @@ vec3 palette(float id,vec3 p,vec3 n,vec3 rd,float aa){
  float vein=pow(max(0.,sin(p.z*.8+atan(p.y,p.x)*6.)),28.);
  vec3 col=base*(.58+.7*diff)+accent*(.13*rim+.18*vein);
  if(id>1.5)col+=accent*(.12+.14*rim);
- col+=vec3(.28)*pow(max(dot(reflect(rd,n),normalize(vec3(.2,.8,-.5))),0.),48.);
+ float spec=pow(max(dot(reflect(rd,n),normalize(vec3(.2,.8,-.5))),0.),id>2.5?56.:32.);
+ col+=vec3(.40,.36,.30)*spec;
+ col+=vec3(.10,.13,.16)*rim*max(n.y,0.);
  return col;
 }
 
-vec3 normalAt(vec3 p){vec2 e=vec2(.003,0.);return normalize(vec3(scene(p+e.xyy).x-scene(p-e.xyy).x,scene(p+e.yxy).x-scene(p-e.yxy).x,scene(p+e.yyx).x-scene(p-e.yyx).x));}
+// Tetrahedral normal uses four evaluations instead of six.
+vec3 normalAt(vec3 p){vec2 e=vec2(.001732,-.001732);return normalize(e.xyy*scene(p+e.xyy).x+e.yyx*scene(p+e.yyx).x+e.yxy*scene(p+e.yxy).x+e.xxx*scene(p+e.xxx).x);}
 void mainImage(out vec4 O,in vec2 f){
  vec2 uv=(2.*f-iResolution.xy)/iResolution.y;
  float z=iTime*.38;
@@ -55,7 +58,7 @@ void mainImage(out vec4 O,in vec2 f){
  vec3 target=vec3(route(z+5.)+vec2(0.),z+5.);
  vec3 forward=normalize(target-ro),right=normalize(cross(vec3(0,1,0),forward)),up=cross(forward,right);
  // Optical framing keeps the main reveal to the right of desktop text.
- float shift=iResolution.x/iResolution.y>1.1?.30:0.;
+ float shift=0.; // Text now lives above the visual, so use the full scene frame.
  vec3 rd=normalize(right*(uv.x-shift)+up*(uv.y+.04)+forward*1.65);
  float t=0.;vec2 hit=vec2(1.,0.);vec3 p=ro;
  for(int i=0;i<88;i++){

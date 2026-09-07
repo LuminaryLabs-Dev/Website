@@ -1,3 +1,45 @@
+## 2026-09-07 — Shared white presentation and preserved shader refinement
+
+- Give Home, Nexus Arcade, Open Source, Services, Portfolio, Team and Contact a
+  shared white title panel, contained shader viewport and white action strip.
+- Use locally hosted OFL-licensed Rajdhani Semibold for upright mechanical
+  headings; preserve body copy and allow natural mobile wrapping.
+- Add a progressive downward panel reveal and typed heading with complete
+  semantic text, reduced-motion handling, keyboard interruption and a loading
+  watchdog. Keep the navigation and existing Home intro independent.
+- A recorded startup pass exposed delayed headings during WebGL compilation.
+  The shared renderer now defers initialization only on opted-in presentation
+  pages until their entry completes; the Home intro bypasses this delay.
+  Preserve rendering math, pixel budgets and all other consumers.
+- Center the real Arcade cabinet drawings over the live room. Move captions,
+  controls and useful explanatory copy outside the shader area.
+- Refine the seven hero materials and optical framing without changing protected
+  geometry, route equations, Team arrival/growth timing, Contact's 34 steps and
+  backward camera offset, or Obsidian's original speed, roll and neon.
+- Use four-sample normals for Arcade, Services and Portfolio. Add a conservative
+  Arcade cabinet exclusion bound that matches the preceding candidate exactly
+  at seven rendered timestamps through 600 seconds.
+- Regenerate all seven 1440x554 fallback posters from the actual GLSL at 15s;
+  replace Team's obsolete shell poster with its current globe. Refresh affected
+  shader, poster, homepage control and presentation asset versions.
+- Validation: 69 source-preservation contracts; static destinations and assets;
+  shared shell consistency; seven-page playback, offscreen suspension,
+  synthetic hidden-tab suspension, changed reduced-motion settings and no-JS
+  presentation; studies, disclosures, media dialog and Contact prefill.
+- Final five-viewport review: 35 page captures with no overflow or page errors.
+- Additional checks cover Home taps/drag rejection/arrow, intro replay/Skip/
+  Escape, Team portrait playback, cabinet anchor, WebGL context loss and all
+  seven unavailable-WebGL and reduced-motion posters.
+- Recorded travel and startup sequences reviewed across seven pages; 14 entry
+  geometry measurements show stable title height and viewport position.
+  Current startup checks cover intro deferral, replay focus, early pause and
+  missing-entry recovery. Eight renderer method comparisons remain identical.
+- Performance limitation: the overall 5% median/p95 target did not pass in
+  SwiftShader. The documented tradeoff retains the reviewed material changes
+  and existing adaptive budgets. The optimized Arcade rerun meets that target.
+  Software render-plus-readback time is not physical GPU timing; physical-device
+  throughput remains unverified. No claim of photographic mockup equivalence.
+
 ## 2026-09-06 — Restore Obsidian and ClusterBots (local, unpushed)
 
 - Restore Obsidian from `0294c86`: original geometry timing, centered descent,

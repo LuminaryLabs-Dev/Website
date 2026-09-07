@@ -13,13 +13,13 @@ void mainImage(out vec4 O,in vec2 F){
 vec2 uv=(2.*F-iResolution.xy)/iResolution.y;float aspect=iResolution.x/iResolution.y;
 float a=.9+iTime*.052+.09*sin(iTime*.023),el=.22+.15*sin(iTime*.031),dist=3.5+.18*sin(iTime*.043);
 vec3 ro=vec3(cos(a)*cos(el),sin(el),sin(a)*cos(el))*dist,fw=normalize(-ro),rt=normalize(cross(fw,vec3(0,1,0))),up=cross(rt,fw);
-float mobile=1.-smoothstep(.85,1.25,aspect);uv.x-=mix(.78,0.,mobile);uv.y+=mix(0.,.42,mobile);
+float mobile=1.-smoothstep(.85,1.25,aspect);uv.y+=mix(0.,.06,mobile); // Center the network now that the title is outside the scene.
 vec3 rd=normalize(fw*mix(2.10,1.28,mobile)+rt*uv.x+up*uv.y);
 vec3 col=vec3(.009,.018,.035)+vec3(.006,.01,.018)*max(0.,rd.y+.4),light=normalize(vec3(-.5,.8,1.));
 vec2 worldBound=sphere(ro,rd,vec3(0),1.58);if(worldBound.y<0.){O=vec4(pow(col/(1.+col),vec3(.454545)),1.);return;}
 vec2 hit=sphere(ro,rd,vec3(0),1.);float stop=hit.x>0.&&hit.y>0.?hit.x:1e4;vec3 surface=ro+rd*min(stop,10.);
-if(stop<100.){vec3 n=surface;float dif=max(dot(n,light),0.),rim=pow(1.-max(dot(n,-rd),0.),3.);float panel=pow(abs(sin(n.x*16.+n.z*8.)*sin(n.y*17.-n.z*7.)),.35);float detail=uDetail>.5?(panel-.5)*.12:0.;float mineral=.5+.5*sin(n.x*5.+sin(n.z*7.))*sin(n.y*8.+n.z*3.);vec3 blue=mix(vec3(.018,.065,.145),vec3(.035,.13,.235),mineral);col=blue*(.28+dif*1.2+detail)+vec3(.045,.18,.32)*rim*.50;col+=vec3(.1,.22,.34)*pow(max(dot(reflect(rd,n),light),0.),40.)*.4;}
-float tangent=length(cross(ro,rd));if(dot(ro,rd)<0.){float limb=abs(tangent-1.);col+=vec3(.045,.23,.45)*exp(-limb*65.)*.32;col+=vec3(.025,.105,.22)*exp(-limb*23.)*.12*smoothstep(.99,1.025,tangent);}
+if(stop<100.){vec3 n=surface;float dif=max(dot(n,light),0.),rim=pow(1.-max(dot(n,-rd),0.),3.);float panel=pow(abs(sin(n.x*16.+n.z*8.)*sin(n.y*17.-n.z*7.)),.35);float detail=uDetail>.5?(panel-.5)*.065:0.;float mineral=.5+.5*sin(n.x*5.+sin(n.z*7.))*sin(n.y*8.+n.z*3.);vec3 blue=mix(vec3(.018,.065,.145),vec3(.025,.11,.24),mineral);col=blue*(.22+dif*1.35+detail)+vec3(.045,.18,.32)*rim*.50;col+=vec3(.13,.27,.40)*pow(max(dot(reflect(rd,n),light),0.),40.)*.4;}
+float tangent=length(cross(ro,rd));if(dot(ro,rd)<0.){float limb=abs(tangent-1.);col+=vec3(.045,.23,.45)*exp(-limb*65.)*.42;col+=vec3(.025,.105,.22)*exp(-limb*23.)*.12*smoothstep(.99,1.025,tangent);}
 vec3 emission=vec3(0);float globeStop=stop;
 // Four groups, three sources and one meeting point each. No global marching loop.
 for(int G=0;G<4;G++){float g=float(G),age=iTime-g*1.5;vec3 h=hub(g);vec2 groupBound=sphere(ro,rd,h*.96,.87);if(groupBound.y<0.)continue;float grown=smoothstep(6.,8.2,age);float arrival=pow(.5+.5*cos(6.283185*(age-6.)/2.666667),24.);float cycle=age*.20;
@@ -27,7 +27,8 @@ for(int B=0;B<4;B++){float b=float(B);bool big=B==3;if(big&&grown<.001)continue;
 mat3 basis=frame(n);vec3 center=base+n*.09*scale;vec2 bound=sphere(ro,rd,center,.10*scale);if(bound.y>0.&&bound.x<stop){vec3 w=ro-base,q=vec3(dot(w,basis[0]),dot(w,basis[1]),dot(w,basis[2]))/scale,v=vec3(dot(rd,basis[0]),dot(rd,basis[1]),dot(rd,basis[2]))/scale;
 float t=1e4;vec3 normal=vec3(0);float part=0.;
 for(int K=0;K<3;K++){float k=float(K);vec3 c=K==0?vec3(0,.103,0):(K==1?vec3(0,.06,0):vec3(0,.023,0));vec3 r=K==0?vec3(.046):(K==1?vec3(.024,.035,.024):vec3(.023,.027,.023));float t0=ellipsoid(q,v,c,r);if(t0<t){t=t0;normal=basis*normalize((q+v*t-c)/(r*r));part=k;}}
-if(t<stop){vec3 p=q+v*t;float rim=pow(1.-max(dot(normal,-rd),0.),2.),dif=max(dot(normal,light),0.);vec3 material;if(part>1.5){float thread=.75+.25*sin(p.y*850.);material=vec3(.26,.19,.08)*(.35+dif)*thread;}else{float filament=exp(-pow(length(p.xz)/.019,2.));material=vec3(.07,.12,.16)*(.4+dif)+vec3(1.,.57,.17)*(rim*.5+filament*.9+.30)*power;material+=vec3(1.,.85,.55)*pow(max(dot(reflect(rd,normal),light),0.),32.);}col=material;stop=t;}}
+if(t<stop){vec3 p=q+v*t;float rim=pow(1.-max(dot(normal,-rd),0.),2.),dif=max(dot(normal,light),0.);vec3 material;if(part>1.5){float thread=.75+.25*sin(p.y*850.);material=vec3(.32,.24,.11)*(.28+dif)*thread;material+=vec3(.25,.20,.11)*pow(max(dot(reflect(rd,normal),light),0.),24.);}else{float stem=abs(abs(p.x)-(.009+.008*sin((p.y-.07)*55.)));
+float filament=exp(-stem*stem/.000018)*smoothstep(.065,.085,p.y)*(1.-smoothstep(.12,.142,p.y));material=vec3(.07,.12,.16)*(.4+dif)+vec3(1.,.57,.17)*(rim*.55+filament*1.4+.10)*power;material+=vec3(1.,.85,.55)*pow(max(dot(reflect(rd,normal),light),0.),32.);}col=material;stop=t;}}
 // Occlusion by the globe is tested independently from the bulb envelope.
 emission+=vec3(1.,.52,.14)*glow(ro,rd,center+n*.02*scale,.047*scale,globeStop)*power*.23;
 if(globeStop<100.)col+=vec3(.18,.075,.014)*exp(-dot(surface-base,surface-base)*130.)*power;

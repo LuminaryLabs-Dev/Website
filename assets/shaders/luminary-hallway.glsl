@@ -51,7 +51,7 @@ void mainImage(out vec4 color, in vec2 fragCoord) {
   // Continuous travel avoids a camera or material reset. Only geometry cells repeat.
   float travel=iTime*0.38;
   vec3 ro=vec3(bend(travel+2.0)-0.65+.16*sin(iTime*.06),1.85+.09*sin(iTime*.07),travel+2.0);
-  vec3 rd=normalize(vec3(uv.x-0.52,uv.y-0.12,1.65));
+  vec3 rd=normalize(vec3(uv.x,uv.y-0.12,1.65));
   rd.xz=mat2(cos(.042*cos(ro.z*.045)), -sin(.042*cos(ro.z*.045)), sin(.042*cos(ro.z*.045)), cos(.042*cos(ro.z*.045)))*rd.xz;
   float t=90.0, material=0.0; vec3 n=vec3(0,0,-1);
   if(rd.y<-.0001) { t=-ro.y/rd.y; n=vec3(0,1,0); material=1.0; }
@@ -94,10 +94,14 @@ void mainImage(out vec4 color, in vec2 fragCoord) {
     vec3 lights=hexLights(wall,aa,iTime,seam);
     col*=1.0-seam*detailFade*0.65;
     col+=vec3(.04,.06,.07)*exp(-abs(seam-.3)*6.)*detailFade;
-    col+=lights*detailFade*(p.x>0.0?1.0:0.38);
+    col+=lights*detailFade*(p.x>0.0?1.0:0.68);
     if(uDetail>.5){float smallSeam;vec3 smallLight=hexLights(wall*3.,aa*3.,iTime*.25,smallSeam);col*=1.-smallSeam*.09*detailFade;col+=smallLight*.035*detailFade;}
     float bayEdge=min(mod(p.z,BAY),BAY-mod(p.z,BAY));
     col*=1.0-line(bayEdge,0.025,aa)*0.65;
+    // Existing bay joints gain narrow metallic shoulders, not additional geometry.
+    col+=vec3(.13,.17,.20)*line(bayEdge-.055,.018,aa)*detailFade;
+    float spec=pow(max(dot(reflect(rd,n),normalize(vec3(-.4,.8,-.3))),0.),32.);
+    col+=vec3(.16,.21,.25)*spec*(.55+.45*tex);
     // Thin amber sill anchors the architecture; broad falloff lights the material.
     float sill=abs(p.y-0.075);
     col+=AMBER*(line(sill,0.013,aa)*1.8+exp(-sill*5.5)*0.13);
@@ -105,7 +109,7 @@ void mainImage(out vec4 color, in vec2 fragCoord) {
     col+=vec3(0.26,0.32,0.34)*line(top,0.018,aa)*0.3;
   } else if(material==1.0) {
     float rough=grain(p.xz*7.0);
-    col=vec3(0.14,0.17,0.19)*(0.65+0.35*rough);
+    col=vec3(0.14,0.17,0.19)*(0.82+0.18*rough);
     float jointX=min(mod(p.x+9.0,3.0),3.0-mod(p.x+9.0,3.0));
     float jointZ=min(mod(p.z,4.5),4.5-mod(p.z,4.5));
     col*=1.0-max(line(jointX,0.006,aa),line(jointZ,0.006,aa))*0.6*detailFade;
@@ -117,7 +121,7 @@ void mainImage(out vec4 color, in vec2 fragCoord) {
     // Approximate rough reflections with surface-space light bands, no second trace.
     float reflection=pow(max(0.0,sin(p.z*1.45-iTime*0.32)),14.0);
     col+=mix(CYAN,AMBER,step(0.0,sin(p.z*0.7)))*reflection*
-      exp(-wallDist*0.95)*0.09*(0.5+0.5*rough);
+      exp(-wallDist*0.95)*0.16*(0.5+0.5*rough);
     col+=vec3(0.045,0.058,0.065)*pow(1.0-max(dot(n,-rd),0.0),4.0);
   } else if(material==2.0) {
     col=vec3(0.085,0.11,0.13)*(0.7+0.3*grain(p.xz*3.0));

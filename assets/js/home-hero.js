@@ -5,6 +5,7 @@
   const button = hero?.querySelector('.hallway-control');
   if (!hero || !renderer || !button) return;
 
+  const visibleControl = hero.querySelector('[data-home-motion]');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const mobile = matchMedia('(max-width: 700px)');
   let userPaused = false;
@@ -20,6 +21,11 @@
     hero.classList.toggle('hallway-live', renderer.ready && !motion.matches);
     button.hidden = !renderer.ready || motion.matches;
     button.setAttribute('aria-label', userPaused ? 'Resume hallway animation' : 'Pause hallway animation');
+    if (visibleControl) {
+      visibleControl.hidden = !renderer.ready || motion.matches;
+      visibleControl.textContent = userPaused ? 'Resume motion' : 'Pause motion';
+      visibleControl.setAttribute('aria-pressed', String(userPaused));
+    }
   }
   function setQuality() {
     renderer.setAttribute('max-pixels', String(budgets[tier]));
@@ -27,6 +33,7 @@
     renderer.dataset.quality = ['full', 'balanced', 'light'][tier];
   }
   // Keep gestures and text selection separate from a deliberate background tap.
+  visibleControl?.addEventListener('click', () => { userPaused = !userPaused; sync(); });
   let gesture = null;
   button.addEventListener('pointerdown', event => {
     gesture = { x: event.clientX, y: event.clientY, moved: !event.isPrimary };
@@ -53,6 +60,7 @@
   renderer.addEventListener('shader-error', () => {
     hero.classList.remove('hallway-live');
     button.hidden = true;
+    if (visibleControl) visibleControl.hidden = true;
   });
   motion.addEventListener('change', sync);
   mobile.addEventListener('change', () => {

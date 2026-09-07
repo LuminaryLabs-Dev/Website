@@ -14,8 +14,16 @@
   <link href="/assets/css/site-components.css?v=20260906-scenes-1" rel="stylesheet"/>
   <link href="/assets/css/site-motion.css?v=20260906-unified-1" rel="stylesheet"/>
   <link href="/assets/css/shader-renderer.css?v=20260901-1" rel="stylesheet"/>
- </head>
- <body class="ll-site nexus-arcade-page">
+ <link rel="preload" href="/public/fonts/rajdhani-semibold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/page-presentation.css?v=20260907-presentation-1">
+<script>
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('entry-armed');
+    window.pageEntrySafety = setTimeout(() => document.documentElement.classList.remove('entry-armed'), 3000);
+  }
+</script>
+</head>
+ <body class="presentation-page ll-site nexus-arcade-page">
   <!-- site:header:start -->
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
@@ -35,61 +43,31 @@
 </header>
 <!-- site:header:end -->
   <main id="main" tabindex="-1">
-   <section aria-labelledby="page-title" class="page-hero cabinet-hero">
-    <div aria-hidden="true" class="page-scene" data-ambient="" data-scene-src="/assets/shaders/arcade-infinite.glsl?v=20260906-scenes-1">
-     <img alt="" class="scene-poster" width="1440" height="900" src="/public/scenes/arcade-infinite.webp?v=20260906-scenes-1"/>
-    </div>
-    <div class="site-inner cabinet-layout">
-     <div class="hero-copy">
-      <p class="eyebrow">
-       Nexus Arcade
-      </p>
-      <h1 id="page-title">
-       Nexus Arcade.
-      </h1>
-      <p class="lede">
-       Modern play.
-       <br/>
-       Retro arcade soul.
-      </p>
-      <p class="hero-description">
-       A hands-on approach to gaming. Explore the cabinet, discover new worlds, and find your next five-minute adventure.
-      </p>
-      <a class="site-button" href="/nexus-arcade/play/">
-       Play Games
-       <span aria-hidden="true">
-        ↗
-       </span>
-      </a>
-      <a class="text-action" href="#arcade-revival">
-       Explore the cabinet
-       <span aria-hidden="true">
-        ↓
-       </span>
-      </a>
-     </div>
-     <figure class="cabinet-drawing">
-      <div class="cad-views">
-       <img alt="Nexus Arcade cabinet perspective CAD drawing" fetchpriority="high" src="/public/NexusArcadePics/cad/cabinet-perspective.png">
-        <img alt="Nexus Arcade cabinet front elevation CAD drawing" src="/public/NexusArcadePics/cad/cabinet-front.png"/>
-       </img>
-      </div>
-      <figcaption>
-       <span>
+   <section class="presentation-hero  cabinet-hero"  aria-labelledby="page-title" data-page-entry>
+ <div class="presentation-heading"><div class="presentation-panel" aria-hidden="true"></div><div class="presentation-copy"><p class="eyebrow">Nexus Arcade</p><h1 id="page-title" >Nexus Arcade</h1><p class="presentation-subtitle">Modern play Retro arcade soul</p></div></div>
+ <div class="presentation-visual"><div aria-hidden="true" class="page-scene" data-ambient="" data-scene-src="/assets/shaders/arcade-infinite.glsl?v=20260907-presentation-1">
+<img alt="" class="scene-poster" height="554" src="/public/scenes/arcade-infinite.webp?v=20260907-presentation-1" width="1440"/>
+</div><figure class="cabinet-drawing">
+<div class="cad-views">
+<img alt="Nexus Arcade cabinet perspective CAD drawing" fetchpriority="high" src="/public/NexusArcadePics/cad/cabinet-perspective.png"/>
+<img alt="Nexus Arcade cabinet front elevation CAD drawing" src="/public/NexusArcadePics/cad/cabinet-front.png"/>
+</div>
+
+</figure></div>
+ <div class="presentation-actions"><div class="presentation-links"><a class="site-button " href="/nexus-arcade/play/">Play Games <span aria-hidden="true">↗</span></a><a class="text-action" href="#arcade-revival">Explore the cabinet <span aria-hidden="true">↓</span></a></div><button class="motion-toggle" data-motion-toggle="" hidden="" type="button">
+     Pause motion
+    </button></div><div class="presentation-caption">
+<span>
         Cabinet study / Perspective + front
        </span>
-       <span>
+<span>
         W 2 ft 2.8 in · H 5 ft 8.9 in · D 2 ft 5.9 in
        </span>
-      </figcaption>
-     </figure>
-    </div>
-    <button class="hero-motion motion-toggle" data-motion-toggle="" hidden="" type="button">
-     Pause motion
-    </button>
-   </section>
+</div>
+ </section>
    <section aria-labelledby="revival-title" class="site-section revival" id="arcade-revival">
     <div class="site-inner">
+<p class="presentation-context">A hands-on approach to gaming. Explore the cabinet, discover new worlds, and find your next five-minute adventure.</p>
      <div class="section-heading" data-reveal="">
       <div>
        <p class="eyebrow">
@@ -189,5 +167,6 @@
   </script>
   <script src="/assets/js/shader-renderer.js?v=20260906-scenes-1"></script>
   <script src="/assets/js/page-scenes.js?v=20260906-scenes-1"></script>
- </body>
+ <script src="/assets/js/page-entry.js?v=20260907-presentation-1"></script>
+</body>
 </html>
