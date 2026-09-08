@@ -16,9 +16,28 @@
   prongs and original glow. Preserve Obsidian's 110 steps, original map, speed
   4.0, roll and neon. Preserve Team's 12 sources, 4 hubs, first arrivals at
   group age 6, growth through 8.2, scale 2.3, dotted connectors and fast pulses.
-- The renderer waits for `presentation-entry-finished` only on opted-in
-  presentation pages. Intro renderers bypass this rule. Preserve the two-frame
-  paint opportunity, bounded failed-entry recovery and disposal cleanup.
+- Marketing heroes and loading bulbs opt into `startup-independent` before
+  connection: fetch immediately, then give the cover two animation-frame
+  callbacks before WebGL initialization. Never gate these renderers on typing.
+  Other renderer consumers retain the existing entry/intro lifecycle.
+- `hero-loading.js` observes the specific hero's `firstFrameRendered` state and
+  readiness event. Fade only its cover over 250ms, then remove/dispose the bulb.
+  An already-ready hero uses the same cleanup path; bulb readiness cannot reveal it.
+- Cover bulbs reuse fractal-filament with `uLoadingCover=1`; zero preserves the
+  fullscreen intro appearance and storage/Skip/replay behavior. Budget: 24 FPS,
+  at most 130,000 pixels, no stars/dust or additional particle passes. Input uses
+  the renderer's draw hook, 200ms smoothing, bounded offsets and total 5-degree tilt.
+- Keep the shader-derived still visible on bulb failure. Hero failure exposes
+  the existing poster. Stop stalled loading after 30 seconds of active visible,
+  unpaused time; abort the hero so a late fetch cannot revive it. Hidden/offscreen,
+  user-paused and fullscreen-intro time is excluded. No-JS/reduced motion use posters.
+- Validation for this change: 28 page/viewport combinations (390x844, 768x1024,
+  1440x900, 1920x1080) prove startup with title completion withheld, then normal
+  typography/layout; cached/slow startup recordings; four first-paint/fade
+  captures with the external still blocked; pause, offscreen, synthetic hidden
+  tab, reduced motion, no-JS, errors, timeout, duplicate/removal cleanup, and
+  intro Skip/replay checks. One intro timing timeout during concurrent software
+  tests passed on isolated rerun; do not claim physical-device performance.
 - Current hero posters are 1440x554 GLSL captures at 15s, versioned
   `20260907-presentation-1`. Team's fallback is the globe, not a shell tunnel.
 - Keep shader artwork comparisons separate from generated concept imagery.

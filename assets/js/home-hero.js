@@ -90,6 +90,7 @@
   window.addEventListener('pagehide', event => {
     if (!event.persisted) { clearInterval(sampler); observer.disconnect(); }
   });
+  window.HeroLoading?.attach(renderer);
   setQuality();
   sync();
 })();

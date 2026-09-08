@@ -1,3 +1,26 @@
+## 2026-09-08 — Independent hero startup and lightbulb loading covers
+
+- Start all seven marketing hero shader requests without waiting for headline
+  typing. Preserve the title animation and unrelated renderer lifecycles.
+- Show a shader-derived bulb still before initialization, animate the cover at
+  24 FPS / 130,000 pixels, and fade only the cover for 250ms after the specific
+  hero's first rendered frame. Dispose the bulb and its input/lifecycle listeners.
+- Reuse the filament shader with cover-only clear glass, restrained brass,
+  a six-second gentle float, and smoothed pointer steering in raymarch space.
+  Preserve the existing fullscreen intro artwork, Skip, replay and storage.
+- Preserve motion controls, hidden/offscreen suspension, reduced-motion and
+  no-JavaScript posters. Retain the still on bulb failure; expose the page poster
+  on hero failure or 30 seconds of active stalled loading. Reject late completion.
+- Refresh affected asset versions and document the new startup ownership.
+- Validate seven heroes at four viewports with title completion held, then
+  release typography and capture the normal layout. Check cached/slow recorded
+  startup, first-paint image failure, intermediate fade opacity, lifecycle and
+  failure exits, and first-frame/disposal ownership. Intro pixels match the
+  original shader at 0/2/4s in 128px comparison captures.
+- Measure software-rendering startup stalls rather than claiming compilation is
+  nonblocking. Cancel pending bulb initialization at hero readiness and freeze
+  the bulb during reveal. Physical-GPU performance remains unmeasured.
+
 ## 2026-09-07 — Shared white presentation and preserved shader refinement
 
 - Give Home, Nexus Arcade, Open Source, Services, Portfolio, Team and Contact a

@@ -18,11 +18,18 @@
   <link href="/assets/css/site-motion.css?v=20260906-unified-1" rel="stylesheet"/>
   <link href="/assets/css/shader-renderer.css?v=20260901-1" rel="stylesheet"/>
  <link rel="preload" href="/public/fonts/rajdhani-semibold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/page-presentation.css?v=20260907-presentation-1">
+<link rel="stylesheet" href="/assets/css/page-presentation.css?v=20260908-loading-1">
 <script>
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.documentElement.classList.add('entry-armed');
     window.pageEntrySafety = setTimeout(() => document.documentElement.classList.remove('entry-armed'), 3000);
+  }
+</script>
+<link rel="preload" as="image" href="/public/home/hero-loading-bulb.png?v=20260908-loading-1" media="(prefers-reduced-motion: no-preference)">
+<script>
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('hero-loading-enabled');
+    window.heroLoadingSafety = setTimeout(() => document.documentElement.classList.remove('hero-loading-enabled'), 15000);
   }
 </script>
 </head>
@@ -48,7 +55,7 @@
   <main id="main" tabindex="-1">
    <section class="presentation-hero  "  aria-labelledby="page-title" data-page-entry>
  <div class="presentation-heading"><div class="presentation-panel" aria-hidden="true"></div><div class="presentation-copy"><p class="eyebrow">Portfolio</p><h1 id="page-title" >Selected work in immersive computing</h1><p class="presentation-subtitle">Experiences tools and systems</p></div></div>
- <div class="presentation-visual"><div aria-hidden="true" class="page-scene" data-ambient="" data-scene-src="/assets/shaders/portfolio-terraces.glsl?v=20260907-presentation-1">
+ <div class="presentation-visual"><div class="hero-loading-cover" aria-hidden="true"><img class="hero-loading-still" src="/public/home/hero-loading-bulb.png?v=20260908-loading-1" alt="" fetchpriority="high" width="720" height="720"></div><div aria-hidden="true" class="page-scene" data-ambient="" data-scene-src="/assets/shaders/portfolio-terraces.glsl?v=20260907-presentation-1">
 <img alt="" class="scene-poster" height="554" src="/public/scenes/portfolio-terraces.webp?v=20260907-presentation-1" width="1440"/>
 </div></div>
  <div class="presentation-actions"><div class="presentation-links"><a class="site-button " href="#projects">View the projects <span aria-hidden="true">↗</span></a></div><button class="motion-toggle" data-motion-toggle="" hidden="" type="button">
@@ -338,8 +345,9 @@
   </script>
   <script src="/assets/js/site-ui.js?v=20260906-unified-1">
   </script>
-  <script src="/assets/js/shader-renderer.js?v=20260906-scenes-1"></script>
-  <script src="/assets/js/page-scenes.js?v=20260906-scenes-1"></script>
+  <script src="/assets/js/shader-renderer.js?v=20260908-loading-1"></script>
+  <script src="/assets/js/hero-loading.js?v=20260908-loading-1"></script>
+  <script src="/assets/js/page-scenes.js?v=20260908-loading-1"></script>
  <script src="/assets/js/page-entry.js?v=20260907-presentation-1"></script>
 </body>
 </html>

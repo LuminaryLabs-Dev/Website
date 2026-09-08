@@ -38,6 +38,7 @@
       this.frameCount = 0;
       this.runGeneration = 0;
       this.ready = false;
+      this.firstFrameRendered = false;
       this.disposed = false;
       this.initializing = false;
       this.resizeObserver = null;
@@ -56,6 +57,8 @@
     connectedCallback() {
       if (this.initializing || this.ready) return;
       this.disposed = false;
+      this.firstFrameRendered = false;
+      this.frameCount = 0;
       this.initializing = true;
       const generation = ++this.runGeneration;
       this.dataset.state = "loading";
@@ -128,6 +131,16 @@
           if (generation === this.runGeneration && !this.disposed) this.fail(error);
         });
       };
+      // Covered heroes fetch now; typography remains an independent enhancement.
+      if (this.hasAttribute("startup-independent")) {
+        this.sourceRequest = this.fetchSource();
+        // Attach a handler now even if a hidden tab delays the paint callbacks.
+        this.sourceRequest.catch(() => {});
+        this.entryFrame = requestAnimationFrame(() => {
+          this.entryFrame = requestAnimationFrame(begin);
+        });
+        return;
+      }
       const entry = document.querySelector("[data-page-entry]");
       // Let the marketing title paint before synchronous WebGL compilation.
       // The optional intro and every other renderer consumer keep their lifecycle.
@@ -159,10 +172,18 @@
       this.dispose();
     }
 
-    async initialize(generation) {
+    async fetchSource() {
       const fragmentUrl = this.getAttribute("fragment-src");
       if (!fragmentUrl) throw new Error("shader-renderer requires fragment-src");
+      const response = await fetch(fragmentUrl, { signal: this.abortController.signal });
+      if (!response.ok) throw new Error(`Shader request failed (${response.status})`);
+      return response.text();
+    }
 
+    async initialize(generation) {
+      let source;
+      if (this.sourceRequest) source = await this.sourceRequest;
+      if (this.disposed || generation !== this.runGeneration) return;
       const transparent = this.hasAttribute("transparent");
       const gl = this.canvas.getContext("webgl", {
         alpha: transparent,
@@ -176,11 +197,8 @@
       this.gl = gl;
       gl.clearColor(0, 0, 0, transparent ? 0 : 1);
 
-      const response = await fetch(fragmentUrl, { signal: this.abortController.signal });
-      if (!response.ok) throw new Error(`Shader request failed (${response.status})`);
-      // Shared studies can also be opened directly in Shadertoy. The wrapper
-      // supplies standard uniforms, so keep exactly one declaration of each.
-      const source = (await response.text()).replace(/uniform\s+(?:vec3\s+iResolution|float\s+iTime|vec4\s+iMouse)\s*;/g, '');
+      // Keep one declaration of each standard Shadertoy uniform.
+      source = (source ?? await this.fetchSource()).replace(/uniform\s+(?:vec3\s+iResolution|float\s+iTime|vec4\s+iMouse)\s*;/g, '');
       if (this.disposed || generation !== this.runGeneration) return;
       const fragmentSource = `precision highp float;
 uniform vec3 iResolution;
@@ -316,8 +334,9 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);}`;
       if (maxPixels > 0 && rect.width * rect.height > 0) {
         pixelRatio = Math.min(pixelRatio, Math.sqrt(maxPixels / (rect.width * rect.height)));
       }
-      const width = Math.max(1, Math.round(rect.width * pixelRatio));
-      const height = Math.max(1, Math.round(rect.height * pixelRatio));
+      const round = this.hasAttribute("startup-independent") ? Math.floor : Math.round;
+      const width = Math.max(1, round(rect.width * pixelRatio));
+      const height = Math.max(1, round(rect.height * pixelRatio));
       if (this.canvas.width !== width || this.canvas.height !== height) {
         this.canvas.width = width;
         this.canvas.height = height;
@@ -342,8 +361,8 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);}`;
 
     draw(elapsed) {
       if (!this.ready || !this.gl || !this.program) return;
+      this.beforeDraw?.(elapsed);
       this.lastElapsed = elapsed;
-      this.frameCount += 1;
       const gl = this.gl;
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.disable(gl.BLEND);
@@ -359,6 +378,11 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);}`;
       this.uniformValues.forEach((value, name) => this.applyUniform(name, value));
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       this.passes.forEach(pass => pass.render(elapsed, this.canvas.width, this.canvas.height));
+      if (!this.firstFrameRendered && gl.isContextLost()) {
+        throw new Error("Shader first frame failed");
+      }
+      this.firstFrameRendered = true;
+      this.frameCount += 1;
     }
 
     shouldAnimate() {
@@ -421,6 +445,14 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);}`;
       this.initializing = false;
       this.canvas?.remove();
       this.canvas = null;
+      this.sourceRequest = null;
+      this.beforeDraw = null;
+      this.firstFrameRendered = false;
+      this.gl = null;
+      this.program = null;
+      this.buffer = null;
+      this.uniformLocations.clear();
+      this.dispatchEvent(new Event("shader-disposed"));
     }
   }
 

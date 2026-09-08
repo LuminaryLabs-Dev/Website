@@ -21,12 +21,14 @@
         renderer.className='scene-renderer';
         renderer.setAttribute('fragment-src',scene.dataset.sceneSrc);
         renderer.setAttribute('data-decorative','');
+        if (scene.closest('.presentation-visual')) renderer.setAttribute('startup-independent','');
         renderer.setAttribute('paused','');
         renderer.setAttribute('max-fps','30');
         renderer.setAttribute('max-pixels',String(budgets[tier]));
         renderer.setAttribute('pixel-ratio-cap','1');
         renderer.addEventListener('shader-ready',quality);
         scene.append(renderer);
+        window.HeroLoading?.attach(renderer);
       }
       renderer.toggleAttribute('paused',!window.SiteMotion.allowed||!scene.classList.contains('is-visible'));
     }
