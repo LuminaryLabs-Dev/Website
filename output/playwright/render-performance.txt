@@ -1,0 +1,163 @@
+Compilation and render checks only. Timing values below timer resolution were discarded. Use the animation performance records for timing.
+[
+  {
+    "name": "luminary-hallway",
+    "label": "before",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "luminary-hallway",
+    "label": "after",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "arcade-infinite",
+    "label": "before",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "arcade-infinite",
+    "label": "after",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "obsidian-descent",
+    "label": "before",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "obsidian-descent",
+    "label": "after",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "services-branches",
+    "label": "before",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "services-branches",
+    "label": "after",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "portfolio-terraces",
+    "label": "before",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "portfolio-terraces",
+    "label": "after",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "team-chambers",
+    "label": "before",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "team-chambers",
+    "label": "after",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "contact-scene",
+    "label": "before",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "contact-scene",
+    "label": "after",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "fractal-filament",
+    "label": "before",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "fractal-filament",
+    "label": "after",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  }
+]

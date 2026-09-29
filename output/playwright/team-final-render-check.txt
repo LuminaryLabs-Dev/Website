@@ -1,0 +1,23 @@
+Compilation and render checks only. Timing values below timer resolution were discarded. Use the animation performance records for timing.
+[
+  {
+    "name": "team-chambers",
+    "label": "before",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  },
+  {
+    "name": "team-chambers",
+    "label": "after",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "pixels": [
+      822,
+      316
+    ],
+    "glError": 0
+  }
+]

@@ -1,0 +1,9 @@
+### Result
+{"title":"Ten shader reviews — Luminary Labs","videos":[{"src":"living-lightning.mp4","duration":5,"width":1440,"height":554},{"src":"luminous-roots.mp4","duration":5,"width":1440,"height":554},{"src":"fractal-coral.mp4","duration":5,"width":1440,"height":554},{"src":"ribbon-vortex.mp4","duration":5,"width":1440,"height":554},{"src":"crystal-mycelium.mp4","duration":5,"width":1440,"height":554},{"src":"recursive-bloom.mp4","duration":5,"width":1440,"height":554},{"src":"molten-glass.mp4","duration":5,"width":1440,"height":554},{"src":"neon-mandelbulb.mp4","duration":5,"width":1440,"height":554},{"src":"aurora-weave.mp4","duration":5,"width":1440,"height":554},{"src":"fractal-cathedral.mp4","duration":5,"width":1440,"height":554}]}
+### Ran Playwright code
+```js
+await (async(page)=>{await page.goto('http://127.0.0.1:4173/output/shader-library/');await page.setViewportSize({width:1440,height:900});const videos=await page.evaluate(async()=>Promise.all([...document.querySelectorAll('video')].map(v=>new Promise(resolve=>{v.onloadedmetadata=()=>resolve({src:v.getAttribute('src'),duration:v.duration,width:v.videoWidth,height:v.videoHeight});v.onerror=()=>resolve({src:v.src,error:true});v.preload='metadata';v.load()}))));await page.screenshot({path:'output/shader-library/review-gallery.png'});return {title:await page.title(),videos}})(page);
+```
+### Page
+- Page URL: http://127.0.0.1:4173/output/shader-library/
+- Page Title: Ten shader reviews — Luminary Labs

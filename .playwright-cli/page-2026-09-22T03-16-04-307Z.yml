@@ -1,0 +1,86 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - navigation "Main navigation" [ref=e5]:
+        - link "Home" [ref=e6] [cursor=pointer]:
+          - /url: /index.html
+        - link "Nexus Arcade" [ref=e7] [cursor=pointer]:
+          - /url: /nexus-arcade/
+        - link "Open Source" [ref=e8] [cursor=pointer]:
+          - /url: /opensource.html
+        - link "Services" [ref=e9] [cursor=pointer]:
+          - /url: /services.html
+        - link "Portfolio" [ref=e10] [cursor=pointer]:
+          - /url: /portfolio.html
+        - link "Team" [ref=e11] [cursor=pointer]:
+          - /url: /team.html
+        - link "Contact" [ref=e12] [cursor=pointer]:
+          - /url: /contact.html
+      - link "Luminary Labs home" [ref=e13] [cursor=pointer]:
+        - /url: /index.html
+  - main [ref=e14]:
+    - region [ref=e15]:
+      - generic [ref=e17]:
+        - paragraph [ref=e18]: Team
+        - heading "People who build the future by hand" [level=1] [ref=e19]:
+          - generic [aria-hidden] [ref=e20]: People
+          - generic [aria-hidden] [ref=e21]: who
+          - generic [aria-hidden] [ref=e22]: build
+          - generic [aria-hidden] [ref=e23]: the
+          - generic [aria-hidden] [ref=e24]: future
+          - generic [aria-hidden] [ref=e25]: by
+          - generic [aria-hidden] [ref=e26]: hand
+        - paragraph [ref=e27]: Three perspectives One studio
+      - generic [ref=e29]:
+        - link "Meet the team" [ref=e31] [cursor=pointer]:
+          - /url: "#team"
+          - text: Meet the team
+          - generic [aria-hidden] [ref=e32]: ↗
+        - button "Pause motion" [ref=e33] [cursor=pointer]
+    - generic [ref=e35]:
+      - paragraph [ref=e36]: "Three perspectives, one studio: operations, vision, and technical systems working together across every project."
+      - heading "The team" [level=2] [ref=e39]
+      - article [ref=e40]:
+        - figure [ref=e41]:
+          - img "Robot illustration for Angel Berger" [ref=e43]
+          - generic [ref=e44]:
+            - button "Animate portrait" [ref=e45] [cursor=pointer]
+            - status
+        - generic [ref=e46]:
+          - paragraph [ref=e47]: Founder / CEO
+          - heading "Angel Berger" [level=2] [ref=e48]
+          - paragraph [ref=e49]: Angel is our approachable and pragmatic leader in executive operations at Luminary Labs. They keep the ship running smoothly and make sure our clients always receive the results they are looking for.
+      - article [ref=e50]:
+        - figure [ref=e51]:
+          - img "Robot illustration for Simon Swartout" [ref=e53]
+          - generic [ref=e54]:
+            - button "Animate portrait" [ref=e55] [cursor=pointer]
+            - status
+        - generic [ref=e56]:
+          - paragraph [ref=e57]: Chief Vision Officer
+          - heading "Simon Swartout" [level=2] [ref=e58]
+          - paragraph [ref=e59]: Simon is the Chief Vision Officer of Luminary Labs and a lead developer on the team. The role was invented to make sure that Luminary Labs never waivers from its mission statement.
+      - article [ref=e60]:
+        - figure [ref=e61]:
+          - img "Robot illustration for Crimson Wheeler" [ref=e63]
+          - generic [ref=e64]:
+            - button "Animate portrait" [ref=e65] [cursor=pointer]
+            - status
+        - generic [ref=e66]:
+          - paragraph [ref=e67]: Chief Technical Officer
+          - heading "Crimson Wheeler" [level=2] [ref=e68]
+          - paragraph [ref=e69]: Crimson is the CTO of Luminary Labs LLC and heads our technical operations. As our studio architect, he plays a pivotal role in automating studio operations and integrating AI into our workflows.
+  - contentinfo [ref=e70]:
+    - generic [ref=e71]:
+      - paragraph [ref=e72]: © 2026 Luminary Labs LLCAI Consultants and Software Developers
+      - navigation "Footer navigation" [ref=e73]:
+        - link "Open Source" [ref=e74] [cursor=pointer]:
+          - /url: /opensource.html
+        - link "Services" [ref=e75] [cursor=pointer]:
+          - /url: /services.html
+        - link "Contact" [ref=e76] [cursor=pointer]:
+          - /url: /contact.html
+        - link "AI Knowledge Base" [ref=e77] [cursor=pointer]:
+          - /url: /ai/index.html

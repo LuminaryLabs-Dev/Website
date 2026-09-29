@@ -1,4 +1,12 @@
-// Historical website adaptation: 34 steps, backward camera, no pointer steering or vignette.
+
+// Analytic environment lighting: broad softboxes and a narrow reflected ribbon.
+// This is a real-time material approximation, not path-traced reflection.
+vec3 reflectedLight(vec3 r){
+ float broad=pow(max(dot(r,normalize(vec3(-.5,.8,.4))),0.),12.);
+ float strip=pow(max(dot(r,normalize(vec3(.8,.25,-.4))),0.),48.);
+ return vec3(.08,.14,.21)*( .5+.5*r.y)+vec3(1.,.78,.52)*broad+vec3(.35,.70,1.)*strip;
+}
+// Connected Cluster Bots: each link is a capsule between the actual animated node centers.
 //based on Cluster Bots by simonsdev and Crimson Wheeler
 mat2 R(float a){float s=sin(a),c=cos(a);return mat2(c,-s,s,c);}
 float H(vec3 p){return fract(sin(dot(p,vec3(17.,59.,113.)))*43758.5);}
@@ -7,7 +15,7 @@ vec3 K(vec3 p){return vec3(H(p),H(p+19.),H(p+37.));}
 // Calculates a safe flight path to avoid colliding with the grid nodes.
 // X and Y axis movements are staggered so the camera strictly crosses boundaries in empty space.
 vec3 path(float t) {
-    float S = 1.5;
+    float S = 2.3;
     float idx = floor(t);
     float f = fract(t);
 
@@ -33,41 +41,39 @@ vec3 path(float t) {
 // Tracks the web's distance for the volumetric glow effect.
 float webDist = 100.0;
 
+vec3 nodeCenter(vec3 id){return (id+.5+.05*sin(iTime*.6+K(id)*6.28))*2.3;}
+float linkDistance(vec3 p,vec3 a,vec3 b){vec3 q=p-a,v=b-a;return length(q-v*clamp(dot(q,v)/dot(v,v),0.,1.))-.040;}
 float M(vec3 p) {
     float T = iTime * 0.6;
-    float S = 1.5;
+    float S = 2.3;
     float d = 9.0;
-
-    // Simulates a directional wind wave to push and ripple the strands.
-    float wind = sin(p.x * 2.5 + p.z * 2.0 - iTime * 4.0) * cos(p.y * 2.0 - p.x * 1.5 - iTime * 3.0);
-
-    // Distorts space solely for the fractal webs, leaving the bots physically anchored.
-    vec3 wp = p;
-    wp += 0.15 * sin(p.yzx * 3.0 + T * 0.5 + wind * 0.6);
-    wp += 0.05 * sin(p.zxy * 8.0 - T + wind * 1.2);
-
-    vec3 wfq = fract(wp/S) * S - S * 0.5;
-    float rX = length(wfq.zy);
-    float rY = length(wfq.xz);
-    float rZ = length(wfq.xy);
-
-    webDist = min(rX, min(rY, rZ)) - (0.008 + 0.003 * wind);
-
+    webDist=100.;
     vec3 b = floor(p/S - 0.5);
 
+    // Cache the eight corners once. Each of the twelve cell edges uses two
+    // cached centers, instead of recomputing animated hashes per edge.
+    vec3 centers[8];
+    for(int j=0;j<8;j++){
+        vec3 o=vec3(mod(float(j),2.),mod(floor(float(j)/2.),2.),mod(floor(float(j)/4.),2.));
+        centers[j]=nodeCenter(b+o);
+    }
     // Evaluates 8 neighboring grid cells to correctly render overlapping bot geometry.
     for(int j=0; j<8; j++) {
         vec3 o = vec3(mod(float(j),2.0), mod(floor(float(j)/2.0),2.0), mod(floor(float(j)/4.0),2.0));
         vec3 id = b + o;
         vec3 h = K(id);
 
-        vec3 c = (id + 0.5 + 0.05 * sin(T + h * 6.28)) * S;
+        vec3 c = centers[j];
+        // Shared endpoints guarantee attachment through every animation phase.
+        if(mod(float(j),2.)<.5)webDist=min(webDist,linkDistance(p,c,centers[j+1]));
+        if(mod(floor(float(j)/2.),2.)<.5)webDist=min(webDist,linkDistance(p,c,centers[j+2]));
+        if(j<4)webDist=min(webDist,linkDistance(p,c,centers[j+4]));
         vec3 q = p - c;
 
         q.xz = R(h.x * 6.283 + T * 0.4) * q.xz;
         q.xy = R(h.y * 6.283 + T * 0.3) * q.xy;
 
-        float s = 0.1 + 0.15 * h.z + 0.02 * sin(T * 2.0 + h.x * 6.283);
+        float s = 0.20 + 0.20 * h.z + 0.02 * sin(T * 2.0 + h.x * 6.283);
         vec3 a = abs(q);
 
         // Creates the octagonal body by intersecting an octahedron with bounding planes.
@@ -78,18 +84,18 @@ float M(vec3 p) {
         // Renders two tapered prongs along the local Y-axis.
         float prongLen = s * 2.2;
         vec2 py = vec2(length(q.xz), max(0.0, abs(q.y) - prongLen));
-        float pRadius = 0.02 - 0.005 * clamp(abs(q.y) / prongLen, 0.0, 1.0);
+        float pRadius = 0.035 - 0.008 * clamp(abs(q.y) / prongLen, 0.0, 1.0);
         float prongs = length(py) - pRadius;
 
         d = min(d, min(body, prongs));
     }
 
-    return min(d, webDist * 0.6);
+    return min(d, webDist);
 }
 
 vec3 N(vec3 p) {
-    vec2 e = vec2(.002, 0);
-    return normalize(vec3(M(p+e.xyy)-M(p-e.xyy), M(p+e.yxy)-M(p-e.yxy), M(p+e.yyx)-M(p-e.yyx)));
+    vec2 e=vec2(.002,-.002);
+    return normalize(e.xyy*M(p+e.xyy)+e.yyx*M(p+e.yyx)+e.yxy*M(p+e.yxy)+e.xxx*M(p+e.xxx));
 }
 
 void mainImage(out vec4 o, in vec2 f) {
@@ -109,7 +115,7 @@ void mainImage(out vec4 o, in vec2 f) {
     vec3 up = cross(right, fwd);
 
     mat3 camMat = mat3(right, up, fwd);
-    vec3 rd = camMat * normalize(vec3(uv, 1.3));
+    vec3 rd = camMat * normalize(vec3(uv, 1.6));
 
     rd.xz = R(m.x * 0.8) * rd.xz;
     rd.yz = R(-m.y * 0.6) * rd.yz;
@@ -118,24 +124,24 @@ void mainImage(out vec4 o, in vec2 f) {
     float t = 0., d = 0., g = 0., wGlow = 0.;
 
     // Raymarching loop: accumulates distance and volumetric glow.
-    for(int i=0; i<34; i++) {
+    for(int i=0; i<48; i++) {
         p = ro + rd * t;
         d = M(p);
 
-        g += 0.012 / (0.04 + d * d * 80.0);
-        wGlow += 0.008 / (0.01 + abs(webDist) * 25.0);
+        g += 0.002 / (0.04 + d * d * 80.0);
+        wGlow += 0.0012 / (0.04 + abs(webDist) * 25.0);
 
-        if(d < 0.002 || t > 18.0) break;
+        if(d < max(0.002,t/iResolution.y*.4) || t > 16.0) break;
         t += d * 0.8;
     }
 
     // Calculates ambient glowing colors for the webs and bots.
     float windGlow = sin(p.x * 2.5 + p.z * 2.0 - iTime * 4.0) * 0.5 + 0.5;
     vec3 webCol = vec3(1.0, 0.4 + 0.3 * windGlow, 0.1) * wGlow * (0.6 + 0.5 * windGlow);
-    webCol += vec3(0.5, 0.2, 0.8) * wGlow * 0.5 * sin(p.z * 2.0 + iTime * 3.0);
+    webCol += vec3(0.15, 0.4, 0.65) * wGlow * 0.25 * sin(p.z * 2.0 + iTime * 3.0);
 
     vec3 botGlowCol = 0.4 + 0.4 * cos(p.z * 0.3 + p.x * 0.2 + vec3(0, 2, 4));
-    vec3 col = vec3(0.005, 0.01, 0.025) + g * botGlowCol + webCol;
+    vec3 col = vec3(0.018, 0.035, 0.055) + g * botGlowCol + webCol;
 
     // Applies basic surface lighting and reflections.
     if(d < 0.01) {
@@ -147,15 +153,14 @@ void mainImage(out vec4 o, in vec2 f) {
         float sp = pow(max(dot(r, l), 0.0), 28.0);
         float shoulder = pow(max(dot(r, normalize(vec3(-.7,.3,.6))), 0.0), 12.0);
 
+        col += reflectedLight(r)*(.12+.45*fre);
+        col += tint*pow(max(dot(-n,l),0.),2.)*.24;
         col += vec3(.035,.065,.09) * shoulder;
-        col += tint * (0.08 + 0.22 * dif) + vec3(0.55, 0.85, 1.3) * fre + vec3(1.0) * sp * 0.8;
+        col += tint * (0.08 + 0.22 * dif) + vec3(0.35, 0.60, 0.8) * fre + vec3(1.0) * sp * 0.8;
     }
 
-    // Renders distant background stars; screen-space vignette intentionally omitted.
-    if(t > 17.0) {
-        vec3 st = rd * 100.0;
-        col += pow(fract(sin(dot(st.xy + st.z, vec2(12.98, 78.23))) * 43758.5), 150.0) * 1.5;
-    }
+    // Distance haze resolves subpixel distant links without sparkling star noise.
+    col=mix(col,vec3(.045,.07,.10),smoothstep(5.,16.,t));
 
-    o = vec4(pow(col * exp(-t * 0.06), vec3(0.75)), 1.0);
+    o = vec4(pow(col/(1.+col), vec3(0.75)), 1.0);
 }

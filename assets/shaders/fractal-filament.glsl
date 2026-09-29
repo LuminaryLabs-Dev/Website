@@ -142,8 +142,8 @@ float directionalGlobeRadius(vec3 p)
     float directionZ = sin(angle);
 
     return inversesqrt(
-        directionX * directionX / (0.73 * 0.73)
-        + directionZ * directionZ / (0.71 * 0.71)
+        directionX * directionX / (0.69 * 0.69)
+        + directionZ * directionZ / (0.69 * 0.69)
     );
 }
 
@@ -153,7 +153,7 @@ float globeProfileRadius(vec3 p)
         directionalGlobeRadius(p);
 
     float normalizedY =
-        (p.y - 0.40) / 0.80;
+        (p.y - 0.34) / 0.86;
 
     return horizontalRadius
         * sqrt(max(
@@ -172,8 +172,8 @@ float glassProfileRadius(vec3 p)
     const float insertionRadius = 0.260;
 
     // Visible shoulder.
-    const float shoulderStart = -0.440;
-    const float globeJoinY = 0.140;
+    const float shoulderStart = -0.480;
+    const float globeJoinY = 0.100;
 
     // Section 4: hidden insertion taper.
     if (p.y < insertionTopY)
@@ -219,8 +219,8 @@ float glassProfileRadius(vec3 p)
     float horizontalRadius =
         directionalGlobeRadius(p);
 
-    const float globeCenterY = 0.40;
-    const float globeRadiusY = 0.80;
+    const float globeCenterY = 0.34;
+    const float globeRadiusY = 0.86;
 
     float normalizedJoinY =
         (globeJoinY - globeCenterY)
@@ -302,7 +302,7 @@ float glassSDF(vec3 p)
     float d = max(side, verticalCap);
 
     // Preserve the existing subtle liquid motion.
-    d += (uLoadingCover > 0.5 ? 0.0 : 0.003)
+    d += 0.001
        * sin(p.y * 9.0 + p.x * 5.0 + iTime * 0.7)
        * sin(p.z * 7.0 - iTime * 0.43);
 
@@ -326,7 +326,7 @@ float curvedFilamentStem(vec3 p, float side, float lane)
 
     float x = side * mix(0.045, 0.165, spread);
     x += lane * mix(0.042, 0.020, u);
-    x += 0.006 * sin(iTime * 13.0 + y * 44.0 + side * 2.0 + lane * 8.0);
+    x += 0.006 * sin(iTime * 1.3 + y * 44.0 + side * 2.0 + lane * 8.0);
 
     vec3 q = vec3(p.x - x, p.y - y, p.z);
     return length(q) - 0.012;
@@ -334,8 +334,8 @@ float curvedFilamentStem(vec3 p, float side, float lane)
 
 float filamentRawSDF(vec3 p)
 {
-    p.x += 0.005 * sin(iTime * 17.0 + p.y * 51.0);
-    p.z += 0.004 * cos(iTime * 19.0 - p.y * 46.0);
+    p.x += 0.005 * sin(iTime * 1.7 + p.y * 51.0);
+    p.z += 0.004 * cos(iTime * 1.9 - p.y * 46.0);
 
     float pulse = 0.009 * sin(iTime * 4.2);
 
@@ -350,9 +350,7 @@ float filamentRawSDF(vec3 p)
 
     float stems = curvedFilamentStem(p, -1.0, 0.0);
     stems = min(stems, curvedFilamentStem(p, 1.0, 0.0));
-    stems = min(stems, curvedFilamentStem(p, -1.0, 1.0));
-    stems = min(stems, curvedFilamentStem(p, 1.0, -1.0));
-    stems = min(stems, curvedFilamentStem(p, 0.0, 0.0));
+    // Two clean support leads keep the glowing loops legible at loader scale.
 
     float bridge = sdCapsule(
         p,
@@ -695,23 +693,12 @@ vec3 shadeSolid(vec3 p, vec3 rd, float material)
 
         float movingHighlight = pow(sat(1.0 - abs(p.x - 0.10 * sin(iTime * 0.25)) * 4.8), 6.0);
 
-        vec3 metal = mix(
-            vec3(0.025, 0.055, 0.026),
-            vec3(0.72, 0.20, 0.008),
-            threads * 0.68
-        );
-
-        if (uLoadingCover > 0.5) {
-            vec3 brass = mix(vec3(0.12, 0.09, 0.05), vec3(0.48, 0.34, 0.16), threads);
-            return brass * (0.35 + diffuse * 0.65)
-                 + vec3(0.85, 0.77, 0.56) * specular * 0.7
-                 + vec3(0.48, 0.36, 0.18) * movingHighlight * 0.35
-                 + vec3(0.20, 0.25, 0.28) * rim * 0.4;
-        }
-        metal += vec3(1.0, 0.72, 0.15) * movingHighlight;
-        return metal * (0.18 + diffuse * 0.78)
-             + vec3(1.0, 0.84, 0.25) * specular
-             + vec3(0.65, 0.15, 0.005) * rim;
+        // One brass material shared by the intro and every loading cover.
+        vec3 brass = mix(vec3(0.12, 0.09, 0.05), vec3(0.48, 0.34, 0.16), threads);
+        return brass * (0.35 + diffuse * 0.65)
+             + vec3(0.85, 0.77, 0.56) * specular * 0.7
+             + vec3(0.48, 0.36, 0.18) * movingHighlight * 0.35
+             + vec3(0.20, 0.25, 0.28) * rim * 0.4;
     }
 
     if (material < 2.5)
@@ -732,40 +719,13 @@ vec3 shadeGlass(vec3 p, vec3 rd)
     vec3 n = glassNormal(p);
     float fresnel = pow(1.0 + dot(n, rd), 3.2);
 
-    if (uLoadingCover > 0.5) {
-        vec3 reflected = reflect(rd, n);
-        float softbox = pow(sat(dot(reflected, normalize(vec3(-0.7, 0.4, 0.8)))), 24.0);
-        float sidebox = pow(sat(dot(reflected, normalize(vec3(0.8, 0.2, 0.4)))), 40.0);
-        return vec3(0.65, 0.76, 0.84) * fresnel * 1.4
-             + vec3(0.9, 0.95, 1.0) * softbox * 1.4
-             + vec3(1.0, 0.65, 0.32) * sidebox * 0.8;
-    }
-    vec3 fp = p * 2.35 + vec3(
-        sin(iTime * 0.17) * 0.22,
-        iTime * 0.065,
-        cos(iTime * 0.13) * 0.22
-    );
-
-    float fractal = foldedFractal(fp);
-    float angle = atan(p.y - 0.12, p.x);
-    float radial = length(p.xy - vec2(0.0, 0.12));
-    float flow = sin(angle * 2.2 - radial * 8.5 + fractal * 7.5 - iTime * 0.62);
-    vec3 lacquer = energyColor(flow);
-
-    float contour = pow(1.0 - abs(sin(fractal * 17.0 + angle * 3.0)), 12.0);
-    vec3 glass = lacquer * (0.035 + fractal * 0.08);
-    glass += vec3(1.0, 0.48, 0.025) * contour * 0.16;
-
-    // Strong gold silhouette and secondary emerald inner rim.
-    glass += vec3(1.0, 0.47, 0.018) * fresnel * 0.74;
-    glass += vec3(1.0, 0.95, 0.42) * pow(fresnel, 2.2) * 0.72;
-    glass += vec3(0.02, 0.62, 0.075) * (1.0 - fresnel) * fractal * 0.12;
-
+    // Shared clear glass, warm filament reflection and soft studio highlights.
     vec3 reflected = reflect(rd, n);
-    float movingReflection = pow(sat(reflected.y * 0.7 - reflected.x * 0.3), 18.0);
-    glass += vec3(1.0, 1.0, 0.67) * movingReflection * 0.72;
-
-    return glass;
+    float softbox = pow(sat(dot(reflected, normalize(vec3(-0.7, 0.4, 0.8)))), 24.0);
+    float sidebox = pow(sat(dot(reflected, normalize(vec3(0.8, 0.2, 0.4)))), 40.0);
+    return vec3(0.76, 0.80, 0.74) * fresnel * 1.4
+         + vec3(1.0, 0.95, 0.82) * softbox * 1.4
+         + vec3(1.0, 0.65, 0.32) * sidebox * 0.8;
 }
 
 float starBurst(vec2 p, float size, float phase)

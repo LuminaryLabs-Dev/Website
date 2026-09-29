@@ -1,0 +1,288 @@
+[
+  {
+    "id": "soft-hallway",
+    "name": "Soft hallway",
+    "category": "home",
+    "source": "/assets/shaders/luminary-hallway.glsl?v=20260922-library-3",
+    "poster": "/public/home/luminary-hallway-poster.webp?v=20260922-library-3",
+    "budgets": [
+      921600,
+      480000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "arcade-machines",
+    "name": "Arcade machines",
+    "category": "arcade",
+    "source": "/assets/shaders/arcade-infinite.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/arcade-infinite.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "assembly-bench",
+    "name": "Assembly bench",
+    "category": "services",
+    "source": "/assets/shaders/services-branches.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/services-branches.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "sculpture-gallery",
+    "name": "Sculpture gallery",
+    "category": "portfolio",
+    "source": "/assets/shaders/portfolio-terraces.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/portfolio-terraces.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "shared-ideas",
+    "name": "Shared ideas",
+    "category": "team",
+    "source": "/assets/shaders/team-chambers.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/team-chambers.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": "orbit"
+  },
+  {
+    "id": "connected-nodes",
+    "name": "Connected nodes",
+    "category": "contact",
+    "source": "/assets/shaders/contact-scene.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/contact-scene.webp?v=20260922-library-3",
+    "budgets": [
+      260000,
+      190000,
+      130000
+    ],
+    "input": null
+  },
+  {
+    "id": "light-atrium",
+    "name": "Light atrium",
+    "category": "home",
+    "source": "/assets/shaders/light-atrium.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/light-atrium.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "pinball-lounge",
+    "name": "Pinball lounge",
+    "category": "arcade",
+    "source": "/assets/shaders/pinball-lounge.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/pinball-lounge.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "signal-foundry",
+    "name": "Signal foundry",
+    "category": "services",
+    "source": "/assets/shaders/signal-foundry.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/signal-foundry.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "prismatic-garden",
+    "name": "Prismatic garden",
+    "category": "portfolio",
+    "source": "/assets/shaders/prismatic-garden.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/prismatic-garden.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "idea-constellation",
+    "name": "Idea constellation",
+    "category": "team",
+    "source": "/assets/shaders/idea-constellation.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/idea-constellation.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "resonance-rings",
+    "name": "Resonance rings",
+    "category": "contact",
+    "source": "/assets/shaders/resonance-rings.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/resonance-rings.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "living-lightning",
+    "name": "Living Lightning",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/living-lightning.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/living-lightning.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "luminous-roots",
+    "name": "Luminous Roots",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/luminous-roots.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/luminous-roots.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "fractal-coral",
+    "name": "Fractal Coral",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/fractal-coral.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/fractal-coral.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "ribbon-vortex",
+    "name": "Ribbon Vortex",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/ribbon-vortex.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/ribbon-vortex.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "crystal-mycelium",
+    "name": "Crystal Mycelium",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/crystal-mycelium.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/crystal-mycelium.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "recursive-bloom",
+    "name": "Recursive Bloom",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/recursive-bloom.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/recursive-bloom.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "molten-glass",
+    "name": "Molten Glass",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/molten-glass.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/molten-glass.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "neon-mandelbulb",
+    "name": "Neon Mandelbulb",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/neon-mandelbulb.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/neon-mandelbulb.webp?v=20260922-library-3",
+    "budgets": [
+      400000,
+      260000,
+      180000
+    ],
+    "input": null
+  },
+  {
+    "id": "aurora-weave",
+    "name": "Aurora Weave",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/aurora-weave.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/aurora-weave.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  },
+  {
+    "id": "fractal-cathedral",
+    "name": "Fractal Cathedral",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/fractal-cathedral.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/fractal-cathedral.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null
+  }
+]

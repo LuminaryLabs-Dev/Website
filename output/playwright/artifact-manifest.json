@@ -1,0 +1,86 @@
+{
+  "rows": [
+    {
+      "source": "assets/shaders/luminary-hallway.glsl",
+      "sourceSha256": "a05dcc82c6fe92289525ac19a7ae928c3eaa21029eab813279d2bbd7057934bf",
+      "poster": "public/home/luminary-hallway-poster.webp",
+      "posterSha256": "ba0d02fe6cc01b4356a4ee073b42bab92ebe5131bcdce580bc3a81f0cc8c6ae1",
+      "width": 1440,
+      "height": 554,
+      "time": 15,
+      "cacheVersion": "20260921-feedback-2"
+    },
+    {
+      "source": "assets/shaders/arcade-infinite.glsl",
+      "sourceSha256": "9bf6339bd031069ff3455ad659956d235ccfe2821552a04912c371c69dde982f",
+      "poster": "public/scenes/arcade-infinite.webp",
+      "posterSha256": "e585b264de8a9869c38c003e62e47712b22f1d5f2e2aba29f41c40c5057e4176",
+      "width": 1440,
+      "height": 554,
+      "time": 15,
+      "cacheVersion": "20260921-feedback-2"
+    },
+    {
+      "source": "assets/shaders/obsidian-descent.glsl",
+      "sourceSha256": "d400e5c3327f446fa2715405eacd7d6a422bba70e2e4d9607a6ba59e13898912",
+      "poster": "public/scenes/obsidian-descent.webp",
+      "posterSha256": "5749a6e5d197de33cc98ec13f128efbd72bb479962d1cc837f23518f6ce759b6",
+      "width": 1440,
+      "height": 554,
+      "time": 15,
+      "cacheVersion": "20260921-feedback-2"
+    },
+    {
+      "source": "assets/shaders/services-branches.glsl",
+      "sourceSha256": "b86196f34006143ed5283563bd55b98e5cbfb06246d4837f663ff67e60e2a2bb",
+      "poster": "public/scenes/services-branches.webp",
+      "posterSha256": "02c52c4d15f61531b4949974f8660d3651f572643889c02c19fefc1e895bd504",
+      "width": 1440,
+      "height": 554,
+      "time": 15,
+      "cacheVersion": "20260921-feedback-2"
+    },
+    {
+      "source": "assets/shaders/portfolio-terraces.glsl",
+      "sourceSha256": "4c0c114cd97ea8bd1c3661c05aa35e4428e8af14c801022d6ea94b0d8831eb2e",
+      "poster": "public/scenes/portfolio-terraces.webp",
+      "posterSha256": "7fc7a5ec33803db9bb59e2d3daaa1fd736413a3c8503b5b6f0454cff7717e4a4",
+      "width": 1440,
+      "height": 554,
+      "time": 15,
+      "cacheVersion": "20260921-feedback-2"
+    },
+    {
+      "source": "assets/shaders/team-chambers.glsl",
+      "sourceSha256": "8b5dbc4b45d152861fbe7d284775eb687803241ec285a95807add36a06f57874",
+      "poster": "public/scenes/team-chambers.webp",
+      "posterSha256": "1a8db2322264e67774ff583c1cf99ad9b22b8642bec53a95957410a8c5f1d263",
+      "width": 1440,
+      "height": 554,
+      "time": 15,
+      "cacheVersion": "20260921-team-center-3"
+    },
+    {
+      "source": "assets/shaders/contact-scene.glsl",
+      "sourceSha256": "b21d5678f4b9339ea2b11fa9495c36d69495f007d59f4f14498200cda22c57a0",
+      "poster": "public/scenes/contact-scene.webp",
+      "posterSha256": "e353c6d11c0bc316a4b8bc6f2df08b39cb8247b5373b2888d76fd20a33d28340",
+      "width": 1440,
+      "height": 554,
+      "time": 15,
+      "cacheVersion": "20260921-feedback-2"
+    },
+    {
+      "source": "assets/shaders/fractal-filament.glsl",
+      "sourceSha256": "576a30cb78ce0afe38210e8a69ae983985cf95a342614569492cd7243a02b8fc",
+      "poster": "public/home/hero-loading-bulb.png",
+      "posterSha256": "8a825be067c301990db543187b74329a9db824d36500598e06e1278540317a85",
+      "width": 720,
+      "height": 720,
+      "time": 15,
+      "cacheVersion": "20260921-feedback-2"
+    }
+  ],
+  "inlineMatches": true,
+  "missingReviewMedia": []
+}

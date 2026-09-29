@@ -1,5 +1,37 @@
 # Website Repo Memory
 
+## 2026-09-22 — Larger forms and quieter detail
+
+- Current shader cache version is `20260922-library-3`. All 22 sources received individual scale/density changes; keep each scene's defining structure and animation.
+- Favor broader surfaces and fewer tiny repetitions. Fractal shading uses calmer veins/grain, different highlight widths and bounded contact shading. Do not replace scene identities with one common shape or palette.
+- Team retains all three source bulbs per group, shared-center destinations and attached bounce curves. Other categories retain their existing subjects and connections.
+- Current before/after review: `output/shader-scale-review/`. Its ZIP preserves pre-pass sources. Refreshed five-second clips and mobile evidence remain under `output/shader-material-review/`.
+
+## 2026-09-22 — Shader categories and screensaver playback
+
+- User authorized all ten generated fractal directions as procedural animations plus categorized rotation across the seven website pages.
+- `assets/js/shader-library.js` owns entries, categories, sources, posters, input mode and pixel budgets. Page markup supplies `data-shader-category`.
+- `page-scenes.js` now owns Home and the other six hero lifecycles. The Home helper only retains scroll behavior. The shared playlist owns tap-to-next; Pause stays explicit.
+- Rotation uses shuffled 45-second active-playback intervals, preparation at 40 seconds, and a readiness-gated 1.2-second fade. Pause/hidden/offscreen/intro time does not advance it. Manual selection holds the chosen scene.
+- Keep at most two hero scene renderers while preparing/fading; halve their pixel budgets during fades and release the outgoing context. A failed next scene must not remove the current one.
+- Every category now has at least two scenes: Home adds Light atrium; Arcade adds Pinball lounge; Services adds Signal foundry; Portfolio adds Prismatic garden; Team adds Idea constellation; Contact adds Resonance rings. Open Source retains ten scenes (22 total).
+- Click/tap advances within the category. Ignore drags over 8px, scrolling, selection and interactive descendants. Keyboard users retain the Next scene button.
+- Material reflections are analytic environment highlights; transmission uses thickness probes. These are real-time approximations, not scene-traced reflection/refraction or physical subsurface transport.
+- Fractal shaders live in `assets/shaders/fractals/` with a bounded bloom pass. Generated reference art remains a visual target, not implemented image textures or a claim of exact fidelity.
+- `/shaders/` is the running category gallery. Local comparison videos and review notes live under `output/shader-library/`. Ten exported clips are verified at exactly five seconds each. All ten shaders passed mobile/GL checks and short full-tier performance samples around 30 FPS on this Mac. The current material/variant pass uses `20260922-library-2` and its evidence lives under `output/shader-material-review/`.
+
+## 2026-09-21 — W-001–W-010 local visual implementation
+
+- The current user goal authorizes changing the affected scene geometry and materials. This supersedes older exact-geometry preservation notes for these ten feedback items only.
+- Preserve original business copy, arcade CAD/dimensions and player/installer behavior, intro Skip/replay, loading readiness and timeout rules, pause, reduced motion and fallback handling.
+- Marketing navigation now has an 18px desktop / 12px mobile top inset; compact nav-row heights are unchanged.
+- Shared bulb uses clear glass and brass in both modes, a slimmer symmetric envelope, and two readable filament leads. Presentation-only stars/background/input remain mode-specific.
+- Home uses warm materials and soft inset panels; Arcade uses angled cabinets with recessed animated screens, separate controls and painted trim. The foreground CAD illustration is displayed at half its previous width and height, with source artwork unchanged. Services is a connected assembly bench; Portfolio is a distinct three-exhibit gallery.
+- The earlier Open Source facet revision was superseded by the ten-scene fractal library above after the user preferred the original brighter glow. Team retains its globe with clouds and smoothed bounded pointer input. Receiving bulbs sit radially outward from the mean of all three source positions and use a quick radial arrival, squash, overshoot and settle.
+- Contact uses shared animated endpoints, eight cached corners and twelve cell edges, four normal samples, and a bounded 48-step trace. The earlier independent wire warp is retired.
+- Shader-derived posters and relevant cache keys must stay in sync. Current key: `20260921-feedback-2`; Team shader/poster: `20260921-team-center-3`.
+- `WEBSITE_FEEDBACK.md` remains the sole item-status authority. Local evidence lives under `output/playwright/`; user aesthetic acceptance and publication are separate.
+
 ## 2026-09-07 — Presentation ownership and preservation contracts
 
 - `presentation-page` scopes the new frame to the seven marketing pages.
@@ -289,3 +321,15 @@ Public static apps can live under `/apps/` when they are generated outputs from 
 - Removal: deleted the standalone GLSL Lab page and its page-specific CSS/JS, removed the GLSL Lab entry from the universal navbar and fallback page links, and preserved shared shader assets used by Open Source and Contact.
 - Refinement: added a top-centered pulsing "Click the diamond stars" cue to the homepage shader so the existing interactive stars are discoverable without adding new shader objects.
 - Refinement: added a persistent right-aligned `LL` signature with a lightweight CSS glowing bulb in the shared navbar, linking the mark home without introducing a raster asset.
+
+
+## 2026-09-21 Feedback validation handoff
+
+W-001–W-010 are locally implemented and checked; `WEBSITE_FEEDBACK.md` owns final
+per-item evidence and limitations. Arcade CAD presentation is half its former width
+and height. Team receiving bulbs extend outward along their source group’s shared center direction,
+with a radial bounce, squash and overshoot/settle. No camera-up placement bias remains.
+
+Use `npm start` for the Node preview on loopback port 4173. `scripts/serve.mjs`
+correctly serves `.mjs` as JavaScript, which the previous preview server did not.
+The local review is `output/playwright/review.html`. Nothing was published.

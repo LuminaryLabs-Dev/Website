@@ -1,0 +1,168 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [aria-hidden] [ref=e3]:
+    - generic [ref=e4]:
+      - navigation [ref=e5]:
+        - link [ref=e6] [cursor=pointer]:
+          - /url: /index.html
+          - text: Home
+        - link [ref=e7] [cursor=pointer]:
+          - /url: /nexus-arcade/
+          - text: Nexus Arcade
+        - link [ref=e8] [cursor=pointer]:
+          - /url: /opensource.html
+          - text: Open Source
+        - link [ref=e9] [cursor=pointer]:
+          - /url: /services.html
+          - text: Services
+        - link [ref=e10] [cursor=pointer]:
+          - /url: /portfolio.html
+          - text: Portfolio
+        - link [ref=e11] [cursor=pointer]:
+          - /url: /team.html
+          - text: Team
+        - link [ref=e12] [cursor=pointer]:
+          - /url: /contact.html
+          - text: Contact
+      - link [ref=e13] [cursor=pointer]:
+        - /url: /index.html
+  - dialog "Luminary Labs interactive introduction" [ref=e14]:
+    - button "Activate the Luminary Labs light" [ref=e18] [cursor=pointer]
+    - paragraph: Light the way
+    - button "Skip Intro" [ref=e19] [cursor=pointer]
+    - generic [ref=e20]: The Luminary Labs light is ready
+  - main [aria-hidden] [ref=e21]:
+    - region [ref=e22]:
+      - generic [ref=e24]:
+        - paragraph [ref=e25]: Home
+        - heading [level=1] [ref=e26]: Turning specialized knowledge into working technology
+        - paragraph [ref=e27]: Good ideas deserve a way forward
+      - button [ref=e29] [cursor=pointer]
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - link [ref=e32] [cursor=pointer]:
+            - /url: /portfolio.html
+            - text: Explore our work
+            - generic [aria-hidden] [ref=e33]: ↗
+          - link [ref=e34] [cursor=pointer]:
+            - /url: "#capabilities"
+        - button [ref=e36] [cursor=pointer]: Pause motion
+    - generic [ref=e38]:
+      - generic [ref=e39]:
+        - generic [ref=e40]: What We Build
+        - heading [level=2] [ref=e41]: Expertise, put to work.
+      - generic [ref=e42]:
+        - generic [ref=e43]:
+          - heading [level=3] [ref=e44]: XR & Spatial Computing
+          - paragraph [ref=e45]: Quest, Steam Frame, WebXR — we build immersive applications from prototype to published product across every major platform.
+        - generic [ref=e46]:
+          - heading [level=3] [ref=e47]: AI Integration
+          - paragraph [ref=e48]: Local GGUF models, cloud APIs, agentic pipelines — we embed AI into your product so it actually adds value, not just buzzwords.
+        - generic [ref=e49]:
+          - heading [level=3] [ref=e50]: Full-Stack Web & Apps
+          - paragraph [ref=e51]: From HTML5 embeddable games to backend-integrated web apps. Rapid MVPs delivered in 1-2 weeks, ready to pitch or deploy.
+      - paragraph [ref=e52]: "From prototype to launch: focused development, clear interfaces, and working products you can explore."
+    - generic [ref=e54]:
+      - generic [ref=e55]:
+        - generic [ref=e56]: Nexus Suite
+        - heading [level=2] [ref=e57]: Arcade and Automation
+        - paragraph [ref=e58]: Explore original games and the open tools behind our work.
+      - generic [ref=e59]:
+        - generic [ref=e60]:
+          - generic [ref=e61]: Live on site
+          - text: Explore the cabinet and the Nexus suite.
+        - generic [ref=e62]:
+          - generic [ref=e63]: Inspectable previews
+          - text: Users can review the experience before opening it.
+        - generic [ref=e64]:
+          - generic [ref=e65]: Donationware release
+          - text: Built to stay public and easy to discover.
+      - generic [ref=e66]:
+        - article [ref=e67]:
+          - generic [ref=e68]: Playable Preview
+          - generic [ref=e71]:
+            - generic [ref=e72]: Nexus Arcade
+            - heading [level=3] [ref=e73]: Retro energy, modern hardware
+            - paragraph [ref=e74]: Modern play, retro arcade soul. Explore the cabinet and try our public game prototypes.
+            - generic [ref=e75]:
+              - generic [ref=e76]:
+                - generic [ref=e77]: Arcade
+                - generic [ref=e78]: Hardware
+              - link [ref=e79] [cursor=pointer]:
+                - /url: /nexus-arcade/
+                - text: Explore Nexus Arcade →
+        - article [ref=e80]:
+          - generic [ref=e81]: Early Access
+          - generic [ref=e84]:
+            - generic [ref=e85]: Open Source Lab
+            - heading [level=3] [ref=e86]: Operational AI by you
+            - paragraph [ref=e87]: A local AI orchestration product for routines, wrappers, and workflow automation.
+            - generic [ref=e88]:
+              - generic [ref=e89]:
+                - generic [ref=e90]: No-Code
+                - generic [ref=e91]: Personal AI
+              - link [ref=e92] [cursor=pointer]:
+                - /url: opensource.html
+                - text: Learn More →
+      - link [ref=e94] [cursor=pointer]:
+        - /url: opensource.html
+        - text: Explore Open Source →
+    - generic [ref=e96]:
+      - generic [ref=e97]:
+        - generic [ref=e98]: Client Work
+        - heading [level=2] [ref=e99]: Active Projects
+        - paragraph [ref=e100]: Current engagements across XR, IoT, and spatial computing.
+      - generic [ref=e101]:
+        - article [ref=e102]:
+          - generic [ref=e103]: Gaining
+          - generic [ref=e106]:
+            - heading [level=3] [ref=e107]: Vending Backpack
+            - paragraph [ref=e108]: IoT-integrated vending solutions with Aldervon Systems. Subscription-based revenue model with monthly recurring income per deployed machine.
+        - article [ref=e109]:
+          - generic [ref=e110]: Active
+          - generic [ref=e113]:
+            - heading [level=3] [ref=e114]: Museum Multiverse
+            - paragraph [ref=e115]: Published on Quest Store. A third-person VR experience with MadeInBrooklynGames — ongoing milestone-based development.
+      - link [ref=e117] [cursor=pointer]:
+        - /url: portfolio.html
+        - text: View Full Portfolio →
+    - generic [ref=e120]:
+      - generic [ref=e121]:
+        - generic [ref=e122]: 4+
+        - generic [ref=e123]: Active Projects
+      - generic [ref=e124]:
+        - generic [ref=e125]: ✓
+        - generic [ref=e126]: Published on Quest Store
+      - generic [ref=e127]:
+        - generic [ref=e128]: "3"
+        - generic [ref=e129]: Open Source Products
+      - generic [ref=e130]:
+        - generic [ref=e131]: B2B
+        - generic [ref=e132]: Enterprise Focus
+    - generic [ref=e134]:
+      - heading [level=2] [ref=e135]: Ready to Build Something?
+      - paragraph [ref=e136]: From $750 portfolio setups to $4,000 XR apps — we ship fast and we ship quality.
+      - generic [ref=e137]:
+        - link [ref=e138] [cursor=pointer]:
+          - /url: services.html
+          - text: View Pricing
+        - link [ref=e139] [cursor=pointer]:
+          - /url: contact.html
+          - text: Get In Touch
+  - contentinfo [aria-hidden] [ref=e140]:
+    - generic [ref=e141]:
+      - paragraph [ref=e142]: © 2026 Luminary Labs LLC AI Consultants and Software Developers
+      - navigation [ref=e143]:
+        - link [ref=e144] [cursor=pointer]:
+          - /url: /opensource.html
+          - text: Open Source
+        - link [ref=e145] [cursor=pointer]:
+          - /url: /services.html
+          - text: Services
+        - link [ref=e146] [cursor=pointer]:
+          - /url: /contact.html
+          - text: Contact
+        - link [ref=e147] [cursor=pointer]:
+          - /url: /ai/index.html
+          - text: AI Knowledge Base

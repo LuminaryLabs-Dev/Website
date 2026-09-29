@@ -1,0 +1,322 @@
+{
+  "counts": {
+    "home": 2,
+    "arcade": 2,
+    "opensource": 10,
+    "services": 2,
+    "portfolio": 2,
+    "team": 2,
+    "contact": 2
+  },
+  "clicks": [
+    {
+      "category": "home",
+      "clicked": true,
+      "dragHeld": true,
+      "pauseHeld": true,
+      "pausedNext": true,
+      "renderers": 1
+    },
+    {
+      "category": "arcade",
+      "clicked": true,
+      "dragHeld": true,
+      "pauseHeld": true,
+      "pausedNext": true,
+      "renderers": 1
+    },
+    {
+      "category": "opensource",
+      "clicked": true,
+      "dragHeld": true,
+      "pauseHeld": true,
+      "pausedNext": true,
+      "renderers": 1
+    },
+    {
+      "category": "services",
+      "clicked": true,
+      "dragHeld": true,
+      "pauseHeld": true,
+      "pausedNext": true,
+      "renderers": 1
+    },
+    {
+      "category": "portfolio",
+      "clicked": true,
+      "dragHeld": true,
+      "pauseHeld": true,
+      "pausedNext": true,
+      "renderers": 1
+    },
+    {
+      "category": "team",
+      "clicked": true,
+      "dragHeld": true,
+      "pauseHeld": true,
+      "pausedNext": true,
+      "renderers": 1
+    },
+    {
+      "category": "contact",
+      "clicked": true,
+      "dragHeld": true,
+      "pauseHeld": true,
+      "pausedNext": true,
+      "renderers": 1
+    }
+  ],
+  "samples": [
+    {
+      "id": "soft-hallway",
+      "fps": 29.894012138720157,
+      "gl": 0
+    },
+    {
+      "id": "arcade-machines",
+      "fps": 29.950989290232062,
+      "gl": 0
+    },
+    {
+      "id": "assembly-bench",
+      "fps": 29.89401213882104,
+      "gl": 0
+    },
+    {
+      "id": "sculpture-gallery",
+      "fps": 29.934687953495185,
+      "gl": 0
+    },
+    {
+      "id": "shared-ideas",
+      "fps": 29.918404351767904,
+      "gl": 0
+    },
+    {
+      "id": "connected-nodes",
+      "fps": 29.902138455921932,
+      "gl": 0
+    },
+    {
+      "id": "light-atrium",
+      "fps": 30.8166409861117,
+      "gl": 0
+    },
+    {
+      "id": "pinball-lounge",
+      "fps": 29.899429192634678,
+      "gl": 0
+    },
+    {
+      "id": "signal-foundry",
+      "fps": 29.940119760499282,
+      "gl": 0
+    },
+    {
+      "id": "prismatic-garden",
+      "fps": 29.923830250251818,
+      "gl": 0
+    },
+    {
+      "id": "idea-constellation",
+      "fps": 29.942836403189713,
+      "gl": 0
+    },
+    {
+      "id": "resonance-rings",
+      "fps": 30.833408905434815,
+      "gl": 0
+    },
+    {
+      "id": "living-lightning",
+      "fps": 29.921117054976083,
+      "gl": 0
+    },
+    {
+      "id": "luminous-roots",
+      "fps": 30.79989129454289,
+      "gl": 0
+    },
+    {
+      "id": "fractal-coral",
+      "fps": 30.811055731762572,
+      "gl": 0
+    },
+    {
+      "id": "ribbon-vortex",
+      "fps": 29.92654393752681,
+      "gl": 0
+    },
+    {
+      "id": "crystal-mycelium",
+      "fps": 29.904848210240146,
+      "gl": 0
+    },
+    {
+      "id": "recursive-bloom",
+      "fps": 28.980257199802203,
+      "gl": 0
+    },
+    {
+      "id": "molten-glass",
+      "fps": 29.01441653825663,
+      "gl": 0
+    },
+    {
+      "id": "neon-mandelbulb",
+      "fps": 28.99338588376696,
+      "gl": 0
+    },
+    {
+      "id": "aurora-weave",
+      "fps": 30.83061298521208,
+      "gl": 0
+    },
+    {
+      "id": "fractal-cathedral",
+      "fps": 29.921117054976083,
+      "gl": 0
+    }
+  ],
+  "mobile": [
+    {
+      "id": "soft-hallway",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "arcade-machines",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "assembly-bench",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "sculpture-gallery",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "shared-ideas",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "connected-nodes",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "light-atrium",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "pinball-lounge",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "signal-foundry",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "prismatic-garden",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "idea-constellation",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "resonance-rings",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "living-lightning",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "luminous-roots",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "fractal-coral",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "ribbon-vortex",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "crystal-mycelium",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "recursive-bloom",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "molten-glass",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "neon-mandelbulb",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "aurora-weave",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    },
+    {
+      "id": "fractal-cathedral",
+      "gl": 0,
+      "overflow": false,
+      "poster": 1440
+    }
+  ],
+  "touchNext": true,
+  "reduced": {
+    "id": "shared-ideas",
+    "renderers": 0,
+    "poster": 1440
+  },
+  "errors": []
+}

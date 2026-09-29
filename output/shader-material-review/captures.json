@@ -1,0 +1,134 @@
+[
+  {
+    "gl": 0,
+    "width": 1232,
+    "height": 554,
+    "id": "soft-hallway"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "arcade-machines"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "assembly-bench"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "sculpture-gallery"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "shared-ideas"
+  },
+  {
+    "gl": 0,
+    "width": 760,
+    "height": 341,
+    "id": "connected-nodes"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "light-atrium"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "pinball-lounge"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "signal-foundry"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "prismatic-garden"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "idea-constellation"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "resonance-rings"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "living-lightning"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "luminous-roots"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "fractal-coral"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "ribbon-vortex"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "crystal-mycelium"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "recursive-bloom"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "molten-glass"
+  },
+  {
+    "gl": 0,
+    "width": 943,
+    "height": 424,
+    "id": "neon-mandelbulb"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "aurora-weave"
+  },
+  {
+    "gl": 0,
+    "width": 1193,
+    "height": 536,
+    "id": "fractal-cathedral"
+  }
+]

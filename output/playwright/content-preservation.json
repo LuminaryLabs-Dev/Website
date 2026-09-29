@@ -1,0 +1,30 @@
+[
+  {
+    "file": "index.html",
+    "only_cache_keys_changed": true
+  },
+  {
+    "file": "nexus-arcade/index.html",
+    "only_cache_keys_changed": true
+  },
+  {
+    "file": "opensource.html",
+    "only_cache_keys_changed": true
+  },
+  {
+    "file": "services.html",
+    "only_cache_keys_changed": true
+  },
+  {
+    "file": "portfolio.html",
+    "only_cache_keys_changed": true
+  },
+  {
+    "file": "team.html",
+    "only_cache_keys_changed": true
+  },
+  {
+    "file": "contact.html",
+    "only_cache_keys_changed": true
+  }
+]

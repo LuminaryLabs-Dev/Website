@@ -1,0 +1,21 @@
+[     824ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4173/public/scenes/fractals/living-lightning.webp?v=20260922-library-1:0
+[    2742ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4173/public/scenes/fractals/living-lightning.webp?v=20260922-library-1:0
+[    6710ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4173/public/scenes/fractals/living-lightning.webp?v=20260922-library-1:0
+[   51726ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4173/public/scenes/fractals/ribbon-vortex.webp?v=20260922-library-1:0
+[   98111ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4173/public/scenes/fractals/fractal-coral.webp?v=20260922-library-1:0
+[  144786ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4173/public/scenes/fractals/luminous-roots.webp?v=20260922-library-1:0
+[  191223ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4173/public/scenes/fractals/aurora-weave.webp?v=20260922-library-1:0
+[  393663ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://127.0.0.1:4173/assets/shaders/fractals/fractal-coral.glsl?v=20260922-library-1:0
+[  393665ms] [ERROR] Shader renderer fallback: TypeError: Failed to fetch
+    at ShaderRenderer.fetchSource (http://127.0.0.1:4173/assets/js/shader-renderer.js?v=20260908-loading-1:178:30)
+    at ShaderRenderer.connectedCallback (http://127.0.0.1:4173/assets/js/shader-renderer.js?v=20260908-loading-1:136:35)
+    at prepare (http://127.0.0.1:4173/assets/js/page-scenes.js?v=20260922-library-1:47:13)
+    at HTMLSelectElement.<anonymous> (http://127.0.0.1:4173/assets/js/page-scenes.js?v=20260922-library-1:71:222) @ http://127.0.0.1:4173/assets/js/shader-renderer.js?v=20260908-loading-1:419
+[  396183ms] SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+    at <anonymous>:2:60
+    at <anonymous>:3:7
+[  835537ms] [ERROR] Shader renderer fallback: Error: Hero initialization exceeded 30 seconds of active loading
+    at sync (http://127.0.0.1:4173/assets/js/hero-loading.js?v=20260921-feedback-2:119:19) @ http://127.0.0.1:4173/assets/js/shader-renderer.js?v=20260908-loading-1:419
+[  918327ms] SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+    at <anonymous>:2:60
+    at <anonymous>:3:7

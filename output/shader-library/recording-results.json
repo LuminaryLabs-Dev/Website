@@ -1,0 +1,112 @@
+[
+  {
+    "frames": 184,
+    "elapsed": 6217.400000002235,
+    "time": 13,
+    "gl": 0,
+    "dimensions": [
+      1440,
+      554
+    ],
+    "id": "living-lightning"
+  },
+  {
+    "frames": 184,
+    "elapsed": 6166.300000000745,
+    "time": 13,
+    "gl": 0,
+    "dimensions": [
+      1440,
+      554
+    ],
+    "id": "luminous-roots"
+  },
+  {
+    "frames": 142,
+    "elapsed": 6336.89999999851,
+    "time": 13,
+    "gl": 0,
+    "dimensions": [
+      1440,
+      554
+    ],
+    "id": "fractal-coral"
+  },
+  {
+    "frames": 184,
+    "elapsed": 6079.400000002235,
+    "time": 13,
+    "gl": 0,
+    "dimensions": [
+      1440,
+      554
+    ],
+    "id": "ribbon-vortex"
+  },
+  {
+    "frames": 166,
+    "elapsed": 6371.39999999851,
+    "time": 13,
+    "gl": 0,
+    "dimensions": [
+      1440,
+      554
+    ],
+    "id": "crystal-mycelium"
+  },
+  {
+    "frames": 184,
+    "elapsed": 6118.199999999255,
+    "time": 13,
+    "gl": 0,
+    "dimensions": [
+      1440,
+      554
+    ],
+    "id": "recursive-bloom"
+  },
+  {
+    "frames": 168,
+    "elapsed": 6293.699999999255,
+    "time": 13,
+    "gl": 0,
+    "dimensions": [
+      1440,
+      554
+    ],
+    "id": "molten-glass"
+  },
+  {
+    "frames": 184,
+    "elapsed": 6116.5,
+    "time": 13,
+    "gl": 0,
+    "dimensions": [
+      1440,
+      554
+    ],
+    "id": "neon-mandelbulb"
+  },
+  {
+    "frames": 184,
+    "elapsed": 6090.89999999851,
+    "time": 13,
+    "gl": 0,
+    "dimensions": [
+      1440,
+      554
+    ],
+    "id": "aurora-weave"
+  },
+  {
+    "frames": 184,
+    "elapsed": 6151.699999999255,
+    "time": 13,
+    "gl": 0,
+    "dimensions": [
+      1440,
+      554
+    ],
+    "id": "fractal-cathedral"
+  }
+]

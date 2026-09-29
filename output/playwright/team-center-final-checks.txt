@@ -1,0 +1,9 @@
+### Result
+{"live":{"frames":60,"glError":0},"fallback":{"loaded":true,"url":"http://127.0.0.1:4173/public/scenes/team-chambers.webp?v=20260921-team-center-3","visible":"1","renderer":false}}
+### Ran Playwright code
+```js
+await (async(page)=>{await page.goto('http://127.0.0.1:4173/team.html');await page.waitForFunction(()=>document.querySelector('.scene-renderer')?.ready&&!document.querySelector('.hero-loading-cover'));const first=await page.evaluate(()=>document.querySelector('.scene-renderer').frameCount);await page.waitForTimeout(2000);const live=await page.evaluate(first=>({frames:document.querySelector('.scene-renderer').frameCount-first,glError:document.querySelector('.scene-renderer').gl.getError()}),first);await page.emulateMedia({reducedMotion:'reduce'});await page.reload();await page.waitForTimeout(500);const fallback=await page.locator('.scene-poster').evaluate(p=>({loaded:p.complete&&p.naturalWidth>0,url:p.currentSrc,visible:getComputedStyle(p).opacity,renderer:!!document.querySelector('.scene-renderer')}));await page.emulateMedia({reducedMotion:'no-preference'});await page.goto('http://127.0.0.1:4173/output/playwright/review.html#team');return {live,fallback}})(page);
+```
+### Page
+- Page URL: http://127.0.0.1:4173/output/playwright/review.html#team
+- Page Title: Website visual review — Luminary Labs

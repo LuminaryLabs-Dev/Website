@@ -3,7 +3,7 @@
   const active = new WeakMap();
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const root = document.documentElement;
-  const SOURCE = '/assets/shaders/fractal-filament.glsl?v=20260908-loading-1';
+  const SOURCE = '/assets/shaders/fractal-filament.glsl?v=20260921-feedback-2';
   const LOAD_BUDGET = 30000; // Active visible/unpaused time; suspension is not failure.
 
   function attach(hero) {

@@ -1,0 +1,2 @@
+### Result
+{"pausedCover":true,"beforeDeadline":{"cover":true,"ready":false},"elapsedMs":34037,"state":{"disposed":true,"ready":false,"error":"Hero initialization exceeded 30 seconds of active loading","posterVisible":true,"posterLoaded":true,"bulbs":0},"late":{"ready":false,"disposed":true,"covers":0}}

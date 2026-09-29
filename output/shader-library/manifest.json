@@ -1,0 +1,272 @@
+[
+  {
+    "id": "living-lightning",
+    "source": "assets/shaders/fractals/living-lightning.glsl",
+    "sourceSha256": "6d8f13cc0371d10635c0946af8913fdecd07a04e0cb625b0f2e80f52135c3964",
+    "clip": "output/shader-library/living-lightning.mp4",
+    "seconds": 5.0,
+    "width": 1440,
+    "height": 554,
+    "review": "Initial connections were sparse. Replaced the field with warped filaments, tightened their width and restored bright cores and bloom.",
+    "recording": {
+      "frames": 184,
+      "elapsed": 6217.400000002235,
+      "time": 13,
+      "gl": 0,
+      "dimensions": [
+        1440,
+        554
+      ],
+      "id": "living-lightning"
+    },
+    "poster": "public/scenes/fractals/living-lightning.webp",
+    "posterSha256": "ce4ed1f8dce77871fd8896798856eaaaeead694f6f26d8f3ee944d457f65ba48",
+    "bloomSha256": "39472fb843df8d8fc783cea1ff9a0f16dc4f4cc163f687391f1f126d7f27c3f5",
+    "posterTime": 8,
+    "clipTimeline": "Five seconds trimmed from a six-second live recording; approximately shader time 8\u201313 seconds.",
+    "cacheVersion": "20260922-library-1"
+  },
+  {
+    "id": "luminous-roots",
+    "source": "assets/shaders/fractals/luminous-roots.glsl",
+    "sourceSha256": "f0577fa86169426654b84b4db085d0dbdfef99087a422ee8272e5b7b3f759ee2",
+    "clip": "output/shader-library/luminous-roots.mp4",
+    "seconds": 5.0,
+    "width": 1440,
+    "height": 554,
+    "review": "Initial roots were too bulky. Reduced the branch width and added warm surface grain, fine veins and edge glow.",
+    "recording": {
+      "frames": 184,
+      "elapsed": 6166.300000000745,
+      "time": 13,
+      "gl": 0,
+      "dimensions": [
+        1440,
+        554
+      ],
+      "id": "luminous-roots"
+    },
+    "poster": "public/scenes/fractals/luminous-roots.webp",
+    "posterSha256": "651ee7665164d9638a940d2842c1a106e8411500d9d47ca07ab08fee498aa8c7",
+    "bloomSha256": "39472fb843df8d8fc783cea1ff9a0f16dc4f4cc163f687391f1f126d7f27c3f5",
+    "posterTime": 8,
+    "clipTimeline": "Five seconds trimmed from a six-second live recording; approximately shader time 8\u201313 seconds.",
+    "cacheVersion": "20260922-library-1"
+  },
+  {
+    "id": "fractal-coral",
+    "source": "assets/shaders/fractals/fractal-coral.glsl",
+    "sourceSha256": "02719d3c37a33fbbe25c07601700e66313bec92dae32d70addb0dcd853befb0f",
+    "clip": "output/shader-library/fractal-coral.mp4",
+    "seconds": 5.0,
+    "width": 1440,
+    "height": 554,
+    "review": "Initial coral read as solid sheets. Rebuilt it as connected, perforated geometry at multiple scales.",
+    "recording": {
+      "frames": 142,
+      "elapsed": 6336.89999999851,
+      "time": 13,
+      "gl": 0,
+      "dimensions": [
+        1440,
+        554
+      ],
+      "id": "fractal-coral"
+    },
+    "poster": "public/scenes/fractals/fractal-coral.webp",
+    "posterSha256": "73be90a70a2a8fe03ed13e141af15d853d812435c5f28201f6cbafe478b27135",
+    "bloomSha256": "39472fb843df8d8fc783cea1ff9a0f16dc4f4cc163f687391f1f126d7f27c3f5",
+    "posterTime": 8,
+    "clipTimeline": "Five seconds trimmed from a six-second live recording; approximately shader time 8\u201313 seconds.",
+    "cacheVersion": "20260922-library-1"
+  },
+  {
+    "id": "ribbon-vortex",
+    "source": "assets/shaders/fractals/ribbon-vortex.glsl",
+    "sourceSha256": "34ac0bffee7e83e44c3c1103308c45e02ee5b4d23ee6e5daf18d13dc1f7a77ac",
+    "clip": "output/shader-library/ribbon-vortex.mp4",
+    "seconds": 5.0,
+    "width": 1440,
+    "height": 554,
+    "review": "Reduced broad bands into thinner twisting ribbons, with luminous edges and small crystalline junctions.",
+    "recording": {
+      "frames": 184,
+      "elapsed": 6079.400000002235,
+      "time": 13,
+      "gl": 0,
+      "dimensions": [
+        1440,
+        554
+      ],
+      "id": "ribbon-vortex"
+    },
+    "poster": "public/scenes/fractals/ribbon-vortex.webp",
+    "posterSha256": "6ac465f1573840a4768c1678ffbd6d3868592f8580188b767d55dbecf34d5068",
+    "bloomSha256": "39472fb843df8d8fc783cea1ff9a0f16dc4f4cc163f687391f1f126d7f27c3f5",
+    "posterTime": 8,
+    "clipTimeline": "Five seconds trimmed from a six-second live recording; approximately shader time 8\u201313 seconds.",
+    "cacheVersion": "20260922-library-1"
+  },
+  {
+    "id": "crystal-mycelium",
+    "source": "assets/shaders/fractals/crystal-mycelium.glsl",
+    "sourceSha256": "bdedb89a4bc05578c0849f566616ad1a2ecef78de2fb9ffe97aceeeb72593248",
+    "clip": "output/shader-library/crystal-mycelium.mp4",
+    "seconds": 5.0,
+    "width": 1440,
+    "height": 554,
+    "review": "Reduced thread thickness and added fine secondary connections and travelling light pulses.",
+    "recording": {
+      "frames": 166,
+      "elapsed": 6371.39999999851,
+      "time": 13,
+      "gl": 0,
+      "dimensions": [
+        1440,
+        554
+      ],
+      "id": "crystal-mycelium"
+    },
+    "poster": "public/scenes/fractals/crystal-mycelium.webp",
+    "posterSha256": "953e35b89c50e56f5e16b8c1bf466252c8fa5d96704248e97a7fcb734d940047",
+    "bloomSha256": "39472fb843df8d8fc783cea1ff9a0f16dc4f4cc163f687391f1f126d7f27c3f5",
+    "posterTime": 8,
+    "clipTimeline": "Five seconds trimmed from a six-second live recording; approximately shader time 8\u201313 seconds.",
+    "cacheVersion": "20260922-library-1"
+  },
+  {
+    "id": "recursive-bloom",
+    "source": "assets/shaders/fractals/recursive-bloom.glsl",
+    "sourceSha256": "bc14df86c1eceaf794cf8606772a8e3f64b7adbf94d5afafe7d38505acd3e08a",
+    "clip": "output/shader-library/recursive-bloom.mp4",
+    "seconds": 5.0,
+    "width": 1440,
+    "height": 554,
+    "review": "Opened gaps between nested petal forms and added fine luminous veins to clarify the layers.",
+    "recording": {
+      "frames": 184,
+      "elapsed": 6118.199999999255,
+      "time": 13,
+      "gl": 0,
+      "dimensions": [
+        1440,
+        554
+      ],
+      "id": "recursive-bloom"
+    },
+    "poster": "public/scenes/fractals/recursive-bloom.webp",
+    "posterSha256": "9814a4ba04b1e2f15b18a67ea7c9ce9110c0e82248f6ef94dd909c17b76ff9f3",
+    "bloomSha256": "39472fb843df8d8fc783cea1ff9a0f16dc4f4cc163f687391f1f126d7f27c3f5",
+    "posterTime": 8,
+    "clipTimeline": "Five seconds trimmed from a six-second live recording; approximately shader time 8\u201313 seconds.",
+    "cacheVersion": "20260922-library-1"
+  },
+  {
+    "id": "molten-glass",
+    "source": "assets/shaders/fractals/molten-glass.glsl",
+    "sourceSha256": "e16623de629c71f7cc89602a220f53b587e64eec528ff80554ff7f2ca36d5275",
+    "clip": "output/shader-library/molten-glass.mp4",
+    "seconds": 5.0,
+    "width": 1440,
+    "height": 554,
+    "review": "Initial glass read as opaque sheets. Rebuilt it as smooth connected tubes with warm internal-looking noise and bright rims.",
+    "recording": {
+      "frames": 168,
+      "elapsed": 6293.699999999255,
+      "time": 13,
+      "gl": 0,
+      "dimensions": [
+        1440,
+        554
+      ],
+      "id": "molten-glass"
+    },
+    "poster": "public/scenes/fractals/molten-glass.webp",
+    "posterSha256": "bea39057ba5a7db5d4ffe304b01897c0198d5f7434da74658a2f9c726880f542",
+    "bloomSha256": "39472fb843df8d8fc783cea1ff9a0f16dc4f4cc163f687391f1f126d7f27c3f5",
+    "posterTime": 8,
+    "clipTimeline": "Five seconds trimmed from a six-second live recording; approximately shader time 8\u201313 seconds.",
+    "cacheVersion": "20260922-library-1"
+  },
+  {
+    "id": "neon-mandelbulb",
+    "source": "assets/shaders/fractals/neon-mandelbulb.glsl",
+    "sourceSha256": "e754cf9158540a02459ae5f11000975ca15faebba713636d6166f5cf2613cb91",
+    "clip": "output/shader-library/neon-mandelbulb.mp4",
+    "seconds": 5.0,
+    "width": 1440,
+    "height": 554,
+    "review": "Kept a bounded five-iteration Mandelbulb distance field; strengthened contour lighting and checked the camera clearance.",
+    "recording": {
+      "frames": 184,
+      "elapsed": 6116.5,
+      "time": 13,
+      "gl": 0,
+      "dimensions": [
+        1440,
+        554
+      ],
+      "id": "neon-mandelbulb"
+    },
+    "poster": "public/scenes/fractals/neon-mandelbulb.webp",
+    "posterSha256": "825400e2922d8aaf1ccc3980ead23d344b9c7e1ec28b68ff0793a2ec092b9512",
+    "bloomSha256": "39472fb843df8d8fc783cea1ff9a0f16dc4f4cc163f687391f1f126d7f27c3f5",
+    "posterTime": 8,
+    "clipTimeline": "Five seconds trimmed from a six-second live recording; approximately shader time 8\u201313 seconds.",
+    "cacheVersion": "20260922-library-1"
+  },
+  {
+    "id": "aurora-weave",
+    "source": "assets/shaders/fractals/aurora-weave.glsl",
+    "sourceSha256": "482a3741df8d057157f32f1bc1f55938ec07bb9a361a4123367213522b77504c",
+    "clip": "output/shader-library/aurora-weave.mp4",
+    "seconds": 5.0,
+    "width": 1440,
+    "height": 554,
+    "review": "Opened the closed shells into separated flowing sheets, with cyan/pink lighting and fine veins.",
+    "recording": {
+      "frames": 184,
+      "elapsed": 6090.89999999851,
+      "time": 13,
+      "gl": 0,
+      "dimensions": [
+        1440,
+        554
+      ],
+      "id": "aurora-weave"
+    },
+    "poster": "public/scenes/fractals/aurora-weave.webp",
+    "posterSha256": "1c174331a80660add63106419d01cc77eba22976c66f0eddc27fe0a3909e1a5a",
+    "bloomSha256": "39472fb843df8d8fc783cea1ff9a0f16dc4f4cc163f687391f1f126d7f27c3f5",
+    "posterTime": 8,
+    "clipTimeline": "Five seconds trimmed from a six-second live recording; approximately shader time 8\u201313 seconds.",
+    "cacheVersion": "20260922-library-1"
+  },
+  {
+    "id": "fractal-cathedral",
+    "source": "assets/shaders/fractals/fractal-cathedral.glsl",
+    "sourceSha256": "8ccf5a76b11bfa377247067e900993de459f94ba6c52dbcdc753207f5f4dc42b",
+    "clip": "output/shader-library/fractal-cathedral.mp4",
+    "seconds": 5.0,
+    "width": 1440,
+    "height": 554,
+    "review": "Removed the dense straight branch field and replaced it with nested curved arches and thinner ribs.",
+    "recording": {
+      "frames": 184,
+      "elapsed": 6151.699999999255,
+      "time": 13,
+      "gl": 0,
+      "dimensions": [
+        1440,
+        554
+      ],
+      "id": "fractal-cathedral"
+    },
+    "poster": "public/scenes/fractals/fractal-cathedral.webp",
+    "posterSha256": "591a95d4f35aeda5a58cea89480e2634f1615942753f8ac96417633c6955b0b5",
+    "bloomSha256": "39472fb843df8d8fc783cea1ff9a0f16dc4f4cc163f687391f1f126d7f27c3f5",
+    "posterTime": 8,
+    "clipTimeline": "Five seconds trimmed from a six-second live recording; approximately shader time 8\u201313 seconds.",
+    "cacheVersion": "20260922-library-1"
+  }
+]

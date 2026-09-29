@@ -1,0 +1,6 @@
+### Result
+{"results":[{"width":1440,"overflow":false,"glError":0},{"width":390,"overflow":false,"glError":0}],"errors":[]}
+### Ran Playwright code
+```js
+await (async(page)=>{const errors=[];page.on('pageerror',e=>errors.push(String(e)));const results=[];for(const [name,width,height] of [['desktop',1440,900],['mobile',390,844]]){await page.setViewportSize({width,height});await page.goto('http://127.0.0.1:4173/team.html');await page.waitForFunction(()=>document.querySelector('.scene-renderer')?.ready&&!document.querySelector('.hero-loading-cover'));await page.waitForTimeout(1000);await page.evaluate(()=>document.querySelector('.scene-renderer').setAttribute('paused',''));for(const t of [6.18,7.68,9.18,10.68,15,30,90]){await page.evaluate(t=>document.querySelector('.scene-renderer').draw(t),t);await page.locator('.presentation-visual').screenshot({path:`output/playwright/team-center-${name}-${t}.png`});}await page.evaluate(()=>document.querySelector('.scene-renderer').draw(15));await page.screenshot({path:`output/playwright/after-team-${name}.png`,fullPage:true});results.push(await page.evaluate(()=>({width:innerWidth,overflow:document.documentElement.scrollWidth>innerWidth,glError:document.querySelector('.scene-renderer').gl.getError()})));}return {results,errors}})(page);
+```

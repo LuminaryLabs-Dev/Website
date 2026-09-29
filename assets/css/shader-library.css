@@ -1,0 +1,13 @@
+/* Compact scene controls remain outside the animated image. */
+.scene-controls{display:flex;align-items:center;justify-content:flex-end;gap:14px;flex-wrap:wrap;font:500 14px/1.4 var(--font-display,system-ui)}
+.scene-controls button,.scene-menu summary{font:inherit;min-height:44px;padding:10px 8px;border:0;border-bottom:1px solid #a6aea7;background:transparent;color:#17212b;cursor:pointer;border-radius:0}
+.scene-controls button:disabled{opacity:.4;cursor:default}
+.scene-menu{position:relative}.scene-menu summary{list-style:none}.scene-menu summary::after{content:' +';margin-left:12px}.scene-menu[open] summary::after{content:' −'}
+.scene-menu-panel{position:absolute;right:0;top:100%;z-index:20;width:min(300px,calc(100vw - 40px));padding:20px;background:#fff;border:1px solid #a6aea7;box-shadow:0 8px 24px #0002;color:#17212b;display:grid;gap:18px}
+.scene-menu-panel label{display:grid;gap:8px}.scene-menu-panel label:last-child{display:flex;align-items:center;gap:8px}.scene-menu-panel select{width:100%;min-height:44px;font:inherit;background:white;color:#17212b;border:1px solid #9ca69f;padding:8px}.scene-menu-panel input{width:18px;height:18px}
+.scene-status{color:#53605c;font-size:12px;max-width:200px}.scene-controls :focus-visible{outline:2px solid #207658;outline-offset:3px}
+.ll-site .page-scene[data-shader-category] .scene-poster{visibility:visible}
+.ll-site .page-scene[data-shader-category][data-state=ready] .scene-poster{visibility:hidden}
+.ll-site .page-scene[data-shader-category] .scene-renderer{position:absolute;inset:0;will-change:opacity}
+.presentation-page .presentation-hero:has(.scene-renderer[data-state=error]) .motion-toggle{display:initial}
+@media(max-width:760px){.scene-controls{width:100%;justify-content:flex-start;gap:12px}.scene-status{max-width:none;flex:1}.scene-menu-panel{left:0;right:auto}.presentation-actions{overflow:visible}}

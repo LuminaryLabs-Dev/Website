@@ -1,0 +1,2 @@
+### Result
+[{"name":"contact-scene","label":"before","frames":60,"pixels":[822,316],"gpu":"ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)","glError":0,"elapsedMs":1806,"framesRendered":55,"fps":30.45404208194906},{"name":"contact-scene","label":"after","frames":60,"pixels":[822,316],"gpu":"ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)","glError":0,"elapsedMs":1805,"framesRendered":55,"fps":30.47091412742382}]

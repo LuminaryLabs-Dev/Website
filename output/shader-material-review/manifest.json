@@ -1,0 +1,354 @@
+[
+  {
+    "id": "soft-hallway",
+    "name": "Soft hallway",
+    "category": "home",
+    "source": "/assets/shaders/luminary-hallway.glsl?v=20260922-library-3",
+    "poster": "/public/home/luminary-hallway-poster.webp?v=20260922-library-3",
+    "budgets": [
+      921600,
+      480000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "52e0838fa7bace8d1a075ae8a07b98b1304becebe889969074990e9d8283ab1f",
+    "posterSHA256": "1b78afbc5e8d8a96172b69c051e5d2012bada4bc66d3c06e171bd5cbbabcebc1",
+    "review": "Warm wall materials retain their softer character; the floor picks up broad environment reflections."
+  },
+  {
+    "id": "light-atrium",
+    "name": "Light atrium",
+    "category": "home",
+    "source": "/assets/shaders/light-atrium.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/light-atrium.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "07c93e2c96e9445ad7b1c09778b2217c694c7c99cfcf1d79925c7781ddd18642",
+    "posterSHA256": "26f31d57714f2d9e309cde1661bb7e42b8572348d5f9a5db61ce3e01c19fa0aa",
+    "review": "Forward travel through lit glass arches. Stone floor catches broad reflected light."
+  },
+  {
+    "id": "arcade-machines",
+    "name": "Arcade machines",
+    "category": "arcade",
+    "source": "/assets/shaders/arcade-infinite.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/arcade-infinite.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "4cae1b71ce8746aa9124d154a1d73c6301c968b4b010f2793808f20c458a004e",
+    "posterSHA256": "f90e83a34b7475ffbfa6aa8c3169d79a46398d9706640d25dc193ad13927d3f5",
+    "review": "CRT glass catches softbox reflections. Cabinet paint stays matte and the floor remains restrained."
+  },
+  {
+    "id": "pinball-lounge",
+    "name": "Pinball lounge",
+    "category": "arcade",
+    "source": "/assets/shaders/pinball-lounge.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/pinball-lounge.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "31fde02876025c132643ab32804bcc31870d9943f872b2b4e53a83e47302fb27",
+    "posterSHA256": "7392e46a6e2c4fb8172dc2ff3fd899199ed3f94e80acea07e56081d8b51d0fb3",
+    "review": "Three sloped playfields with glass bumpers, moving chrome balls, illuminated lanes and illuminated score displays."
+  },
+  {
+    "id": "living-lightning",
+    "name": "Living Lightning",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/living-lightning.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/living-lightning.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "afb05dab4f09f4dc8d765b2d4db0c492bb93c5d1c8095a54daca1606972228b6",
+    "posterSHA256": "01e52d21c9c397b732c861a528e7afa4aaf2f615c46fcca886e5fad292952d2b",
+    "review": "Preserves its distinct geometry and camera travel. Thin features receive absorption-weighted backlight, refracted internal veins and Fresnel-weighted environment reflections."
+  },
+  {
+    "id": "luminous-roots",
+    "name": "Luminous Roots",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/luminous-roots.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/luminous-roots.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "666c48fdb5893a8bd3c840ad6cecf2152d868ad8f0060da6f2eb68646a18aa9f",
+    "posterSHA256": "c1a1c5ef1f4dcb494b4c4c8ae691c5322389439c44bfbfbad37f75617d87f1d5",
+    "review": "Preserves its distinct geometry and camera travel. Thin features receive absorption-weighted backlight, refracted internal veins and Fresnel-weighted environment reflections."
+  },
+  {
+    "id": "fractal-coral",
+    "name": "Fractal Coral",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/fractal-coral.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/fractal-coral.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "3037762b0daa4434288fc10166262ad75a1b6647b1b475139eda42dda0d99475",
+    "posterSHA256": "8e8e01d1f35df99890ff7bf76c4675edd13a920f45ce058d06652412112684c4",
+    "review": "Preserves its distinct geometry and camera travel. Thin features receive absorption-weighted backlight, refracted internal veins and Fresnel-weighted environment reflections."
+  },
+  {
+    "id": "ribbon-vortex",
+    "name": "Ribbon Vortex",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/ribbon-vortex.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/ribbon-vortex.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "683702a4213fffb7b5584def809a6ec0a0d45d49a45bf60d2fb0441c2a9cd0b4",
+    "posterSHA256": "e567df85080e5410e097477f559e544ba4951c7f63f6aa1c8b8eed9d7461c6f7",
+    "review": "Preserves its distinct geometry and camera travel. Thin features receive absorption-weighted backlight, refracted internal veins and Fresnel-weighted environment reflections."
+  },
+  {
+    "id": "crystal-mycelium",
+    "name": "Crystal Mycelium",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/crystal-mycelium.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/crystal-mycelium.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "7166bac8e8e43c4e99986cf6113eb4dbe4f008f6a6f5b795f61905a4cd67ab18",
+    "posterSHA256": "68e16011e95d42a092c7f4fb00796740bdfe273a6ea8a773bd21e7458c475e95",
+    "review": "Preserves its distinct geometry and camera travel. Thin features receive absorption-weighted backlight, refracted internal veins and Fresnel-weighted environment reflections."
+  },
+  {
+    "id": "recursive-bloom",
+    "name": "Recursive Bloom",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/recursive-bloom.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/recursive-bloom.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "6e7d8a6c5493a438fcf2b2ce5d6b2d42055a6b3ec9feb0d853f684b85931cdf8",
+    "posterSHA256": "1189b2d75dc94c5382247f74ab6a38dfb530b32cd101621ff2bd48a0873d2d36",
+    "review": "Preserves its distinct geometry and camera travel. Thin features receive absorption-weighted backlight, refracted internal veins and Fresnel-weighted environment reflections."
+  },
+  {
+    "id": "molten-glass",
+    "name": "Molten Glass",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/molten-glass.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/molten-glass.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "22d400a0f15050a450cefc9dff413c1b7011a2fec3a494b50552b74c231be667",
+    "posterSHA256": "fd0e7eebee1ab06849f767ab0705fb5d49d6913c3e5f77670a8b21fb50fd7aee",
+    "review": "Preserves its distinct geometry and camera travel. Thin features receive absorption-weighted backlight, refracted internal veins and Fresnel-weighted environment reflections."
+  },
+  {
+    "id": "neon-mandelbulb",
+    "name": "Neon Mandelbulb",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/neon-mandelbulb.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/neon-mandelbulb.webp?v=20260922-library-3",
+    "budgets": [
+      400000,
+      260000,
+      180000
+    ],
+    "input": null,
+    "sourceSHA256": "f1922701d53a9ce090b456ce7e36d0d53316b56d13fad0ad4b886ae9ada4049d",
+    "posterSHA256": "3d22250da29b6aa66f8011d75aa8944cc5b3af1ec806f065a7e99a6eda92c61a",
+    "review": "Preserves its distinct geometry and camera travel. Thin features receive absorption-weighted backlight, refracted internal veins and Fresnel-weighted environment reflections."
+  },
+  {
+    "id": "aurora-weave",
+    "name": "Aurora Weave",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/aurora-weave.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/aurora-weave.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "9b4206f54a88b97ba5b654269cebe94db836e21b09cd94442264fa99baf6c394",
+    "posterSHA256": "2ab9ca05775ac869064d914b7cc06cb9ad24e273bd381a0a15915a0ab30537ef",
+    "review": "Preserves its distinct geometry and camera travel. Thin features receive absorption-weighted backlight, refracted internal veins and Fresnel-weighted environment reflections."
+  },
+  {
+    "id": "fractal-cathedral",
+    "name": "Fractal Cathedral",
+    "category": "opensource",
+    "source": "/assets/shaders/fractals/fractal-cathedral.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/fractals/fractal-cathedral.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "bfbdf1ab2d32733b9add4cc6e4aead825e5df7588ec1c71746acf79269af94ab",
+    "posterSHA256": "93e6ab7eb6a7f14e41c8102a3c775d4e8fc0fa44276602d588715ce9b1fa1613",
+    "review": "Preserves its distinct geometry and camera travel. Thin features receive absorption-weighted backlight, refracted internal veins and Fresnel-weighted environment reflections."
+  },
+  {
+    "id": "assembly-bench",
+    "name": "Assembly bench",
+    "category": "services",
+    "source": "/assets/shaders/services-branches.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/services-branches.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "7e37911d93206473f2c49db0d7aa864d9ddae485bba3c86423ceb8dee9e86171",
+    "posterSHA256": "b472772358ea72ae279a86d8aa187a4bcd0687df9103937efd74c98bd8cea576",
+    "review": "Layered materials gain selective transmission and grazing reflections without changing the assembly motion."
+  },
+  {
+    "id": "signal-foundry",
+    "name": "Signal foundry",
+    "category": "services",
+    "source": "/assets/shaders/signal-foundry.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/signal-foundry.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "50f5e6f8b9c97512738144d41258ac57bbf702e6caf55e5d5e17159a11350b76",
+    "posterSHA256": "2959d3dc5cbd6bc9f71bd0e21a55b4468a92063bfae0d81d4ff5f2cf3f59dd64",
+    "review": "Three rotating translucent modules surround a glowing core. Repeating fins are bounded to each module."
+  },
+  {
+    "id": "sculpture-gallery",
+    "name": "Sculpture gallery",
+    "category": "portfolio",
+    "source": "/assets/shaders/portfolio-terraces.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/portfolio-terraces.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "feb6e4d8e3f1e81863316b33a1f677db8bb3cbba893b4163d687621ecba44c77",
+    "posterSHA256": "92a83d0f834ca84336acbd3bc076ac6d37f0fd18edadf35c99953c7559bfbf10",
+    "review": "Crystal and plate materials gain thickness-weighted backlighting and view-dependent reflections."
+  },
+  {
+    "id": "prismatic-garden",
+    "name": "Prismatic garden",
+    "category": "portfolio",
+    "source": "/assets/shaders/prismatic-garden.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/prismatic-garden.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "c9f2bcc200f1a71756778e025bb7516715111426a1c9062706477791a8bcb00b",
+    "posterSHA256": "b9319f8663ab1d702eba597b37a91b32b11fdea5e7613c5272f39a6f28d4d8bd",
+    "review": "Rotating glass-petal sculptures with warm light inside and cool reflections across their surfaces."
+  },
+  {
+    "id": "shared-ideas",
+    "name": "Shared ideas",
+    "category": "team",
+    "source": "/assets/shaders/team-chambers.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/team-chambers.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": "orbit",
+    "sourceSHA256": "706ae21283b5c7cb785a705ec0f2f230b2cc9a4b18d733794b6ce1937ba5bcb0",
+    "posterSHA256": "ea6802fc8d5fdc0af7d61b3412f50db9b3d530bd0db7cb8e70f0e7a2afd55e73",
+    "review": "Bulb envelopes have warmer internal light and glass highlights. Shared-center placement and attached bounce curves are preserved."
+  },
+  {
+    "id": "idea-constellation",
+    "name": "Idea constellation",
+    "category": "team",
+    "source": "/assets/shaders/idea-constellation.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/idea-constellation.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "7fb425f8a603d77796727efc5ae9545f26930c1bb931579ce72d191314586f34",
+    "posterSHA256": "93d8df4654a63ea61b2519b60a1b1327f132511cedef0cf9502f606a3d96f1c7",
+    "review": "Six contributors orbit a shared warm light. Curved links remain attached while their endpoints move."
+  },
+  {
+    "id": "connected-nodes",
+    "name": "Connected nodes",
+    "category": "contact",
+    "source": "/assets/shaders/contact-scene.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/contact-scene.webp?v=20260922-library-3",
+    "budgets": [
+      260000,
+      190000,
+      130000
+    ],
+    "input": null,
+    "sourceSHA256": "775ddf987b02aabe7666bc41d4fc018d597e8d8191b776965ccaedd0cb4d1b38",
+    "posterSHA256": "9bae900ebd042cc20c38d67f9549419d7ba01a0c09a111eb97e28dbe26f978c3",
+    "review": "Nodes and links catch environment reflections and warmer light through their edges."
+  },
+  {
+    "id": "resonance-rings",
+    "name": "Resonance rings",
+    "category": "contact",
+    "source": "/assets/shaders/resonance-rings.glsl?v=20260922-library-3",
+    "poster": "/public/scenes/resonance-rings.webp?v=20260922-library-3",
+    "budgets": [
+      640000,
+      400000,
+      260000
+    ],
+    "input": null,
+    "sourceSHA256": "fd6974cf56114413ce77adc699e084c488ea48d270eaa05e5b9081aa85b79bfb",
+    "posterSHA256": "a95b58fd79c7f524d1f61fc8c0103ef23548ed0fc663ee2db68025dadb727e35",
+    "review": "Three connected portals with traveling signal beads, translucent rings and metal rims."
+  }
+]

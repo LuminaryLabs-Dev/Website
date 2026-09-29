@@ -1,0 +1,266 @@
+[
+  {
+    "frames": 183,
+    "elapsed": 6016.199999999255,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "soft-hallway",
+    "duration": 5.0,
+    "poster": "public/home/luminary-hallway-poster.webp"
+  },
+  {
+    "frames": 183,
+    "elapsed": 6036,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "assembly-bench",
+    "duration": 5.0,
+    "poster": "public/scenes/services-branches.webp"
+  },
+  {
+    "frames": 183,
+    "elapsed": 6028,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "sculpture-gallery",
+    "duration": 5.0,
+    "poster": "public/scenes/portfolio-terraces.webp"
+  },
+  {
+    "frames": 183,
+    "elapsed": 6028,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "shared-ideas",
+    "duration": 5.0,
+    "poster": "public/scenes/team-chambers.webp"
+  },
+  {
+    "frames": 131,
+    "elapsed": 6199.39999999851,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "connected-nodes",
+    "duration": 5.0,
+    "poster": "public/scenes/contact-scene.webp"
+  },
+  {
+    "frames": 182,
+    "elapsed": 6022.39999999851,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "light-atrium",
+    "duration": 5.0,
+    "poster": "public/scenes/light-atrium.webp"
+  },
+  {
+    "frames": 183,
+    "elapsed": 6041.800000000745,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "pinball-lounge",
+    "duration": 5.0,
+    "poster": "public/scenes/pinball-lounge.webp"
+  },
+  {
+    "frames": 183,
+    "elapsed": 6026.099999997765,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "signal-foundry",
+    "duration": 5.0,
+    "poster": "public/scenes/signal-foundry.webp"
+  },
+  {
+    "frames": 183,
+    "elapsed": 6044.60000000149,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "prismatic-garden",
+    "duration": 5.0,
+    "poster": "public/scenes/prismatic-garden.webp"
+  },
+  {
+    "frames": 183,
+    "elapsed": 6083,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "idea-constellation",
+    "duration": 5.0,
+    "poster": "public/scenes/idea-constellation.webp"
+  },
+  {
+    "frames": 182,
+    "elapsed": 6035.300000000745,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "resonance-rings",
+    "duration": 5.0,
+    "poster": "public/scenes/resonance-rings.webp"
+  },
+  {
+    "frames": 183,
+    "elapsed": 6056.79999999702,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "living-lightning",
+    "duration": 5.0,
+    "poster": "public/scenes/fractals/living-lightning.webp"
+  },
+  {
+    "frames": 183,
+    "elapsed": 6053.10000000149,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "luminous-roots",
+    "duration": 5.0,
+    "poster": "public/scenes/fractals/luminous-roots.webp"
+  },
+  {
+    "frames": 183,
+    "elapsed": 6080.60000000149,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "fractal-coral",
+    "duration": 5.0,
+    "poster": "public/scenes/fractals/fractal-coral.webp"
+  },
+  {
+    "frames": 183,
+    "elapsed": 6041.10000000149,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "ribbon-vortex",
+    "duration": 5.0,
+    "poster": "public/scenes/fractals/ribbon-vortex.webp"
+  },
+  {
+    "frames": 183,
+    "elapsed": 6068.300000000745,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "crystal-mycelium",
+    "duration": 5.0,
+    "poster": "public/scenes/fractals/crystal-mycelium.webp"
+  },
+  {
+    "frames": 183,
+    "elapsed": 6039.199999999255,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "recursive-bloom",
+    "duration": 5.0,
+    "poster": "public/scenes/fractals/recursive-bloom.webp"
+  },
+  {
+    "frames": 183,
+    "elapsed": 6070.10000000149,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "molten-glass",
+    "duration": 5.0,
+    "poster": "public/scenes/fractals/molten-glass.webp"
+  },
+  {
+    "frames": 171,
+    "elapsed": 6038.10000000149,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "neon-mandelbulb",
+    "duration": 5.0,
+    "poster": "public/scenes/fractals/neon-mandelbulb.webp"
+  },
+  {
+    "frames": 175,
+    "elapsed": 6044.699999999255,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "aurora-weave",
+    "duration": 5.0,
+    "poster": "public/scenes/fractals/aurora-weave.webp"
+  },
+  {
+    "frames": 182,
+    "elapsed": 6067.70000000298,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "fractal-cathedral",
+    "duration": 5.0,
+    "poster": "public/scenes/fractals/fractal-cathedral.webp"
+  },
+  {
+    "frames": 183,
+    "elapsed": 6056,
+    "gl": 0,
+    "dimensions": [
+      1280,
+      492
+    ],
+    "id": "arcade-machines",
+    "duration": 5.0,
+    "poster": "public/scenes/arcade-infinite.webp"
+  }
+]
