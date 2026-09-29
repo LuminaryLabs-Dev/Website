@@ -122,7 +122,10 @@
           this.visible = entries.some(entry => entry.isIntersecting);
           this.syncAnimation();
         }, { rootMargin: "80px" });
-        this.intersectionObserver.observe(this);
+        // Fixed marketing scenes are visible through their scrolling window.
+        // Observe that window so opaque content can cover (and suspend) the
+        // scene without disconnecting or recreating its canvas.
+        this.intersectionObserver.observe(this.closest(".presentation-visual") || this);
       }
 
       const begin = () => {

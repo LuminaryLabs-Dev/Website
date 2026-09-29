@@ -42,3 +42,38 @@
 .ll-site.arcade-player-page .arcade-return{display:inline-flex;align-items:center;min-height:44px;margin-bottom:24px;font-size:13px}
 .ll-site.arcade-player-page .player-shell{z-index:200}
 .ll-site.arcade-player-page .installer-source{margin:0 0 40px;font-size:13px}
+
+/* Shared marketing layers. Keep the existing hero window, copy and effects;
+   only the scenery is anchored to the viewport behind scrolling panels. */
+.ll-site.presentation-page main .presentation-hero,
+.ll-site.presentation-page main #hero.hallway-hero {
+  isolation: auto;
+  background: transparent;
+}
+.ll-site.presentation-page main .presentation-visual {
+  isolation: auto;
+  overflow: visible;
+  background: transparent;
+}
+.ll-site.presentation-page main .presentation-visual > :is(.page-scene, shader-renderer, .hallway-poster, .hero-loading-cover) {
+  position: fixed;
+  inset: var(--header-height) 0 0;
+  width: min(calc(var(--presentation-width) - 2px), calc(100% - 2 * var(--presentation-gutter) - 2px));
+  height: calc(100% - var(--header-height));
+  margin-inline: auto;
+  pointer-events: none;
+}
+.ll-site.presentation-page main .presentation-visual > :is(.page-scene, shader-renderer, .hallway-poster) {
+  z-index: 0;
+}
+.ll-site.presentation-page main > :not(.presentation-hero),
+.ll-site.presentation-page .presentation-heading,
+.ll-site.presentation-page .presentation-actions,
+.ll-site.presentation-page .presentation-caption,
+.ll-site.presentation-page .site-footer {
+  position: relative;
+  z-index: 10;
+}
+.ll-site.presentation-page .presentation-caption {
+  background: var(--paper);
+}
