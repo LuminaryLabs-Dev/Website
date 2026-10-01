@@ -2,14 +2,14 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-const pages=['index.html','nexus-arcade/index.html','opensource.html','services.html','portfolio.html','team.html','contact.html','nexus-arcade/play/index.html'];
+const pages=['index.html','nexus-arcade/index.html','opensource.html','services.html','services/apex-benchworks/index.html','portfolio.html','team.html','contact.html','nexus-arcade/play/index.html'];
 const links=[['Home','/index.html'],['Nexus Arcade','/nexus-arcade/'],['Open Source','/opensource.html'],['Services','/services.html'],['Portfolio','/portfolio.html'],['Team','/team.html'],['Contact','/contact.html']];
 const header=await fs.readFile(path.join(root,'templates/site-header.html'),'utf8');
 const footer=await fs.readFile(path.join(root,'templates/site-footer.html'),'utf8');
 let drift=false;
 for(const file of pages){
   const pathname='/'+file;
-  const active=pathname.startsWith('/nexus-arcade/')?'/nexus-arcade/':pathname;
+  const active=pathname.startsWith('/nexus-arcade/')?'/nexus-arcade/':pathname.startsWith('/services/')?'/services.html':pathname;
   const nav=header.replace('{{links}}',links.map(([label,href])=>`      <a href="${href}"${href===active?' class="active" aria-current="page"':''}>${label}</a>`).join('\n')).trim();
   const source=await fs.readFile(path.join(root,file),'utf8');
   if(!source.includes('<!-- site:header:start -->')||!source.includes('<!-- site:footer:start -->'))throw Error(`Missing shell markers: ${file}`);
