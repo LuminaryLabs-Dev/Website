@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0908" />
+  <meta name="description" content="Artifact Hunt is a Luminary Labs interactive venue prototype for browser-based museum and attraction experiences." />
+  <title>Artifact Hunt — Luminary Labs</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <p class="eyebrow">LUMINARY LABS · INTERACTIVE VENUE DEMO</p>
+      <h1>The Cabinet of Lost Objects</h1>
+      <p class="lede">Three objects hold fragments of a hidden record. Inspect the exhibit, uncover each story, and unlock the archive.</p>
+    </header>
+
+    <section class="exhibit-room" aria-label="The Cabinet of Lost Objects exhibit">
+      <div class="room-header" aria-hidden="true">
+        <span>ARCHIVE B · RESTRICTED COLLECTION</span>
+        <span>CASE FILE 317</span>
+      </div>
+      <div class="room-cases">
+        <button class="display-case artifact-trigger" data-artifact="watch" aria-label="Inspect the broken pocket watch display">
+          <span class="case-number">01</span>
+          <span class="spotlight" aria-hidden="true"></span>
+          <span class="object watch" aria-hidden="true"><i></i></span>
+          <span class="case-plaque"><strong>Broken Pocket Watch</strong><small>11:47 PM</small></span>
+        </button>
+
+        <button class="display-case artifact-trigger" data-artifact="photo" aria-label="Inspect the unmarked photograph display">
+          <span class="case-number">02</span>
+          <span class="spotlight" aria-hidden="true"></span>
+          <span class="object photo" aria-hidden="true"><i></i></span>
+          <span class="case-plaque"><strong>Unmarked Photograph</strong><small>Source unknown</small></span>
+        </button>
+
+        <button class="display-case artifact-trigger" data-artifact="key" aria-label="Inspect the hotel room key display">
+          <span class="case-number">03</span>
+          <span class="spotlight" aria-hidden="true"></span>
+          <span class="object key" aria-hidden="true"><i></i></span>
+          <span class="case-plaque"><strong>Hotel Room Key</strong><small>Room 317</small></span>
+        </button>
+      </div>
+      <div class="room-floor" aria-hidden="true"></div>
+    </section>
+
+    <section class="hunt-status" aria-label="Artifact hunt progress">
+      <div class="progress-wrap" aria-live="polite">
+        <div class="progress-label"><span>Artifacts discovered</span><strong id="progressText">0 / 3</strong></div>
+        <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+      </div>
+      <p class="instruction">Tap a display to inspect the object. Complete its interaction, then add it to the collection.</p>
+    </section>
+
+    <section class="gallery" aria-label="Collection record">
+      <button class="artifact artifact-trigger" data-artifact="watch" aria-label="Open the broken pocket watch record">
+        <span class="artifact-number">01</span>
+        <span class="artifact-copy"><strong>Broken Pocket Watch</strong><small>Stopped at 11:47 PM</small></span>
+        <span class="status">UNDISCOVERED</span>
+      </button>
+
+      <button class="artifact artifact-trigger" data-artifact="photo" aria-label="Open the unmarked photograph record">
+        <span class="artifact-number">02</span>
+        <span class="artifact-copy"><strong>Unmarked Photograph</strong><small>Something is written beneath the image</small></span>
+        <span class="status">UNDISCOVERED</span>
+      </button>
+
+      <button class="artifact artifact-trigger" data-artifact="key" aria-label="Open the hotel room key record">
+        <span class="artifact-number">03</span>
+        <span class="artifact-copy"><strong>Hotel Room Key</strong><small>Room 317 no longer exists</small></span>
+        <span class="status">UNDISCOVERED</span>
+      </button>
+    </section>
+
+    <section id="finale" class="finale" aria-live="polite">
+      <div class="lock-mark" aria-hidden="true">✦</div>
+      <p class="eyebrow">FINAL ARCHIVE</p>
+      <h2 id="finaleTitle">LOCKED</h2>
+      <p id="finaleText">Discover all three artifacts to open the sealed record.</p>
+      <div class="archive-sheet" aria-hidden="true">
+        <span>ARCHIVE B</span>
+        <strong>ROOM 317</strong>
+        <p>Some exhibits end where the hidden story begins.</p>
+      </div>
+      <button id="resetButton" class="secondary" type="button">Reset experience</button>
+    </section>
+
+    <footer>Prototype experience · Original content · Built by Luminary Labs</footer>
+  </main>
+
+  <dialog id="artifactDialog">
+    <form method="dialog" class="dialog-card">
+      <button class="close" value="cancel" aria-label="Close artifact">×</button>
+      <p id="dialogEyebrow" class="eyebrow"></p>
+      <h2 id="dialogTitle"></h2>
+      <p id="dialogBody"></p>
+      <div id="dialogInteraction" class="interaction"></div>
+      <button id="discoverButton" class="primary" value="default" disabled>Complete interaction first</button>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
