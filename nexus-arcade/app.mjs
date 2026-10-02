@@ -30,14 +30,16 @@ const PUBLIC_ARCADE_ROUTE = location.pathname === "/arcade/" || location.pathnam
 const RUNTIME_SCOPE_PATH = PUBLIC_ARCADE_ROUTE ? "/arcade/" : "/nexus-arcade/";
 const SERVICE_WORKER_PATH = `${RUNTIME_SCOPE_PATH}sw.js?v=${PACKAGE_REF}`;
 
-function requestedGameSlug() {
+function requestedGameSelector() {
   const query = new URLSearchParams(location.search).get("game");
-  if (query && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(query)) return query;
+  if (query && /^NXA-[0-9]{6}$/.test(query)) return { gameId: query, slug: null };
+  if (query && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(query)) return { gameId: null, slug: query };
   const match = location.pathname.match(/^\/arcade\/([a-z0-9]+(?:-[a-z0-9]+)*)\/?$/);
-  return match?.[1] || document.body.dataset.gameSlug || null;
+  const slug = match?.[1] || document.body.dataset.gameSlug || null;
+  return slug ? { gameId: null, slug } : null;
 }
 
-const REQUESTED_SLUG = requestedGameSlug();
+const REQUESTED_GAME = requestedGameSelector();
 let serviceWorkerReady = false;
 let library;
 let installer;
@@ -175,8 +177,8 @@ function renderGame(game) {
   primary.setAttribute("aria-label", `${primary.textContent} ${game.title}`);
   const hosted = document.createElement("a");
   hosted.className = "hosted-link";
-  hosted.href = REQUESTED_SLUG ? hostedGameUrl(game.slug) : publicGameUrl(game.slug);
-  if (REQUESTED_SLUG) {
+  hosted.href = REQUESTED_GAME ? hostedGameUrl(game.slug) : publicGameUrl(game.slug);
+  if (REQUESTED_GAME) {
     hosted.target = "_blank";
     hosted.rel = "noopener noreferrer";
     hosted.textContent = "Hosted ↗";
@@ -268,16 +270,19 @@ async function initialize() {
       catalogFromCache = true;
       setStatus(`${games.length} cached games available. Registry is offline; installed games can still launch.`);
     }
-    const visibleGames = REQUESTED_SLUG ? games.filter((game) => game.slug === REQUESTED_SLUG) : games;
-    if (REQUESTED_SLUG && !visibleGames.length) {
+    const visibleGames = REQUESTED_GAME
+      ? games.filter((game) => REQUESTED_GAME.gameId ? game.id === REQUESTED_GAME.gameId : game.slug === REQUESTED_GAME.slug)
+      : games;
+    if (REQUESTED_GAME && !visibleGames.length) {
+      const requested = REQUESTED_GAME.gameId || REQUESTED_GAME.slug;
       count.textContent = "0";
-      setStatus(`Game "${REQUESTED_SLUG}" is not in the public NexusArcade registry.`, "error");
+      setStatus(`Game "${requested}" is not in the public NexusArcade registry.`, "error");
       grid.replaceChildren(textElement("p", "", "This game is not currently available."));
       return;
     }
     count.textContent = String(visibleGames.length);
     grid.replaceChildren(...visibleGames.map(renderGame));
-    if (REQUESTED_SLUG) {
+    if (REQUESTED_GAME) {
       const game = visibleGames[0];
       document.title = `${game.title} — Nexus Arcade — Luminary Labs`;
       document.querySelector("#page-title")?.replaceChildren(document.createTextNode(game.title));

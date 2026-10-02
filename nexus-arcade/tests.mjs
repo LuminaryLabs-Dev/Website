@@ -61,7 +61,7 @@ for (const slug of routeDirs) {
 const app = await read("app.mjs");
 assert.match(app, /PUBLIC_ARCADE_ROUTE/);
 assert.match(app, /RUNTIME_SCOPE_PATH/);
-assert.match(app, /requestedGameSlug/);
+assert.match(app, /requestedGameSelector/);
 assert.match(app, /publicGameUrl\(game\.slug\)/);
 assert.match(app, /library\.getManifest\(game\)/);
 assert.match(app, /player\.play\(manifest\)/);
