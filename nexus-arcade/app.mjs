@@ -5,8 +5,9 @@ import {
   REGISTRY_PIN,
   REGISTRY_VERSION,
   hostedGameUrl,
+  publicGameUrl,
   trustedThumbnailUrl,
-} from "./config.mjs?v=20260904-6";
+} from "./config.mjs?v=20261002-1";
 
 const grid = document.querySelector("#game-grid");
 const status = document.querySelector("#library-status");
@@ -25,6 +26,18 @@ const MANIFEST_STORAGE_KEY = "nexus-arcade-manifests";
 const SESSION_STORAGE_KEY = "nexus-arcade-session";
 const SESSION_ID_PATTERN = /^[a-zA-Z0-9_-]{16,128}$/;
 const gameViews = new Map();
+const PUBLIC_ARCADE_ROUTE = location.pathname === "/arcade/" || location.pathname.startsWith("/arcade/");
+const RUNTIME_SCOPE_PATH = PUBLIC_ARCADE_ROUTE ? "/arcade/" : "/nexus-arcade/";
+const SERVICE_WORKER_PATH = `${RUNTIME_SCOPE_PATH}sw.js?v=${PACKAGE_REF}`;
+
+function requestedGameSlug() {
+  const query = new URLSearchParams(location.search).get("game");
+  if (query && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(query)) return query;
+  const match = location.pathname.match(/^\/arcade\/([a-z0-9]+(?:-[a-z0-9]+)*)\/?$/);
+  return match?.[1] || document.body.dataset.gameSlug || null;
+}
+
+const REQUESTED_SLUG = requestedGameSlug();
 let serviceWorkerReady = false;
 let library;
 let installer;
@@ -62,7 +75,7 @@ function writeStored(key, value) {
 
 async function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return false;
-  const registration = await navigator.serviceWorker.register(`/nexus-arcade/sw.js?v=${PACKAGE_REF}`, { type: "module", scope: "/nexus-arcade/" });
+  const registration = await navigator.serviceWorker.register(SERVICE_WORKER_PATH, { type: "module", scope: RUNTIME_SCOPE_PATH });
   await navigator.serviceWorker.ready;
   if (!navigator.serviceWorker.controller) {
     await Promise.race([
@@ -162,11 +175,16 @@ function renderGame(game) {
   primary.setAttribute("aria-label", `${primary.textContent} ${game.title}`);
   const hosted = document.createElement("a");
   hosted.className = "hosted-link";
-  hosted.href = hostedGameUrl(game.slug);
-  hosted.target = "_blank";
-  hosted.rel = "noopener noreferrer";
-  hosted.textContent = "Open ↗";
-  hosted.setAttribute("aria-label", `Open hosted ${game.title} in a new tab`);
+  hosted.href = REQUESTED_SLUG ? hostedGameUrl(game.slug) : publicGameUrl(game.slug);
+  if (REQUESTED_SLUG) {
+    hosted.target = "_blank";
+    hosted.rel = "noopener noreferrer";
+    hosted.textContent = "Hosted ↗";
+    hosted.setAttribute("aria-label", `Open hosted ${game.title} in a new tab`);
+  } else {
+    hosted.textContent = "Game page →";
+    hosted.setAttribute("aria-label", `Open ${game.title} game page`);
+  }
   actions.append(primary, hosted);
 
   const progressWrap = document.createElement("div");
@@ -236,7 +254,7 @@ async function initialize() {
     });
     installer = new arcade.BrowserInstaller({ fetchImpl: browserFetch, sessionId: SESSION_ID });
     await installer.removeStaleSessions(SESSION_ID);
-    player = new arcade.ArcadePlayer(frame);
+    player = new arcade.ArcadePlayer(frame, { scopePath: RUNTIME_SCOPE_PATH });
     let games;
     let catalogFromCache = false;
     try {
@@ -250,9 +268,24 @@ async function initialize() {
       catalogFromCache = true;
       setStatus(`${games.length} cached games available. Registry is offline; installed games can still launch.`);
     }
-    count.textContent = String(games.length);
-    grid.replaceChildren(...games.map(renderGame));
-    if (!catalogFromCache) setStatus(`${games.length} games loaded from registry ${library.catalogClient.latest.registryVersion}. Nothing downloads until you choose Install.`);
+    const visibleGames = REQUESTED_SLUG ? games.filter((game) => game.slug === REQUESTED_SLUG) : games;
+    if (REQUESTED_SLUG && !visibleGames.length) {
+      count.textContent = "0";
+      setStatus(`Game "${REQUESTED_SLUG}" is not in the public NexusArcade registry.`, "error");
+      grid.replaceChildren(textElement("p", "", "This game is not currently available."));
+      return;
+    }
+    count.textContent = String(visibleGames.length);
+    grid.replaceChildren(...visibleGames.map(renderGame));
+    if (REQUESTED_SLUG) {
+      const game = visibleGames[0];
+      document.title = `${game.title} — Nexus Arcade — Luminary Labs`;
+      document.querySelector("#page-title")?.replaceChildren(document.createTextNode(game.title));
+      document.querySelector("#library-title")?.replaceChildren(document.createTextNode("Install and play"));
+      setStatus(`${game.title} v${game.version} loaded from registry ${library.catalogClient.latest.registryVersion}. Nothing downloads until you choose Install.`);
+    } else if (!catalogFromCache) {
+      setStatus(`${games.length} games loaded from registry ${library.catalogClient.latest.registryVersion}. Nothing downloads until you choose Install.`);
+    }
   } catch (error) {
     console.error("[nexus-arcade] initialization failed", error);
     setStatus(`The public registry could not load: ${error.message}`, "error");

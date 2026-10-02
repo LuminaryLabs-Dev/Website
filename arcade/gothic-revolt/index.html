@@ -1,20 +1,20 @@
+<!-- generated:arcade-game-route -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Play Nexus Arcade — Luminary Labs</title>
-  <meta name="description" content="Explore and play Nexus Arcade prototypes in your browser.">
-  <link rel="canonical" href="https://luminarylabs.dev/nexus-arcade/play/">
+  <title>Gothic Revolt — Nexus Arcade — Luminary Labs</title>
+  <meta name="description" content="Browse, install, and play Nexus Arcade games through the verified NexusArcade installer.">
+  <link rel="canonical" href="https://luminarylabs.dev/arcade/">
   <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="manifest" href="../manifest.webmanifest">
-  <link rel="stylesheet" href="../styles.css?v=20261002-1">
-  <link rel="stylesheet" href="./styles.css?v=20261002-1">
-<link rel="stylesheet" href="/assets/css/site-tokens.css?v=20260906-unified-1">
-<link rel="stylesheet" href="/assets/css/site-shell.css?v=20260906-unified-1">
+  <link rel="manifest" href="/arcade/manifest.webmanifest">
+  <link rel="stylesheet" href="/nexus-arcade/styles.css?v=20261002-1">
+  <link rel="stylesheet" href="/nexus-arcade/play/styles.css?v=20261002-1">
+  <link rel="stylesheet" href="/assets/css/site-tokens.css?v=20260906-unified-1">
+  <link rel="stylesheet" href="/assets/css/site-shell.css?v=20260906-unified-1">
 </head>
-<body class="ll-site arcade-player-page">
-
+<body class="ll-site arcade-player-page" data-game-slug="gothic-revolt">
   <!-- site:header:start -->
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
@@ -37,17 +37,19 @@
   <main id="main" tabindex="-1">
     <section class="library-intro" aria-labelledby="page-title">
       <a class="arcade-return" href="/nexus-arcade/">← Back to the cabinet</a>
-<p class="eyebrow">Nexus Arcade / Play</p>
-      <h1 id="page-title">A little time.<br><em>A new adventure.</em></h1>
-      <div class="intro-details"><p class="lede">Explore our public prototypes. Choose a game, install it, and press Play. Your progress stays with you when you close the player.</p>
-      <p class="catalog-count"><strong id="game-count">—</strong><span>games to explore</span></p></div>
+      <p class="eyebrow">Nexus Arcade / Games</p>
+      <h1 id="page-title">Choose a game.</h1>
+      <div class="intro-details">
+        <p class="lede">The catalog comes from the NexusArcade registry. Game files are downloaded only when you choose Install, verified file by file, then launched locally in the browser.</p>
+        <p class="catalog-count"><strong id="game-count">—</strong><span>games available</span></p>
+      </div>
     </section>
 
     <section class="library-section" id="library" aria-labelledby="library-title">
       <div class="section-heading">
         <div>
           <p class="eyebrow">The collection</p>
-          <h2 id="library-title">Choose a game</h2>
+          <h2 id="library-title">All games</h2>
         </div>
         <p id="library-status" class="status" role="status" aria-live="polite">Loading games…</p>
       </div>
@@ -56,15 +58,15 @@
     </section>
 
     <section class="how-it-works" aria-labelledby="how-title">
-      <div><p class="eyebrow">Getting started</p><h2 id="how-title">Pick. Install. Play.</h2></div>
+      <div><p class="eyebrow">Verified delivery</p><h2 id="how-title">Registry. Install. Play.</h2></div>
       <ol>
-        <li><span>01</span><div><strong>Choose your next game</strong><p>Browse the collection. Only the game you choose is downloaded.</p></div></li>
-        <li><span>02</span><div><strong>Install, then press Play</strong><p>Game files are checked before launch. Open lets you play the hosted version in a new tab.</p></div></li>
-        <li><span>03</span><div><strong>Keep your progress</strong><p>Temporary game files are removed when you close the player. Your saved progress and settings stay.</p></div></li>
+        <li><span>01</span><div><strong>Choose a registered game</strong><p>The site reads the live NexusArcade registry instead of duplicating game files.</p></div></li>
+        <li><span>02</span><div><strong>Install verified files</strong><p>The NexusArcade installer downloads the selected build through jsDelivr and verifies every file before activation.</p></div></li>
+        <li><span>03</span><div><strong>Return to the same URL</strong><p>Each game has a stable Luminary URL at <code>/arcade/&lt;slug&gt;/</code> even when its underlying build changes.</p></div></li>
       </ol>
     </section>
-  <p class="installer-source"><a href="https://github.com/LuminaryLabs-Dev/NexusArcade" target="_blank" rel="noopener noreferrer">Installer source ↗</a></p>
-</main>
+    <p class="installer-source"><a href="https://github.com/LuminaryLabs-Dev/NexusArcade" target="_blank" rel="noopener noreferrer">Installer source ↗</a></p>
+  </main>
 
   <section id="player-shell" class="player-shell" hidden aria-labelledby="player-title">
     <div class="player-toolbar">
@@ -92,7 +94,7 @@
 </footer>
 <!-- site:footer:end -->
 
-  <script type="module" src="../app.mjs?v=20261002-1"></script>
-<script src="/assets/js/site-nav.js?v=20260906-unified-1"></script>
+  <script type="module" src="/nexus-arcade/app.mjs?v=20261002-1"></script>
+  <script src="/assets/js/site-nav.js?v=20260906-unified-1"></script>
 </body>
 </html>

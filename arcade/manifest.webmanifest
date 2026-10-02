@@ -1,0 +1,11 @@
+{
+  "name": "Nexus Arcade",
+  "short_name": "Nexus Arcade",
+  "id": "/arcade/",
+  "start_url": "/arcade/",
+  "scope": "/arcade/",
+  "display": "standalone",
+  "background_color": "#f2f1ed",
+  "theme_color": "#d94824",
+  "icons": []
+}

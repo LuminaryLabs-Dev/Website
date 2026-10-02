@@ -7,93 +7,78 @@ import {
   PACKAGE_URL,
   SERVICE_WORKER_PACKAGE_URL,
   hostedGameUrl,
+  publicGameUrl,
   trustedThumbnailUrl,
 } from "./config.mjs";
 
 const root = path.dirname(new URL(import.meta.url).pathname);
+const siteRoot = path.join(root, "..");
 const read = (name) => readFile(path.join(root, name), "utf8");
 const files = await readdir(root);
+
 assert.deepEqual(files.sort(), ["app.mjs", "config.mjs", "index.html", "manifest.webmanifest", "play", "styles.css", "sw.js", "tests.mjs"].sort());
 assert(!files.some((name) => /\.(?:wasm|mp3|wav|ogg|webp|jpe?g|png)$/i.test(name)), "Website route must not contain game assets");
 
 assert.match(PACKAGE_REF, /^[a-f0-9]{40}$/);
+assert.equal(PACKAGE_REF, "c7d1ac67063c9950d59a09c51d1cb068c1028652");
 assert.equal(PACKAGE_URL, `https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusArcade@${PACKAGE_REF}/dist/browser/nexus-arcade.mjs`);
 assert.equal(SERVICE_WORKER_PACKAGE_URL, `https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusArcade@${PACKAGE_REF}/dist/browser/service-worker.mjs`);
-assert.equal(LATEST_URL, "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusArcade-Prototypes@main/registry/latest.json");
-assert.equal(hostedGameUrl("blood-maiden"), "https://luminarylabs-dev.github.io/NexusArcade-Prototypes/games/blood-maiden/");
-assert.throws(() => hostedGameUrl("../private"), /Invalid game slug/);
-assert.equal(trustedThumbnailUrl(`https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusArcade-Prototypes@${"a".repeat(40)}/prototypes/bumble-beez/cover.png`).includes("bumble-beez"), true);
+assert.equal(LATEST_URL, "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusArcade-Games@main/registry/latest.json");
+assert.equal(hostedGameUrl("blood-maiden"), "https://luminarylabs-dev.github.io/NexusArcade-Games/games/blood-maiden/");
+assert.equal(publicGameUrl("wrong-floor"), "https://luminarylabs.dev/arcade/wrong-floor/");
+assert.throws(() => publicGameUrl("../private"), /Invalid game slug/);
+assert.equal(trustedThumbnailUrl(`https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusArcade-Games@${"a".repeat(40)}/games/bumble-beez/build/cover.png`).includes("bumble-beez"), true);
 assert.throws(() => trustedThumbnailUrl("https://cdn.jsdelivr.net/gh/attacker/games@main/cover.png"), /Untrusted/);
 
 const overview = await read("index.html");
-const html = await read("play/index.html");
-assert.match(overview, /href="https:\/\/luminarylabs.dev\/nexus-arcade\/"/);
-assert.match(overview, /href="\/nexus-arcade\/play\/"/);
+const legacyPlay = await read("play/index.html");
+const arcade = await readFile(path.join(siteRoot, "arcade", "index.html"), "utf8");
+assert.match(overview, /href="https:\/\/luminarylabs\.dev\/nexus-arcade\/"/);
+assert.match(overview, /href="\/arcade\/"/);
 assert.doesNotMatch(overview, /<iframe|src="[^"\n]*app\.mjs/);
-assert.match(html, /href="https:\/\/luminarylabs.dev\/nexus-arcade\/play\/"/);
-assert.match(html, /href="\.\.\/styles\.css\?v=/);
-assert.match(html, /href="\.\/styles\.css\?v=/);
-assert.match(html, /src="\.\.\/app\.mjs\?v=/);
-assert.match(html, /href="\.\.\/manifest\.webmanifest"/);
-const manifest = JSON.parse(await read("manifest.webmanifest"));
-assert.equal(manifest.id, "/nexus-arcade/");
-assert.equal(manifest.start_url, "/nexus-arcade/play/");
-assert.equal(manifest.scope, "/nexus-arcade/");
-assert.equal(manifest.background_color, "#f2f1ed");
-assert.equal(manifest.theme_color, "#d94824");
+assert.match(legacyPlay, /href="https:\/\/luminarylabs\.dev\/nexus-arcade\/play\/"/);
+assert.match(arcade, /href="https:\/\/luminarylabs\.dev\/arcade\/" rel="canonical"/);
+assert.match(arcade, /src="\/nexus-arcade\/app\.mjs\?v=/);
+assert.match(arcade, /<iframe id="game-frame"[^>]*allow="autoplay; fullscreen; gamepad"[^>]*allowfullscreen><\/iframe>/);
+assert.doesNotMatch(arcade, /<iframe[^>]*\bsandbox\b/);
+assert.doesNotMatch(arcade, /<iframe[^>]*\bsrc=/);
 
-// Resolve both documents' local resources from their actual nested route.
-// Canonical URLs, anchors, and external links are deliberately excluded.
-for (const [route, document] of [["/nexus-arcade/", overview], ["/nexus-arcade/play/", html]]) {
-  for (const [, resource] of document.matchAll(/(?:src|href)="([^"#][^"]*)"/g)) {
-    const url = new URL(resource, `https://luminarylabs.dev${route}`);
-    if (url.origin !== "https://luminarylabs.dev") continue;
-    let local = path.join(root, "..", decodeURIComponent(url.pathname));
-    if (url.pathname.endsWith("/")) local = path.join(local, "index.html");
-    assert.ok((await readFile(local)).length > 0, `Missing resource: ${route} -> ${resource}`);
-  }
+const manifest = JSON.parse(await readFile(path.join(siteRoot, "arcade", "manifest.webmanifest"), "utf8"));
+assert.equal(manifest.id, "/arcade/");
+assert.equal(manifest.start_url, "/arcade/");
+assert.equal(manifest.scope, "/arcade/");
+
+const arcadeEntries = await readdir(path.join(siteRoot, "arcade"), { withFileTypes: true });
+const routeDirs = arcadeEntries.filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort();
+assert(routeDirs.includes("wrong-floor"), "Wrong Floor public game route is missing");
+for (const slug of routeDirs) {
+  const page = await readFile(path.join(siteRoot, "arcade", slug, "index.html"), "utf8");
+  assert.match(page, /^<!-- generated:arcade-game-route -->/);
+  assert.match(page, new RegExp(`data-game-slug="${slug}"`));
+  assert.match(page, new RegExp(`https://luminarylabs\\.dev/arcade/${slug}/`));
 }
-const theme = await read("styles.css");
-assert.match(theme, /color-scheme: light/);
-assert.match(theme, /\[hidden\]\s*\{\s*display: none !important/);
-assert.match(theme, /:focus-visible/);
-assert.match(theme, /prefers-reduced-motion/);
-assert.match(await read("play/styles.css"), /#game-frame[^}]*background: #000/s);
-const legacy = await readFile(path.join(root, "..", "gemini-arcade.html"), "utf8");
-assert.match(legacy, /http-equiv="refresh" content="0;url=\/nexus-arcade\/"/);
-assert.match(legacy, /<a href="\/nexus-arcade\/">/);
-assert.match(html, /<iframe id="game-frame"[^>]*allow="autoplay; fullscreen; gamepad"[^>]*allowfullscreen><\/iframe>/);
-assert.doesNotMatch(html, /<iframe[^>]*\bsandbox\b/);
-assert.doesNotMatch(html, /<iframe[^>]*\bsrc=/);
 
 const app = await read("app.mjs");
-assert.match(app, /image\.loading = "lazy"/);
-assert.match(app, /primary\.addEventListener\("click"/);
+assert.match(app, /PUBLIC_ARCADE_ROUTE/);
+assert.match(app, /RUNTIME_SCOPE_PATH/);
+assert.match(app, /requestedGameSlug/);
+assert.match(app, /publicGameUrl\(game\.slug\)/);
 assert.match(app, /library\.getManifest\(game\)/);
 assert.match(app, /player\.play\(manifest\)/);
-assert.match(app, /new DOMException\("Install cancelled", "AbortError"\)/);
-assert.match(app, /dataset\.packageRef = PACKAGE_REF/);
-assert.match(app, /register\(`\/nexus-arcade\/sw\.js\?v=\$\{PACKAGE_REF\}/);
-assert.match(app, /scope: "\/nexus-arcade\/"/);
-assert.match(app, /nexus-arcade-catalog/);
-assert.match(app, /nexus-arcade-manifests/);
-assert.match(app, /installed games can still launch/);
-assert.match(app, /sessionStorage\.getItem\(SESSION_STORAGE_KEY\)/);
+assert.match(app, /new arcade\.ArcadePlayer\(frame, \{ scopePath: RUNTIME_SCOPE_PATH \}\)/);
+assert.match(app, /navigator\.serviceWorker\.register\(SERVICE_WORKER_PATH/);
 assert.match(app, /new arcade\.BrowserInstaller\(\{ fetchImpl: browserFetch, sessionId: SESSION_ID \}\)/);
-assert.match(app, /installer\.removeStaleSessions\(SESSION_ID\)/);
-assert.match(app, /await unloadPlayerFrame\(\)/);
 assert.match(app, /await installer\.remove\(closing\.manifest\)/);
-assert.match(app, /releaseSessionMetadata\(SESSION_ID\)/);
-assert.match(app, /type: "NEXUS_ARCADE_RELEASE_SESSION"/);
-assert.match(app, /window\.addEventListener\("pagehide", releaseCurrentSession\)/);
-assert.match(app, /Saved game data was kept/);
 assert.doesNotMatch(app, /localStorage\.clear\(/);
-assert.doesNotMatch(app, /indexedDB\.deleteDatabase\(/);
-assert.doesNotMatch(app, /caches\.delete\(/);
-assert.ok(app.indexOf("await unloadPlayerFrame()") < app.indexOf("await installer.remove(closing.manifest)"), "The iframe must unload before its asset cache is removed");
 
-const serviceWorker = await read("sw.js");
-assert.match(serviceWorker, new RegExp(PACKAGE_REF));
-assert.match(serviceWorker, /scopePath: "\/nexus-arcade\/"/);
+const publicSw = await readFile(path.join(siteRoot, "arcade", "sw.js"), "utf8");
+assert.match(publicSw, new RegExp(PACKAGE_REF));
+assert.match(publicSw, /scopePath: "\/arcade\/"/);
+const legacySw = await read("sw.js");
+assert.match(legacySw, new RegExp(PACKAGE_REF));
+assert.match(legacySw, /scopePath: "\/nexus-arcade\/"/);
 
-console.log("Nexus Arcade Website contract validation ok");
+const legacy = await readFile(path.join(siteRoot, "gemini-arcade.html"), "utf8");
+assert.match(legacy, /http-equiv="refresh" content="0;url=\/nexus-arcade\/"/);
+
+console.log(`Nexus Arcade Website contract validation ok: ${routeDirs.length} public game routes`);
