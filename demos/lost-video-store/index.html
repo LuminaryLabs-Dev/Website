@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#09090b" />
+  <meta name="description" content="The Lost Video Store — an interactive venue storytelling demo by Luminary Labs." />
+  <title>The Lost Video Store — Luminary Labs</title>
+  <link rel="stylesheet" href="src/styles/base.css" />
+  <link rel="stylesheet" href="src/styles/exhibit.css" />
+  <link rel="stylesheet" href="src/styles/mobile.css" />
+  <link rel="stylesheet" href="src/styles/effects.css" />
+</head>
+<body>
+  <main id="app" class="app-shell" data-state="INTRO">
+    <section id="intro" class="intro-screen" aria-labelledby="introTitle">
+      <div class="intro-card">
+        <p class="eyebrow">LUMINARY LABS · INTERACTIVE VENUE DEMO</p>
+        <h1 id="introTitle">The Lost Video Store</h1>
+        <p class="intro-copy">The store closed without warning in November 1994. Three objects remain in the abandoned collection. Each one contradicts the official record.</p>
+        <button id="beginButton" class="primary-action">Enter after hours</button>
+        <p class="microcopy">Original fictional content. Built to demonstrate a browser-based layer for physical exhibits.</p>
+      </div>
+    </section>
+
+    <section id="experience" class="experience" aria-hidden="true">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">CASE FILE 317</p>
+          <strong id="progressText">0 / 3 evidence recovered</strong>
+        </div>
+        <div class="topbar-actions">
+          <button id="caseFileButton" class="ghost-action">Case file</button>
+          <button id="audioButton" class="icon-action" aria-pressed="true" aria-label="Toggle audio">Sound on</button>
+        </div>
+      </header>
+
+      <section class="scene-wrap" aria-label="Abandoned video store exhibit">
+        <div id="roomScene" class="room-scene">
+          <div class="ceiling-light light-a"></div>
+          <div class="ceiling-light light-b"></div>
+          <div class="back-wall"></div>
+          <div class="shelf shelf-left"><span>HORROR</span></div>
+          <div class="shelf shelf-right"><span>NEW RELEASES</span></div>
+          <div class="counter"></div>
+          <div class="crt"><div class="crt-glow"></div><span>NO SIGNAL</span></div>
+          <div class="archive-door" id="archiveDoor"><span>B-17</span></div>
+          <div class="floor-grid"></div>
+
+          <button class="hotspot hotspot-vhs" data-artifact="vhs" aria-label="Inspect returned VHS tape">
+            <span class="pulse"></span><span class="hotspot-label">Returned tape</span>
+          </button>
+          <button class="hotspot hotspot-badge" data-artifact="badge" aria-label="Inspect employee badge">
+            <span class="pulse"></span><span class="hotspot-label">Employee badge</span>
+          </button>
+          <button class="hotspot hotspot-key" data-artifact="key" aria-label="Inspect storage key">
+            <span class="pulse"></span><span class="hotspot-label">Storage key</span>
+          </button>
+
+          <div id="finaleOverlay" class="finale-overlay" aria-hidden="true">
+            <p class="eyebrow">ARCHIVE B-17</p>
+            <h2>The room that wasn't there.</h2>
+            <p>The return record, the missing employee's final shift, and the unregistered key all point to one place omitted from every surviving floor plan.</p>
+            <button id="openArchiveButton" class="primary-action">Open the archive</button>
+          </div>
+        </div>
+        <div class="scene-caption">
+          <p id="scenePrompt">Move through the store and inspect anything that looks out of place.</p>
+        </div>
+      </section>
+
+      <aside id="caseFile" class="case-file" aria-hidden="true" aria-label="Case file 317">
+        <div class="case-file-head">
+          <div><p class="eyebrow">CASE FILE 317</p><h2>Evidence board</h2></div>
+          <button id="closeCaseFile" class="icon-action" aria-label="Close case file">Close</button>
+        </div>
+        <div id="evidenceList" class="evidence-list"></div>
+        <div id="connections" class="connections"></div>
+        <button id="resetButton" class="danger-ghost">Reset experience</button>
+      </aside>
+
+      <dialog id="objectViewer" class="object-viewer">
+        <div class="viewer-shell">
+          <button id="closeViewer" class="viewer-close" aria-label="Close object viewer">×</button>
+          <div class="viewer-visual" id="viewerVisual" aria-hidden="true"></div>
+          <div class="viewer-copy">
+            <p id="viewerEyebrow" class="eyebrow"></p>
+            <h2 id="viewerTitle"></h2>
+            <p id="viewerDescription"></p>
+            <div id="interactionHost" class="interaction-host"></div>
+            <div id="clueReveal" class="clue-reveal" aria-live="polite"></div>
+            <button id="collectButton" class="primary-action" disabled>Add to case file</button>
+          </div>
+        </div>
+      </dialog>
+
+      <section id="archiveReveal" class="archive-reveal" aria-hidden="true">
+        <div class="archive-card">
+          <p class="eyebrow">RECOVERED MATERIAL · ARCHIVE B-17</p>
+          <h2>Closing Night</h2>
+          <p>The tape was returned after the store was officially closed. The employee badge shows a final shift on the same date. The key identifies a storage room absent from the published floor plan.</p>
+          <blockquote>Someone was still using the store after it stopped existing on paper.</blockquote>
+          <p class="final-copy">A real venue could replace these fictional clues with approved collection objects, archival media, QR/NFC triggers, environmental effects, or exhibit-specific rewards.</p>
+          <button id="restartButton" class="primary-action">Replay the demo</button>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
