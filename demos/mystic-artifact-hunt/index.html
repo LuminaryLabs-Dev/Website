@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="icon" href="data:," />
+    <meta name="theme-color" content="#171916" />
+    <meta name="description" content="A lightweight marker-based AR artifact hunt in a haunted museum." />
+    <title>Mystic Artifact Hunt</title>
+    <script type="module" crossorigin src="./assets/index-DViflC2u.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-C4YYQoA6.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar"><a class="wordmark" href="./">MYSTIC <span>ARCHIVE</span></a><a class="print-link" id="print-link" href="./markers/print.html">Print marker cards ↗</a></header>
+      <section class="gallery-shell" id="desktop-gallery" aria-label="Desktop marker gallery" hidden>
+        <section class="gallery-intro">
+          <p class="eyebrow">TWO-DEVICE AR TEST</p>
+          <h1>Marker gallery</h1>
+          <p>Scan the QR code with your phone, then point it at each marker shown here.</p>
+        </section>
+        <section class="gallery-layout" aria-label="Phone launch and marker gallery">
+          <article class="marker-viewer" aria-label="Image target gallery">
+            <div class="marker-meta"><span class="eyebrow" id="marker-position">MARKER 1 OF 10</span><span id="marker-id">MAH-01</span></div>
+            <div class="marker-frame"><img id="marker-image" src="./markers/MAH-00.png" alt="The Brass Compass image target" /></div>
+            <div class="marker-caption"><div><p class="eyebrow">ARTIFACT</p><h2 id="marker-title">The Brass Compass</h2></div><div class="gallery-controls"><button id="previous" class="gallery-arrow" type="button" aria-label="Previous marker">←</button><button id="next" class="gallery-arrow" type="button" aria-label="Next marker">→</button></div></div>
+          </article>
+          <aside class="launch-card" aria-labelledby="launch-title">
+            <p class="eyebrow">OPEN ON YOUR PHONE</p>
+            <h2 id="launch-title">Start the AR hunt</h2>
+            <p>Scan this code on your phone, allow camera access, and aim at the marker on this screen.</p>
+            <div class="qr-frame"><canvas id="launch-qr" aria-label="QR code that opens Mystic Artifact Hunt"></canvas><p id="qr-status" role="status" aria-live="polite">Preparing launch code…</p></div>
+            <a class="phone-link" id="phone-link" href="./">Open the AR hunt</a>
+            <p class="small-note">For best tracking, keep the whole square visible in even light.</p>
+          </aside>
+        </section>
+      </section>
+      <section class="intro" id="intro">
+        <p class="eyebrow">A CAMERA-LED AR MYSTERY</p>
+        <h1>Ten artifacts.<br /><em>One missing room.</em></h1>
+        <p class="lede">Find the black-and-white markers. Each one brings a relic into your space and reveals another piece of the museum’s story.</p>
+        <button class="primary" id="start">Start the hunt <span aria-hidden="true">→</span></button>
+        <p class="small-note">Camera access is needed. Use printed cards in good, even light.</p>
+      </section>
+      <section class="hunt" id="hunt" hidden>
+        <div class="stage" id="stage"><div class="stage-hint" id="stage-hint"><span class="scan-glyph">⌖</span><strong>Point your camera at a marker</strong><span>Keep the whole square in view</span></div></div>
+        <div class="hunt-panel">
+          <div class="progress-line"><span id="progress">0 / 10 recovered</span><button class="text-button" id="reset">Reset hunt</button></div>
+          <div class="kit-card" id="kit-card" aria-live="polite"><p class="eyebrow">WAITING FOR A MARKER</p><h2>Your next clue is nearby</h2><p>Hold the camera over any artifact card to reveal its 3D relic and controls.</p></div>
+          <details class="casebook-wrap"><summary id="casebook-summary">Casebook · 0 / 10</summary><ol class="casebook" id="casebook" aria-label="Recovered artifacts"></ol></details>
+        </div>
+      </section>
+      <div class="status" id="status" role="status" aria-live="polite"></div>
+      <footer id="app-footer">MYSTIC ARTIFACT HUNT · MARKER-BASED AR</footer>
+    </main>
+  </body>
+</html>
