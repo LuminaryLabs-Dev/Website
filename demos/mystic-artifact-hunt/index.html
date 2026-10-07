@@ -7,8 +7,8 @@
     <meta name="theme-color" content="#171916" />
     <meta name="description" content="A lightweight marker-based AR artifact hunt in a haunted museum." />
     <title>Mystic Artifact Hunt</title>
-    <script type="module" crossorigin src="./assets/index-DViflC2u.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-C4YYQoA6.css">
+    <script type="module" crossorigin src="./assets/index-oEsKQj2D.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-2LrboRfW.css">
   </head>
   <body>
     <main class="app-shell">
@@ -40,7 +40,8 @@
         <h1>Ten artifacts.<br /><em>One missing room.</em></h1>
         <p class="lede">Find the black-and-white markers. Each one brings a relic into your space and reveals another piece of the museum’s story.</p>
         <button class="primary" id="start">Start the hunt <span aria-hidden="true">→</span></button>
-        <p class="small-note">Camera access is needed. Use printed cards in good, even light.</p>
+        <p class="small-note">Your camera starts only after you tap the button. If access was blocked, enable camera permission for this site in your browser settings.</p>
+        <p class="camera-help" id="camera-help" role="alert" hidden></p>
       </section>
       <section class="hunt" id="hunt" hidden>
         <div class="stage" id="stage"><div class="stage-hint" id="stage-hint"><span class="scan-glyph">⌖</span><strong>Point your camera at a marker</strong><span>Keep the whole square in view</span></div></div>
@@ -51,6 +52,8 @@
         </div>
       </section>
       <div class="status" id="status" role="status" aria-live="polite"></div>
+      <div id="arjs-error" hidden></div>
+      <div id="error-popup" hidden></div>
       <footer id="app-footer">MYSTIC ARTIFACT HUNT · MARKER-BASED AR</footer>
     </main>
   </body>
