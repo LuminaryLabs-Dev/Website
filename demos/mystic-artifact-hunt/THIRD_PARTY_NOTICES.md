@@ -9,3 +9,5 @@
 Dependency versions are pinned in `package.json` and `package-lock.json`. This prototype uses local marker images and local SVG icons; it does not fetch 3D models or image assets at runtime.
 
 The local `public/vendor/camera_para.dat` camera calibration file is copied from the AR.js `3.4.8` release at `data/data/camera_para.dat`, alongside the AR.js runtime.
+
+- **NexusEngine 0.0.4** — MIT License, Copyright (c) 2026 Luminary Labs. Pinned source commit `2b5e070fab8c73986174b842559b96a7fd2db662`; license: `licenses/NexusEngine-MIT.txt`. Source: https://github.com/LuminaryLabs-Dev/NexusEngine. This app uses the engine and DomainServiceKit exports, not the experimental ProtoKits adapter.
