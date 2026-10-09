@@ -7,8 +7,8 @@
     <meta name="theme-color" content="#171916" />
     <meta name="description" content="A lightweight marker-based AR artifact hunt in a haunted museum." />
     <title>The Room That Remembers · Mystic Artifact Hunt</title>
-    <script type="module" crossorigin src="./assets/index-Bj8PoT-8.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CPZuzJED.css">
+    <script type="module" crossorigin src="./assets/index-D0BLuZGJ.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BkWPRwPg.css">
   </head>
   <body>
     <main class="app-shell">
@@ -47,8 +47,9 @@
         <div class="stage" id="stage"><div class="stage-hint" id="stage-hint"><span class="scan-glyph">⌖</span><strong>Point your camera at a marker</strong><span>Keep the whole square in view</span></div></div>
         <div class="hunt-panel">
           <div class="progress-line"><span id="progress">0 / 10 recovered</span><span><button class="text-button" id="mute" aria-pressed="false">Sound off</button> <button class="text-button" id="stop-camera">Stop camera</button></span></div>
+          <div class="camera-state" id="camera-state" role="status"><span id="camera-status">Starting the camera…</span><button id="resume-camera" hidden>Resume camera</button></div>
           <div class="kit-card" id="kit-card" aria-live="polite"><p class="eyebrow">WAITING FOR A MARKER</p><h2>Your next clue is nearby</h2><p>Hold the camera over any artifact card to reveal its 3D relic and controls.</p></div>
-          <details class="casebook-wrap"><summary id="casebook-summary">Casebook · 0 / 10</summary><ol class="casebook" id="casebook" aria-label="Recovered artifacts"></ol></details><details class="casebook-wrap"><summary>Options</summary><p>Reset clears all saved evidence and the ending.</p><button class="text-button" id="reset">Reset hunt</button></details>
+          <details class="casebook-wrap"><summary id="casebook-summary">Casebook · 0 / 10</summary><ol class="casebook" id="casebook" aria-label="Recovered artifacts"></ol></details><details class="casebook-wrap"><summary>Options</summary><p>Reset clears all saved evidence and the ending.</p><button class="text-button" id="reset">Reset hunt</button><p id="camera-check" class="small-note">Camera check: waiting to start.</p></details>
         </div>
       </section>
       <div class="status" id="status" role="status" aria-live="polite"></div>
