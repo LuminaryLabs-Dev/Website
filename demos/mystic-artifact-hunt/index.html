@@ -7,8 +7,8 @@
     <meta name="theme-color" content="#171916" />
     <meta name="description" content="A lightweight marker-based AR artifact hunt in a haunted museum." />
     <title>The Room That Remembers · Mystic Artifact Hunt</title>
-    <script type="module" crossorigin src="./assets/index-BD-5kMlI.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-Bmi6_upI.css">
+    <script type="module" crossorigin src="./assets/index-kRGEHfvb.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-q0Nwsww8.css">
   </head>
   <body>
     <main class="app-shell">
@@ -16,42 +16,42 @@
       <section class="gallery-shell" id="desktop-gallery" aria-label="Desktop marker gallery" hidden>
         <section class="gallery-intro">
           <p class="eyebrow">THE ROOM THAT REMEMBERS</p>
-          <h1>Marker gallery</h1>
+          <h1>The room that remembers.</h1>
           <p>Scan the QR code with your phone, then point it at each marker shown here.</p>
         </section>
         <section class="gallery-layout" aria-label="Phone launch and marker gallery">
           <article class="marker-viewer" aria-label="Image target gallery">
             <div class="marker-meta"><span class="eyebrow" id="marker-position">MARKER 1 OF 10</span><span id="marker-id">MAH-01</span></div>
-            <div class="marker-frame"><img id="marker-image" src="./markers/MAH-00.png" alt="The Brass Compass image target" /></div>
+            <div id="pair-targets" class="pair-targets" hidden><figure><img src="./markers/MAH-04.png" alt="Room 317 Key target"><figcaption>The Key</figcaption></figure><figure><img src="./markers/MAH-09.png" alt="Archive Seal target"><figcaption>The Seal</figcaption></figure></div><div class="marker-frame"><img id="marker-image" src="./markers/MAH-00.png" alt="The Brass Compass image target" /></div>
             <div class="marker-caption"><div><p class="eyebrow">ARTIFACT</p><h2 id="marker-title">The Brass Compass</h2></div><div class="gallery-controls"><button id="previous" class="gallery-arrow" type="button" aria-label="Previous marker">←</button><button id="next" class="gallery-arrow" type="button" aria-label="Next marker">→</button></div></div>
           </article>
           <aside class="launch-card" aria-labelledby="launch-title">
-            <p class="eyebrow">OPEN ON YOUR PHONE</p>
+            <p class="eyebrow">TEN OBJECTS · ONE MISSING ROOM</p>
             <h2 id="launch-title">Start the AR hunt</h2>
             <p>Scan this code on your phone, allow camera access, and aim at the marker on this screen.</p>
             <div class="qr-frame"><canvas id="launch-qr" aria-label="QR code that opens Mystic Artifact Hunt"></canvas><p id="qr-status" role="status" aria-live="polite">Preparing launch code…</p></div>
-            <a class="phone-link" id="phone-link" href="./">Open the AR hunt</a>
+            <button id="gallery-explore" class="primary">Explore in 3D</button><button id="pair-toggle" class="secondary" aria-pressed="false">Show key + seal together</button><a class="phone-link" id="phone-link" href="./">Open the AR hunt</a>
             <p class="small-note">For best tracking, keep the whole square visible in even light.</p>
-            <a class="phone-link" href="./feature-preview.mp4">Watch the illustrated feature preview ↗</a><p class="small-note">Camera off; tracking bypassed. Phone recognition remains unverified.</p>
+            <a class="phone-link" href="./feature-preview.mp4?v=0.2.0">Watch the illustrated feature preview ↗</a><p class="small-note">Camera off; tracking bypassed. Phone recognition remains unverified.</p>
           </aside>
         </section>
       </section>
       <section class="intro" id="intro">
         <p class="eyebrow">A CAMERA-LED AR MYSTERY</p>
         <h1>The room<br /><em>that remembers.</em></h1>
-        <p class="lede">You were a police sergeant once. Now a museum asks you to investigate a room missing from its records. Ten objects remember it differently. Examine them in any order. Gather their accounts, then return to the Archive Seal.</p>
+        <p class="lede">Room 317 is missing from the museum’s records. Ten objects remember it differently. Examine them, gather what remains, and return to the seal.</p>
         <button class="primary" id="start">Start the hunt <span aria-hidden="true">→</span></button>
         <p class="small-note">Your camera starts only after you tap the button. If access was blocked, enable camera permission for this site in your browser settings.</p>
-        <p class="small-note"><a href="./feature-preview.mp4">Watch the illustrated feature preview</a> · camera off, tracking bypassed.</p>
-        <p class="camera-help" id="camera-help" role="alert" hidden></p>
+        <p class="small-note"><a href="./feature-preview.mp4?v=0.2.0">Watch the illustrated feature preview</a> · camera off, tracking bypassed.</p>
+        <button id="explore-start" class="secondary">Explore in 3D without the camera</button><p class="camera-help" id="camera-help" role="alert" hidden></p>
       </section>
       <section class="hunt" id="hunt" hidden>
-        <div class="stage" id="stage"><div class="stage-hint" id="stage-hint"><span class="scan-glyph">⌖</span><strong>Point your camera at a marker</strong><span>Keep the whole square in view</span></div></div>
+        <div class="stage" id="stage"><div id="scene-loading" class="scene-loading" hidden>Preparing this object…</div><p id="scene-caption" class="scene-caption" role="status"></p><div id="viewer-controls" class="viewer-controls" hidden><span>3D EXPLORATION · CAMERA OFF</span><select id="viewer-target" aria-label="Choose object"></select><div><button id="viewer-left" aria-label="Look left">↶</button><button id="viewer-home" aria-label="Center view">Center</button><button id="viewer-right" aria-label="Look right">↷</button></div></div><div class="stage-hint" id="stage-hint"><span class="scan-glyph">⌖</span><strong>Point your camera at a marker</strong><span>Keep the whole square in view</span></div></div>
         <div class="hunt-panel">
           <div class="progress-line"><span id="progress">0 / 10 recovered</span><span><button class="text-button" id="mute" aria-pressed="false">Sound off</button> <button class="text-button" id="stop-camera">Stop camera</button></span></div>
           <div class="camera-state" id="camera-state" role="status"><span id="camera-status">Starting the camera…</span><button id="resume-camera" hidden>Resume camera</button></div>
           <div class="kit-card" id="kit-card" aria-live="polite"><p class="eyebrow">WAITING FOR A MARKER</p><h2>Your next clue is nearby</h2><p>Hold the camera over any artifact card to reveal its 3D relic and controls.</p></div>
-          <details class="casebook-wrap"><summary id="casebook-summary">Casebook · 0 / 10</summary><ol class="casebook" id="casebook" aria-label="Recovered artifacts"></ol></details><details class="casebook-wrap"><summary>Options</summary><p>Reset clears all saved evidence and the ending.</p><button class="text-button" id="reset">Reset hunt</button><p id="camera-check" class="small-note">Camera check: waiting to start.</p><details class="scanner-diagnostics"><summary>Scanner view</summary><p class="small-note">This is the image the scanner reads. The whole marker and its white margin should be visible. This preview stays on your device.</p><canvas id="scanner-view" width="640" height="480" aria-label="Camera image processed by the marker scanner"></canvas></details></details>
+          <details class="casebook-wrap"><summary id="casebook-summary">Casebook · 0 / 10</summary><ol class="casebook" id="casebook" aria-label="Recovered artifacts"></ol></details><details class="casebook-wrap"><summary>Options</summary><p>Reset clears all saved evidence and the ending.</p><button class="text-button" id="reset">Reset hunt</button><button id="fallback-explore" class="text-button">Explore without the camera</button><button id="retry-scene" class="text-button" hidden>Retry scene</button><p id="camera-check" class="small-note">Camera check: waiting to start.</p><details class="scanner-diagnostics"><summary>Scanner view</summary><p class="small-note">This is the image the scanner reads. The whole marker and its white margin should be visible. This preview stays on your device.</p><canvas id="scanner-view" width="640" height="480" aria-label="Camera image processed by the marker scanner"></canvas></details></details>
         </div>
       </section>
       <div class="status" id="status" role="status" aria-live="polite"></div>
