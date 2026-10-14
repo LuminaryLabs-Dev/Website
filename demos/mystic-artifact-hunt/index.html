@@ -1,63 +1,78 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <link rel="icon" href="data:," />
-    <meta name="theme-color" content="#171916" />
-    <meta name="description" content="A lightweight marker-based AR artifact hunt in a haunted museum." />
-    <title>The Room That Remembers · Mystic Artifact Hunt</title>
-    <script type="module" crossorigin src="./assets/index-kRGEHfvb.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-q0Nwsww8.css">
-  </head>
-  <body>
-    <main class="app-shell">
-      <header class="topbar"><a class="wordmark" href="./">MYSTIC <span>ARTIFACT HUNT</span></a><a class="print-link" id="print-link" href="./markers/print.html">Print marker cards ↗</a></header>
-      <section class="gallery-shell" id="desktop-gallery" aria-label="Desktop marker gallery" hidden>
-        <section class="gallery-intro">
-          <p class="eyebrow">THE ROOM THAT REMEMBERS</p>
-          <h1>The room that remembers.</h1>
-          <p>Scan the QR code with your phone, then point it at each marker shown here.</p>
-        </section>
-        <section class="gallery-layout" aria-label="Phone launch and marker gallery">
-          <article class="marker-viewer" aria-label="Image target gallery">
-            <div class="marker-meta"><span class="eyebrow" id="marker-position">MARKER 1 OF 10</span><span id="marker-id">MAH-01</span></div>
-            <div id="pair-targets" class="pair-targets" hidden><figure><img src="./markers/MAH-04.png" alt="Room 317 Key target"><figcaption>The Key</figcaption></figure><figure><img src="./markers/MAH-09.png" alt="Archive Seal target"><figcaption>The Seal</figcaption></figure></div><div class="marker-frame"><img id="marker-image" src="./markers/MAH-00.png" alt="The Brass Compass image target" /></div>
-            <div class="marker-caption"><div><p class="eyebrow">ARTIFACT</p><h2 id="marker-title">The Brass Compass</h2></div><div class="gallery-controls"><button id="previous" class="gallery-arrow" type="button" aria-label="Previous marker">←</button><button id="next" class="gallery-arrow" type="button" aria-label="Next marker">→</button></div></div>
-          </article>
-          <aside class="launch-card" aria-labelledby="launch-title">
-            <p class="eyebrow">TEN OBJECTS · ONE MISSING ROOM</p>
-            <h2 id="launch-title">Start the AR hunt</h2>
-            <p>Scan this code on your phone, allow camera access, and aim at the marker on this screen.</p>
-            <div class="qr-frame"><canvas id="launch-qr" aria-label="QR code that opens Mystic Artifact Hunt"></canvas><p id="qr-status" role="status" aria-live="polite">Preparing launch code…</p></div>
-            <button id="gallery-explore" class="primary">Explore in 3D</button><button id="pair-toggle" class="secondary" aria-pressed="false">Show key + seal together</button><a class="phone-link" id="phone-link" href="./">Open the AR hunt</a>
-            <p class="small-note">For best tracking, keep the whole square visible in even light.</p>
-            <a class="phone-link" href="./feature-preview.mp4?v=0.2.0">Watch the illustrated feature preview ↗</a><p class="small-note">Camera off; tracking bypassed. Phone recognition remains unverified.</p>
-          </aside>
-        </section>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="icon" href="data:," />
+  <meta name="theme-color" content="#171c19" />
+  <meta name="description" content="Enter an uncanny museum after closing. Turn a brass compass and uncover a room that disappeared." />
+  <title>The Room That Remembers · Mystic Artifact Hunt</title>
+  <script type="module" crossorigin src="./assets/index-CR3WJ8s_.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BtpmOPwP.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar"><a class="wordmark" href="./">MYSTIC <span>ARTIFACT HUNT</span></a><a class="print-link" id="print-link" href="./markers/print.html">Print targets ↗</a></header>
+    <section class="gallery-shell" id="desktop-gallery" aria-label="Museum exhibit station" hidden>
+      <div class="station-architecture" aria-hidden="true"><i></i><i></i><i></i></div>
+      <section class="gallery-intro">
+        <p class="eyebrow">AFTER CLOSING · A PLAYABLE EXHIBITION</p>
+        <h1>The Room<br /><em>That Remembers</em></h1>
+        <p>Some things remember the way back.</p>
       </section>
-      <section class="intro" id="intro">
-        <p class="eyebrow">A CAMERA-LED AR MYSTERY</p>
-        <h1>The room<br /><em>that remembers.</em></h1>
-        <p class="lede">Room 317 is missing from the museum’s records. Ten objects remember it differently. Examine them, gather what remains, and return to the seal.</p>
-        <button class="primary" id="start">Start the hunt <span aria-hidden="true">→</span></button>
-        <p class="small-note">Your camera starts only after you tap the button. If access was blocked, enable camera permission for this site in your browser settings.</p>
-        <p class="small-note"><a href="./feature-preview.mp4?v=0.2.0">Watch the illustrated feature preview</a> · camera off, tracking bypassed.</p>
-        <button id="explore-start" class="secondary">Explore in 3D without the camera</button><p class="camera-help" id="camera-help" role="alert" hidden></p>
+      <section class="gallery-layout" aria-label="Phone launch and marker gallery">
+        <article class="marker-viewer" aria-label="Image target gallery">
+          <div class="marker-meta"><span class="eyebrow" id="marker-position">EXHIBIT 01</span><span id="marker-id">THE BRASS COMPASS</span></div>
+          <div id="pair-targets" class="pair-targets" hidden><figure><img src="./markers/MAH-04.png" alt="Room 317 Key target"><figcaption>The Key</figcaption></figure><figure><img src="./markers/MAH-09.png" alt="Archive Seal target"><figcaption>The Seal</figcaption></figure></div>
+          <div class="marker-frame"><img id="marker-image" src="./markers/MAH-00.png" alt="The Brass Compass image target" /></div>
+          <div class="marker-caption"><div><p class="eyebrow">POINT YOUR PHONE AT THIS SQUARE</p><h2 id="marker-title">The Brass Compass</h2></div><div class="gallery-controls"><button id="previous" class="gallery-arrow" type="button" aria-label="Previous marker">←</button><button id="next" class="gallery-arrow" type="button" aria-label="Next marker">→</button></div></div>
+        </article>
+        <aside class="launch-card" aria-labelledby="launch-title">
+          <p class="eyebrow">YOUR PHONE IS THE VIEWFINDER</p><h2 id="launch-title">A way inside.</h2>
+          <p>Scan to open the museum. Start the camera, then aim at the large square.</p>
+          <div class="qr-frame"><canvas id="launch-qr" aria-label="QR code that opens Mystic Artifact Hunt"></canvas><p id="qr-status" role="status" aria-live="polite">Preparing launch code…</p></div>
+          <a class="phone-link" id="phone-link" href="./">Open on your phone ↗</a>
+          <p class="small-note">Keep the complete target and its white margin visible. Physical phone recognition remains unverified.</p>
+          <button id="gallery-explore" class="primary">Enter the museum <span aria-hidden="true">→</span></button>
+          <p class="station-note">A complete compass encounter, with or without a camera.</p>
+          <details class="station-extras"><summary>More from the museum</summary><button id="pair-toggle" class="secondary" aria-pressed="false">Show key + seal together</button><a href="?experience=full">Explore the earlier ten-object hunt ↗</a><a href="./feature-preview.mp4?v=0.3.0">Watch this experience ↗</a></details>
+        </aside>
       </section>
-      <section class="hunt" id="hunt" hidden>
-        <div class="stage" id="stage"><div id="scene-loading" class="scene-loading" hidden>Preparing this object…</div><p id="scene-caption" class="scene-caption" role="status"></p><div id="viewer-controls" class="viewer-controls" hidden><span>3D EXPLORATION · CAMERA OFF</span><select id="viewer-target" aria-label="Choose object"></select><div><button id="viewer-left" aria-label="Look left">↶</button><button id="viewer-home" aria-label="Center view">Center</button><button id="viewer-right" aria-label="Look right">↷</button></div></div><div class="stage-hint" id="stage-hint"><span class="scan-glyph">⌖</span><strong>Point your camera at a marker</strong><span>Keep the whole square in view</span></div></div>
-        <div class="hunt-panel">
-          <div class="progress-line"><span id="progress">0 / 10 recovered</span><span><button class="text-button" id="mute" aria-pressed="false">Sound off</button> <button class="text-button" id="stop-camera">Stop camera</button></span></div>
-          <div class="camera-state" id="camera-state" role="status"><span id="camera-status">Starting the camera…</span><button id="resume-camera" hidden>Resume camera</button></div>
-          <div class="kit-card" id="kit-card" aria-live="polite"><p class="eyebrow">WAITING FOR A MARKER</p><h2>Your next clue is nearby</h2><p>Hold the camera over any artifact card to reveal its 3D relic and controls.</p></div>
-          <details class="casebook-wrap"><summary id="casebook-summary">Casebook · 0 / 10</summary><ol class="casebook" id="casebook" aria-label="Recovered artifacts"></ol></details><details class="casebook-wrap"><summary>Options</summary><p>Reset clears all saved evidence and the ending.</p><button class="text-button" id="reset">Reset hunt</button><button id="fallback-explore" class="text-button">Explore without the camera</button><button id="retry-scene" class="text-button" hidden>Retry scene</button><p id="camera-check" class="small-note">Camera check: waiting to start.</p><details class="scanner-diagnostics"><summary>Scanner view</summary><p class="small-note">This is the image the scanner reads. The whole marker and its white margin should be visible. This preview stays on your device.</p><canvas id="scanner-view" width="640" height="480" aria-label="Camera image processed by the marker scanner"></canvas></details></details>
-        </div>
-      </section>
-      <div class="status" id="status" role="status" aria-live="polite"></div>
-      <div id="arjs-error" hidden></div>
-      <div id="error-popup" hidden></div>
-      <footer id="app-footer">MYSTIC ARTIFACT HUNT · MARKER-BASED AR</footer>
-    </main>
-  </body>
+    </section>
+    <section class="intro" id="intro">
+      <div id="arrival-scene" aria-hidden="true"></div><div class="arrival-shade" aria-hidden="true"></div>
+      <div class="arrival-copy"><p class="eyebrow">MYSTIC ARTIFACT HUNT · AFTER CLOSING</p>
+        <h1>The Room<br /><span>That</span> <em>Remembers</em></h1>
+        <p class="lede">A room has disappeared from the museum.<br />One compass still remembers the way.</p>
+        <div class="arrival-rule" aria-hidden="true">✦</div>
+        <button class="primary" id="start">Enter with your camera <span aria-hidden="true">→</span></button>
+        <button id="explore-start" class="arrival-alternative">Explore without a camera <span aria-hidden="true">↗</span></button>
+        <p class="small-note">Your camera starts only after you choose it. Sound is optional.</p>
+        <p class="camera-help" id="camera-help" role="alert" hidden></p>
+      </div>
+      <button id="arrival-sound" class="text-button">Sound off</button><button id="back-station" class="text-button" hidden>← Exhibit station</button>
+    </section>
+    <section class="hunt" id="hunt" hidden>
+      <div class="stage" id="stage">
+        <div id="scene-loading" class="scene-loading" role="status" hidden><span class="loading-orbit" aria-hidden="true">✦</span>Preparing the exhibit…</div>
+        <p id="scene-caption" class="scene-caption" role="status"></p>
+        <div id="viewer-controls" class="viewer-controls" hidden><select id="viewer-target" aria-label="Choose object"></select><div><button id="viewer-left" aria-label="Look left">↶</button><button id="viewer-home" aria-label="Center view">Center</button><button id="viewer-right" aria-label="Look right">↷</button><button id="viewer-close" aria-label="Inspect closer">Closer</button></div></div>
+        <div class="stage-hint" id="stage-hint"><span class="scan-glyph">⌖</span><strong>Find the brass compass marker</strong><span>Keep the whole square and its white margin in view.</span></div>
+      </div>
+      <div class="scene-identity"><p class="eyebrow" id="scene-chapter">EXHIBIT 01 · THE WEST STAIR</p><h2 id="scene-title">The Brass Compass</h2><p id="scene-instruction">Turn the needle toward the pale notch.</p></div>
+      <nav class="experience-tools" aria-label="Experience controls"><button class="text-button" id="mute" aria-pressed="false">Sound off</button><button id="pause-experience" class="text-button">Pause</button><button id="casebook-summary" class="text-button" data-open="journal-dialog">Casebook</button><button class="text-button" data-open="options-dialog">Options</button></nav>
+      <div class="camera-state" id="camera-state" role="status"><span id="camera-status">Starting the camera…</span><button id="resume-camera" hidden>Resume camera</button></div>
+      <div class="scene-utilities"><span id="mode-label">CAMERA OFF · 3D EXPERIENCE</span><button class="text-button" data-open="help-dialog">Help</button><button class="text-button" data-open="actions-dialog">Use controls</button></div>
+      <span id="progress" hidden>0 / 10 recovered</span>
+    </section>
+    <dialog id="actions-dialog" class="museum-dialog"><button class="dialog-close" data-close aria-label="Close action controls">×</button><p class="eyebrow">ANOTHER WAY TO TOUCH THE EXHIBIT</p><div class="kit-card" id="kit-card" aria-live="polite"></div></dialog>
+    <dialog id="journal-dialog" class="museum-dialog journal-dialog"><button class="dialog-close" data-close aria-label="Close casebook">×</button><p class="eyebrow">YOUR FIELD NOTES</p><h2>The casebook</h2><p id="journal-intro">The museum leaves a trace in every object.</p><ol class="casebook" id="casebook" aria-label="Recovered artifacts"></ol><span class="journal-page">THE ROOM THAT REMEMBERS · 01</span></dialog>
+    <dialog id="help-dialog" class="museum-dialog"><button class="dialog-close" data-close aria-label="Close help">×</button><p class="eyebrow">A LITTLE GUIDANCE</p><h2>Let the compass lead.</h2><p>Drag the needle around its bearing toward the pale notch. Release it when the two meet. The instrument will show you what it remembers.</p><p>In 3D, drag the surrounding room to look around. Use the arrows or Closer for another view. In AR, move your phone while keeping the marker in sight.</p><button id="slice-hint" class="primary">Show me the direction</button><p id="slice-hint-text" hidden>The notch lies southwest, at 135°. Any angle between 120° and 150° catches the memory.</p><button id="slice-assist" class="secondary" hidden>Align the needle for me</button></dialog>
+    <dialog id="options-dialog" class="museum-dialog"><button class="dialog-close" data-close aria-label="Close options">×</button><p class="eyebrow">YOUR VISIT</p><h2>Make yourself comfortable.</h2><label class="option-row"><span>Story captions</span><input id="captions-toggle" type="checkbox" checked /></label><label class="option-row"><span>Visual quality</span><select id="quality-select"><option value="standard">Standard</option><option value="low">Lighter</option></select></label><button id="stop-camera" class="secondary">Return to the entrance</button><button id="fallback-explore" class="secondary">Explore without a camera</button><button id="retry-scene" class="secondary" hidden>Retry exhibit loading</button><button id="reset" class="text-button">Clear all saved memories</button><p class="small-note">Clearing progress affects the earlier full hunt too. Replaying this compass keeps your discoveries.</p><details><summary>Camera details</summary><p id="camera-check" class="small-note">Camera check: waiting to start.</p><details class="scanner-diagnostics"><summary>Scanner view</summary><canvas id="scanner-view" width="640" height="480" aria-label="Camera image processed by the marker scanner"></canvas></details></details><a href="?experience=full">Visit the earlier ten-object hunt ↗</a></dialog>
+    <dialog id="pause-dialog" class="museum-dialog"><p class="eyebrow">THE MUSEUM WILL WAIT</p><h2>A moment of quiet.</h2><p id="pause-message">Your memories are safe. An unfinished revelation begins again when you realign the compass.</p><button id="continue-experience" class="primary">Continue the visit →</button><button id="pause-exit" class="text-button">Return to the entrance</button></dialog>
+    <dialog id="conclusion-dialog" class="museum-dialog conclusion-dialog"><button class="dialog-close" data-close aria-label="Return to the exhibit">×</button><p class="eyebrow">A MEMORY RECOVERED</p><h2>Somewhere,<br /><em>there is a stair.</em></h2><p>The compass has remembered a route to a room the museum insists was never there. The number on the doorway is still incomplete.</p><p class="ending-whisper">You have the direction.<br />Something on the other side has yours.</p><button id="conclusion-casebook" class="primary">Read the memory →</button><button id="replay-compass" class="secondary">Experience the compass again</button><button id="finish-visit" class="text-button">Finish this visit</button><p class="small-note">The compass preview is complete. The wider museum holds nine more contradictory memories.</p></dialog>
+    <div id="collection-flight" aria-hidden="true">✦</div><div class="status" id="status" role="status" aria-live="polite"></div>
+    <div id="arjs-error" hidden></div><div id="error-popup" hidden></div><footer id="app-footer">THE ROOM THAT REMEMBERS · A SUPERNATURAL EXHIBITION</footer>
+  </main>
+</body>
 </html>
