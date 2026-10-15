@@ -11,6 +11,3 @@ Dependency versions are pinned in `package.json` and `package-lock.json`. This p
 The local `public/vendor/camera_para.dat` camera calibration file is copied from the AR.js `3.4.8` release at `data/data/camera_para.dat`, alongside the AR.js runtime.
 
 - **NexusEngine 0.0.4** — MIT License, Copyright (c) 2026 Luminary Labs. Pinned source commit `2b5e070fab8c73986174b842559b96a7fd2db662`; license: `licenses/NexusEngine-MIT.txt`. Source: https://github.com/LuminaryLabs-Dev/NexusEngine. This app uses the engine and DomainServiceKit exports, not the experimental ProtoKits adapter.
-
-- **Chunk Five** — SIL Open Font License 1.1. Copyright (c) 2009 Meredith Mandel; Reserved Font Name: “Chunk”. Bundled as `fonts/ChunkFive-Regular.ttf`. Full license text: `fonts/LICENSE-ChunkFive.txt`. Source: https://github.com/theleagueof/chunk
-- **Inconsolata** — SIL Open Font License 1.1. Copyright 2006 The Inconsolata Project Authors. Bundled as `fonts/Inconsolata-Regular.ttf` and `fonts/Inconsolata-Bold.ttf`. Full license text: `fonts/LICENSE-Inconsolata.txt`. Source: https://github.com/google/fonts/tree/main/ofl/inconsolata
