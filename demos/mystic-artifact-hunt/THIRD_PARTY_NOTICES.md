@@ -15,3 +15,10 @@ The local `public/vendor/camera_para.dat` camera calibration file is copied from
 - **Inconsolata** — SIL Open Font License 1.1. Copyright 2006 The Inconsolata Project Authors. Bundled as `public/fonts/Inconsolata-Regular.ttf` and `Inconsolata-Bold.ttf`. Full SIL OFL 1.1 text: `public/fonts/LICENSE-Inconsolata.txt`. Source: https://github.com/google/fonts/tree/main/ofl/inconsolata
 
 The cinematic compass and watch packages were authored locally in Blender for this project; source, embedded material provenance and export counts are recorded in `docs/production/CINEMATIC-COMPASS-ASSETS.json` and `CINEMATIC-WATCH-ASSETS.json`. No existing Objaverse model was replaced or removed by these passes.
+
+## Music supplied October 16, 2026
+
+Thriller Suspense Theme by tyops -- https://freesound.org/s/435600/ -- License: Attribution 4.0
+
+Source license verified October16,2026. Adaptation: loudness normalization, MP3 encoding and runtime fades.
+- **DarkMelancoly** — Bigvegie, user-supplied file `583618__bigvegie__darkmelancoly.mp3`; identified source https://freesound.org/people/Bigvegie/sounds/583618/ . The source license could not be independently retrieved. The user explicitly confirmed permission to publish this supplied track on October 16, 2026; included under that permission without asserting a Creative Commons license. Adaptation: loudness normalization, MP3 encoding and runtime fades.
