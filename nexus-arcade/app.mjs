@@ -1,3 +1,4 @@
+import {SessionStorageAdapter,sessionScope} from './session-storage.mjs?v=20261016-2';
 import {
   LATEST_URL,
   PACKAGE_REF,
@@ -27,7 +28,7 @@ const SESSION_ID_PATTERN = /^[a-zA-Z0-9_-]{16,128}$/;
 const gameViews = new Map();
 const PUBLIC_ARCADE_ROUTE = location.pathname === "/arcade/" || location.pathname.startsWith("/arcade/");
 const RUNTIME_SCOPE_PATH = PUBLIC_ARCADE_ROUTE ? "/arcade/" : "/nexus-arcade/";
-const SERVICE_WORKER_PATH = `${RUNTIME_SCOPE_PATH}sw.js?v=${PACKAGE_REF}`;
+const SERVICE_WORKER_PATH = `${RUNTIME_SCOPE_PATH}sw.js?v=20261016-2`;
 
 function requestedGameSelector() {
   const query = new URLSearchParams(location.search).get("game");
@@ -77,14 +78,17 @@ function writeStored(key, value) {
 async function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return false;
   const registration = await navigator.serviceWorker.register(SERVICE_WORKER_PATH, { type: "module", scope: RUNTIME_SCOPE_PATH });
-  await navigator.serviceWorker.ready;
-  if (!navigator.serviceWorker.controller) {
-    await Promise.race([
-      new Promise((resolve) => navigator.serviceWorker.addEventListener("controllerchange", resolve, { once: true })),
-      new Promise((resolve) => setTimeout(resolve, 3000)),
-    ]);
+  const expected = new URL(SERVICE_WORKER_PATH, location.href).href;
+  if (navigator.serviceWorker.controller?.scriptURL !== expected) {
+    await new Promise((resolve, reject) => {
+      const check = () => { if (navigator.serviceWorker.controller?.scriptURL === expected) { cleanup(); resolve(); } };
+      const cleanup = () => { clearTimeout(timer); navigator.serviceWorker.removeEventListener('controllerchange', check); };
+      const timer = setTimeout(() => { cleanup(); reject(new Error('The game service is updating. Refresh and try again.')); }, 15000);
+      navigator.serviceWorker.addEventListener('controllerchange', check);
+      check();
+    });
   }
-  return Boolean(registration.active || registration.waiting || registration.installing);
+  return true;
 }
 
 async function manifestFor(game) {
@@ -97,6 +101,7 @@ async function manifestFor(game) {
     }).catch((error) => {
       const cached = readStored(MANIFEST_STORAGE_KEY, {})[game.id];
       if (cached?.id === game.id && cached.version === game.version && cached.slug === game.slug) return cached;
+      manifests.delete(game.id);
       throw error;
     }));
   }
@@ -205,14 +210,17 @@ function renderGame(game) {
       active.abort(new DOMException("Install cancelled", "AbortError"));
       return;
     }
+    if (installs.size) { setStatus("Another game is installing. Wait for it to finish or cancel it first."); return; }
     primary.disabled = true;
+    const pending = new AbortController();
+    installs.set(game.id, pending);
     try {
       const manifest = await manifestFor(game);
       if (installedVersion(game)) {
         openPlayer(game, manifest);
         return;
       }
-      const controller = new AbortController();
+      const controller = pending;
       installs.set(game.id, controller);
       primary.disabled = false;
       primary.textContent = "Cancel";
@@ -254,22 +262,25 @@ async function initialize() {
     installer = new arcade.BrowserInstaller({
       fetchImpl: browserFetch,
       sessionId: SESSION_ID,
-      storage: new arcade.CacheStorageAdapter({ sessionId: SESSION_ID, scopePath: RUNTIME_SCOPE_PATH }),
+      storage: new SessionStorageAdapter({ sessionId: SESSION_ID, scopePath: RUNTIME_SCOPE_PATH }),
     });
-    await installer.removeStaleSessions(SESSION_ID);
-    player = new arcade.ArcadePlayer(frame, { scopePath: RUNTIME_SCOPE_PATH });
+    await installer.storage.reconcile();
+    player = new arcade.ArcadePlayer(frame, { scopePath: sessionScope(RUNTIME_SCOPE_PATH, SESSION_ID) });
     let games;
     let catalogFromCache = false;
+    let catalogVersion = REGISTRY_VERSION || "cached";
     try {
       games = await library.load();
-      writeStored(CATALOG_STORAGE_KEY, { registryVersion: library.catalogClient.latest.registryVersion, games });
+      catalogVersion = library.catalogClient.latest.registryVersion;
+      writeStored(CATALOG_STORAGE_KEY, { registryVersion: catalogVersion, games });
     } catch (error) {
       const cached = readStored(CATALOG_STORAGE_KEY, null);
       if (!cached?.games?.length) throw error;
       games = cached.games;
       library.games = games;
       catalogFromCache = true;
-      setStatus(`${games.length} cached games available. Registry is offline; installed games can still launch.`);
+      catalogVersion = cached.registryVersion || "cached";
+      setStatus(`${games.length} cached games available. Registry is offline; previously verified files may be available. Some games need a connection.`);
     }
     const visibleGames = REQUESTED_GAME
       ? games.filter((game) => REQUESTED_GAME.gameId ? game.id === REQUESTED_GAME.gameId : game.slug === REQUESTED_GAME.slug)
@@ -288,7 +299,7 @@ async function initialize() {
       document.title = `${game.title} — Nexus Arcade — Luminary Labs`;
       document.querySelector("#page-title")?.replaceChildren(document.createTextNode(game.title));
       document.querySelector("#library-title")?.replaceChildren(document.createTextNode("Install and play"));
-      setStatus(`${game.title} v${game.version} loaded from registry ${library.catalogClient.latest.registryVersion}. Nothing downloads until you choose Install.`);
+      if (!catalogFromCache) setStatus(`${game.title} v${game.version} loaded from registry ${catalogVersion}. Nothing downloads until you choose Install.`);
     } else if (!catalogFromCache) {
       setStatus(`${games.length} games loaded from registry ${library.catalogClient.latest.registryVersion}. Nothing downloads until you choose Install.`);
     }
@@ -317,9 +328,10 @@ async function closePlayer() {
   await unloadPlayerFrame();
   activeGame = null;
   if (!closing) return;
-  await installer.remove(closing.manifest);
+  // Keep this session alive for a game opened in another tab. Reclaimed on exit
+  // only when the service worker can establish there are no remaining clients.
   syncPrimaryAction(closing.game);
-  setStatus(`${closing.game.title} files were removed. Saved game data was kept.`);
+  setStatus(`${closing.game.title} closed. Verified files remain for this tab; saved game data was kept.`);
 }
 
 closePlayerButton.addEventListener("click", () => {
@@ -336,7 +348,8 @@ function releaseCurrentSession() {
   frame.src = "about:blank";
   const games = installer.storage.releaseSessionMetadata(SESSION_ID);
   navigator.serviceWorker.controller?.postMessage({
-    type: "NEXUS_ARCADE_RELEASE_SESSION",
+    type: "NEXUS_ARCADE_COLLECT_UNUSED_SESSIONS",
+    departing: true,
     sessionId: SESSION_ID,
     games,
   });
@@ -348,3 +361,4 @@ window.addEventListener("pageshow", (event) => {
 });
 
 initialize();
+
