@@ -1,87 +1,29 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <link rel="icon" href="data:," />
-  <meta name="theme-color" content="#171c19" />
-  <meta name="description" content="Enter an uncanny museum after closing. Turn a brass compass and uncover a room that disappeared." />
-  <link rel="preload" href="./fonts/ChunkFive-Regular.ttf" as="font" type="font/ttf" crossorigin />
-  <link rel="preload" href="./fonts/Inconsolata-Regular.ttf" as="font" type="font/ttf" crossorigin />
-  <link rel="preload" href="./fonts/Inconsolata-Bold.ttf" as="font" type="font/ttf" crossorigin />
-  <style>@font-face{font-family:Chunk Five;src:url(./fonts/ChunkFive-Regular.ttf)format("truetype");font-style:normal;font-weight:400;font-display:swap}@font-face{font-family:Inconsolata;src:url(./fonts/Inconsolata-Regular.ttf)format("truetype");font-style:normal;font-weight:400;font-display:swap}@font-face{font-family:Inconsolata;src:url(./fonts/Inconsolata-Bold.ttf)format("truetype");font-style:normal;font-weight:700;font-display:swap}</style>
-  <title>The Room That Remembers · Mystic Artifact Hunt</title>
-  <script type="module" crossorigin src="./assets/index-CeooKfNm.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-C0W9G6HF.css">
-</head>
-<body>
-  <main class="app-shell">
-    <header class="topbar"><a class="wordmark" href="./">MYSTIC <span>ARTIFACT HUNT</span></a><a class="print-link" id="print-link" href="./markers/print.html">Print targets ↗</a></header>
-    <section class="gallery-shell" id="desktop-gallery" aria-label="Museum exhibit station" hidden>
-      <div class="station-architecture" aria-hidden="true"><i></i><i></i><i></i></div>
-      <section class="gallery-intro">
-        <p class="eyebrow">AFTER CLOSING · A PLAYABLE EXHIBITION</p>
-        <h1>The Room<br /><em>That Remembers</em></h1>
-        <p>Some things remember the way back.</p>
-      </section>
-      <section class="gallery-layout" aria-label="Phone launch and marker gallery">
-        <article class="marker-viewer" aria-label="Image target gallery">
-          <div class="marker-meta"><span class="eyebrow" id="marker-position">SINGLE ROOM MARKER · CALIBRATION</span><span id="marker-id">MAH-00</span></div>
-          <div id="pair-targets" class="pair-targets" hidden><figure><img src="./markers/MAH-04.png" alt="Room 317 Key target"><figcaption>The Key</figcaption></figure><figure><img src="./markers/MAH-09.png" alt="Archive Seal target"><figcaption>The Seal</figcaption></figure></div>
-          <div class="marker-frame"><img id="marker-image" src="./markers/MAH-00-calibration.png" alt="Mystic museum calibration marker artwork; WebXR placement uses a floor tap" /></div>
-          <div class="marker-caption"><div><p class="eyebrow">ROOM MARKER ART · WEBXR USES FLOOR TAP</p><h2 id="marker-title">The Brass Compass</h2></div><div class="gallery-controls"><button id="previous" class="gallery-arrow" type="button" aria-label="Previous marker">←</button><button id="next" class="gallery-arrow" type="button" aria-label="Next marker">→</button></div></div>
-        </article>
-        <aside class="launch-card" aria-labelledby="launch-title">
-          <p class="eyebrow">YOUR PHONE IS THE VIEWFINDER</p><h2 id="launch-title">A way inside.</h2>
-          <p>Open the museum on Android Chrome. Start AR, find the floor, then tap once to set the room.</p>
-          <div class="qr-frame"><canvas id="launch-qr" aria-label="QR code that opens Mystic Artifact Hunt"></canvas><p id="qr-status" role="status" aria-live="polite">Preparing launch code…</p></div>
-          <a class="phone-link" id="phone-link" href="./">Open on your phone ↗</a>
-          <p class="small-note">WebXR floor placement is awaiting Android phone validation.</p>
-          <button id="gallery-explore" class="primary">Enter the museum <span aria-hidden="true">→</span></button>
-          <p class="station-note">A complete compass encounter, with or without a camera.</p>
-          <details class="station-extras"><summary>More from the museum</summary><button id="pair-toggle" class="secondary" aria-pressed="false">Show key + seal together</button><a href="?experience=full">Explore the earlier ten-object hunt ↗</a><a href="./feature-preview.mp4?v=0.3.0">Watch this experience ↗</a></details>
-        </aside>
-      </section>
-    </section>
-    <section class="intro" id="intro">
-      <div id="arrival-scene" aria-hidden="true"></div><div class="arrival-shade" aria-hidden="true"></div>
-      <div class="arrival-copy"><p class="eyebrow">MYSTIC ARTIFACT HUNT · AFTER CLOSING</p>
-        <h1>The Room<br /><span>That</span> <em>Remembers</em></h1>
-        <p class="lede">A room has disappeared from the museum.<br />One compass still remembers the way.</p>
-        <div class="arrival-rule" aria-hidden="true">✦</div>
-        <button class="primary" id="start">Set the room with AR <span aria-hidden="true">→</span></button>
-        <button id="explore-start" class="arrival-alternative">Explore without a camera <span aria-hidden="true">↗</span></button>
-        <p class="small-note">AR places both exhibits in one 5 × 5 ft room. Camera and sound start only after you choose.</p>
-        <p class="camera-help" id="camera-help" role="alert" hidden></p>
-      </div>
-      <button id="arrival-sound" class="text-button">Sound off</button><button id="back-station" class="text-button" hidden>← Exhibit station</button>
-    </section>
-    <section class="hunt" id="hunt" hidden>
-      <div class="stage" id="stage">
-        <div id="scene-loading" class="scene-loading" role="status" hidden><span class="loading-orbit" aria-hidden="true">✦</span>Preparing the exhibit…</div>
-        <p id="scene-caption" class="scene-caption" role="status"></p>
-        <div id="viewer-controls" class="viewer-controls" hidden><select id="viewer-target" aria-label="Choose object"></select><div><button id="viewer-left" aria-label="Look left">↶</button><button id="viewer-home" aria-label="Center view">Center</button><button id="viewer-right" aria-label="Look right">↷</button><button id="viewer-close" aria-label="Inspect closer">Closer</button></div></div>
-        <div class="stage-hint" id="stage-hint">
-          <span class="scan-glyph room-plan-glyph" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><rect x="7" y="7" width="50" height="50" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M23.7 7v50M40.3 7v50M7 23.7h50M7 40.3h50" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/><circle cx="32" cy="32" r="4" fill="currentColor"/></svg></span>
-          <p class="eyebrow">ONE-TIME ROOM SETUP</p>
-          <strong>Place the museum around you</strong>
-          <span>This sets one 5 × 5 ft play area for both exhibits. Move until the brass ring appears on a clear patch of floor, then tap once. The compass and watch will stay arranged around this spot for your visit.</span>
-        </div>
-      </div>
-      <div class="scene-identity"><p class="eyebrow" id="scene-chapter">EXHIBIT 01 · THE WEST STAIR</p><h2 id="scene-title">The Brass Compass</h2><p id="scene-instruction">Turn the needle toward the pale notch.</p></div>
-      <nav class="experience-tools" aria-label="Experience controls"><button class="text-button" id="mute" aria-pressed="false">Sound off</button><button id="pause-experience" class="text-button">Pause</button><button id="casebook-summary" class="text-button" data-open="journal-dialog">Casebook</button><button class="text-button" data-open="options-dialog">Options</button></nav>
-      <div class="camera-state" id="camera-state" role="status"><span id="camera-status">Starting the camera…</span><button id="resume-camera" hidden>Resume camera</button></div>
-      <div class="scene-utilities"><span id="mode-label">CAMERA OFF · 3D EXPERIENCE</span><button class="text-button" data-open="help-dialog">Help</button><button class="text-button" data-open="actions-dialog">Use controls</button></div>
-      <span id="progress" hidden>0 / 10 recovered</span>
-    </section>
-    <dialog id="actions-dialog" class="museum-dialog"><button class="dialog-close" data-close aria-label="Close action controls">×</button><p class="eyebrow">ANOTHER WAY TO TOUCH THE EXHIBIT</p><div class="kit-card" id="kit-card" aria-live="polite"></div></dialog>
-    <dialog id="journal-dialog" class="museum-dialog journal-dialog"><button class="dialog-close" data-close aria-label="Close casebook">×</button><p class="eyebrow">YOUR FIELD NOTES</p><h2>The casebook</h2><p id="journal-intro">The museum leaves a trace in every object.</p><ol class="casebook" id="casebook" aria-label="Recovered artifacts"></ol><span class="journal-page">THE ROOM THAT REMEMBERS · 01</span></dialog>
-    <dialog id="help-dialog" class="museum-dialog"><button class="dialog-close" data-close aria-label="Close help">×</button><p class="eyebrow">A LITTLE GUIDANCE</p><h2>Let the compass lead.</h2><p>Drag the needle around its bearing toward the pale notch. Release it when the two meet. The instrument will show you what it remembers.</p><p>In 3D, drag the surrounding room to look around. Use the arrows or Closer for another view. In AR, scan the floor and tap once to place the room. The anchor remains for this visit.</p><button id="slice-hint" class="primary">Show me the direction</button><p id="slice-hint-text" hidden>The notch lies southwest, at 135°. Any angle between 120° and 150° catches the memory.</p><button id="slice-assist" class="secondary" hidden>Align the needle for me</button></dialog>
-    <dialog id="options-dialog" class="museum-dialog"><button class="dialog-close" data-close aria-label="Close options">×</button><p class="eyebrow">YOUR VISIT</p><h2>Make yourself comfortable.</h2><label class="option-row"><span>Story captions</span><input id="captions-toggle" type="checkbox" checked /></label><label class="option-row"><span>Visual quality</span><select id="quality-select"><option value="standard">Standard</option><option value="low">Lighter</option></select></label><button id="stop-camera" class="secondary">Return to the entrance</button><button id="fallback-explore" class="secondary">Explore without a camera</button><button id="retry-scene" class="secondary" hidden>Retry exhibit loading</button><button id="reset" class="text-button">Clear all saved memories</button><p class="small-note">Clearing progress affects the earlier full hunt too. Replaying this compass keeps your discoveries.</p><details><summary>Camera details</summary><p id="camera-check" class="small-note">Camera check: waiting to start.</p><details class="scanner-diagnostics"><summary>Scanner view</summary><canvas id="scanner-view" width="640" height="480" aria-label="Camera image processed by the marker scanner"></canvas></details></details><a href="?experience=full">Visit the earlier ten-object hunt ↗</a></dialog>
-    <dialog id="pause-dialog" class="museum-dialog"><p class="eyebrow">THE MUSEUM WILL WAIT</p><h2>A moment of quiet.</h2><p id="pause-message">Your memories are safe. An unfinished revelation begins again when you realign the compass.</p><button id="continue-experience" class="primary">Continue the visit →</button><button id="pause-exit" class="text-button">Return to the entrance</button></dialog>
-    <dialog id="conclusion-dialog" class="museum-dialog conclusion-dialog"><button class="dialog-close" data-close aria-label="Return to the exhibit">×</button><p class="eyebrow" id="conclusion-eyebrow">A MEMORY RECOVERED</p><h2 id="conclusion-title">Somewhere,<br /><em>there is a stair.</em></h2><p id="conclusion-copy">The compass has remembered a route to a room the museum insists was never there. The number on the doorway is still incomplete.</p><p class="ending-whisper" id="conclusion-whisper">You have the direction.<br />Something on the other side has yours.</p><button id="continue-watch" class="primary" hidden>Continue to the stopped watch →</button><button id="conclusion-casebook" class="secondary">Read the memory →</button><button id="replay-compass" class="secondary">Experience the compass again</button><button id="replay-watch" class="secondary" hidden>Experience the stopped watch again</button><button id="finish-visit" class="text-button">Finish this visit</button><p class="small-note" id="conclusion-note">The compass has remembered the route. The stopped watch is next.</p></dialog>
-    <div id="collection-flight" aria-hidden="true">✦</div><div class="status" id="status" role="status" aria-live="polite"></div>
-    <div id="arjs-error" hidden></div><div id="error-popup" hidden></div><footer id="app-footer">THE ROOM THAT REMEMBERS · A SUPERNATURAL EXHIBITION</footer>
-  </main>
-</body>
-</html>
+<html lang="en"><head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" /><meta name="theme-color" content="#101815" /><meta name="description" content="A cinematic museum mystery. Ten objects remember a vanished room differently. Play with clicks or taps." /><link rel="icon" href="data:," />
+<link rel="preload" href="./fonts/ChunkFive-Regular.ttf" as="font" type="font/ttf" crossorigin /><link rel="preload" href="./fonts/Inconsolata-Regular.ttf" as="font" type="font/ttf" crossorigin /><title>The Room That Remembers · Mystic Artifact Hunt</title>
+  <script type="module" crossorigin src="./assets/index-C3nHGZNE.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DxuJsfzX.css">
+</head><body><main class="app-shell">
+<div class="scene-stage" id="stage" aria-label="Interactive museum exhibit"><div id="stage-hint" hidden><strong>The museum is preparing.</strong></div></div><div class="cinema-vignette" aria-hidden="true"></div>
+<header class="topbar"><a class="wordmark" href="./">LUMINARY LABS <span>/ MYSTIC MUSEUM</span></a><span class="edition">AN EXHIBITION AFTER CLOSING</span></header>
+<section class="intro" id="intro" aria-labelledby="arrival-title"><div class="arrival-copy"><p class="eyebrow">A MYSTERY IN TEN OBJECTS</p><h1 id="arrival-title">The Room<br /><em>That Remembers</em></h1><p class="lede">One room has vanished from the museum.<br />The objects remember it differently.</p><button class="primary" id="start" disabled>Opening the museum…</button><p id="arrival-note" class="small-note">Made to explore. Click or tap to begin.</p><p id="load-error" class="load-error" role="alert" hidden></p></div><div class="arrival-footer"><button id="arrival-sound" class="text-button" aria-pressed="false">Sound off</button><span>1950 / THE WEST STAIR</span><span>COMPUTER & PHONE</span></div></section>
+<section id="hunt" hidden aria-label="Museum visit"><div class="scene-identity"><p class="eyebrow" id="scene-chapter">EXHIBIT 01 · THE WEST STAIR</p><h2 id="scene-title">The Brass Compass</h2><p id="scene-instruction">Choose a bearing on the dial.</p></div><nav class="experience-tools" aria-label="Visit controls"><button id="mute" class="text-button" aria-pressed="false">Sound off</button><button id="pause-experience" class="text-button">Pause</button><button class="text-button" data-open="map-dialog">Museum map</button><button id="casebook-summary" class="text-button" data-open="journal-dialog">Casebook</button><button class="text-button" data-open="options-dialog">Options</button></nav>
+<p id="scene-caption" class="scene-caption" aria-live="polite"></p>
+<div id="interaction-bar" class="interaction-bar">
+<span id="interaction-label">Choose a bearing on the dial</span>
+<div id="compass-controls"><button id="turn-left" aria-label="Turn needle left">−</button><span id="bearing-readout">045°</span><button id="turn-right" aria-label="Turn needle right">+</button></div>
+<div id="watch-controls" class="watch-controls" hidden><div class="watch-readout"><span id="watch-time">2:15</span><small id="watch-catches">0 / 3 catches</small></div><button id="unwind-watch" class="text-button">Turn back</button><button id="wind-watch" class="primary">Wind the crown</button></div>
+<button id="reveal-memory" class="primary" hidden>Follow the remembered route →</button><button id="collect-memory" class="primary" hidden>Keep this memory →</button><button id="skip-revelation" class="text-button" hidden>Skip the revelation</button></div>
+<div id="viewer-controls" class="viewer-controls" aria-label="Inspection views"><button id="viewer-left">Left view</button><button id="viewer-home">Center</button><button id="viewer-right">Right view</button><button id="viewer-close">Closer</button></div><div class="scene-utilities"><span id="progress">0 / 10 memories</span><button class="text-button" data-open="help-dialog">Guidance</button><button class="text-button" data-open="actions-dialog">Working parts</button><button id="return-entrance" class="text-button">Leave the exhibit</button></div></section>
+<div id="scene-loading" class="scene-loading" hidden role="status"><span class="loading-line" aria-hidden="true"></span><p id="loading-copy">Opening the west gallery…</p></div>
+<dialog id="map-dialog" class="museum-dialog map-dialog"><button class="dialog-close" data-close aria-label="Close museum map">×</button><p class="eyebrow">THE COLLECTION</p><h2>Find your way.</h2><p>Ten objects. Ten accounts of a room that should not exist.</p><div id="museum-map" class="museum-map"></div></dialog>
+<dialog id="actions-dialog" class="museum-dialog"><button class="dialog-close" data-close aria-label="Close working parts">×</button><div id="kit-card" aria-live="polite"></div></dialog>
+<dialog id="journal-dialog" class="museum-dialog journal-dialog"><button class="dialog-close" data-close aria-label="Close casebook">×</button><p class="eyebrow">YOUR FIELD NOTES</p><h2>The casebook</h2><p id="journal-intro"></p><ol id="casebook" class="casebook" aria-label="Recovered memories"></ol></dialog>
+<dialog id="help-dialog" class="museum-dialog"><button class="dialog-close" data-close aria-label="Close guidance">×</button><p class="eyebrow">A LITTLE GUIDANCE</p><h2>Let the object lead.</h2><p id="help-instruction">Choose a bearing on the ivory dial. Turn the needle toward the pale notch.</p><p>Choose a view to inspect the exhibit. Every puzzle can be completed with clicks or taps. Your casebook keeps each recovered memory.</p><button id="slice-hint" class="secondary">Show me a hint</button><p id="slice-hint-text" hidden></p><button id="slice-assist" class="secondary" hidden>Help me with this object</button></dialog>
+<dialog id="options-dialog" class="museum-dialog"><button class="dialog-close" data-close aria-label="Close options">×</button><p class="eyebrow">YOUR VISIT</p><h2>A little comfort.</h2><label class="option-row"><span>Story captions</span><input id="captions-toggle" type="checkbox" checked /></label><label class="option-row"><span>Visual quality</span><select id="quality-select"><option value="standard">Standard</option><option value="low">Lighter</option></select></label><button id="retry-scene" class="secondary">Reload this exhibit</button><button id="reset" class="text-button">Clear all saved memories</button><p class="small-note">Revisiting keeps your discoveries. Clearing the casebook begins a new investigation.</p></dialog>
+<dialog id="pause-dialog" class="museum-dialog"><p class="eyebrow">THE MUSEUM WILL WAIT</p><h2>A moment of quiet.</h2><p>Your recovered memories are safe. An interrupted revelation can be experienced again.</p><button id="continue-experience" class="primary">Continue the visit →</button><button id="pause-exit" class="secondary">Return to the entrance</button></dialog>
+<dialog id="conclusion-dialog" class="museum-dialog conclusion-dialog"><button class="dialog-close" data-close aria-label="Return to the exhibit">×</button><p class="eyebrow" id="conclusion-eyebrow">A MEMORY RECOVERED</p><h2 id="conclusion-title">Somewhere,<br /><em>there is a stair.</em></h2><p id="conclusion-copy">The instrument remembers a route to a room the museum insists was never there.</p><p id="conclusion-whisper" class="ending-whisper">You have the direction. Something on the other side has yours.</p><button id="continue-watch" class="primary">Visit the stopped watch →</button><button id="conclusion-casebook" class="secondary">Read the memory</button><button id="replay-compass" class="secondary">Experience the compass again</button><button id="replay-watch" class="secondary" hidden>Experience the watch again</button><button id="finish-visit" class="text-button">Return to the entrance</button></dialog>
+<dialog id="seal-dialog" class="museum-dialog"><button class="dialog-close" data-close aria-label="Return to the seal">×</button><p class="eyebrow">THE LAST IMPRESSION</p><h2>Return it silently.</h2><p>The ten memories will enter the wax. Your chosen interpretation will be carried into the ending.</p><button id="confirm-seal" class="primary">Return the impression →</button></dialog>
+<div id="collection-flight" aria-hidden="true"></div><p id="status" class="status" role="status" aria-live="polite"></p>
+</main></body></html>
