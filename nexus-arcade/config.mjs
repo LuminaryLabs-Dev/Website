@@ -3,9 +3,9 @@ export const PACKAGE_URL = `https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusAr
 export const SERVICE_WORKER_PACKAGE_URL = `https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusArcade@${PACKAGE_REF}/dist/browser/service-worker.mjs`;
 export const LATEST_URL = "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusArcade-Games@main/registry/latest.json";
 
-// Set both values to roll the site back to a previously validated registry release.
-export const REGISTRY_PIN = null;
-export const REGISTRY_VERSION = null;
+// Verified release pin. Advance after payload integrity checks; mutable CDN main pointers can lag.
+export const REGISTRY_PIN = "bf8b7efc5edd536c978cfabe7fb4150b334a5621";
+export const REGISTRY_VERSION = "0.2.0";
 
 export const PAGES_ORIGIN = "https://luminarylabs-dev.github.io";
 export const PAGES_GAME_PREFIX = "/NexusArcade-Games/games/";
