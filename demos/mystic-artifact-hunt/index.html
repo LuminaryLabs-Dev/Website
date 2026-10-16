@@ -11,8 +11,8 @@
   <link rel="preload" href="./fonts/Inconsolata-Bold.ttf" as="font" type="font/ttf" crossorigin />
   <style>@font-face{font-family:Chunk Five;src:url(./fonts/ChunkFive-Regular.ttf)format("truetype");font-style:normal;font-weight:400;font-display:swap}@font-face{font-family:Inconsolata;src:url(./fonts/Inconsolata-Regular.ttf)format("truetype");font-style:normal;font-weight:400;font-display:swap}@font-face{font-family:Inconsolata;src:url(./fonts/Inconsolata-Bold.ttf)format("truetype");font-style:normal;font-weight:700;font-display:swap}</style>
   <title>The Room That Remembers · Mystic Artifact Hunt</title>
-  <script type="module" crossorigin src="./assets/index-C4ePnBre.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-Zoi2Kjna.css">
+  <script type="module" crossorigin src="./assets/index-FJQaCQvV.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-C0W9G6HF.css">
 </head>
 <body>
   <main class="app-shell">
@@ -49,9 +49,9 @@
         <h1>The Room<br /><span>That</span> <em>Remembers</em></h1>
         <p class="lede">A room has disappeared from the museum.<br />One compass still remembers the way.</p>
         <div class="arrival-rule" aria-hidden="true">✦</div>
-        <button class="primary" id="start">Enter with your camera <span aria-hidden="true">→</span></button>
+        <button class="primary" id="start">Set the room with AR <span aria-hidden="true">→</span></button>
         <button id="explore-start" class="arrival-alternative">Explore without a camera <span aria-hidden="true">↗</span></button>
-        <p class="small-note">Your camera starts only after you choose it. Sound is optional.</p>
+        <p class="small-note">AR places both exhibits in one 5 × 5 ft room. Camera and sound start only after you choose.</p>
         <p class="camera-help" id="camera-help" role="alert" hidden></p>
       </div>
       <button id="arrival-sound" class="text-button">Sound off</button><button id="back-station" class="text-button" hidden>← Exhibit station</button>
@@ -61,7 +61,12 @@
         <div id="scene-loading" class="scene-loading" role="status" hidden><span class="loading-orbit" aria-hidden="true">✦</span>Preparing the exhibit…</div>
         <p id="scene-caption" class="scene-caption" role="status"></p>
         <div id="viewer-controls" class="viewer-controls" hidden><select id="viewer-target" aria-label="Choose object"></select><div><button id="viewer-left" aria-label="Look left">↶</button><button id="viewer-home" aria-label="Center view">Center</button><button id="viewer-right" aria-label="Look right">↷</button><button id="viewer-close" aria-label="Inspect closer">Closer</button></div></div>
-        <div class="stage-hint" id="stage-hint"><span class="scan-glyph">⌖</span><strong>Set the museum in place</strong><span>Move until the brass floor ring appears, then tap once.</span></div>
+        <div class="stage-hint" id="stage-hint">
+          <span class="scan-glyph room-plan-glyph" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><rect x="7" y="7" width="50" height="50" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M23.7 7v50M40.3 7v50M7 23.7h50M7 40.3h50" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/><circle cx="32" cy="32" r="4" fill="currentColor"/></svg></span>
+          <p class="eyebrow">ONE-TIME ROOM SETUP</p>
+          <strong>Place the museum around you</strong>
+          <span>This sets one 5 × 5 ft play area for both exhibits. Move until the brass ring appears on a clear patch of floor, then tap once. The compass and watch will stay arranged around this spot for your visit.</span>
+        </div>
       </div>
       <div class="scene-identity"><p class="eyebrow" id="scene-chapter">EXHIBIT 01 · THE WEST STAIR</p><h2 id="scene-title">The Brass Compass</h2><p id="scene-instruction">Turn the needle toward the pale notch.</p></div>
       <nav class="experience-tools" aria-label="Experience controls"><button class="text-button" id="mute" aria-pressed="false">Sound off</button><button id="pause-experience" class="text-button">Pause</button><button id="casebook-summary" class="text-button" data-open="journal-dialog">Casebook</button><button class="text-button" data-open="options-dialog">Options</button></nav>
