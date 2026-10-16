@@ -25,7 +25,7 @@ function gamePage(game) {
   const marker = "<!-- generated:arcade-game-route -->\n";
   return marker + baseHtml
     .replace("<title>Nexus Arcade Games — Luminary Labs</title>", `<title>${game.title} — Nexus Arcade — Luminary Labs</title>`)
-    .replace('href="https://luminarylabs.dev/arcade/" rel="canonical"', `href="https://luminarylabs.dev/arcade/${game.slug}/" rel="canonical"`)
+    .replace(/(<link\b[^>]*\brel="canonical"[^>]*\bhref=")[^"]*(")/, `$1https://luminarylabs.dev/arcade/${game.slug}/$2`)
     .replace('<body class="ll-site arcade-player-page">', `<body class="ll-site arcade-player-page" data-game-slug="${game.slug}">`);
 }
 

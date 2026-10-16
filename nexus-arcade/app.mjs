@@ -4,7 +4,6 @@ import {
   PACKAGE_URL,
   REGISTRY_PIN,
   REGISTRY_VERSION,
-  hostedGameUrl,
   publicGameUrl,
   trustedThumbnailUrl,
 } from "./config.mjs?v=20261002-1";
@@ -177,12 +176,10 @@ function renderGame(game) {
   primary.setAttribute("aria-label", `${primary.textContent} ${game.title}`);
   const hosted = document.createElement("a");
   hosted.className = "hosted-link";
-  hosted.href = REQUESTED_GAME ? hostedGameUrl(game.slug) : publicGameUrl(game.slug);
+  hosted.href = REQUESTED_GAME ? "/arcade/" : publicGameUrl(game.slug);
   if (REQUESTED_GAME) {
-    hosted.target = "_blank";
-    hosted.rel = "noopener noreferrer";
-    hosted.textContent = "Hosted ↗";
-    hosted.setAttribute("aria-label", `Open hosted ${game.title} in a new tab`);
+    hosted.textContent = "All games →";
+    hosted.setAttribute("aria-label", "Browse all Nexus Arcade games");
   } else {
     hosted.textContent = "Game page →";
     hosted.setAttribute("aria-label", `Open ${game.title} game page`);
@@ -254,7 +251,11 @@ async function initialize() {
       registryVersion: REGISTRY_VERSION,
       fetchImpl: browserFetch,
     });
-    installer = new arcade.BrowserInstaller({ fetchImpl: browserFetch, sessionId: SESSION_ID });
+    installer = new arcade.BrowserInstaller({
+      fetchImpl: browserFetch,
+      sessionId: SESSION_ID,
+      storage: new arcade.CacheStorageAdapter({ sessionId: SESSION_ID, scopePath: RUNTIME_SCOPE_PATH }),
+    });
     await installer.removeStaleSessions(SESSION_ID);
     player = new arcade.ArcadePlayer(frame, { scopePath: RUNTIME_SCOPE_PATH });
     let games;
@@ -294,7 +295,7 @@ async function initialize() {
   } catch (error) {
     console.error("[nexus-arcade] initialization failed", error);
     setStatus(`The public registry could not load: ${error.message}`, "error");
-    grid.replaceChildren(textElement("p", "", "Use a game's hosted link after the registry connection is restored."));
+    grid.replaceChildren(textElement("p", "", "Refresh when the registry connection is restored to install and play."));
   }
 }
 
