@@ -133,3 +133,7 @@ The static demo is at [`/demos/mystic-artifact-hunt/`](https://luminarylabs.dev/
 Source: [LuminaryLabs-Dev/Mystic-Artifact-Hunt](https://github.com/LuminaryLabs-Dev/Mystic-Artifact-Hunt), build revision `6eb45c0909842f9db06ba6d85465263d24ab5c44`. Run `npm ci` and `npm run build` in that repo with `VITE_PHONE_URL` unset; copy `dist/` contents plus `THIRD_PARTY_NOTICES.md` and `licenses/` into `demos/mystic-artifact-hunt/`. GitHub Pages publishes this Website repo's `main` branch.
 
 Validation: source build, five existing unit tests, dependency audit, desktop gallery navigation, and all ten marker interactions using a synthetic camera feed passed. Physical phone camera permissions and tracking quality remain unverified.
+
+## Nexus Engine Studio
+
+`/nexus-engine-studio/` serves the reviewed static build from the private `LuminaryLabs-Dev/NexusEngine-Studio` repository. Source commit, Engine revision, dependency versions and file hashes are recorded in `nexus-engine-studio/release.json`. Build and validate in Studio; copy only the manifest-listed public assets and release record here. The legacy NexusEngine-Editor is reference only. The native application is built and validated separately in Studio.
