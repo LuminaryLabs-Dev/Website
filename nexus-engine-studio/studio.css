@@ -38,8 +38,7 @@ header,
 .toolbar,
 .viewport-bar,
 .viewport-help,
-footer,
-.template {
+footer {
   background: var(--surface);
   border: 1px solid var(--edge);
   border-radius: 0;
@@ -731,34 +730,6 @@ dialog > p {
 dialog h2 {
   margin-top: 12px;
 }
-.template-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin: 20px 0;
-}
-.template {
-  display: grid;
-  grid-template-columns: 18px 1fr;
-  gap: 7px;
-  padding: 16px;
-  cursor: pointer;
-}
-.template input {
-  margin: 3px 0;
-}
-.template strong {
-  font-size: 13px;
-}
-.template span {
-  grid-column: 2;
-  color: var(--muted);
-  font-size: 11px;
-}
-.template:has(input:checked) {
-  border-color: #61c6ff;
-  background: var(--control);
-}
 .recent-row {
   display: flex;
   gap: 5px;
@@ -953,9 +924,6 @@ dialog h2 {
   }
   .transform-grid > span {
     grid-column: 1/-1;
-  }
-  .template-grid {
-    grid-template-columns: 1fr;
   }
   .settings-grid {
     grid-template-columns: 1fr;

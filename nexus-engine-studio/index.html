@@ -12,7 +12,7 @@
       content="default-src 'self' blob:; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'"
     />
     <title>Nexus Engine Studio</title>
-    <link rel="stylesheet" href="./studio.css?v=b61ef3403353" />
+    <link rel="stylesheet" href="./studio.css?v=bbdcf4061332" />
   </head>
   <body>
     <header>
@@ -380,17 +380,9 @@
             maxlength="120"
             required
         /></label>
-        <div class="template-grid">
-          <label class="template"
-            ><input type="radio" name="template" value="empty" checked /><strong
-              >Empty Project</strong
-            ><span>A clean scene. Your objects and rules.</span></label
-          ><label class="template"
-            ><input type="radio" name="template" value="garden" /><strong
-              >Signal Garden</strong
-            ><span>A configurable player and collectible starter.</span></label
-          >
-        </div>
+        <p class="note">
+          Start with an empty scene. Add your own objects, Domains and Kits.
+        </p>
         <div class="button-row">
           <button class="primary" type="submit">Create project</button
           ><button id="manager-open" type="button">Open project file</button>
@@ -425,6 +417,6 @@
       accept=".glb"
       hidden
     />
-    <script type="module" src="./studio.js?v=a0a785c2be7f"></script>
+    <script type="module" src="./studio.js?v=f015ea0bed72"></script>
   </body>
 </html>
