@@ -1,10 +1,430 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Create, configure, play and export NexusEngine games in your browser or native workspace."><meta http-equiv="Content-Security-Policy" content="default-src 'self' blob:; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'"><title>Nexus Engine Studio</title><link rel="stylesheet" href="./studio.css?v=769892674535"></head><body>
-<header><a class="brand" href="./"><span class="mark">N</span>NEXUS ENGINE <strong>STUDIO</strong></a><span class="edition">PROJECT WORKSPACE / 0.2</span><span id="platform">WEB</span></header>
-<nav class="toolbar" aria-label="Project actions"><div><button id="projects">Projects</button><button id="open">Open</button><button id="save">Save project</button><button id="undo">↶ Undo</button><button id="redo">↷ Redo</button></div><div><button id="play" class="primary">▶ Play</button><button id="stop" disabled>■ Stop</button><button id="export">Export game ↗</button></div></nav>
-<main id="editor"><aside class="structure panel"><div class="panel-title"><h2>Project</h2><span id="dirty"></span></div><label class="field">PROJECT NAME<input id="title" maxlength="120"></label><div class="section-label">SCENES<button id="add-scene">+ Scene</button></div><select id="scenes" aria-label="Active scene"></select><div class="section-label">SCENE HIERARCHY<span id="count"></span></div><div class="add-row"><select id="object-type" aria-label="Object type"><option value="box">Box</option><option value="sphere">Sphere</option><option value="cylinder">Cylinder</option><option value="empty">Empty object</option><option value="camera">Camera</option></select><button id="add">+ Add object</button></div><div id="objects" aria-label="Scene hierarchy"></div><details open><summary>Project assets</summary><button id="import-model">Import static GLB</button><div id="assets"></div></details><details><summary>Reusable objects</summary><button id="save-prefab">Save selected as reusable</button><div id="prefabs"></div></details></aside>
-<section class="workspace"><div class="viewport-bar"><b id="mode">SCENE VIEW</b><div class="tools" aria-label="Transform tool"><button id="move" aria-pressed="true">Move</button><button id="rotate" aria-pressed="false">Rotate</button><button id="scale" aria-pressed="false">Scale</button></div><button id="frame">Reset view</button></div><div id="viewport"><div class="viewport-caption"><span class="eyebrow">BUILD YOUR OWN WORLD</span><h1 id="scene-title">New game</h1></div><div id="play-hud" role="status" hidden></div></div><div class="viewport-help"><span id="hint">Drag to orbit · Scroll to zoom · Select an object to transform</span><span>LOCAL FIRST</span></div><div class="activity panel"><div class="panel-title"><h2>Console</h2><button id="validate">Validate project</button></div><p id="status" role="status">Choose or create a project.</p></div></section>
-<aside class="inspector panel"><div class="panel-title"><h2>Inspector</h2><span>OBJECT + GAMEPLAY</span></div><p id="selection-empty">Select an object to edit its properties and gameplay capabilities.</p><form id="properties" hidden><label class="field">NAME<input id="name" maxlength="100" required></label><label class="field">PARENT<select id="parent"><option value="">Scene root</option></select></label><label class="check"><input id="visible" type="checkbox">Visible</label><fieldset><legend>Transform</legend><span class="field">POSITION</span><div class="vector"><label>X<input id="x" type="number" step="any" required></label><label>Y<input id="y" type="number" step="any" required></label><label>Z<input id="z" type="number" step="any" required></label></div><span class="field">ROTATION · DEGREES</span><div class="vector"><label>X<input id="rx" type="number" step="any" required></label><label>Y<input id="ry" type="number" step="any" required></label><label>Z<input id="rz" type="number" step="any" required></label></div><span class="field">SCALE</span><div class="vector"><label>X<input id="sx" type="number" step="any" min="0.1" max="50" required></label><label>Y<input id="sy" type="number" step="any" min="0.1" max="50" required></label><label>Z<input id="sz" type="number" step="any" min="0.1" max="50" required></label></div></fieldset><label class="field">MATERIAL<select id="material"></select></label><fieldset><legend>Gameplay capabilities</legend><div id="capabilities"></div><label class="field">PLAYER SPEED<input id="speed" type="number" min="0.1" max="30" step="0.1" value="4"></label><label class="field">COLLECTIBLE POINTS<input id="points" type="number" min="1" max="100" value="1"></label><label class="field">CAMERA FOV<input id="fov" type="number" min="20" max="100" value="42"></label><p class="note">Uses installed NexusEngine Domains and Kits. Collision is a static box envelope; player motion stays on the X/Z plane.</p></fieldset><button class="primary wide" type="submit">Apply changes</button><div class="button-row"><button id="duplicate" type="button">Duplicate</button><button id="remove" type="button">Remove</button></div></form><details open><summary>Game & build settings</summary><label class="field">STARTING SCENE<select id="entry-scene"></select></label><label class="field">COLLECTION<select id="collection-mode"><option value="proximity">Player proximity</option><option value="pointer">Pointer click</option></select></label><label class="field">WIN SCORE<input id="goal" type="number" min="1" max="500" value="1"></label><label class="field">TIME LIMIT · SECONDS<input id="seconds" type="number" min="5" max="600" value="60"></label><label class="field">WORLD BOUNDARY · ± METERS<input id="bounds" type="number" min="2" max="100" value="12"></label><button id="settings">Apply game settings</button><p class="note">Play and Export start the selected starting scene. Each scene retains its own game settings.</p><button id="glb">Export active scene GLB</button></details><details><summary>Installed capability graph</summary><div id="kit-graph"></div></details></aside></main>
-<footer><span>NexusEngine connected · <span id="project-label">No project open</span></span><span>WEB + NATIVE / SHARED SOURCE</span></footer>
-<dialog id="manager"><div class="dialog-heading"><span class="eyebrow">NEXUS ENGINE STUDIO</span><button id="close-manager" aria-label="Close project manager">×</button></div><h1>Your next game starts here.</h1><p>Create a project, configure its world, and make it playable.</p><form id="create-project"><label class="field">PROJECT NAME<input id="new-title" value="My Game" maxlength="120" required></label><div class="template-grid"><label class="template"><input type="radio" name="template" value="empty" checked><strong>Empty Project</strong><span>A clean scene. Your objects and rules.</span></label><label class="template"><input type="radio" name="template" value="garden"><strong>Signal Garden</strong><span>A configurable player and collectible starter.</span></label></div><div class="button-row"><button class="primary" type="submit">Create project</button><button id="manager-open" type="button">Open project file</button></div></form><h2>Recent projects</h2><div id="recents"></div><p class="note">Recent saves are stored on this device. Download project files for portable backups.</p></dialog>
-<dialog id="scene-dialog"><form id="create-scene"><h2>New scene</h2><label class="field">SCENE NAME<input id="new-scene-name" value="New Scene" required maxlength="100"></label><div class="button-row"><button class="primary" type="submit">Create scene</button><button id="cancel-scene" type="button">Cancel</button></div></form></dialog>
-<input id="file" type="file" accept=".json,.nexus" hidden><input id="model-file" type="file" accept=".glb" hidden><script type="module" src="./studio.js?v=e364135ffcc4"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Create, configure, play and export NexusEngine games."
+    />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' blob:; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'"
+    />
+    <title>Nexus Engine Studio</title>
+    <link rel="stylesheet" href="./studio.css?v=b61ef3403353" />
+  </head>
+  <body>
+    <header>
+      <span class="brand"
+        ><i data-lucide="boxes"></i>NEXUS ENGINE <strong>STUDIO</strong></span
+      ><span class="edition">PROJECT WORKSPACE / 0.3</span
+      ><span id="platform">WEB</span>
+    </header>
+    <nav class="toolbar" aria-label="Project actions">
+      <div>
+        <button id="projects"><i data-lucide="folder"></i>Projects</button
+        ><button id="open"><i data-lucide="folder-open"></i>Open</button
+        ><button id="save"><i data-lucide="save"></i>Save</button
+        ><button id="undo"><i data-lucide="undo-2"></i>Undo</button
+        ><button id="redo"><i data-lucide="redo-2"></i>Redo</button>
+      </div>
+      <div>
+        <button id="game-settings">
+          <i data-lucide="settings"></i>Game Settings</button
+        ><button id="play" class="primary">
+          <i data-lucide="play"></i>Play</button
+        ><button id="stop" disabled><i data-lucide="square"></i>Stop</button
+        ><button id="export"><i data-lucide="upload"></i>Export</button>
+      </div>
+    </nav>
+    <main id="editor">
+      <aside class="structure panel">
+        <div class="panel-title">
+          <h2>Hierarchy</h2>
+          <button
+            id="catalog-toggle"
+            class="icon-button"
+            aria-label="Add Domain or Kit"
+            aria-expanded="false"
+            aria-controls="catalog"
+          >
+            <i data-lucide="plus"></i>
+          </button>
+        </div>
+        <div class="scene-row">
+          <select id="scenes" aria-label="Active scene"></select
+          ><button id="add-scene" class="icon-button" aria-label="New scene">
+            <i data-lucide="file-plus"></i>
+          </button>
+        </div>
+        <div class="scene-root">
+          <i data-lucide="globe"></i><span id="hierarchy-scene">Main Scene</span
+          ><span id="count"></span>
+        </div>
+        <div id="objects" role="tree" aria-label="Scene hierarchy"></div>
+        <div class="add-row">
+          <select id="object-type" aria-label="Object type">
+            <option value="box">Box</option>
+            <option value="sphere">Sphere</option>
+            <option value="cylinder">Cylinder</option>
+            <option value="empty">Empty object</option>
+            <option value="camera">Camera</option></select
+          ><button id="add"><i data-lucide="plus"></i>Add object</button>
+        </div>
+      </aside>
+      <section class="workspace">
+        <div class="viewport-bar">
+          <b id="mode">SCENE</b><span id="scene-title">Main Scene</span>
+          <div class="tools" aria-label="Transform tool">
+            <button id="move" aria-pressed="true">
+              <i data-lucide="move"></i>Move</button
+            ><button id="rotate" aria-pressed="false">
+              <i data-lucide="rotate-3d"></i>Rotate</button
+            ><button id="scale" aria-pressed="false">
+              <i data-lucide="scaling"></i>Scale
+            </button>
+          </div>
+          <button id="frame" title="Reset view" aria-label="Reset view">
+            <i data-lucide="scan"></i>
+          </button>
+        </div>
+        <div id="viewport"><div id="play-hud" role="status" hidden></div></div>
+        <div class="viewport-help">
+          <span id="hint"
+            >Drag to orbit · Scroll to zoom · Select to transform</span
+          >
+        </div>
+      </section>
+      <aside class="inspector panel">
+        <div class="panel-title">
+          <h2>Inspector</h2>
+          <span id="selection-kind">SELECTED OBJECT</span>
+        </div>
+        <p id="selection-empty" class="note">
+          Select an object in the scene or hierarchy.
+        </p>
+        <form id="properties" hidden>
+          <div class="inspector-body">
+            <label class="field"
+              >NAME<input id="name" maxlength="100" required
+            /></label>
+            <p id="source-kit" class="source-label"></p>
+            <details>
+              <summary>Transform</summary>
+              <label class="field">PARENT<select id="parent"></select></label
+              ><label class="check"
+                ><input id="visible" type="checkbox" />Visible</label
+              >
+              <div class="transform-grid">
+                <span>Position</span
+                ><label
+                  >X<input id="x" type="number" step="any" required /></label
+                ><label
+                  >Y<input id="y" type="number" step="any" required /></label
+                ><label
+                  >Z<input id="z" type="number" step="any" required /></label
+                ><span>Rotation</span
+                ><label
+                  >X<input id="rx" type="number" step="any" required /></label
+                ><label
+                  >Y<input id="ry" type="number" step="any" required /></label
+                ><label
+                  >Z<input id="rz" type="number" step="any" required /></label
+                ><span>Scale</span
+                ><label
+                  >X<input
+                    id="sx"
+                    type="number"
+                    min=".1"
+                    max="50"
+                    step="any"
+                    required /></label
+                ><label
+                  >Y<input
+                    id="sy"
+                    type="number"
+                    min=".1"
+                    max="50"
+                    step="any"
+                    required /></label
+                ><label
+                  >Z<input
+                    id="sz"
+                    type="number"
+                    min=".1"
+                    max="50"
+                    step="any"
+                    required
+                /></label>
+              </div>
+            </details>
+            <details open>
+              <summary>Domains & Kits</summary>
+              <details class="behavior-picker">
+                <summary>Add / remove behaviors</summary>
+                <div id="capabilities"></div>
+              </details>
+              <div id="player-data">
+                <p class="source-label">
+                  Actor / Player · Player Authority Kit
+                </p>
+                <label class="field"
+                  >PLAYER ID<input id="player-id" maxlength="100" /></label
+                ><label class="field"
+                  >CONTROLLED CHARACTER<select
+                    id="character-ref"
+                  ></select></label
+                ><label class="check"
+                  ><input id="control-enabled" type="checkbox" />Control
+                  enabled</label
+                >
+              </div>
+              <label id="speed-field" class="field"
+                >MOVEMENT SPEED<input
+                  id="speed"
+                  type="number"
+                  min=".1"
+                  max="30"
+                  step=".1" /></label
+              ><label id="points-field" class="field"
+                >COLLECTIBLE POINTS<input
+                  id="points"
+                  type="number"
+                  min="1"
+                  max="100" /></label
+              ><label id="fov-field" class="field"
+                >CAMERA FOV<input id="fov" type="number" min="20" max="100"
+              /></label>
+              <p class="note" id="capability-hint"></p>
+            </details>
+            <details open>
+              <summary>References</summary>
+              <label class="field"
+                >WORLD<select
+                  id="world-ref"
+                  aria-label="World reference"
+                ></select></label
+              ><label class="field"
+                >SCENE<select
+                  id="scene-ref"
+                  aria-label="Scene reference"
+                ></select></label
+              ><label class="field">MODEL<select id="model-ref"></select></label
+              ><label class="field"
+                >MATERIAL<select id="material"></select></label
+              ><button type="button" id="locate">
+                <i data-lucide="scan"></i>Locate in scene
+              </button>
+              <p class="note">
+                World and Scene identify this object's placement. Select another
+                scene in the hierarchy to edit its contents.
+              </p>
+            </details>
+            <div class="button-row secondary-actions">
+              <button id="duplicate" type="button">Duplicate</button
+              ><button id="remove" type="button">Remove</button
+              ><button id="save-prefab" type="button">Save reusable</button>
+            </div>
+          </div>
+          <div class="inspector-apply">
+            <p id="property-error" role="alert"></p>
+            <button class="primary wide" type="submit">Apply changes</button>
+          </div>
+        </form>
+      </aside>
+    </main>
+    <section class="asset-browser panel" aria-label="Project assets">
+      <div class="asset-toolbar">
+        <h2><i data-lucide="boxes"></i>Assets</h2>
+        <div id="asset-tabs" role="tablist" aria-label="Asset type">
+          <button role="tab" aria-selected="true" data-filter="all">All</button
+          ><button role="tab" aria-selected="false" data-filter="mesh">
+            Models</button
+          ><button role="tab" aria-selected="false" data-filter="material">
+            Materials</button
+          ><button role="tab" aria-selected="false" data-filter="prefab">
+            Reusable</button
+          ><button role="tab" aria-selected="false" data-filter="data">
+            Data
+          </button>
+        </div>
+        <input
+          id="asset-search"
+          type="search"
+          aria-label="Search assets"
+          placeholder="Search assets…"
+        /><button id="import-model">
+          <i data-lucide="import"></i>Import GLB
+        </button>
+      </div>
+      <div id="assets" class="asset-grid" role="tabpanel"></div>
+      <p id="asset-empty" hidden>No matching assets.</p>
+    </section>
+    <footer>
+      <button
+        id="console-toggle"
+        aria-expanded="false"
+        aria-controls="console-panel"
+      >
+        <i data-lucide="terminal"></i>Console</button
+      ><span id="status" role="status">Choose or create a project.</span
+      ><span id="dirty"></span><span id="project-label">No project</span>
+    </footer>
+    <section id="console-panel" class="console-panel panel" hidden>
+      <div class="panel-title">
+        <h2>Activity</h2>
+        <button id="validate">Validate project</button>
+      </div>
+      <div id="activity-log"></div>
+    </section>
+    <section
+      id="catalog"
+      class="catalog panel"
+      role="dialog"
+      aria-label="Add Domain or Kit"
+      hidden
+    >
+      <div class="panel-title">
+        <h2>Add Domain or Kit</h2>
+        <button
+          id="catalog-close"
+          aria-label="Close catalog"
+          class="icon-button"
+        >
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <input
+        id="catalog-search"
+        type="search"
+        aria-label="Search manifest"
+        placeholder="Search manifest…"
+      />
+      <p class="source-label" id="catalog-source">NexusEngine manifest</p>
+      <div id="catalog-tree"></div>
+      <p id="catalog-error" role="alert"></p>
+      <div class="catalog-footer">
+        <span id="catalog-count">0 selected</span
+        ><button id="catalog-add" class="primary" disabled>Add selected</button>
+      </div>
+      <p class="note">
+        Required dependencies are included. Kits without a Studio integration
+        are read-only.
+      </p>
+    </section>
+    <dialog id="settings-dialog">
+      <div class="dialog-heading">
+        <h2>Game Settings</h2>
+        <button id="close-settings" aria-label="Close game settings">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <label class="field"
+        >PROJECT NAME<input id="title" maxlength="120" /></label
+      ><label class="field"
+        >WORLD NAME<input id="world-name" maxlength="100" /></label
+      ><label class="field"
+        >STARTING SCENE<select id="entry-scene"></select
+      ></label>
+      <p id="settings-scene" class="source-label"></p>
+      <label class="field"
+        >COLLECTION<select id="collection-mode">
+          <option value="proximity">Player proximity</option>
+          <option value="pointer">Pointer click</option>
+        </select></label
+      >
+      <div class="settings-grid">
+        <label class="field"
+          >WIN SCORE<input id="goal" type="number" min="1" max="500" /></label
+        ><label class="field"
+          >TIME LIMIT · SECONDS<input
+            id="seconds"
+            type="number"
+            min="5"
+            max="600" /></label
+        ><label class="field"
+          >WORLD BOUNDARY · ± METERS<input
+            id="bounds"
+            type="number"
+            min="2"
+            max="100"
+        /></label>
+      </div>
+      <p id="readiness" role="status"></p>
+      <p class="note">
+        Play and Export use the starting scene. Movement stays on X/Z; colliders
+        use static box envelopes.
+      </p>
+      <button id="settings" class="primary">Apply game settings</button
+      ><button id="glb">Export active scene GLB</button>
+      <details>
+        <summary>Installed composition</summary>
+        <div id="kit-graph"></div>
+      </details>
+    </dialog>
+    <dialog id="manager">
+      <div class="dialog-heading">
+        <span class="eyebrow">NEXUS ENGINE STUDIO</span
+        ><button id="close-manager" aria-label="Close project manager">
+          ×
+        </button>
+      </div>
+      <h1>Your next game starts here.</h1>
+      <p>Create a project, configure its world, and make it playable.</p>
+      <form id="create-project">
+        <label class="field"
+          >PROJECT NAME<input
+            id="new-title"
+            value="My Game"
+            maxlength="120"
+            required
+        /></label>
+        <div class="template-grid">
+          <label class="template"
+            ><input type="radio" name="template" value="empty" checked /><strong
+              >Empty Project</strong
+            ><span>A clean scene. Your objects and rules.</span></label
+          ><label class="template"
+            ><input type="radio" name="template" value="garden" /><strong
+              >Signal Garden</strong
+            ><span>A configurable player and collectible starter.</span></label
+          >
+        </div>
+        <div class="button-row">
+          <button class="primary" type="submit">Create project</button
+          ><button id="manager-open" type="button">Open project file</button>
+        </div>
+      </form>
+      <h2>Recent projects</h2>
+      <div id="recents"></div>
+      <p class="note">
+        Recent saves are stored on this device. Download project files for
+        portable backups.
+      </p>
+    </dialog>
+    <dialog id="scene-dialog">
+      <form id="create-scene">
+        <h2>New scene</h2>
+        <label class="field"
+          >SCENE NAME<input
+            id="new-scene-name"
+            value="New Scene"
+            required
+            maxlength="100"
+        /></label>
+        <div class="button-row">
+          <button class="primary" type="submit">Create scene</button
+          ><button id="cancel-scene" type="button">Cancel</button>
+        </div>
+      </form>
+    </dialog>
+    <input id="file" type="file" accept=".json,.nexus" hidden /><input
+      id="model-file"
+      type="file"
+      accept=".glb"
+      hidden
+    />
+    <script type="module" src="./studio.js?v=a0a785c2be7f"></script>
+  </body>
+</html>
