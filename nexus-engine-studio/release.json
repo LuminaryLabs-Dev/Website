@@ -1,18 +1,18 @@
 {
   "schema": "nexusengine.studio-release/1",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "engineCommit": "081fea1cdd9ca1662bc15116e7174d9c27821630",
   "dependencies": {
     "nexusengine": "0.0.4",
     "three": "0.186.1"
   },
   "files": {
-    "index.html": "b4b1863b4db2e7116cb5ebb563a62a2e03f4c6aaafdcd575227840cf82b77a8b",
-    "studio.js": "66908e1860d610208fc931203dafb0e293978cb4ac79b66503469f10cec04904",
-    "studio.css": "403dd352ec9d4153cccb3342ead5572c2132e8f4572b3af205a73bb97255ef94",
+    "index.html": "bfca01162eb5f4b2e28f83e70145bbe9c86a5f3eb6d3943a7040591edf18250b",
+    "studio.js": "48ecd39155934014855463932837eba1de8f4f51e071e568cab48463ed21d310",
+    "studio.css": "7698926745352fb54bf8ba5e8278c292dd6db88d02035dc4193869cfafe04ac2",
     "nexusengine-LICENSE.txt": "4a0ae6ed06f277f289a4b0c20b6949640aa02bc491f0cb46b2be24d843256ca7",
     "three-LICENSE.txt": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc"
   },
   "sourceRepository": "LuminaryLabs-Dev/NexusEngine-Studio",
-  "sourceCommit": "d885587845ce7e607f973575e023ed9c70b7805e"
+  "sourceCommit": "4dc04a238c80fb73ffb09c4f23d2d49fae70afec"
 }
