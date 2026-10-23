@@ -7,12 +7,12 @@
     "three": "0.186.1"
   },
   "files": {
-    "index.html": "bfca01162eb5f4b2e28f83e70145bbe9c86a5f3eb6d3943a7040591edf18250b",
-    "studio.js": "48ecd39155934014855463932837eba1de8f4f51e071e568cab48463ed21d310",
+    "index.html": "140f26bdec746fb18b92d855f88fefb3db76da326787c771cb73d3901efe7b86",
+    "studio.js": "e364135ffcc4010580f502f18f22bd79c751ba96dd9dea3ad8d08632cfb78130",
     "studio.css": "7698926745352fb54bf8ba5e8278c292dd6db88d02035dc4193869cfafe04ac2",
     "nexusengine-LICENSE.txt": "4a0ae6ed06f277f289a4b0c20b6949640aa02bc491f0cb46b2be24d843256ca7",
     "three-LICENSE.txt": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc"
   },
   "sourceRepository": "LuminaryLabs-Dev/NexusEngine-Studio",
-  "sourceCommit": "4dc04a238c80fb73ffb09c4f23d2d49fae70afec"
+  "sourceCommit": "74fbc8bd04e2c6bc37927e51356fed604f4cd2aa"
 }
