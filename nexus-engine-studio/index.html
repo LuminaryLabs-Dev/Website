@@ -12,7 +12,7 @@
       content="default-src 'self' blob:; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'"
     />
     <title>Nexus Engine Studio</title>
-    <link rel="stylesheet" href="./studio.css?v=bbdcf4061332" />
+    <link rel="stylesheet" href="./studio.css?v=746517fe4e48" />
   </head>
   <body>
     <header>
@@ -237,18 +237,12 @@
     <section class="asset-browser panel" aria-label="Project assets">
       <div class="asset-toolbar">
         <h2><i data-lucide="boxes"></i>Assets</h2>
-        <div id="asset-tabs" role="tablist" aria-label="Asset type">
-          <button role="tab" aria-selected="true" data-filter="all">All</button
-          ><button role="tab" aria-selected="false" data-filter="mesh">
-            Models</button
-          ><button role="tab" aria-selected="false" data-filter="material">
-            Materials</button
-          ><button role="tab" aria-selected="false" data-filter="prefab">
-            Reusable</button
-          ><button role="tab" aria-selected="false" data-filter="data">
-            Data
-          </button>
-        </div>
+        <button id="asset-new-folder">
+          <i data-lucide="folder"></i>New folder
+        </button>
+        <button id="asset-rename" disabled>Rename</button
+        ><button id="asset-move" disabled>Move…</button>
+        <button id="asset-use" disabled>Open asset</button>
         <input
           id="asset-search"
           type="search"
@@ -258,9 +252,35 @@
           <i data-lucide="import"></i>Import GLB
         </button>
       </div>
-      <div id="assets" class="asset-grid" role="tabpanel"></div>
-      <p id="asset-empty" hidden>No matching assets.</p>
+      <div class="asset-layout">
+        <nav id="asset-folders" role="tree" aria-label="Asset folders"></nav>
+        <div class="asset-content">
+          <nav id="asset-breadcrumbs" aria-label="Asset path"></nav>
+          <div
+            id="assets"
+            class="asset-grid"
+            role="listbox"
+            aria-label="Folder contents"
+          ></div>
+          <p id="asset-empty" hidden>This folder is empty.</p>
+        </div>
+      </div>
     </section>
+    <dialog id="asset-dialog">
+      <form id="asset-edit-form">
+        <h2 id="asset-dialog-title">New folder</h2>
+        <label class="field" id="asset-name-label"
+          >NAME<input id="asset-edit-name" maxlength="80" required /></label
+        ><label class="field" id="asset-destination-label" hidden
+          >DESTINATION<select id="asset-destination"></select
+        ></label>
+        <p id="asset-dialog-error" role="alert"></p>
+        <div class="button-row">
+          <button type="submit" class="primary">Confirm</button
+          ><button id="asset-dialog-cancel" type="button">Cancel</button>
+        </div>
+      </form>
+    </dialog>
     <footer>
       <button
         id="console-toggle"
@@ -417,6 +437,6 @@
       accept=".glb"
       hidden
     />
-    <script type="module" src="./studio.js?v=f015ea0bed72"></script>
+    <script type="module" src="./studio.js?v=f90ecb73351a"></script>
   </body>
 </html>

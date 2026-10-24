@@ -1,6 +1,6 @@
 {
   "schema": "nexusengine.studio-release/1",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "engineCommit": "081fea1cdd9ca1662bc15116e7174d9c27821630",
   "dependencies": {
     "nexusengine": "0.0.4",
@@ -8,13 +8,13 @@
     "lucide": "1.61.0"
   },
   "files": {
-    "index.html": "14f5a39cdd39bec12954cc2a8272900c815e4e83d8c463176ee9e00b35f000bc",
-    "studio.js": "f015ea0bed721ffcf3cd495d9835136660c1ec2e5071139966301f67e014d490",
-    "studio.css": "bbdcf4061332f126f9b7935c75eae82f43809b39849ada1f65e124ae155ed65b",
+    "index.html": "37e8a26992db97d31adcc71005de4880f5138950e0f904315955374dd5d1b24a",
+    "studio.js": "f90ecb73351ae89f595995b45fe2a004b624be2fffd7de1fed7f19d53c5c4e85",
+    "studio.css": "746517fe4e481b80bec3552f36091efa0040e418adb24f2c568a13b62d8473d7",
     "nexusengine-LICENSE.txt": "4a0ae6ed06f277f289a4b0c20b6949640aa02bc491f0cb46b2be24d843256ca7",
     "three-LICENSE.txt": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc",
     "lucide-LICENSE.txt": "b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57"
   },
   "sourceRepository": "LuminaryLabs-Dev/NexusEngine-Studio",
-  "sourceCommit": "0e6acad6797328a0492108b9c7d51072ad43dc78"
+  "sourceCommit": "55dfcaaa1c299766f17bef4eca7621fe79a3a7c6"
 }
