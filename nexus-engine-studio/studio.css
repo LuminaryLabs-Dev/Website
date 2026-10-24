@@ -1334,10 +1334,9 @@ h3 {
 /* Adjustable host-local workspace; game documents never contain these sizes. */
 #editor {
   position: relative;
-  grid-template-columns: minmax(
-      170px,
-      var(--hierarchy-width, 220px)
-    ) 6px minmax(280px, 1fr) 6px minmax(270px, var(--inspector-width, 310px));
+  grid-template-columns:
+    minmax(170px, var(--hierarchy-width, 220px))
+    6px minmax(280px, 1fr) 6px minmax(270px, var(--inspector-width, 310px));
   gap: 3px;
 }
 .workspace-resize {
@@ -1529,4 +1528,485 @@ h3 {
   .viewport-bar .tools button {
     font-size: 10px;
   }
+}
+
+/* Continuous scene canvas with contextual floating surfaces. */
+body {
+  display: block;
+}
+header {
+  height: 46px;
+  padding: 0 20px;
+  border-bottom: 0;
+}
+header .edition {
+  margin-left: auto;
+}
+#platform {
+  margin-left: 0;
+}
+.toolbar {
+  height: 48px;
+  padding: 5px 14px;
+  border-top: 0;
+}
+.toolbar button {
+  padding: 7px 10px;
+}
+#editor {
+  display: block;
+  position: absolute;
+  inset: 94px 0 28px;
+  padding: 0;
+  min-height: 0;
+}
+#editor > .workspace {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+}
+#viewport {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+.viewport-bar {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: auto;
+  gap: 8px;
+  padding: 5px;
+  background: var(--surface);
+  box-shadow: 0 4px 18px #00142633;
+}
+.viewport-bar #scene-title {
+  display: none;
+}
+.viewport-bar #mode {
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+.viewport-help {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  border: 0;
+  background: #082139bb;
+  padding: 5px 12px;
+  white-space: nowrap;
+  font-size: 11px;
+}
+#tool-rail {
+  position: absolute;
+  top: 110px;
+  left: 12px;
+  width: 46px;
+  display: flex;
+  flex-direction: column;
+  z-index: 8;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+}
+#tool-rail button {
+  border: 0;
+  background: transparent;
+  flex-direction: column;
+  gap: 0;
+  font-size: 23px;
+  padding: 8px 2px;
+}
+#tool-rail small {
+  font-size: 9px;
+}
+#editor > .structure,
+#editor > .inspector {
+  position: fixed;
+  z-index: 7;
+  top: 110px;
+  bottom: auto;
+  margin: 0;
+  background: var(--surface);
+  box-shadow: 0 8px 26px #00112240;
+  display: flex;
+  resize: both;
+  overflow: auto;
+  min-height: 160px;
+  max-height: calc(100vh - 164px);
+  max-width: calc(100vw - 86px);
+}
+#editor > .structure {
+  left: 72px;
+  right: auto;
+  width: 240px;
+  height: 390px;
+  padding: 13px;
+}
+#editor > .inspector {
+  left: auto;
+  right: 16px;
+  width: 300px;
+  height: 530px;
+  padding: 0;
+}
+#inspector-panel.no-selection,
+#editor > .panel-closed {
+  display: none;
+}
+.inspector > .panel-title {
+  padding: 12px;
+  margin: 0;
+  flex-shrink: 0;
+}
+.inspector form {
+  min-height: 0;
+  flex: 1;
+}
+.inspector-body {
+  padding: 0 12px 12px;
+}
+.inspector-apply {
+  padding: 8px 12px;
+}
+.panel-drag {
+  cursor: move;
+  user-select: none;
+}
+.drawer-close {
+  display: inline-flex;
+  padding: 2px 7px;
+  background: transparent;
+}
+.workspace-resize,
+#asset-resize,
+#panel-controls {
+  display: none !important;
+}
+.asset-browser {
+  position: fixed;
+  left: 72px;
+  right: 16px;
+  bottom: 42px;
+  top: auto;
+  width: auto;
+  height: 250px;
+  min-height: 170px;
+  max-height: 50vh;
+  z-index: 9;
+  margin: 0;
+  resize: vertical;
+  overflow: auto;
+  box-shadow: 0 8px 28px #00112240;
+}
+.assets-collapsed .asset-browser {
+  width: 155px;
+  right: auto;
+  height: 40px !important;
+  min-height: 40px;
+  resize: none;
+  overflow: hidden;
+}
+.assets-collapsed .asset-toolbar h2 {
+  display: none;
+}
+.assets-collapsed .asset-toolbar {
+  padding: 0;
+}
+.assets-collapsed #assets-toggle {
+  width: 153px;
+  height: 38px;
+  border: 0;
+}
+.asset-toolbar {
+  flex-wrap: wrap;
+  min-height: 42px;
+}
+.asset-toolbar button {
+  padding: 5px 7px;
+  font-size: 11px;
+}
+.asset-layout {
+  min-height: 125px;
+}
+#scene-search {
+  width: 100%;
+  margin-bottom: 5px;
+}
+.scene-row {
+  margin-bottom: 5px;
+}
+.scene-root {
+  padding: 5px 0;
+}
+.object {
+  padding: 6px;
+}
+.object.group-row {
+  font-weight: 600;
+}
+#geometry-panel {
+  position: absolute;
+  z-index: 8;
+  right: 16px;
+  top: 16px;
+  width: 300px;
+  max-width: calc(100vw - 88px);
+  max-height: calc(100% - 50px);
+  overflow: auto;
+  padding: 12px;
+  box-shadow: 0 8px 26px #00112240;
+}
+#geometry-panel .button-row {
+  flex-wrap: wrap;
+  gap: 5px;
+}
+#geometry-panel button {
+  padding: 6px 8px;
+}
+#geometry-modes [aria-pressed="true"] {
+  background: var(--primary);
+}
+#geometry-error {
+  color: #ffb1aa;
+}
+#geometry-preview-state {
+  color: #ffd38c;
+}
+body.geometry-editing #inspector-panel {
+  display: none;
+}
+#empty-scene {
+  position: absolute;
+  z-index: 4;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  padding: 18px;
+}
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 28px;
+  min-height: 28px;
+  padding: 2px 12px;
+  font-size: 10px;
+}
+.catalog {
+  position: fixed;
+  z-index: 15;
+  top: 160px;
+  left: 325px;
+  width: 370px;
+  max-width: calc(100vw - 88px);
+  max-height: calc(100vh - 200px);
+}
+body.playing #tool-rail,
+body.playing #hierarchy-panel,
+body.playing #inspector-panel,
+body.playing .asset-browser,
+body.playing .viewport-bar,
+body.playing #geometry-panel,
+body.playing #empty-scene,
+body.playing .viewport-help {
+  display: none !important;
+}
+body:not(.playing) #stop {
+  display: none;
+}
+body.playing #play {
+  display: none;
+}
+#play-hud {
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  padding: 10px 16px;
+  z-index: 5;
+}
+#restart-play {
+  position: absolute;
+  right: 18px;
+  bottom: 22px;
+  z-index: 5;
+}
+@media (max-width: 1000px) {
+  .toolbar {
+    flex-wrap: nowrap;
+    overflow: auto;
+    height: 48px;
+  }
+  .toolbar > div {
+    flex-wrap: nowrap;
+  }
+  #editor > .structure {
+    width: 220px;
+  }
+  .catalog {
+    left: 80px;
+  }
+  .asset-browser {
+    height: 230px;
+  }
+  header .edition {
+    display: none;
+  }
+}
+@media (max-width: 650px) {
+  header {
+    height: 40px;
+    padding: 0 10px;
+  }
+  .brand {
+    font-size: 12px;
+  }
+  .toolbar {
+    height: 48px;
+  }
+  #editor {
+    top: 88px;
+  }
+  .toolbar .readiness-action,
+  #game-settings {
+    display: none;
+  }
+  #editor > .structure,
+  #editor > .inspector {
+    top: 108px;
+    max-height: calc(100vh - 175px);
+  }
+  .viewport-bar {
+    left: 76px;
+    transform: none;
+    max-width: calc(100vw - 90px);
+  }
+  .viewport-bar button {
+    font-size: 10px;
+    padding: 4px;
+  }
+  #mode {
+    display: none;
+  }
+  #geometry-panel {
+    top: 65px;
+  }
+  .viewport-help {
+    display: none;
+  }
+  #empty-scene {
+    width: 250px;
+  }
+}
+/* One persistent project header; no workspace mode switch. */
+header {
+  display: none;
+}
+.toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 54px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+}
+.studio-wordmark {
+  margin-right: auto;
+  font-size: 17px;
+  font-weight: 600;
+  color: #d8f3ff;
+  white-space: nowrap;
+}
+#workspace-path {
+  color: var(--muted);
+  font-size: 12px;
+  margin-right: auto;
+}
+#editor {
+  top: 54px;
+}
+#tool-rail,
+#editor > .structure,
+#editor > .inspector {
+  top: 72px;
+}
+#editor > .structure {
+  height: 350px;
+}
+#editor > .inspector {
+  height: 570px;
+}
+#editor > .structure,
+#editor > .inspector {
+  max-height: calc(100vh - 120px);
+}
+#tool-rail {
+  top: 72px;
+}
+.toolbar #open,
+.toolbar #game-settings {
+  font-size: 11px;
+}
+.toolbar .readiness-action {
+  display: none;
+}
+@media (max-width: 1300px) {
+  #workspace-path {
+    display: none;
+  }
+  .studio-wordmark {
+    font-size: 14px;
+  }
+  .toolbar {
+    gap: 8px;
+  }
+}
+@media (max-width: 850px) {
+  .studio-wordmark {
+    display: none;
+  }
+  .toolbar {
+    justify-content: flex-start;
+  }
+  #editor {
+    top: 54px;
+  }
+  #editor > .structure,
+  #editor > .inspector {
+    top: 72px;
+  }
+}
+.game-controls {
+  display: none;
+}
+@media (pointer: coarse) {
+  .game-controls {
+    display: flex;
+  }
+}
+body.playing .toolbar > div:first-of-type,
+body.playing #game-settings,
+body.playing #export,
+body.playing #play-readiness {
+  display: none;
+}
+#export-dialog {
+  position: fixed;
+  top: 72px;
+  right: 16px;
+  left: auto;
+  margin: 0;
+  width: 320px;
+  max-width: calc(100vw - 90px);
+  min-width: 0;
+  padding: 20px;
+  box-shadow: 0 8px 24px #00112250;
+}
+#export-dialog {
+  z-index: 20;
 }

@@ -12,16 +12,18 @@
       content="default-src 'self' blob:; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'"
     />
     <title>Nexus Engine Studio</title>
-    <link rel="stylesheet" href="./studio.css?v=579f083ef85a" />
+    <link rel="stylesheet" href="./studio.css?v=7861b7037ad1" />
   </head>
   <body>
     <header>
       <span class="brand"
         ><i data-lucide="boxes"></i>NEXUS ENGINE <strong>STUDIO</strong></span
-      ><span class="edition">PROJECT WORKSPACE / 0.4</span
+      ><span class="edition">CONTINUOUS AUTHORING / 0.5</span
       ><span id="platform">WEB</span>
     </header>
     <nav class="toolbar" aria-label="Project actions">
+      <span class="studio-wordmark">◇ Nexus Studio</span
+      ><span id="workspace-path">Projects</span>
       <div>
         <button id="projects"><i data-lucide="folder"></i>Projects</button
         ><button id="open"><i data-lucide="folder-open"></i>Open</button
@@ -59,10 +61,16 @@
         Inspector
       </button>
     </nav>
+    <nav id="tool-rail" aria-label="Scene tools">
+      <button id="rail-add">+<small>Add</small></button
+      ><button id="rail-scene">☷<small>Scene</small></button
+      ><button id="rail-shape">◇<small>Shape</small></button
+      ><button id="reset-layout">↺<small>Layout</small></button>
+    </nav>
     <main id="editor">
       <aside class="structure panel" id="hierarchy-panel">
         <div class="panel-title">
-          <h2>Hierarchy</h2>
+          <h2>Scene</h2>
           <button
             id="close-hierarchy"
             class="drawer-close"
@@ -90,6 +98,12 @@
           <i data-lucide="globe"></i><span id="hierarchy-scene">Main Scene</span
           ><span id="count"></span>
         </div>
+        <input
+          id="scene-search"
+          type="search"
+          placeholder="Search scene…"
+          aria-label="Search scene"
+        />
         <div id="objects" role="tree" aria-label="Scene hierarchy"></div>
       </aside>
       <div
@@ -118,6 +132,67 @@
           </button>
         </div>
         <div id="viewport"><div id="play-hud" role="status" hidden></div></div>
+        <section
+          id="geometry-panel"
+          class="panel"
+          hidden
+          aria-label="Geometry tools"
+        >
+          <div class="panel-title">
+            <h2>Geometry</h2>
+            <button id="geometry-done">Done</button>
+          </div>
+          <p id="geometry-path"></p>
+          <div id="geometry-modes" class="button-row"></div>
+          <p id="geometry-selection">Select a face</p>
+          <details>
+            <summary>Select by ID</summary>
+            <select
+              id="geometry-elements"
+              multiple
+              size="5"
+              aria-label="Geometry elements"
+            ></select>
+          </details>
+          <div class="button-row">
+            <button id="geometry-extrude">Extrude</button
+            ><button id="geometry-inset">Inset</button
+            ><button id="geometry-bevel">Bevel</button>
+          </div>
+          <label class="field"
+            >OPERATION<select id="geometry-operation">
+              <option value="extrude">Extrude face</option>
+              <option value="inset">Inset face</option>
+              <option value="bevel">Bevel convex edges</option>
+              <option value="transform">Move selection</option>
+            </select></label
+          ><label class="field"
+            >AMOUNT<input
+              id="geometry-amount"
+              type="number"
+              value="0.25"
+              step="0.05" /></label
+          ><label class="field" id="geometry-axis-field" hidden
+            >AXIS<select id="geometry-axis">
+              <option value="x">X</option>
+              <option value="y" selected>Y</option>
+              <option value="z">Z</option>
+            </select></label
+          >
+          <p id="geometry-error" role="alert"></p>
+          <p id="geometry-preview-state" role="status"></p>
+          <div class="button-row">
+            <button id="geometry-preview">Preview</button
+            ><button id="geometry-apply" class="primary" disabled>Apply</button
+            ><button id="geometry-cancel">Cancel</button>
+          </div>
+        </section>
+        <div id="empty-scene" class="panel" hidden>
+          <h2>Empty scene</h2>
+          <p>Add an object or import your own asset.</p>
+          <button id="empty-add">Add object</button
+          ><button id="empty-import">Import asset</button>
+        </div>
         <div class="viewport-help">
           <span id="hint"
             >Drag to orbit · Scroll to zoom · Select to transform</span
@@ -135,7 +210,7 @@
       ></div>
       <aside class="inspector panel" id="inspector-panel">
         <div class="panel-title">
-          <h2>Inspector</h2>
+          <h2>Properties</h2>
           <button
             id="close-inspector"
             class="drawer-close"
@@ -152,6 +227,12 @@
           <div class="inspector-body">
             <label class="field"
               >NAME<input id="name" maxlength="100" required
+            /></label>
+            <label class="field"
+              >SCENE GROUP<input
+                id="object-collection"
+                maxlength="60"
+                placeholder="Objects"
             /></label>
             <p id="source-kit" class="source-label"></p>
             <details id="transform-section" open>
@@ -213,6 +294,8 @@
                 >MATERIAL<select id="material"></select
               ></label>
             </details>
+            <button type="button" id="edit-material">Edit material</button
+            ><button type="button" id="edit-geometry">Edit geometry</button>
             <div class="behavior-heading">
               <h3>Behaviors</h3>
               <button type="button" id="add-behavior">+ Add behavior</button>
@@ -312,7 +395,8 @@
         </button>
         <button id="asset-rename" disabled>Rename</button
         ><button id="asset-move" disabled>Move…</button>
-        <button id="asset-use" disabled>Open asset</button>
+        <button id="asset-use" disabled>Open asset</button
+        ><button id="asset-edit-model" disabled>Edit model</button>
         <input
           id="asset-search"
           type="search"
@@ -366,6 +450,7 @@
         <h2>Activity</h2>
         <button id="validate">Validate project</button>
       </div>
+      <p id="runtime-diagnostics" hidden></p>
       <div id="activity-log"></div>
     </section>
     <section
@@ -489,9 +574,41 @@
         /></label>
       </div>
       <p id="readiness" role="status"></p>
+      <label class="check"
+        ><input id="rolling" type="checkbox" />Rolling terrain gameplay</label
+      >
+      <div id="rolling-settings">
+        <label class="field"
+          >ACCELERATION<input
+            id="acceleration"
+            type="number"
+            min="1"
+            max="100"
+            value="12" /></label
+        ><label class="field"
+          >GRAVITY<input
+            id="gravity"
+            type="number"
+            min="1"
+            max="60"
+            value="18" /></label
+        ><label class="field"
+          >RESPAWN BELOW Y<input
+            id="kill-y"
+            type="number"
+            min="-100"
+            max="0"
+            value="-8" /></label
+        ><label class="check"
+          ><input id="follow-camera" type="checkbox" checked />Follow
+          player</label
+        ><label class="check"
+          ><input id="ocean" type="checkbox" />Decorative sea</label
+        >
+      </div>
       <p class="note">
-        Play and Export use the starting scene. Movement stays on X/Z; colliders
-        use static box envelopes.
+        Play and Export use the starting scene. Rolling uses authored solid
+        surfaces and the player position as its spawn.
       </p>
       <button id="settings" class="primary">Apply game settings</button
       ><button id="glb">Export active scene GLB</button>
@@ -500,6 +617,54 @@
         <div id="kit-graph"></div>
       </details>
     </dialog>
+    <dialog id="material-dialog">
+      <form id="material-form">
+        <h2>Material</h2>
+        <p id="material-uses"></p>
+        <label class="field"
+          >COLOR<input
+            id="material-color"
+            type="color"
+            value="#3388cc" /></label
+        ><label class="field"
+          >ROUGHNESS<input
+            id="material-roughness"
+            type="number"
+            min="0"
+            max="1"
+            step=".05"
+            value=".5"
+        /></label>
+        <p id="material-error" role="alert"></p>
+        <button class="primary" type="submit">Apply shared material</button
+        ><button id="material-cancel" type="button">Cancel</button>
+      </form>
+    </dialog>
+    <dialog id="shared-model-dialog">
+      <h2>Edit shared model</h2>
+      <p id="shared-model-count"></p>
+      <div class="button-row">
+        <button id="shared-edit">Edit all instances</button
+        ><button id="shared-unique" class="primary">Make this one unique</button
+        ><button id="shared-cancel">Cancel</button>
+      </div>
+    </dialog>
+    <dialog id="export-dialog">
+      <h2>Export game</h2>
+      <p id="export-ready" role="status"></p>
+      <p>Standalone web · bundled HTML</p>
+      <p class="note">
+        Native Studio packaging is a separate development build; native game
+        export is not integrated.
+      </p>
+      <button id="export-file" class="primary">Export file</button
+      ><button id="export-close">Close</button>
+    </dialog>
+    <dialog id="loading-dialog">
+      <h2>Open project</h2>
+      <p id="loading-state">Reading project…</p>
+      <progress></progress><button id="loading-cancel">Cancel</button>
+    </dialog>
     <dialog id="manager">
       <div class="dialog-heading">
         <span class="eyebrow">NEXUS ENGINE STUDIO</span
@@ -507,7 +672,7 @@
           ×
         </button>
       </div>
-      <h1>Your next game starts here.</h1>
+      <h1>Projects</h1>
       <p>Create a project, configure its world, and make it playable.</p>
       <form id="create-project">
         <label class="field"
@@ -525,6 +690,11 @@
           ><button id="manager-open" type="button">Open project file</button>
         </div>
       </form>
+      <h2>Example project</h2>
+      <button id="open-example">Open Blue Island</button>
+      <p class="note">
+        A separately authored rolling collectible game. New projects stay empty.
+      </p>
       <h2>Recent projects</h2>
       <div id="recents"></div>
       <p class="note">
@@ -554,6 +724,6 @@
       accept=".glb"
       hidden
     />
-    <script type="module" src="./studio.js?v=8f8c23523625"></script>
+    <script type="module" src="./studio.js?v=54a63d917cac"></script>
   </body>
 </html>
