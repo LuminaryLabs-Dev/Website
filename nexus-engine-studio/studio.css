@@ -2010,3 +2010,5 @@ body.playing #play-readiness {
 #export-dialog {
   z-index: 20;
 }
+
+.game-options{position:absolute;right:20px;bottom:70px;display:flex;gap:6px}.game-options button{font-size:11px;padding:6px}.game-toast{position:absolute;top:78px;left:50%;transform:translateX(-50%);pointer-events:none;color:#bcefff;background:#082a47dd;padding:8px 12px}

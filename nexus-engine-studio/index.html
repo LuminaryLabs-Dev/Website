@@ -12,13 +12,13 @@
       content="default-src 'self' blob:; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'"
     />
     <title>Nexus Engine Studio</title>
-    <link rel="stylesheet" href="./studio.css?v=7861b7037ad1" />
+    <link rel="stylesheet" href="./studio.css?v=a3fbd1582a82" />
   </head>
   <body>
     <header>
       <span class="brand"
         ><i data-lucide="boxes"></i>NEXUS ENGINE <strong>STUDIO</strong></span
-      ><span class="edition">CONTINUOUS AUTHORING / 0.5</span
+      ><span class="edition">CONTINUOUS AUTHORING / 0.6</span
       ><span id="platform">WEB</span>
     </header>
     <nav class="toolbar" aria-label="Project actions">
@@ -313,6 +313,15 @@
                   max="30"
                   step=".1"
               /></label>
+              <div id="platform-fields">
+                <p class="note">Travel offset from the authored position; preview path in the scene. Keep platforms at scene root.</p>
+                <div class="transform-grid"><span>Travel</span>
+                  <label>X<input id="travel-x" type="number" min="-30" max="30" step="any"></label>
+                  <label>Y<input id="travel-y" type="number" min="-30" max="30" step="any"></label>
+                  <label>Z<input id="travel-z" type="number" min="-30" max="30" step="any"></label></div>
+                <label class="field">ONE-WAY SECONDS<input id="travel-seconds" type="number" min="1" max="30" step="any"></label>
+                <label class="field">ENDPOINT PAUSE<input id="pause-seconds" type="number" min="0" max="10" step="any"></label>
+              </div>
               <label id="points-field" class="field"
                 >POINTS<input id="points" type="number" min="1" max="100"
               /></label>
@@ -578,6 +587,8 @@
         ><input id="rolling" type="checkbox" />Rolling terrain gameplay</label
       >
       <div id="rolling-settings">
+        <label class="check"><input id="jumping" type="checkbox">Space to jump</label>
+        <label class="field">JUMP SPEED<input id="jump-speed" type="number" min="1" max="20" value="7" step="any"></label>
         <label class="field"
           >ACCELERATION<input
             id="acceleration"
@@ -724,6 +735,6 @@
       accept=".glb"
       hidden
     />
-    <script type="module" src="./studio.js?v=54a63d917cac"></script>
+    <script type="module" src="./studio.js?v=4581fb828832"></script>
   </body>
 </html>
