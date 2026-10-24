@@ -1202,3 +1202,331 @@ dialog h2 {
     height: 64px;
   }
 }
+
+/* Focused, draft-based object Inspector. */
+.behavior-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin: 12px 0 7px;
+}
+h3 {
+  font-size: 12px;
+  margin: 0;
+}
+.behavior-heading button {
+  font-size: 11px;
+  padding: 5px 7px;
+}
+.behavior-card {
+  border: 1px solid var(--edge);
+  background: var(--surface);
+  padding: 8px;
+  margin-bottom: 8px;
+}
+.behavior-card .behavior-heading {
+  margin: 0 0 5px;
+}
+.behavior-card .note {
+  margin: 5px 0;
+  font-size: 11px;
+}
+.field-error {
+  color: #ffc0b6;
+  font-size: 11px;
+  margin: 5px 0;
+}
+.field-error:empty {
+  display: none;
+}
+[aria-invalid="true"] {
+  border-color: #ffab9a;
+}
+#property-draft {
+  font-size: 11px;
+  color: #b3dfff;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* One creation menu with the full manifest preserved under Advanced. */
+.catalog {
+  left: 18px;
+  top: 142px;
+  width: 370px;
+  max-height: calc(100vh - 165px);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+.add-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 9px;
+}
+.add-tabs button {
+  flex: 1;
+  font-size: 12px;
+  padding: 7px;
+}
+.add-tabs [aria-selected="true"] {
+  background: var(--primary);
+  border-color: #61caff;
+}
+#add-basic,
+#add-advanced {
+  min-height: 0;
+}
+#add-basic input {
+  width: 100%;
+  margin: 0;
+}
+#add-advanced h3 {
+  margin: 2px 0 9px;
+}
+#add-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 48vh;
+  overflow: auto;
+}
+.add-choice {
+  text-align: left;
+  justify-content: flex-start;
+  white-space: normal;
+  padding: 9px 10px;
+  width: 100%;
+  flex-shrink: 0;
+}
+.add-choice strong,
+.add-choice small {
+  display: block;
+}
+.add-choice strong {
+  font-size: 12px;
+}
+.add-choice small {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+  line-height: 1.4;
+}
+#add-error {
+  margin: 7px 0;
+}
+#add-context {
+  margin: 8px 0;
+  font-size: 11px;
+}
+#add-advanced #catalog-tree {
+  max-height: 40vh;
+}
+@media (max-width: 760px) {
+  .catalog {
+    left: 8px;
+    top: 110px;
+    width: min(370px, calc(100vw - 16px));
+  }
+}
+
+/* Adjustable host-local workspace; game documents never contain these sizes. */
+#editor {
+  position: relative;
+  grid-template-columns: minmax(
+      170px,
+      var(--hierarchy-width, 220px)
+    ) 6px minmax(280px, 1fr) 6px minmax(270px, var(--inspector-width, 310px));
+  gap: 3px;
+}
+.workspace-resize {
+  background: transparent;
+  border: 0;
+  cursor: col-resize;
+  touch-action: none;
+  min-height: 0;
+}
+.workspace-resize:hover,
+.workspace-resize:focus-visible {
+  background: #2784bc;
+  outline: 1px solid #8ad7ff;
+}
+.workspace-resize.horizontal {
+  height: 7px;
+  flex-shrink: 0;
+  cursor: row-resize;
+  margin: 0 4px;
+}
+.asset-browser {
+  height: var(--assets-height, 190px);
+  margin-top: 0;
+  min-height: 150px;
+}
+.assets-collapsed .asset-browser {
+  height: 42px !important;
+  min-height: 42px;
+}
+.assets-collapsed .asset-layout,
+.assets-collapsed .asset-toolbar > button:not(#assets-toggle),
+.assets-collapsed .asset-toolbar > input {
+  display: none !important;
+}
+.assets-collapsed .asset-toolbar {
+  border-bottom: 0;
+  height: 40px;
+}
+#assets-toggle {
+  margin-left: 0;
+}
+#panel-controls,
+.drawer-close {
+  display: none;
+}
+.toolbar .readiness-action {
+  max-width: 175px;
+  white-space: normal;
+  font-size: 11px;
+  color: #b4e9ff;
+  padding: 5px 8px;
+}
+#editor > .structure,
+#editor > .inspector {
+  min-width: 0;
+}
+.inspector .panel-title > span {
+  display: none;
+}
+@media (max-width: 1200px) {
+  .toolbar {
+    padding: 6px;
+  }
+  .toolbar button {
+    padding: 7px;
+  }
+  .toolbar .readiness-action {
+    max-width: 120px;
+    font-size: 10px;
+  }
+}
+@media (max-width: 1000px) {
+  body {
+    height: 100vh;
+    min-height: 0;
+    overflow: hidden;
+  }
+  #panel-controls {
+    display: flex;
+    gap: 6px;
+    padding: 4px 7px;
+    flex-shrink: 0;
+  }
+  #panel-controls button {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+  #panel-controls [aria-expanded="true"] {
+    background: var(--primary);
+  }
+  #editor {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    padding: 0 4px;
+    min-height: 220px;
+  }
+  #editor > .workspace {
+    grid-column: 1;
+    grid-row: 1;
+    height: auto;
+    min-height: 0;
+  }
+  #editor > .workspace-resize {
+    display: none;
+  }
+  #editor > .structure,
+  #editor > .inspector {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 5;
+    grid-row: auto;
+    max-height: none;
+    background: var(--surface);
+    box-shadow: 0 4px 20px #0009;
+    display: none;
+  }
+  #editor > .structure {
+    left: 4px;
+    width: min(280px, calc(100vw - 40px));
+  }
+  #editor > .inspector {
+    right: 4px;
+    width: min(330px, calc(100vw - 30px));
+  }
+  body[data-open-panel="hierarchy"] #editor > .structure {
+    display: flex;
+  }
+  body[data-open-panel="inspector"] #editor > .inspector {
+    display: flex;
+  }
+  .drawer-close {
+    display: inline-flex;
+    padding: 3px 7px;
+    font-size: 16px;
+    margin-left: auto;
+  }
+  .structure .panel-title {
+    gap: 6px;
+  }
+  #catalog-toggle {
+    margin-left: 0;
+  }
+  .catalog {
+    left: 10px;
+    top: 155px;
+    width: min(370px, calc(100vw - 20px));
+    max-height: calc(100vh - 170px);
+  }
+  .asset-toolbar {
+    flex-wrap: wrap;
+  }
+  .asset-browser {
+    flex-shrink: 0;
+  }
+  .assets-collapsed .asset-toolbar {
+    flex-wrap: nowrap;
+  }
+  footer {
+    position: static;
+    min-height: 28px;
+  }
+  .toolbar > div {
+    flex-wrap: wrap;
+  }
+  .toolbar {
+    flex-wrap: wrap;
+  }
+  #add-choices {
+    max-height: 38vh;
+  }
+  #add-advanced #catalog-tree {
+    max-height: 30vh;
+  }
+}
+@media (max-width: 480px) {
+  .toolbar .readiness-action {
+    max-width: none;
+  }
+  .toolbar {
+    gap: 5px;
+  }
+  #editor {
+    min-height: 180px;
+  }
+  .asset-toolbar button {
+    padding: 4px 6px;
+  }
+  .viewport-bar .tools button {
+    font-size: 10px;
+  }
+}
