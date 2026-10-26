@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#09171b">
+    <meta name="description" content="A presentation preview of the CAMEL and NexusEngine prompt-driven game authoring harness.">
+    <title>Camel Authoring Harness</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="wordmark" href="/camel-authoring/" aria-label="Camel Authoring Harness home"><span class="mark">C</span> CAMEL <i>×</i> NEXUS</a>
+        <span class="model"><span class="pulse"></span> QWEN 3.8 · 27B</span>
+      </header>
+      <section class="hero">
+        <p class="eyebrow">PROMPT TO PLAYABLE</p>
+        <h1>Make a whole<br><em>world worth playing.</em></h1>
+        <p class="intro">Describe the game. CAMEL coordinates the design, mesh layout, and review. NexusEngine builds a playable campaign from the result.</p>
+      </section>
+      <p class="preview-note" role="status"><span class="preview-tag">PRESENTATION MODULE</span> Live authoring service is not connected.</p>
+      <details class="settings">
+        <summary><span>Cerebras connection</span><span id="key-state">Preview only</span></summary>
+        <div class="settings-body">
+          <label for="api-key">Cerebras API key</label>
+          <div class="key-row">
+            <input id="api-key" type="password" autocomplete="off" spellcheck="false" placeholder="Enabled when the secure service is connected" disabled>
+            <button id="save-key" type="button" disabled>Save key</button>
+          </div>
+          <p id="key-message" role="status">This static presentation package does not accept or store API keys.</p>
+        </div>
+      </details>
+      <section class="composer" aria-labelledby="prompt-label">
+        <label id="prompt-label" for="prompt">Your game idea</label>
+        <textarea id="prompt" maxlength="2000" placeholder="A sky courier races across floating islands, collecting sun shards before the storm catches up…" rows="4"></textarea>
+        <div class="composer-footer">
+          <span id="status" role="status" aria-live="polite">Presentation preview · generation service pending</span>
+          <button id="create" type="button"><span>Create game</span><b aria-hidden="true">↗</b></button>
+        </div>
+      </section>
+      <section id="result" class="result" hidden aria-live="polite"></section>
+      <footer><span>CAMEL orchestration</span><span>NexusEngine runtime</span><span>Mesh-first authoring</span></footer>
+    </main>
+  </body>
+</html>
+
