@@ -41,3 +41,8 @@ Immersive rendering uses `XRSession.visibilityState`, independently of the HTML 
 ### Phone diagnostic view
 
 The user confirms the terrain renders before spatial AR and disappears on entry; the visibility fix did not resolve that physical-phone failure. Open the landing page with `?debug=1` to inspect the transition. The optional panel shows frame/pose counts, draw calls, graphics context/framebuffer state, and runtime/shader errors. Its pink cube uses a simple material and raw XR viewer pose independently of terrain placement. Recenter and Basic terrain help distinguish placement from model-material failures. Copy status copies text locally; no telemetry or camera images are transmitted. Diagnostics are absent from the normal interface. The exact phone cause still requires this runtime evidence.
+
+
+### Active XR frame ownership
+
+The user subsequently confirmed increasing pose counts with Terrain hidden. A regression reproduced this state by interleaving a non-XR callback into the immersive render loop. Spatial AR now ignores callbacks lacking an XRFrame from the active session; rendering and diagnostics use one sampled viewer pose, and the tracking warning clears upon recovery. The diagnostic marker is centered and the report counts ignored webpage callbacks. The reproduction passes after the fix; phone confirmation is still required.

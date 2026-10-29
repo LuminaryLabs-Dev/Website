@@ -3,7 +3,7 @@ import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {OrbitControls} from './vendor/OrbitControls.js';
 import {Placement,GazeReveal} from './placement.mjs';
 import {Features,titleSprite} from './features.js';
-import {Diagnostics} from './diagnostics.js?v=xr-diagnostic-2';
+import {Diagnostics} from './diagnostics.js?v=xr-frame-owner-3';
 const $=s=>document.querySelector(s),video=$('#camera'),view=$('#view'),overlay=$('#overlay');
 const preview=new URLSearchParams(location.search).get('mode')==='preview';
 const placement=new Placement(),gaze=new GazeReveal(),abort=new AbortController(),ray=new T.Raycaster();
@@ -62,10 +62,11 @@ function updateAnchor(frame){if(!frame||placement.mode!=='pinned')return;const r
  if(!frame.createAnchor||anchorPending||anchorRevision===placement.revision)return;
  const revision=placement.revision;anchorRevision=revision;anchorPending=true;const p=placement.position,q=placement.rotation;
  frame.createAnchor(new XRRigidTransform({x:p.x,y:p.y,z:p.z},{x:q.x,y:q.y,z:q.z,w:q.w}),ref).then(a=>{if(state==='closed'||revision!==placement.revision||placement.mode!=='pinned'){a.delete();return;}anchor=a;}).catch(()=>{/* local space remains world-fixed without an optional anchor */}).finally(()=>anchorPending=false);}
-function draw(time,frame){if(state==='closed')return;const dt=Math.min(.1,lastTime?(time-lastTime)/1000:0);lastTime=time;elapsed+=dt;
+function draw(time,frame,viewerPose){if(state==='closed')return;const dt=Math.min(.1,lastTime?(time-lastTime)/1000:0);lastTime=time;elapsed+=dt;
  // Immersive AR may hide its HTML document while the XR session remains visible.
  const active=mode==='world'?xrSession?.visibilityState!=='hidden':!document.hidden;
- if(state==='viewing'&&active){tracked=mode!=='world'||Boolean(frame?.getViewerPose(renderer.xr.getReferenceSpace()));
+ if(state==='viewing'&&active){const wasTracked=tracked;tracked=mode!=='world'||Boolean(viewerPose);
+  if(mode==='world'&&tracked&&!wasTracked)hint(placement.mode==='following'?'Tap terrain to pin. Walk closer to inspect.':'');
   if(tracked){if(mode==='world')renderer.xr.updateCamera(camera);if(controls?.enabled)controls.update();cameraPose();if(pendingPin){const p=pendingPin;pendingPin=null;pinAt(p.focus);}
    placement.update(dt,camPos,camQuat);updateAnchor(frame);group.position.copy(placement.position);group.quaternion.copy(placement.rotation);group.visible=tracked;group.updateMatrixWorld(true);
    if(mode==='preview'&&placement.mode==='pinned'&&controls&&!controls.enabled){controls.target.copy(placement.focus).applyQuaternion(group.quaternion).add(group.position);controls.enabled=true;}
@@ -74,7 +75,13 @@ function draw(time,frame){if(state==='closed')return;const dt=Math.min(.1,lastTi
    gaze.update(dt,looking,tracked&&(mode!=='world'||xrSession.visibilityState==='visible'));title.material.opacity=gaze.fade;title.position.y=.14+(1-gaze.fade)*.045;features.update(elapsed);
   }else{group.visible=false;hint('Tracking paused. Look around slowly to recover.');}}
  renderer.render(scene,camera);}
-function renderFrame(time,frame){if(state==='closed')return;try{diagnostics.beforeFrame(frame);draw(time,frame);diagnostics.paint();}catch(error){diagnostics.error(error);}}
+function renderFrame(time,frame){
+ if(state==='closed')return;
+ // Only the active XR session may update or render its scene. A leftover window
+ // callback has no XRFrame and must not clear tracking or touch the XR framebuffer.
+ if(mode==='world'&&(!frame||frame.session!==xrSession)){diagnostics.ignoredFrames++;return;}
+ try{const viewerPose=diagnostics.beforeFrame(frame);draw(time,frame,viewerPose);diagnostics.paint();}catch(error){diagnostics.error(error);}
+}
 async function scan(){if(!isSecureContext||!navigator.mediaDevices?.getUserMedia)throw Error('Use HTTPS and allow camera access.');
  stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:640},height:{ideal:480},frameRate:{ideal:24,max:30}}});if(state==='closed'){stopCamera();return;}
  video.srcObject=stream;await video.play();if(state==='closed')return;video.width=video.videoWidth;video.height=video.videoHeight;

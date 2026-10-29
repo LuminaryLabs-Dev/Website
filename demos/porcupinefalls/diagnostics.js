@@ -3,7 +3,7 @@ import * as T from './vendor/three.module.js';
 // Opt-in, local-only diagnostics. No camera frames or reports are uploaded.
 export class Diagnostics {
  constructor(enabled, readState, recenter) {
-  this.enabled=enabled;this.readState=readState;this.frames=0;this.xrFrames=0;this.poseFrames=0;this.lastError='';this.contextEvents=[];this.lastPaint=0;
+  this.enabled=enabled;this.readState=readState;this.frames=0;this.ignoredFrames=0;this.xrFrames=0;this.poseFrames=0;this.lastError='';this.contextEvents=[];this.lastPaint=0;
   this.panel=document.querySelector('#diagnostics');this.panel.hidden=!enabled;
   document.querySelector('#recenter').onclick=recenter;
   document.querySelector('#basic').onclick=()=>{
@@ -33,13 +33,14 @@ export class Diagnostics {
   this.frames++;if(!frame)return;this.xrFrames++;
   const pose=frame.getViewerPose(this.renderer.xr.getReferenceSpace());
   if(pose)this.poseFrames++;
-  if(this.marker){this.marker.visible=Boolean(pose);if(pose)this.marker.position.set(-.09,.04,-.45).applyMatrix4(new T.Matrix4().fromArray(pose.transform.matrix));}
+  if(this.marker){this.marker.visible=Boolean(pose);if(pose)this.marker.position.set(0,0,-.45).applyMatrix4(new T.Matrix4().fromArray(pose.transform.matrix));}
+  return pose;
  }
  snapshot(){
   const s=this.readState(),gl=this.renderer?.getContext();
   const framebuffer=gl&&!gl.isContextLost()?gl.checkFramebufferStatus(gl.FRAMEBUFFER).toString(16):'unavailable';
-  return {framebuffer,build:'xr-diagnostic-2',mode:s.mode,state:s.state,xrVisibility:s.xrVisibility,frames:this.frames,xrFrames:this.xrFrames,poseFrames:this.poseFrames,tracked:s.tracked,terrainVisible:s.terrainVisible,placement:s.placement,position:s.position,documentHidden:document.hidden,contextLost:gl?.isContextLost()??null,contextEvents:this.contextEvents,drawCalls:this.renderer?.info.render.calls??0,triangles:this.renderer?.info.render.triangles??0,layer:this.renderer?.xr.getBaseLayer()?.constructor.name??'none',basicTerrain:Boolean(this.basic),error:this.lastError};
+  return {framebuffer,build:'xr-frame-owner-3',mode:s.mode,state:s.state,xrVisibility:s.xrVisibility,frames:this.frames,ignoredFrames:this.ignoredFrames,xrFrames:this.xrFrames,poseFrames:this.poseFrames,tracked:s.tracked,terrainVisible:s.terrainVisible,placement:s.placement,position:s.position,documentHidden:document.hidden,contextLost:gl?.isContextLost()??null,contextEvents:this.contextEvents,drawCalls:this.renderer?.info.render.calls??0,triangles:this.renderer?.info.render.triangles??0,layer:this.renderer?.xr.getBaseLayer()?.constructor.name??'none',basicTerrain:Boolean(this.basic),error:this.lastError};
  }
- report(){const s=this.snapshot();return `Build ${s.build} | ${s.mode} | ${s.state}\nXR ${s.xrVisibility??'none'} | frames ${s.xrFrames} | poses ${s.poseFrames}\nTerrain ${s.terrainVisible?'shown':'hidden'} | ${s.placement}\nDraws ${s.drawCalls} | triangles ${s.triangles}\nContext ${s.contextLost?'LOST':'OK'} | ${s.layer} | FBO ${s.framebuffer}\nPosition ${s.position.map(n=>n.toFixed(2)).join(', ')}\nPage hidden ${s.documentHidden} | ${s.contextEvents.join(', ')||'no context resets'}${s.error?'\nERROR '+s.error:''}`;}
+ report(){const s=this.snapshot();return `Build ${s.build} | ${s.mode} | ${s.state}\nXR ${s.xrVisibility??'none'} | frames ${s.xrFrames} | poses ${s.poseFrames}\nIgnored webpage frames ${s.ignoredFrames}\nTerrain ${s.terrainVisible?'shown':'hidden'} | ${s.placement}\nDraws ${s.drawCalls} | triangles ${s.triangles}\nContext ${s.contextLost?'LOST':'OK'} | ${s.layer} | FBO ${s.framebuffer}\nPosition ${s.position.map(n=>n.toFixed(2)).join(', ')}\nPage hidden ${s.documentHidden} | ${s.contextEvents.join(', ')||'no context resets'}${s.error?'\nERROR '+s.error:''}`;}
  paint(force=false){if(!this.enabled)return;const now=performance.now();if(!force&&now-this.lastPaint<500)return;this.lastPaint=now;document.querySelector('#diagnostic-text').textContent=this.report();}
 }

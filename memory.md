@@ -323,3 +323,16 @@ Public static apps can live under `/apps/` when they are generated outputs from 
 - Added opt-in ?debug=1 diagnostics: real XR frame/pose counts, layer, draw calls/triangles, context/framebuffer status, placement position and error messages. Includes independent pink MeshBasicMaterial marker positioned directly from XR viewer pose, recenter, plain double-sided terrain material toggle, and Copy status. Reports stay local and no camera data is uploaded.
 - Rendering continues for visible-blurred XR frames; attention timing still only counts fully visible sessions. Runtime frame errors and shader errors now surface instead of silently stopping without explanation.
 - Local normal-camera checks and simulated-XR diagnostic controls pass. Exact physical-phone failure remains unconfirmed pending its diagnostic status and reference-cube visibility.
+
+
+## 2026-10-28 Persistent tracking-paused report
+- User tested xr-diagnostic-2 and reports it remains on the tracking-lost/turn-slowly message. Exact Copy status text and pink-cube visibility are still missing.
+- Source inspection: that hint is emitted only when draw() has no XR frame/viewer pose; anchor pose failure does not emit that hint. This narrows the immediate symptom to viewer-pose availability or frame delivery, before mesh rendering. Do not claim a graphics/material fix or infer permanent hardware incompatibility without the counts.
+- Requested existing Copy status text and reference-cube visibility. No further speculative live patch published; the existing pre-XR camera mode is known to render terrain on the user's phone.
+
+
+## 2026-10-28 Valid poses but terrain hidden — corrected evidence
+- User corrected the initial zero-pose report: poses continuously increase, yet the diagnostic panel says Terrain hidden. Pink cube was not seen. Zero tracking poses and permanent hardware incompatibility are NOT established; camera-mode fallback was not implemented.
+- Reproduced the valid-pose/hidden-terrain combination by interleaving a callback without XRFrame into the actual XR render loop. It overwrote tracked=false, hid terrain, and displayed the lost-tracking message despite valid session poses. This is a confirmed application defect and a candidate explanation for the phone; device callback counts still require confirmation.
+- Fix: only callbacks from the active XR session can update/render during spatial AR; diagnostics and drawing share one sampled viewer pose. Recovered tracking clears the stale warning. Centered the independent pink diagnostic marker so a narrow portrait field of view cannot place it offscreen; added ignored webpage frame count.
+- Validation: failure reproduced before fix; corrected runtime passes interleaved callback, framebuffer terrain visibility, follow, pin, true tracking loss/recovery, and close checks. Ordinary image recognition/camera cleanup also pass. Physical-phone result remains unverified.
