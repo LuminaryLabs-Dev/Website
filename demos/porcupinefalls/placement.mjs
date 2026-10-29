@@ -10,7 +10,7 @@ export class Placement {
   this.mode='placing';this.revision++;this.focus.copy(focus);
   const heading=this.heading(cameraRotation),yaw=Math.atan2(-heading.x,-heading.z);
   this.targetRotation.setFromAxisAngle(UP,yaw);
-  this.target.copy(cameraPosition).addScaledVector(heading,distance);this.target.y-=.28;
+  this.target.copy(cameraPosition).addScaledVector(heading,distance);this.target.y-=Math.min(.28,distance*.22);
   this.target.sub(focus.clone().applyQuaternion(this.targetRotation));
  }
  update(dt,cameraPosition,cameraRotation){
