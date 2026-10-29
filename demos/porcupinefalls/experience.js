@@ -3,12 +3,14 @@ import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {OrbitControls} from './vendor/OrbitControls.js';
 import {Placement,GazeReveal} from './placement.mjs';
 import {Features,titleSprite} from './features.js';
-import {Diagnostics} from './diagnostics.js?v=xr-persistent-4';
+import {SpatialRenderer} from './spatial-renderer.js?v=xr-direct-5';
+import {Diagnostics} from './diagnostics.js?v=xr-direct-5';
 const $=s=>document.querySelector(s),video=$('#camera'),view=$('#view'),overlay=$('#overlay');
 const preview=new URLSearchParams(location.search).get('mode')==='preview';
 const placement=new Placement(),gaze=new GazeReveal(),abort=new AbortController(),ray=new T.Raycaster();
 const camPos=new T.Vector3(),camQuat=new T.Quaternion(),viewerMatrix=new T.Matrix4();
 let state='loading',mode=preview?'preview':'camera',stream,controller,recognizing=false,renderer,scene,camera,group,model,features,terrain,title,controls;
+let spatial=null;
 let xrSession=null,anchor=null,anchorPending=false,anchorRevision=-1,pendingPin=null,worldSupported=false;
 let lastTime=0,gazeCheck=0,looking=false,tracked=true,gyroBase=null,elapsed=0,selectedId=null;
 const diagnostics=new Diagnostics(new URLSearchParams(location.search).has('debug'),()=>({state,mode,tracked,terrainVisible:group?.visible,xrVisibility:xrSession?.visibilityState??null,placement:placement.mode,position:placement.position.toArray()}),()=>{if(state!=='viewing')return;disposeAnchor();pendingPin=null;placement.follow();placement.initialized=false;updatePinLabel();hint('Terrain recentered in front of you.');});
@@ -16,11 +18,11 @@ function status(s){state=s;document.body.dataset.state=s;}
 function hint(s){$('#hint').textContent=s;$('#hint').style.opacity=s?1:0;}
 function stopCamera(){stream?.getTracks().forEach(t=>t.stop());stream=null;video.srcObject=null;}
 function disposeAnchor(){anchor?.delete();anchor=null;anchorRevision=-1;}
-function close(){if(state==='closed')return;status('closed');if(group)group.visible=false;abort.abort();stopCamera();disposeAnchor();xrSession?.end().catch(()=>{});renderer?.setAnimationLoop(null);if(!recognizing)controller?.dispose();controls?.dispose();renderer?.dispose();removeEventListener('deviceorientation',orientation);}
+function close(){if(state==='closed')return;status('closed');if(group)group.visible=false;abort.abort();stopCamera();disposeAnchor();spatial?.stop();xrSession?.end().catch(()=>{});renderer?.setAnimationLoop(null);if(!recognizing)controller?.dispose();controls?.dispose();renderer?.dispose();removeEventListener('deviceorientation',orientation);}
 addEventListener('pagehide',close);addEventListener('message',e=>{if(e.origin===location.origin&&e.data?.type==='close-experience')close();});
 $('#exit').onclick=()=>{close();parent.postMessage({type:'experience-closed'},location.origin);};
 function canPin(){return mode==='world'||mode==='preview';}
-function currentCamera(){if(mode!=='world')return camera;const xrCamera=renderer.xr.getCamera();return xrCamera.cameras[0]??xrCamera;}
+function currentCamera(){return camera;}
 function cameraPose(){const c=currentCamera();c.getWorldPosition(camPos);c.getWorldQuaternion(camQuat);return c;}
 function updatePinLabel(){$('#pin').textContent=!canPin()?'Pin unavailable':placement.mode==='following'?'Pin here':'Follow';}
 function show(){status('viewing');group.visible=true;$('#reticle').hidden=true;$('#pin').hidden=false;
@@ -49,15 +51,15 @@ function orientation(e){if(mode!=='camera'||e.alpha===null||state!=='viewing')re
 addEventListener('deviceorientation',orientation);
 async function enterWorld(){if(state!=='viewing'||xrSession||$('#enter').disabled)return;$('#enter').disabled=true;
  // Request synchronously inside the tap gesture; release the scan camera before XR owns it.
- try{const request=navigator.xr.requestSession('immersive-ar',{requiredFeatures:['local'],optionalFeatures:['local-floor','anchors','dom-overlay'],domOverlay:{root:overlay}});stopCamera();
- const session=await request;if(state==='closed'){await session.end();return;}xrSession=session;renderer.xr.setReferenceSpaceType('local');await renderer.xr.setSession(session);if(state==='closed'){await session.end().catch(()=>{});return;}
+ try{stopCamera();const request=navigator.xr.requestSession('immersive-ar',{requiredFeatures:['local'],optionalFeatures:['local-floor','anchors','dom-overlay'],domOverlay:{root:overlay}});
+ const session=await request;if(state==='closed'){await session.end();return;}xrSession=session;session.addEventListener('end',()=>{spatial.stop();xrSession=null;if(state!=='closed'){close();parent.postMessage({type:'experience-closed'},location.origin);}});renderer.setAnimationLoop(null);if(!await spatial.prepare(session))return;if(state==='closed'){await session.end().catch(()=>{});return;}
  mode='world';tracked=false;lastTime=0;$('#exit').hidden=false;placement.initialized=false;placement.follow();$('#enter').hidden=true;overlay.style.pointerEvents='auto';video.hidden=true;hint('Tap terrain to pin. Walk closer to inspect.');updatePinLabel();
- renderer.xr.getReferenceSpace().addEventListener('reset',()=>{disposeAnchor();placement.follow();placement.initialized=false;hint('Tracking origin changed. Tap to pin again.');updatePinLabel();});
- session.addEventListener('select',e=>{if(session.domOverlayState)return;const pose=e.frame.getPose(e.inputSource.targetRaySpace,renderer.xr.getReferenceSpace());if(!pose)return;const m=new T.Matrix4().fromArray(pose.transform.matrix);ray.ray.origin.setFromMatrixPosition(m);ray.ray.direction.set(0,0,-1).transformDirection(m);selectRay();});
- session.addEventListener('end',()=>{xrSession=null;if(state!=='closed'){close();parent.postMessage({type:'experience-closed'},location.origin);}});
+ spatial.referenceSpace.addEventListener('reset',()=>{disposeAnchor();placement.follow();placement.initialized=false;hint('Tracking origin changed. Tap to pin again.');updatePinLabel();});
+ session.addEventListener('select',e=>{if(session.domOverlayState)return;const pose=e.frame.getPose(e.inputSource.targetRaySpace,spatial.referenceSpace);if(!pose)return;const m=new T.Matrix4().fromArray(pose.transform.matrix);ray.ray.origin.setFromMatrixPosition(m);ray.ray.direction.set(0,0,-1).transformDirection(m);selectRay();});
+ spatial.start(renderFrame);
  }catch(e){if(state==='closed')return;$('#enter').disabled=false;hint('Spatial AR could not start. Close and retry with Google Play Services for AR enabled.');$('#error').hidden=false;$('#error').textContent=e.message||'Spatial AR is unavailable.';}}
 $('#enter').onclick=enterWorld;
-function updateAnchor(frame){if(!frame||placement.mode!=='pinned')return;const ref=renderer.xr.getReferenceSpace();
+function updateAnchor(frame){if(!frame||placement.mode!=='pinned')return;const ref=spatial.referenceSpace;
  if(anchor){const pose=frame.getPose(anchor.anchorSpace,ref);if(!pose)return;placement.position.set(pose.transform.position.x,pose.transform.position.y,pose.transform.position.z);return;}
  if(!frame.createAnchor||anchorPending||anchorRevision===placement.revision)return;
  const revision=placement.revision;anchorRevision=revision;anchorPending=true;const p=placement.position,q=placement.rotation;
@@ -74,7 +76,7 @@ function draw(time,frame,viewerPose){
     // and the renderer's derived eye cameras.
     viewerMatrix.fromArray(viewerPose.transform.matrix);
     camPos.setFromMatrixPosition(viewerMatrix);camQuat.setFromRotationMatrix(viewerMatrix);
-    renderer.xr.updateCamera(camera);
+    if(viewerPose.views[0])spatial.updateCamera(viewerPose.views[0]);
     if(!wasTracked)hint(placement.mode==='following'?'Tap terrain to pin. Walk closer to inspect.':'');
    }else{if(controls?.enabled)controls.update();cameraPose();}
    if(pendingPin){const p=pendingPin;pendingPin=null;pinAt(p.focus);}
@@ -90,13 +92,13 @@ function draw(time,frame,viewerPose){
   }
   title.material.opacity=gaze.fade;title.position.y=.14+(1-gaze.fade)*.045;features.update(elapsed);
  }
- renderer.render(scene,camera);
+ if(mode==='world')spatial.render(scene,viewerPose);else renderer.render(scene,camera);
 }
 function renderFrame(time,frame){
  if(state==='closed')return;
  if(mode==='world'&&(!frame||frame.session!==xrSession)){diagnostics.ignoredFrames++;return;}
  try{
-  const viewerPose=mode==='world'?frame.getViewerPose(renderer.xr.getReferenceSpace()):null;
+  const viewerPose=mode==='world'?frame.getViewerPose(spatial.referenceSpace):null;
   draw(time,frame,viewerPose);
   // Diagnostics observes the same pose after rendering; it cannot gate content.
   diagnostics.observeFrame(frame,viewerPose);diagnostics.paint();
@@ -111,10 +113,13 @@ async function scan(){if(!isSecureContext||!navigator.mediaDevices?.getUserMedia
  while(state==='scanning'){if(document.hidden){await new Promise(r=>setTimeout(r,200));continue;}recognizing=true;
  try{const {featurePoints}=await controller.detect(video);if(state!=='scanning')break;const result=await controller.match(featurePoints,0);if(state!=='scanning')break;matches=result.modelViewTransform?matches+1:0;if(matches>=2)show();}finally{recognizing=false;}
  if(state==='scanning')await new Promise(r=>setTimeout(r,100));}controller.dispose();controller=null;}
-async function main(){renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.xr.enabled=true;view.append(renderer.domElement);
- scene=new T.Scene();camera=new T.PerspectiveCamera(45,1,.01,30);scene.add(camera);scene.add(new T.HemisphereLight(0xffffff,0x65735c,1));const sun=new T.DirectionalLight(0xffffff,1.5);sun.position.set(-1,2,1);scene.add(sun);
+async function main(){
+ const canvas=document.createElement('canvas'),context=canvas.getContext('webgl',{alpha:true,antialias:false,depth:true,stencil:false,xrCompatible:true,preserveDrawingBuffer:true});
+ if(!context)throw Error('WebGL graphics are unavailable.');
+ renderer=new T.WebGLRenderer({canvas,context,alpha:true,antialias:false,stencil:false,preserveDrawingBuffer:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.xr.enabled=false;view.append(renderer.domElement);
+ scene=new T.Scene();camera=new T.PerspectiveCamera(45,1,.01,30);scene.add(camera);spatial=new SpatialRenderer(renderer,camera);scene.add(new T.HemisphereLight(0xffffff,0x65735c,1));const sun=new T.DirectionalLight(0xffffff,1.5);sun.position.set(-1,2,1);scene.add(sun);
  const [gltf,data,supported]=await Promise.all([new GLTFLoader().loadAsync('./assets/porcupine-mobile.glb'),fetch('./assets/features.json',{signal:abort.signal}).then(r=>{if(!r.ok)throw Error('Map details could not load.');return r.json();}),navigator.xr?.isSessionSupported('immersive-ar').catch(()=>false)??false]);if(state==='closed')return;
- worldSupported=supported;model=gltf.scene;features=new Features(model,data);terrain=model.getObjectByName('Terrain_100k');group=new T.Group();group.add(model);scene.add(group);group.visible=false;diagnostics.attach(renderer,scene,terrain);
+ worldSupported=supported;model=gltf.scene;features=new Features(model,data);terrain=model.getObjectByName('Terrain_100k');group=new T.Group();group.add(model);scene.add(group);group.visible=false;diagnostics.attach(renderer,scene,terrain,spatial);
  const center=new T.Box3().setFromObject(terrain).getCenter(new T.Vector3());model.position.sub(center);title=titleSprite();group.add(title);
  const resize=()=>{if(mode==='world')return;renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();};addEventListener('resize',resize);resize();
  if(preview){document.body.style.background='radial-gradient(circle at 50% 40%,#385245,#10261f)';const distance=Math.max(1.07,.65/(2*Math.tan(T.MathUtils.degToRad(45/2))*camera.aspect*.85));camera.position.set(0,.65,.85).normalize().multiplyScalar(distance);camera.lookAt(0,0,0);controls=new OrbitControls(camera,view);controls.enableDamping=true;controls.enablePan=false;controls.minDistance=.12;controls.maxDistance=2;controls.maxPolarAngle=Math.PI/2-.05;show();}else await scan();

@@ -18,7 +18,8 @@ export class Diagnostics {
   addEventListener('error',e=>this.error(e.error??e.message));
   addEventListener('unhandledrejection',e=>this.error(e.reason));
  }
- attach(renderer,scene,terrain){
+ attach(renderer,scene,terrain,spatial){
+  this.spatial=spatial;
   this.renderer=renderer;this.terrain=terrain;
   renderer.domElement.addEventListener('webglcontextlost',()=>{this.contextEvents.push('lost');this.error('Graphics context lost');});
   renderer.domElement.addEventListener('webglcontextrestored',()=>{this.contextEvents.push('restored');if(this.lastError==='Graphics context lost'){this.lastError='';document.querySelector('#error').hidden=true;}});
@@ -37,8 +38,8 @@ export class Diagnostics {
  snapshot(){
   const s=this.readState(),gl=this.renderer?.getContext();
   const framebuffer=gl&&!gl.isContextLost()?gl.checkFramebufferStatus(gl.FRAMEBUFFER).toString(16):'unavailable';
-  return {framebuffer,build:'xr-persistent-4',mode:s.mode,state:s.state,xrVisibility:s.xrVisibility,frames:this.frames,ignoredFrames:this.ignoredFrames,xrFrames:this.xrFrames,poseFrames:this.poseFrames,tracked:s.tracked,terrainVisible:s.terrainVisible,placement:s.placement,position:s.position,documentHidden:document.hidden,contextLost:gl?.isContextLost()??null,contextEvents:this.contextEvents,drawCalls:this.renderer?.info.render.calls??0,triangles:this.renderer?.info.render.triangles??0,layer:this.renderer?.xr.getBaseLayer()?.constructor.name??'none',basicTerrain:Boolean(this.basic),error:this.lastError};
+  return {framebuffer,build:'xr-direct-5',mode:s.mode,state:s.state,xrVisibility:s.xrVisibility,frames:this.frames,ignoredFrames:this.ignoredFrames,xrFrames:this.xrFrames,poseFrames:this.poseFrames,tracked:s.tracked,terrainVisible:s.terrainVisible,placement:s.placement,position:s.position,documentHidden:document.hidden,contextLost:gl?.isContextLost()??null,contextEvents:this.contextEvents,drawCalls:this.renderer?.info.render.calls??0,triangles:this.renderer?.info.render.triangles??0,layer:this.spatial?.layer?.constructor.name??'none',graphicsError:this.spatial?.errorCode??0,basicTerrain:Boolean(this.basic),error:this.lastError};
  }
- report(){const s=this.snapshot();return `Build ${s.build} | ${s.mode} | ${s.state}\nXR ${s.xrVisibility??'none'} | frames ${s.xrFrames} | poses ${s.poseFrames}\nIgnored webpage frames ${s.ignoredFrames}\nTerrain ${s.terrainVisible?'shown':'hidden'} | ${s.placement}\nDraws ${s.drawCalls} | triangles ${s.triangles}\nContext ${s.contextLost?'LOST':'OK'} | ${s.layer} | FBO ${s.framebuffer}\nPosition ${s.position.map(n=>n.toFixed(2)).join(', ')}\nPage hidden ${s.documentHidden} | ${s.contextEvents.join(', ')||'no context resets'}${s.error?'\nERROR '+s.error:''}`;}
+ report(){const s=this.snapshot();return `Build ${s.build} | ${s.mode} | ${s.state}\nXR ${s.xrVisibility??'none'} | frames ${s.xrFrames} | poses ${s.poseFrames}\nIgnored webpage frames ${s.ignoredFrames}\nTerrain ${s.terrainVisible?'shown':'hidden'} | ${s.placement}\nDraws ${s.drawCalls} | triangles ${s.triangles}\nContext ${s.contextLost?'LOST':'OK'} | ${s.layer} | FBO ${s.framebuffer} | GL ${s.graphicsError.toString(16)}\nPosition ${s.position.map(n=>n.toFixed(2)).join(', ')}\nPage hidden ${s.documentHidden} | ${s.contextEvents.join(', ')||'no context resets'}${s.error?'\nERROR '+s.error:''}`;}
  paint(force=false){if(!this.enabled)return;const now=performance.now();if(!force&&now-this.lastPaint<500)return;this.lastPaint=now;document.querySelector('#diagnostic-text').textContent=this.report();}
 }

@@ -24,7 +24,7 @@ Terrain: 99,899 triangles, 106,180 total including trails/skirt; two embedded 20
 
 Sources: [Trail Finder GPX](https://www.trailfinder.info/trails/trail/porcupine-falls-trail-at-calhoun-family-forest) and [USGS 3DEP](https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer). Seven downloaded segments; newer orange/white routes are not included. Trail widths are enlarged for readability. `assets/features.json` contains source-derived local coordinates and nine landmarks. Lengths are approximate horizontal GPX distances; endpoint descriptions are inferred from nearby source waypoints and network connections. The source's unnamed cultural point is deliberately described without guessing a structure.
 
-`placement.mjs` owns follow/pin pose and attention timing; `features.js` owns picking, highlight, and particles; `experience.js` owns the camera/XR lifetime and UI. Repeated selection is a no-op; stale async anchor requests are discarded after state changes.
+`placement.mjs` owns follow/pin pose and attention timing; `features.js` owns picking, highlight, and particles; `experience.js` owns the camera/session lifetime and UI; `spatial-renderer.js` owns the native XR frame loop, view camera and base-layer drawing. Repeated selection is a no-op; stale async anchor requests are discarded after state changes.
 
 ## Validation
 
@@ -53,3 +53,10 @@ The user subsequently confirmed increasing pose counts with Terrain hidden. A re
 Terrain scene lifetime is owned by recognition and Close. Recognition reveals one model instance; entering XR, temporary viewer-pose loss, and missing optional anchor poses do not hide or recreate it. Valid viewer matrices update its follow/pin placement directly. Missing viewer poses pause transform updates and gaze timing while retaining the last terrain transform; missing anchor poses retain the last anchored transform in local space. The XR runtime controls whether frames can be presented while device tracking is unavailable. Diagnostics observes the pose after rendering and has no control over terrain placement or visibility. Closing explicitly hides and disposes the experience.
 
 Regression checks assert the same terrain instance remains visible and fixed during simulated tracking loss, then resumes following after recovery. Selection, title timing, particles, camera recognition and cleanup also pass. Physical Moto G64 presentation still needs confirmation.
+
+
+### Direct XR graphics path
+
+The user can select the unseen terrain, and neither a basic material nor a simple reference cube appears. Spatial rendering now follows the explicit framebuffer approach in [Google's WebXR guide](https://developers.google.com/ar/develop/webxr/hello-webxr). A WebGL 1 context with antialiasing disabled renders into an XRWebGLLayer; native session frames own the loop, view matrices configure the camera, and the runtime framebuffer is explicitly bound before clearing and drawing. The optional diagnostics report GL error status. Three.js still draws the full existing model and features; its XR-manager layer integration is bypassed.
+
+The desktop harness uses a distinct real framebuffer with color/depth attachments, verifies the active binding and nontransparent terrain pixels, and reports GL error 0. Both prior and new paths pass desktop simulation; this is a compatibility change awaiting physical phone confirmation, not a demonstrated fix for that GPU.
