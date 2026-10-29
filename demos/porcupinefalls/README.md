@@ -36,3 +36,8 @@ Desktop Chrome checks: real image-feature recognition using a synthetic webcam, 
 ### Immersive visibility regression
 
 Immersive rendering uses `XRSession.visibilityState`, independently of the HTML document visibility. Entering XR hides the old camera-relative terrain until a valid tracked pose places it. A simulated XR session reproduced the prior failure with a hidden document and a translated/rotated viewer: zero terrain pixels and the model stranded outside the view. After the fix, the real Three.js XR pipeline renders terrain pixels; follow, pin, tracking loss/recovery, and session close pass. The test uses simulated poses and a desktop WebGL framebuffer, not physical AR hardware. Experience HTML and its entry module use a release query to bypass old cached versions.
+
+
+### Phone diagnostic view
+
+The user confirms the terrain renders before spatial AR and disappears on entry; the visibility fix did not resolve that physical-phone failure. Open the landing page with `?debug=1` to inspect the transition. The optional panel shows frame/pose counts, draw calls, graphics context/framebuffer state, and runtime/shader errors. Its pink cube uses a simple material and raw XR viewer pose independently of terrain placement. Recenter and Basic terrain help distinguish placement from model-material failures. Copy status copies text locally; no telemetry or camera images are transmitted. Diagnostics are absent from the normal interface. The exact phone cause still requires this runtime evidence.

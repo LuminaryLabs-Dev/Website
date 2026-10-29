@@ -316,3 +316,10 @@ Public static apps can live under `/apps/` when they are generated outputs from 
 - Confirmed code defect: draw() gated all placement updates on !document.hidden. Immersive XR session visibility is independent. Reproduction using simulated XR poses through the real Three.js XR renderer showed zero terrain pixels and terrain left at its pre-XR pose outside the new view. No direct phone telemetry was available, so the exact phone cause still requires user confirmation.
 - Fix: gate immersive updates on XRSession.visibilityState, keep webpage visibility for ordinary viewing, and hide stale terrain until the first valid XR pose. Added release query strings so a fresh launch loads the corrected entry files.
 - Validation: simulated XR framebuffer has visible terrain after the fix; follow, fixed pin, tracking loss/recovery, and close pass. Non-XR synthetic-camera recognition, target-loss persistence, damped following, unsupported-pin fallback, and camera cleanup also pass. Physical-phone confirmation remains outstanding.
+
+
+## 2026-10-28 Phone-specific immersive rendering investigation
+- User confirms terrain renders after image recognition, then disappears only when entering spatial AR. Camera, Pin here and Close remain visible. The prior HTML-visibility regression fix did not resolve the actual phone failure; it must not be described as a verified phone fix.
+- Added opt-in ?debug=1 diagnostics: real XR frame/pose counts, layer, draw calls/triangles, context/framebuffer status, placement position and error messages. Includes independent pink MeshBasicMaterial marker positioned directly from XR viewer pose, recenter, plain double-sided terrain material toggle, and Copy status. Reports stay local and no camera data is uploaded.
+- Rendering continues for visible-blurred XR frames; attention timing still only counts fully visible sessions. Runtime frame errors and shader errors now surface instead of silently stopping without explanation.
+- Local normal-camera checks and simulated-XR diagnostic controls pass. Exact physical-phone failure remains unconfirmed pending its diagnostic status and reference-cube visibility.

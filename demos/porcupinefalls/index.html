@@ -6,7 +6,7 @@
 <section id="session" hidden><button id="close" aria-label="Close experience">✕ Close</button></section>
 <script type="module">
 const home=document.querySelector('#home'), panel=document.querySelector('#session');let frame=null;
-function open(mode){if(frame)return;home.hidden=true;panel.hidden=false;frame=document.createElement('iframe');frame.title='Porcupine Falls '+(mode==='scan'?'AR':'3D preview');frame.allow='camera; fullscreen; xr-spatial-tracking';frame.src='experience.html?mode='+mode+'&v=xr-visibility-1';panel.prepend(frame);document.querySelector('#close').focus();}
+function open(mode){if(frame)return;home.hidden=true;panel.hidden=false;frame=document.createElement('iframe');frame.title='Porcupine Falls '+(mode==='scan'?'AR':'3D preview');frame.allow='camera; fullscreen; xr-spatial-tracking';frame.src='experience.html?mode='+mode+'&v=xr-diagnostic-2'+(new URLSearchParams(location.search).has('debug')?'&debug=1':'');panel.prepend(frame);document.querySelector('#close').focus();}
 function close(){if(!frame)return;frame.contentWindow?.postMessage({type:'close-experience'},location.origin);frame.remove();frame=null;panel.hidden=true;home.hidden=false;document.querySelector('#start').focus();}
 document.querySelector('#start').onclick=()=>open('scan');document.querySelector('#preview').onclick=()=>open('preview');document.querySelector('#close').onclick=close;addEventListener('keydown',e=>{if(e.key==='Escape')close()});addEventListener('pagehide',close);addEventListener('message',e=>{if(e.origin===location.origin&&e.source===frame?.contentWindow&&e.data?.type==='experience-closed')close()});
 </script></body></html>

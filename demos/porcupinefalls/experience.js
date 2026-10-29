@@ -3,6 +3,7 @@ import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {OrbitControls} from './vendor/OrbitControls.js';
 import {Placement,GazeReveal} from './placement.mjs';
 import {Features,titleSprite} from './features.js';
+import {Diagnostics} from './diagnostics.js?v=xr-diagnostic-2';
 const $=s=>document.querySelector(s),video=$('#camera'),view=$('#view'),overlay=$('#overlay');
 const preview=new URLSearchParams(location.search).get('mode')==='preview';
 const placement=new Placement(),gaze=new GazeReveal(),abort=new AbortController(),ray=new T.Raycaster();
@@ -10,6 +11,7 @@ const camPos=new T.Vector3(),camQuat=new T.Quaternion();
 let state='loading',mode=preview?'preview':'camera',stream,controller,recognizing=false,renderer,scene,camera,group,model,features,terrain,title,controls;
 let xrSession=null,anchor=null,anchorPending=false,anchorRevision=-1,pendingPin=null,worldSupported=false;
 let lastTime=0,gazeCheck=0,looking=false,tracked=true,gyroBase=null,elapsed=0,selectedId=null;
+const diagnostics=new Diagnostics(new URLSearchParams(location.search).has('debug'),()=>({state,mode,tracked,terrainVisible:group?.visible,xrVisibility:xrSession?.visibilityState??null,placement:placement.mode,position:placement.position.toArray()}),()=>{if(state!=='viewing')return;disposeAnchor();pendingPin=null;placement.follow();placement.initialized=false;updatePinLabel();hint('Terrain recentered in front of you.');});
 function status(s){state=s;document.body.dataset.state=s;}
 function hint(s){$('#hint').textContent=s;$('#hint').style.opacity=s?1:0;}
 function stopCamera(){stream?.getTracks().forEach(t=>t.stop());stream=null;video.srcObject=null;}
@@ -62,16 +64,17 @@ function updateAnchor(frame){if(!frame||placement.mode!=='pinned')return;const r
  frame.createAnchor(new XRRigidTransform({x:p.x,y:p.y,z:p.z},{x:q.x,y:q.y,z:q.z,w:q.w}),ref).then(a=>{if(state==='closed'||revision!==placement.revision||placement.mode!=='pinned'){a.delete();return;}anchor=a;}).catch(()=>{/* local space remains world-fixed without an optional anchor */}).finally(()=>anchorPending=false);}
 function draw(time,frame){if(state==='closed')return;const dt=Math.min(.1,lastTime?(time-lastTime)/1000:0);lastTime=time;elapsed+=dt;
  // Immersive AR may hide its HTML document while the XR session remains visible.
- const active=mode==='world'?xrSession?.visibilityState==='visible':!document.hidden;
+ const active=mode==='world'?xrSession?.visibilityState!=='hidden':!document.hidden;
  if(state==='viewing'&&active){tracked=mode!=='world'||Boolean(frame?.getViewerPose(renderer.xr.getReferenceSpace()));
   if(tracked){if(mode==='world')renderer.xr.updateCamera(camera);if(controls?.enabled)controls.update();cameraPose();if(pendingPin){const p=pendingPin;pendingPin=null;pinAt(p.focus);}
    placement.update(dt,camPos,camQuat);updateAnchor(frame);group.position.copy(placement.position);group.quaternion.copy(placement.rotation);group.visible=tracked;group.updateMatrixWorld(true);
    if(mode==='preview'&&placement.mode==='pinned'&&controls&&!controls.enabled){controls.target.copy(placement.focus).applyQuaternion(group.quaternion).add(group.position);controls.enabled=true;}
    if(mode==='world'&&placement.mode==='pinned')hint('');
    if(time-gazeCheck>150){gazeCheck=time;ray.setFromCamera(new T.Vector2(),currentCamera());looking=ray.intersectObject(terrain,false).length>0;}
-   gaze.update(dt,looking,tracked);title.material.opacity=gaze.fade;title.position.y=.14+(1-gaze.fade)*.045;features.update(elapsed);
+   gaze.update(dt,looking,tracked&&(mode!=='world'||xrSession.visibilityState==='visible'));title.material.opacity=gaze.fade;title.position.y=.14+(1-gaze.fade)*.045;features.update(elapsed);
   }else{group.visible=false;hint('Tracking paused. Look around slowly to recover.');}}
  renderer.render(scene,camera);}
+function renderFrame(time,frame){if(state==='closed')return;try{diagnostics.beforeFrame(frame);draw(time,frame);diagnostics.paint();}catch(error){diagnostics.error(error);}}
 async function scan(){if(!isSecureContext||!navigator.mediaDevices?.getUserMedia)throw Error('Use HTTPS and allow camera access.');
  stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:640},height:{ideal:480},frameRate:{ideal:24,max:30}}});if(state==='closed'){stopCamera();return;}
  video.srcObject=stream;await video.play();if(state==='closed')return;video.width=video.videoWidth;video.height=video.videoHeight;
@@ -83,11 +86,12 @@ async function scan(){if(!isSecureContext||!navigator.mediaDevices?.getUserMedia
 async function main(){renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.xr.enabled=true;view.append(renderer.domElement);
  scene=new T.Scene();camera=new T.PerspectiveCamera(45,1,.01,30);scene.add(camera);scene.add(new T.HemisphereLight(0xffffff,0x65735c,1));const sun=new T.DirectionalLight(0xffffff,1.5);sun.position.set(-1,2,1);scene.add(sun);
  const [gltf,data,supported]=await Promise.all([new GLTFLoader().loadAsync('./assets/porcupine-mobile.glb'),fetch('./assets/features.json',{signal:abort.signal}).then(r=>{if(!r.ok)throw Error('Map details could not load.');return r.json();}),navigator.xr?.isSessionSupported('immersive-ar').catch(()=>false)??false]);if(state==='closed')return;
- worldSupported=supported;model=gltf.scene;features=new Features(model,data);terrain=model.getObjectByName('Terrain_100k');group=new T.Group();group.add(model);scene.add(group);group.visible=false;
+ worldSupported=supported;model=gltf.scene;features=new Features(model,data);terrain=model.getObjectByName('Terrain_100k');group=new T.Group();group.add(model);scene.add(group);group.visible=false;diagnostics.attach(renderer,scene,terrain);
  const center=new T.Box3().setFromObject(terrain).getCenter(new T.Vector3());model.position.sub(center);title=titleSprite();group.add(title);
  const resize=()=>{if(mode==='world')return;renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();};addEventListener('resize',resize);resize();
  if(preview){document.body.style.background='radial-gradient(circle at 50% 40%,#385245,#10261f)';const distance=Math.max(1.07,.65/(2*Math.tan(T.MathUtils.degToRad(45/2))*camera.aspect*.85));camera.position.set(0,.65,.85).normalize().multiplyScalar(distance);camera.lookAt(0,0,0);controls=new OrbitControls(camera,view);controls.enableDamping=true;controls.enablePan=false;controls.minDistance=.12;controls.maxDistance=2;controls.maxPolarAngle=Math.PI/2-.05;show();}else await scan();
- if(state!=='closed')renderer.setAnimationLoop(draw);}
+ if(state!=='closed')renderer.setAnimationLoop(renderFrame);}
 // Read-only inspection supports repeatable interaction checks, without simulating real device poses.
+export function inspectDiagnostics(){return diagnostics.snapshot();}
 export function inspect(){return {state,mode,tracked,terrainVisible:group?.visible,xrVisibility:xrSession?.visibilityState??null,placement:placement.mode,position:placement.position.toArray(),scale:group?.scale.toArray(),titleRevealed:gaze.revealed,titleOpacity:gaze.fade,selectedId,particles:features?.particles?.geometry.attributes.position.count??0,canPin:canPin(),pickables:features?.items.map(i=>{const p=model.localToWorld((i.points?.[Math.floor(i.points.length*.5)]??i.center).clone()).project(currentCamera());return{id:i.id,x:(p.x+1)/2*innerWidth,y:(1-p.y)/2*innerHeight};})};}
 main().catch(e=>{if(state==='closed')return;status('error');stopCamera();controller?.dispose();$('#reticle').hidden=true;$('#error').hidden=false;$('#error').textContent=e.name==='NotAllowedError'?'Camera permission denied. Close, allow camera access, and retry.':e.message;console.error(e);});
