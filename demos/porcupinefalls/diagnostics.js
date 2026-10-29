@@ -29,17 +29,15 @@ export class Diagnostics {
   this.marker.frustumCulled=false;this.marker.renderOrder=10;this.marker.visible=false;scene.add(this.marker);
  }
  error(error){const message=String(error?.message??error);if(message===this.lastError)return;this.lastError=message;const el=document.querySelector('#error');el.hidden=false;el.textContent='Rendering error: '+this.lastError;this.paint(true);}
- beforeFrame(frame){
+ observeFrame(frame,pose){
   this.frames++;if(!frame)return;this.xrFrames++;
-  const pose=frame.getViewerPose(this.renderer.xr.getReferenceSpace());
   if(pose)this.poseFrames++;
   if(this.marker){this.marker.visible=Boolean(pose);if(pose)this.marker.position.set(0,0,-.45).applyMatrix4(new T.Matrix4().fromArray(pose.transform.matrix));}
-  return pose;
  }
  snapshot(){
   const s=this.readState(),gl=this.renderer?.getContext();
   const framebuffer=gl&&!gl.isContextLost()?gl.checkFramebufferStatus(gl.FRAMEBUFFER).toString(16):'unavailable';
-  return {framebuffer,build:'xr-frame-owner-3',mode:s.mode,state:s.state,xrVisibility:s.xrVisibility,frames:this.frames,ignoredFrames:this.ignoredFrames,xrFrames:this.xrFrames,poseFrames:this.poseFrames,tracked:s.tracked,terrainVisible:s.terrainVisible,placement:s.placement,position:s.position,documentHidden:document.hidden,contextLost:gl?.isContextLost()??null,contextEvents:this.contextEvents,drawCalls:this.renderer?.info.render.calls??0,triangles:this.renderer?.info.render.triangles??0,layer:this.renderer?.xr.getBaseLayer()?.constructor.name??'none',basicTerrain:Boolean(this.basic),error:this.lastError};
+  return {framebuffer,build:'xr-persistent-4',mode:s.mode,state:s.state,xrVisibility:s.xrVisibility,frames:this.frames,ignoredFrames:this.ignoredFrames,xrFrames:this.xrFrames,poseFrames:this.poseFrames,tracked:s.tracked,terrainVisible:s.terrainVisible,placement:s.placement,position:s.position,documentHidden:document.hidden,contextLost:gl?.isContextLost()??null,contextEvents:this.contextEvents,drawCalls:this.renderer?.info.render.calls??0,triangles:this.renderer?.info.render.triangles??0,layer:this.renderer?.xr.getBaseLayer()?.constructor.name??'none',basicTerrain:Boolean(this.basic),error:this.lastError};
  }
  report(){const s=this.snapshot();return `Build ${s.build} | ${s.mode} | ${s.state}\nXR ${s.xrVisibility??'none'} | frames ${s.xrFrames} | poses ${s.poseFrames}\nIgnored webpage frames ${s.ignoredFrames}\nTerrain ${s.terrainVisible?'shown':'hidden'} | ${s.placement}\nDraws ${s.drawCalls} | triangles ${s.triangles}\nContext ${s.contextLost?'LOST':'OK'} | ${s.layer} | FBO ${s.framebuffer}\nPosition ${s.position.map(n=>n.toFixed(2)).join(', ')}\nPage hidden ${s.documentHidden} | ${s.contextEvents.join(', ')||'no context resets'}${s.error?'\nERROR '+s.error:''}`;}
  paint(force=false){if(!this.enabled)return;const now=performance.now();if(!force&&now-this.lastPaint<500)return;this.lastPaint=now;document.querySelector('#diagnostic-text').textContent=this.report();}

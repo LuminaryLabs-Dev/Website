@@ -10,7 +10,7 @@ Open in Chrome, allow the camera, and scan the target on another screen or print
 
 ## Interaction
 
-Terrain follows the camera with exponential position and rotation damping. Its model scale stays fixed. On phones supporting immersive WebXR AR, tap **Enter spatial AR** after recognition. Tap terrain or **Pin here** to settle it horizontally in local physical space, then move around or closer. **Follow** releases the pin. Optional WebXR anchors stabilize the pose; local reference-space pinning works without the anchors feature. Tracking loss hides the terrain until tracking recovers; reference-space resets release the old pin explicitly.
+Terrain follows the camera with exponential position and rotation damping. Its model scale stays fixed. On phones supporting immersive WebXR AR, tap **Enter spatial AR** after recognition. Tap terrain or **Pin here** to settle it horizontally in local physical space, then move around or closer. **Follow** releases the pin. Optional WebXR anchors stabilize the pose; local reference-space pinning works without the anchors feature. Tracking loss preserves the visible terrain at its last transform; reference-space resets release the old pin explicitly.
 
 Tap a path to focus closer by translating the terrain, highlight it with 96 moving particles, and show approximate mapped length plus start/end descriptions. Tap a landmark for its name and description. Selection pins the terrain in spatial AR. There are no size sliders or bottom legends. Looking at terrain for over five active seconds unlocks the title, which fades and settles above it and stays unlocked until closing.
 
@@ -35,7 +35,7 @@ Desktop Chrome checks: real image-feature recognition using a synthetic webcam, 
 
 ### Immersive visibility regression
 
-Immersive rendering uses `XRSession.visibilityState`, independently of the HTML document visibility. Entering XR hides the old camera-relative terrain until a valid tracked pose places it. A simulated XR session reproduced the prior failure with a hidden document and a translated/rotated viewer: zero terrain pixels and the model stranded outside the view. After the fix, the real Three.js XR pipeline renders terrain pixels; follow, pin, tracking loss/recovery, and session close pass. The test uses simulated poses and a desktop WebGL framebuffer, not physical AR hardware. Experience HTML and its entry module use a release query to bypass old cached versions.
+Immersive rendering uses `XRSession.visibilityState`, independently of the HTML document visibility. Entering XR retains the already recognised terrain; a valid viewer pose places it in the new reference space. A simulated XR session reproduced the prior failure with a hidden document and a translated/rotated viewer: zero terrain pixels and the model stranded outside the view. After the fix, the real Three.js XR pipeline renders terrain pixels; follow, pin, tracking loss/recovery, and session close pass. The test uses simulated poses and a desktop WebGL framebuffer, not physical AR hardware. Experience HTML and its entry module use a release query to bypass old cached versions.
 
 
 ### Phone diagnostic view
@@ -46,3 +46,10 @@ The user confirms the terrain renders before spatial AR and disappears on entry;
 ### Active XR frame ownership
 
 The user subsequently confirmed increasing pose counts with Terrain hidden. A regression reproduced this state by interleaving a non-XR callback into the immersive render loop. Spatial AR now ignores callbacks lacking an XRFrame from the active session; rendering and diagnostics use one sampled viewer pose, and the tracking warning clears upon recovery. The diagnostic marker is centered and the report counts ignored webpage callbacks. The reproduction passes after the fix; phone confirmation is still required.
+
+
+### Persistent spatial terrain
+
+Terrain scene lifetime is owned by recognition and Close. Recognition reveals one model instance; entering XR, temporary viewer-pose loss, and missing optional anchor poses do not hide or recreate it. Valid viewer matrices update its follow/pin placement directly. Missing viewer poses pause transform updates and gaze timing while retaining the last terrain transform; missing anchor poses retain the last anchored transform in local space. The XR runtime controls whether frames can be presented while device tracking is unavailable. Diagnostics observes the pose after rendering and has no control over terrain placement or visibility. Closing explicitly hides and disposes the experience.
+
+Regression checks assert the same terrain instance remains visible and fixed during simulated tracking loss, then resumes following after recovery. Selection, title timing, particles, camera recognition and cleanup also pass. Physical Moto G64 presentation still needs confirmation.
