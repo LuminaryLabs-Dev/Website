@@ -1,3 +1,13 @@
+## 2026-10-29 — Publish NexusHuman MuJoCo demo
+
+- Publish the public NexusHuman demonstration at `/demo/nexushuman/` and feature it in the `/demo/` directory.
+- Embed `https://luminarylabs-dev.github.io/NexusHuman/physics/` as the primary experience: the MS-Human-700 anatomical scene is requested by the official MuJoCo Live WebAssembly viewer. This is a hosted viewer integration, not a bundled Website-side solver.
+- Remove the procedural Canvas preview from the public-facing NexusHuman demo and from its fallback/navigation text.
+- Architecture decision: the former Canvas preview is now preserved at `LuminaryLabs-Dev/NexusHuman/benchmark/` for a separate benchmarking application; it is not an alternative mode in the public biomechanics demo. A separate benchmarking repository/app has not yet been created.
+- GitHub Pages deployments for Website (`afe6f877`) and NexusHuman (`0f67fd59`) reported success on October 29, 2026.
+- Validation boundary: repository pages and paths were checked, and local desktop/mobile page-layout checks passed. The nested live MuJoCo session, muscle force telemetry, and controlled standing/walking/running have not passed independent end-to-end acceptance.
+- References: [Website publication](https://github.com/LuminaryLabs-Dev/Website/commit/afe6f8773799b1d7a2bc43a6814ca0ae94f5a286), [NexusHuman publication](https://github.com/LuminaryLabs-Dev/NexusHuman/commit/0f67fd594b9e4c4aadd0aa5d2628c80a997846c3).
+
 ## 2026-09-08 — Independent hero startup and lightbulb loading covers
 
 - Start all seven marketing hero shader requests without waiting for headline
