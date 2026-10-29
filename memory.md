@@ -298,3 +298,6 @@ Public static apps can live under `/apps/` when they are generated outputs from 
 - Scan once; model follows the camera independently of target tracking until Close. Camera-free preview, rotation, scaling, and target print page included.
 - Local original passed real image-feature detection using synthetic camera, persistence, camera release, reopening, and state tests. Physical Moto G64 remains untested.
 - No existing demo files or site navigation changed.
+
+## 2026-10-28 QR and image target layout
+- Added launch QR beside the unchanged recognition image on landing and printable target pages; responsive layout and scan-order instructions.
