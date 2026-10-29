@@ -289,3 +289,12 @@ Public static apps can live under `/apps/` when they are generated outputs from 
 - Removal: deleted the standalone GLSL Lab page and its page-specific CSS/JS, removed the GLSL Lab entry from the universal navbar and fallback page links, and preserved shared shader assets used by Open Source and Contact.
 - Refinement: added a top-centered pulsing "Click the diamond stars" cue to the homepage shader so the existing interactive stars are discoverable without adding new shader objects.
 - Refinement: added a persistent right-aligned `LL` signature with a lightweight CSS glowing bulb in the shared navbar, linking the mark home without introducing a raster asset.
+
+
+## 2026-10-28 Porcupine Falls AR demo
+- User requested wireless Moto G64 testing at luminarylabs.dev/demo/porcupinefalls and instructed matching existing website conventions.
+- Existing demos are standalone static folders under demos/; GitHub Pages publishes main at repository root. Added demos/porcupinefalls plus demo/porcupinefalls redirect alias.
+- Contains 99,899-triangle terrain (106,180 total scene triangles), baked textures, GPX-derived trails, local MindAR/Three.js dependencies, and a compiled image target.
+- Scan once; model follows the camera independently of target tracking until Close. Camera-free preview, rotation, scaling, and target print page included.
+- Local original passed real image-feature detection using synthetic camera, persistence, camera release, reopening, and state tests. Physical Moto G64 remains untested.
+- No existing demo files or site navigation changed.
