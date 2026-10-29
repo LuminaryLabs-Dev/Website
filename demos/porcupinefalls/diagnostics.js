@@ -16,6 +16,6 @@ export class Diagnostics {
  snapshot(){
   const s=this.readState(),gl=this.renderer?.getContext();
   const framebuffer=gl&&!gl.isContextLost()?gl.checkFramebufferStatus(gl.FRAMEBUFFER).toString(16):'unavailable';
-  return {framebuffer,build:'xr-clean-6',mode:s.mode,state:s.state,xrVisibility:s.xrVisibility,frames:this.frames,ignoredFrames:this.ignoredFrames,xrFrames:this.xrFrames,poseFrames:this.poseFrames,tracked:s.tracked,terrainVisible:s.terrainVisible,placement:s.placement,position:s.position,documentHidden:document.hidden,contextLost:gl?.isContextLost()??null,contextEvents:this.contextEvents,drawCalls:this.renderer?.info.render.calls??0,triangles:this.renderer?.info.render.triangles??0,layer:this.spatial?.layer?.constructor.name??'none',graphicsError:this.spatial?.errorCode??0,error:this.lastError};
+  return {framebuffer,build:'xr-explore-7',mode:s.mode,state:s.state,xrVisibility:s.xrVisibility,frames:this.frames,ignoredFrames:this.ignoredFrames,xrFrames:this.xrFrames,poseFrames:this.poseFrames,tracked:s.tracked,terrainVisible:s.terrainVisible,placement:s.placement,position:s.position,documentHidden:document.hidden,contextLost:gl?.isContextLost()??null,contextEvents:this.contextEvents,drawCalls:this.renderer?.info.render.calls??0,triangles:this.renderer?.info.render.triangles??0,layer:this.spatial?.layer?.constructor.name??'none',graphicsError:this.spatial?.errorCode??0,error:this.lastError};
  }
 }

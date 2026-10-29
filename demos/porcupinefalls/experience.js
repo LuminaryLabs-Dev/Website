@@ -1,17 +1,17 @@
 import * as T from './vendor/three.module.js';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {OrbitControls} from './vendor/OrbitControls.js';
-import {Placement,GazeReveal} from './placement.mjs?v=xr-clean-6';
-import {Features,titleSprite} from './features.js';
+import {Placement,GazeReveal,damping} from './placement.mjs?v=xr-explore-7';
+import {Features,titleSprite} from './features.js?v=xr-explore-7';
 import {SpatialRenderer} from './spatial-renderer.js?v=xr-direct-5';
-import {Diagnostics} from './diagnostics.js?v=xr-clean-6';
+import {Diagnostics} from './diagnostics.js?v=xr-explore-7';
 const $=s=>document.querySelector(s),video=$('#camera'),view=$('#view'),overlay=$('#overlay');
 const preview=new URLSearchParams(location.search).get('mode')==='preview';
 const placement=new Placement(),gaze=new GazeReveal(),abort=new AbortController(),ray=new T.Raycaster();
-const camPos=new T.Vector3(),camQuat=new T.Quaternion(),viewerMatrix=new T.Matrix4();
+const camPos=new T.Vector3(),camQuat=new T.Quaternion(),viewerMatrix=new T.Matrix4(),mapNormal=new T.Vector3(),titleTarget=new T.Vector3();
 let state='loading',mode=preview?'preview':'camera',stream,controller,recognizing=false,renderer,scene,camera,group,model,features,terrain,title,controls;
 let spatial=null;
-let xrSession=null,anchor=null,anchorPending=false,anchorRevision=-1,pendingPin=null,worldSupported=false;
+let xrSession=null,anchor=null,anchorPending=false,anchorRevision=-1,pendingPlacement=null,worldSupported=false;
 let lastTime=0,gazeCheck=0,looking=false,tracked=true,gyroBase=null,elapsed=0,selectedId=null;
 const diagnostics=new Diagnostics(()=>({state,mode,tracked,terrainVisible:group?.visible,xrVisibility:xrSession?.visibilityState??null,placement:placement.mode,position:placement.position.toArray()}));
 function status(s){state=s;document.body.dataset.state=s;}
@@ -31,18 +31,42 @@ function show(){status('viewing');group.visible=true;$('#reticle').hidden=true;$
  else hint('Tap paths or markers. This device cannot pin terrain in physical space.');updatePinLabel();}
 function pinAt(focus){if(!canPin()){hint('Physical pinning requires a world-tracking browser. Path and landmark details still work.');return;}
  if(placement.mode==='pinned'&&!focus)return;disposeAnchor();placement.pin(camPos,camQuat,focus??new T.Vector3(),focus?.55:.85);if(controls)controls.enabled=false;updatePinLabel();}
-$('#pin').onclick=()=>{if(!canPin()){pinAt(null);return;}if(placement.mode==='following')pendingPin={focus:null};else{disposeAnchor();pendingPin=null;placement.follow();if(controls)controls.enabled=false;hint('Following gently. Tap terrain to pin.');updatePinLabel();}};
+$('#pin').onclick=()=>{if(!canPin()){pinAt(null);return;}if(placement.mode==='following')pendingPlacement={focus:null};else{disposeAnchor();pendingPlacement=null;placement.follow();if(controls)controls.enabled=false;hint('Following gently. Tap terrain to pin.');updatePinLabel();}};
 $('#dismiss').onclick=()=>{$('#details').hidden=true;features.select(null);selectedId=null;};
-function select(item){if(!features.select(item))return;selectedId=item.id;$('#details').hidden=false;$('#name').textContent=item.name;
+function select(item){
+ const firstDiscovery=item.kind==='trail'&&!features.visited.has(item.id);
+ if(!features.select(item))return;
+ selectedId=item.id;$('#choices').hidden=true;$('#choices').replaceChildren();$('#details').hidden=false;$('#name').textContent=item.name;
  $('#description').textContent=item.kind==='trail'?`${item.lengthM>=1000?(item.lengthM/1000).toFixed(2)+' km':item.lengthM+' m'} · ${item.start} → ${item.end}.`:item.description;
- $('#placement-note').textContent=canPin()?'Move closer to inspect. The terrain keeps its physical size.':'Physical pinning is unavailable on this device.';
- const focus=model.localToWorld(item.center.clone());group.worldToLocal(focus);if(canPin())pendingPin={focus};else{placement.follow(focus);hint('Feature in focus. Physical pinning unavailable on this device.');}}
-function selectRay(){if(state!=='viewing'||!tracked)return;const item=features.pick(ray);if(item){select(item);return;}if(ray.intersectObject(terrain,false).length&&placement.mode==='following')pendingPin={focus:null};}
-function pickScreen(x,y){ray.setFromCamera(new T.Vector2(x/innerWidth*2-1,-y/innerHeight*2+1),cameraPose());selectRay();}
+ $('#discovery').hidden=item.kind!=='trail';
+ $('#discovery').textContent=`${firstDiscovery?'Trail discovered':'Trail explored'} · ${features.visited.size} of ${features.trailCount} explored`;
+ if(item.kind==='landmark'){$('#placement-note').textContent='Landmark selected. Explore the map or tap a trail.';return;}
+ const focus=model.localToWorld(item.center.clone());group.worldToLocal(focus);
+ const tangent=1/camera.projectionMatrix.elements[5],aspect=camera.projectionMatrix.elements[5]/camera.projectionMatrix.elements[0];
+ const distance=T.MathUtils.clamp(Math.max(item.extent.x/(2*tangent*aspect*.8),item.extent.z/(2*tangent*.7)),.3,1);
+ pendingPlacement={kind:'inspect',focus,distance};hint('');
+ $('#placement-note').textContent='Trail in focus. The map faces you; move closer to inspect.';
+}
+function selectRay(item=features.pick(ray)){
+ if(state!=='viewing'||!tracked)return;
+ if(item){select(item);return;}
+ if(ray.intersectObject(terrain,false).length&&placement.mode==='following')pendingPlacement={kind:'pin',focus:null};
+}
+function pickScreen(x,y){
+ cameraPose();ray.setFromCamera(new T.Vector2(x/innerWidth*2-1,-y/innerHeight*2+1),camera);
+ const item=features.pickScreen(x,y,camera,innerWidth,innerHeight);
+ if(item?.kind==='landmark'&&features.tapAlternatives.length>1){
+  $('#details').hidden=false;$('#discovery').hidden=true;$('#name').textContent='Choose a landmark';$('#description').textContent='Several landmarks are close together here.';$('#placement-note').textContent='';
+  const choices=$('#choices');choices.replaceChildren();choices.hidden=false;
+  for(const {item:landmark} of features.tapAlternatives){const button=document.createElement('button');button.type='button';button.textContent=landmark.name;button.onclick=()=>select(landmark);choices.append(button);}return;
+ }
+ selectRay(item);
+}
+
 let pointer=null;
 function down(e){if(e.target.closest('button,#details'))return;pointer={x:e.clientX,y:e.clientY};}
-function up(e){if(!pointer||e.target.closest('button,#details'))return;const p=pointer;pointer=null;if(Math.hypot(e.clientX-p.x,e.clientY-p.y)<8)pickScreen(e.clientX,e.clientY);}
-for(const el of [view,overlay]){el.addEventListener('pointerdown',down);el.addEventListener('pointerup',up);}
+function up(e){if(!pointer||e.target.closest('button,#details'))return;const p=pointer;pointer=null;if(Math.hypot(e.clientX-p.x,e.clientY-p.y)<14)pickScreen(e.clientX,e.clientY);}
+for(const el of [view,overlay]){el.addEventListener('pointerdown',down);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',()=>pointer=null);}
 overlay.addEventListener('beforexrselect',e=>{if(e.target.closest('button,#details'))e.preventDefault();});
 function orientation(e){if(mode!=='camera'||e.alpha===null||state!=='viewing')return;
  const q=new T.Quaternion().setFromEuler(new T.Euler(T.MathUtils.degToRad(e.beta),T.MathUtils.degToRad(e.alpha),-T.MathUtils.degToRad(e.gamma),'YXZ'));
@@ -79,7 +103,7 @@ function draw(time,frame,viewerPose){
     if(viewerPose.views[0])spatial.updateCamera(viewerPose.views[0]);
     if(!wasTracked)hint(placement.mode==='following'?'Tap terrain to pin. Walk closer to inspect.':'');
    }else{if(controls?.enabled)controls.update();cameraPose();}
-   if(pendingPin){const p=pendingPin;pendingPin=null;pinAt(p.focus);}
+   if(pendingPlacement){const p=pendingPlacement;pendingPlacement=null;if(p.kind==='inspect'){disposeAnchor();if(canPin())placement.inspect(camPos,camQuat,p.focus,p.distance);else placement.follow(p.focus,true,p.distance);if(controls)controls.enabled=false;updatePinLabel();}else pinAt(p.focus);}
    placement.update(dt,camPos,camQuat);updateAnchor(frame);
    group.position.copy(placement.position);group.quaternion.copy(placement.rotation);group.updateMatrixWorld(true);
    if(mode==='preview'&&placement.mode==='pinned'&&controls&&!controls.enabled){controls.target.copy(placement.focus).applyQuaternion(group.quaternion).add(group.position);controls.enabled=true;}
@@ -90,7 +114,7 @@ function draw(time,frame,viewerPose){
    // Tracking owns transform updates, never the lifetime of the scene content.
    hint('Tracking paused. Terrain stays at its last position.');
   }
-  title.material.opacity=gaze.fade;title.position.y=.14+(1-gaze.fade)*.045;features.update(elapsed);
+  title.material.opacity=gaze.fade;mapNormal.set(0,1,0).applyQuaternion(group.quaternion);const vertical=Math.abs(mapNormal.y)<.5;titleTarget.set(0,vertical?.035:.14+(1-gaze.fade)*.045,vertical?-.35-(1-gaze.fade)*.045:0);title.position.lerp(titleTarget,damping(dt,.2));features.update(elapsed,tracked?camPos:null);
  }
  if(mode==='world')spatial.render(scene,viewerPose);else renderer.render(scene,camera);
 }
@@ -126,5 +150,5 @@ async function main(){
  if(state!=='closed')renderer.setAnimationLoop(renderFrame);}
 // Read-only inspection supports repeatable interaction checks, without simulating real device poses.
 export function inspectDiagnostics(){return diagnostics.snapshot();}
-export function inspect(){return {surfaceUp:group?new T.Vector3(0,1,0).applyQuaternion(group.quaternion).toArray():null,highlight:features?.selected?.mesh.material.emissive?.getHex()??null,particleSample:features?.particles?Array.from(features.particles.geometry.attributes.position.array.slice(0,3)):null,terrainId:terrain?.uuid,state,mode,tracked,terrainVisible:group?.visible,xrVisibility:xrSession?.visibilityState??null,placement:placement.mode,position:placement.position.toArray(),scale:group?.scale.toArray(),titleRevealed:gaze.revealed,titleOpacity:gaze.fade,selectedId,particles:features?.particles?.geometry.attributes.position.count??0,canPin:canPin(),pickables:features?.items.map(i=>{const p=model.localToWorld((i.points?.[Math.floor(i.points.length*.5)]??i.center).clone()).project(currentCamera());return{id:i.id,x:(p.x+1)/2*innerWidth,y:(1-p.y)/2*innerHeight};})};}
+export function inspect(){return {cameraPosition:camera?.position.toArray(),cameraRotation:camera?.quaternion.toArray(),discovered:features?.visited.size,proximity:features?.items.map(i=>({id:i.id,level:i.near})),nearby:features?.items.filter(i=>i.near>.05).map(i=>i.id),tapRadii:{trail:24,landmark:28},surfaceUp:group?new T.Vector3(0,1,0).applyQuaternion(group.quaternion).toArray():null,highlight:features?.selected?.mesh.material.emissive?.getHex()??null,particleSample:features?.particles?Array.from(features.particles.geometry.attributes.position.array.slice(0,3)):null,terrainId:terrain?.uuid,state,mode,tracked,terrainVisible:group?.visible,xrVisibility:xrSession?.visibilityState??null,placement:placement.mode,position:placement.position.toArray(),scale:group?.scale.toArray(),titleRevealed:gaze.revealed,titleOpacity:gaze.fade,selectedId,particles:features?.particles?.geometry.attributes.position.count??0,canPin:canPin(),tapSamples:features?.items.filter(i=>i.kind==='trail').flatMap(i=>[.1,.5,.9].map(t=>{const p=model.localToWorld(i.points[Math.floor((i.points.length-1)*t)].clone()).project(camera);return{id:i.id,t,x:(p.x+1)/2*innerWidth,y:(1-p.y)/2*innerHeight};})),pickables:features?.items.map(i=>{const p=model.localToWorld((i.points?.[Math.floor(i.points.length*.5)]??i.center).clone()).project(currentCamera());return{id:i.id,x:(p.x+1)/2*innerWidth,y:(1-p.y)/2*innerHeight};})};}
 main().catch(e=>{if(state==='closed')return;status('error');stopCamera();controller?.dispose();$('#reticle').hidden=true;$('#error').hidden=false;$('#error').textContent=e.name==='NotAllowedError'?'Camera permission denied. Close, allow camera access, and retry.':e.message;console.error(e);});

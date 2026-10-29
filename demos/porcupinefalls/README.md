@@ -10,12 +10,15 @@ Open in Chrome, allow the camera, and scan the terrain image on another screen o
 
 ## Interaction
 
-- Terrain follows the camera with damped translation and rotation at a fixed physical scale.
-- After recognition, **Enter spatial AR** starts world tracking. **Pin here** or tapping terrain pins a floor-parallel map; walk around or closer to inspect. **Follow** releases it.
-- Tap a trail to focus it by translation, illuminate it, animate 96 particles along it, and show approximate distance, start and endpoint. Selection pins the map. Focus height keeps the selected location in the phone viewport while preserving a flat map.
-- Tap a landmark to show its name and description and pin the map. Names and details appear only upon selection. Dismissing details removes the highlight but preserves the map's pin.
-- Looking at terrain for over five active seconds unlocks a title that fades and settles above the map, then remains for the experience.
-- No size slider, bottom legend, diagnostic window, or pink reference cube. Old `?debug=1` links cannot restore those removed elements.
+- Terrain follows the phone with damped motion. Model scale stays fixed; selection never changes the camera pose.
+- In spatial AR, **Pin here** or a blank-terrain tap holds a horizontal map so you can walk around. **Follow** returns to the overview.
+- Every trail segment is tappable with a 24 CSS-pixel radius (48-pixel-wide corridor). Trails have no pin markers. Landmark pins are larger, with 28 CSS-pixel tap radii; overlapping pins offer large named choice buttons.
+- As the camera approaches a feature, its glow and landmark pulse increase (roughly 0.75 m to 0.35 m from the mapped geometry). This is proximity to the miniature map, not GPS arrival on the actual hiking trail.
+- A trail tap highlights it, runs 96 moving particles, and translates/rotates only the map into a floor-perpendicular view facing the user. Focus distance fits the route using the actual camera projection, without resizing. The resulting inspection map stays world-pinned; walk closer or around it. Camera mode instead keeps following, with physical pinning unavailable.
+- Trail selection overlays approximate length/start/end and records unique routes explored for the current experience. Repeated selections do not award another discovery.
+- Landmark selection overlays its name/description and a brief particle burst, without moving the map or camera. Closing details removes selection effects and preserves placement.
+- Looking at terrain for over five active seconds reveals the persistent Porcupine Falls title. It moves above the map during vertical inspection.
+- No size slider, bottom legend, debug window, pink cube, or trail pins. Only selected feature information appears as text.
 
 ## Spatial rendering
 
@@ -38,3 +41,8 @@ Data: [Trail Finder GPX](https://www.trailfinder.info/trails/trail/porcupine-fal
 `node --test demos/porcupinefalls/placement.test.mjs` checks fixed-size horizontal pinning, camera independence, frame-rate-independent damping, translation-only focus and persistent gaze timing.
 
 Desktop Chrome uses a synthetic camera image with real image-feature recognition and simulated XR poses drawing into a separate real color/depth framebuffer. Checks cover visible terrain pixels/graphics error 0, tracking interruption and recovery, stable instance/pin, ignored non-XR callbacks, camera cleanup, seven trail/nine landmark targets, actual screen-tap selection, trail glow and animated particles, distance/start/end and destination details, flat fixed-scale selection pinning, persistent gaze title, and absence of debug/bottom controls. These automated interaction checks use simulated poses; the user's phone confirmation covers the working direct rendering path, not every interaction or frame-rate measurement.
+
+
+### Touch and exploration verification
+
+The spatial browser harness now uses real touch events on a 412x915 mobile viewport at device scale factor 2. It verifies a 20 CSS-pixel offset tap on a route, a second point near the route's end, proximity highlight changes while approaching a pinned map, discovery deduplication, animated particles, fixed-scale vertical trail inspection, unchanged camera position/orientation during selection, and landmark choice/text without placement movement. Direct XR rendering and persistence checks still pass. These automated results use simulated XR poses; the updated interactions have not yet been physically retested on Moto G64.
