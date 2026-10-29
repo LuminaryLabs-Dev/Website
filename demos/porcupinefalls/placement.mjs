@@ -3,22 +3,28 @@ export const damping=(dt,tau=.28)=>1-Math.exp(-Math.max(0,dt)/tau);
 const UP=new Vector3(0,1,0),FORWARD=new Vector3(0,0,-1);
 /** Owns the map pose: horizontal manual pins and vertical trail inspection. Never writes camera or scale. */
 export class Placement {
- constructor(){this.position=new Vector3();this.rotation=new Quaternion();this.target=new Vector3();this.targetRotation=new Quaternion();this.mode='following';this.initialized=false;this.revision=0;this.focus=new Vector3();this.distance=1.05;this.inspectFollowing=false;}
+ constructor(){this.position=new Vector3();this.rotation=new Quaternion();this.target=new Vector3();this.targetRotation=new Quaternion();this.mode='following';this.initialized=false;this.revision=0;this.focus=new Vector3();this.distance=1.05;this.inspectFollowing=false;this.view='overview';}
  heading(q){const f=FORWARD.clone().applyQuaternion(q);f.y=0;if(f.lengthSq()<.001)f.set(0,0,-1);return f.normalize();}
- follow(focus=null,inspectFollowing=false,distance=null){this.mode='following';this.revision++;this.focus.copy(focus??new Vector3());this.distance=distance??(focus?.55:1.05);this.inspectFollowing=inspectFollowing;}
+ follow(focus=null,inspectFollowing=false,distance=null){this.mode='following';this.revision++;this.focus.copy(focus??new Vector3());this.distance=distance??(focus?.55:1.05);this.inspectFollowing=inspectFollowing;this.view=inspectFollowing?'trail':'overview';}
  pin(cameraPosition,cameraRotation,focus=new Vector3(),distance=.8){
-  this.mode='placing';this.revision++;this.focus.copy(focus);
+  this.view='overview';this.mode='placing';this.revision++;this.focus.copy(focus);
   const heading=this.heading(cameraRotation),yaw=Math.atan2(-heading.x,-heading.z);
   this.targetRotation.setFromAxisAngle(UP,yaw);
   this.target.copy(cameraPosition).addScaledVector(heading,distance);this.target.y-=Math.min(.28,distance*.22);
   this.target.sub(focus.clone().applyQuaternion(this.targetRotation));
  }
  inspect(cameraPosition,cameraRotation,focus,distance=.5){
-  this.mode='placing';this.revision++;this.focus.copy(focus);
+  this.view='trail';this.mode='placing';this.revision++;this.focus.copy(focus);
   const heading=this.heading(cameraRotation),yaw=Math.atan2(-heading.x,-heading.z);
   this.targetRotation.setFromEuler(new Euler(Math.PI/2,yaw,0,'YXZ'));
   this.target.copy(cameraPosition).add(new Vector3(0,0,-distance).applyQuaternion(cameraRotation));
   this.target.sub(focus.clone().applyQuaternion(this.targetRotation));
+ }
+ overview(cameraPosition,cameraRotation,distance){
+  this.follow(null,false,distance);this.mode='placing';
+  const f=this.heading(cameraRotation);
+  this.targetRotation.setFromEuler(new Euler(.6,Math.atan2(-f.x,-f.z),0,'YXZ'));
+  this.target.copy(cameraPosition).add(new Vector3(0,0,-distance).applyQuaternion(cameraRotation));
  }
  update(dt,cameraPosition,cameraRotation){
   if(this.mode==='following'){

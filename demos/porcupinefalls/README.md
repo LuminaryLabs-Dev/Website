@@ -11,7 +11,8 @@ Open in Chrome, allow the camera, and scan the terrain image on another screen o
 ## Interaction
 
 - Terrain follows the phone with damped motion. Model scale stays fixed; selection never changes the camera pose.
-- In spatial AR, **Pin here** or a blank-terrain tap holds a horizontal map so you can walk around. **Follow** returns to the overview.
+- In spatial AR, **Pin here** holds a horizontal map so you can walk around. **Follow** returns to the overview.
+- Tap an empty area of the terrain after selection/inspection to clear the selected item, particles, and information overlay and smoothly return to a fitted full-map overview. Only the map moves; camera position/orientation and model scale stay unchanged. Taps outside the map do nothing, and repeated empty taps do not restart placement. Discovery progress and the revealed title persist. No Back button is added.
 - Every trail segment is tappable with a 24 CSS-pixel radius (48-pixel-wide corridor). Trails have no pin markers. Landmark pins are larger, with 28 CSS-pixel tap radii; overlapping pins offer large named choice buttons.
 - As the camera approaches a feature, its glow and landmark pulse increase (roughly 0.75 m to 0.35 m from the mapped geometry). This is proximity to the miniature map, not GPS arrival on the actual hiking trail.
 - A trail tap highlights it, runs 96 moving particles, and translates/rotates only the map into a floor-perpendicular view facing the user. Focus distance fits the route using the actual camera projection, without resizing. The resulting inspection map stays world-pinned; walk closer or around it. Camera mode instead keeps following, with physical pinning unavailable.
@@ -46,3 +47,8 @@ Desktop Chrome uses a synthetic camera image with real image-feature recognition
 ### Touch and exploration verification
 
 The spatial browser harness now uses real touch events on a 412x915 mobile viewport at device scale factor 2. It verifies a 20 CSS-pixel offset tap on a route, a second point near the route's end, proximity highlight changes while approaching a pinned map, discovery deduplication, animated particles, fixed-scale vertical trail inspection, unchanged camera position/orientation during selection, and landmark choice/text without placement movement. Direct XR rendering and persistence checks still pass. These automated results use simulated XR poses; the updated interactions have not yet been physically retested on Moto G64.
+
+
+### Empty-map return verification
+
+Touch regression tests find an actual empty terrain hit with no feature target, return from vertical trail inspection, and verify cleared selection/particles/overlays, all terrain bounds fitted inside the viewport, unchanged camera transform and physical scale, retained discovery/title state, and stable repeated/background taps. Preview uses a map-only transition on the current camera sightline; its orbit distance limit expands to avoid clamping and shifting the camera during the zoom-out. Spatial AR resumes damped full-map following.
