@@ -301,3 +301,11 @@ Public static apps can live under `/apps/` when they are generated outputs from 
 
 ## 2026-10-28 QR and image target layout
 - Added launch QR beside the unchanged recognition image on landing and printable target pages; responsive layout and scan-order instructions.
+
+
+## 2026-10-29 Interactive terrain overhaul
+- Intent: damped camera following; floor-parallel physical pinning and walking inspection without resizing; selectable paths/landmarks; path distance/start/end and destination descriptions only on selection; trail particles; remove bottom controls; persistent title after five seconds of attention.
+- Finding: existing MindAR tracker only recognizes an image, with no positional world tracking. Added explicit immersive WebXR entry after scan; runtime capability check gates real pinning. Moto G64 is absent from Google's supported ARCore list; physical pinning on this phone remains unavailable unless its browser reports support. No fake camera-relative physical pin.
+- Implementation: Placement owns exponential pose damping, translation-only focus, and horizontal pin state. Features owns widened trail picking, nearest landmark picking, selection materials and 96 particles. Experience owns camera/XR lifecycle, optional anchors, loss/reset handling, and minimal top controls. Scale, terrain GLB, QR, and image target are unchanged.
+- Data: seven paths and nine source GPX/KML landmarks. Route lengths approximate horizontal GPX distances; endpoint descriptions inferred from adjacent waypoints. Unidentified cultural point stays generic. Newer orange/white routes still absent from source coverage.
+- Validation: four placement/gaze tests pass. Chrome browser checks pass for image recognition, target loss persistence, damped synthetic orientation, unavailable physical pin fallback, camera release/early close, selection, particles, fixed scale, stable pinned preview with camera movement, and delayed persistent title. Browser console has no errors. Physical WebXR and Moto G64 hardware remain untested.
