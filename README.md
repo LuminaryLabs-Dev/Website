@@ -137,3 +137,7 @@ Validation: source build, five existing unit tests, dependency audit, desktop ga
 ## Nexus Engine Studio
 
 `/nexus-engine-studio/` serves the reviewed static build from the private `LuminaryLabs-Dev/NexusEngine-Studio` repository. Source commit, Engine revision, dependency versions and file hashes are recorded in `nexus-engine-studio/release.json`. Build and validate in Studio; copy only the manifest-listed public assets and release record here. The legacy NexusEngine-Editor is reference only. The native application is built and validated separately in Studio. Version 0.2 adds project creation/recent projects, multiple scenes, reusable objects, static GLB import, configurable Engine-backed gameplay and diagonal blue interface gradients.
+
+## CAMEL Game Engine
+
+`/apps/CamelGameEngine/` is the developer-facing CAMEL workspace: Cindercrypt and Skyfeather demos, a local brief formatter, and a verified native Unity project download. Generation uses the separately running local authoring harness; no cloud inference endpoint or API key is shipped here. Demo bundles are copied byte-for-byte from sealed runs; the wrapper adapts the roguelike viewport without editing its bundle. `apps/CamelGameEngine/release.json` records source provenance and packaged hashes. Run `node scripts/check-camel-game-engine.mjs` before publishing changes.

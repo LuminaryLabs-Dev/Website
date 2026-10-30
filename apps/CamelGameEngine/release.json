@@ -1,0 +1,40 @@
+{
+  "schema": "camel.public-module/1",
+  "route": "/apps/CamelGameEngine/",
+  "publishedSource": "LuminaryLabs-Dev/Website",
+  "generation": "Local CAMEL/Nexus runtime required; public site formats briefs only.",
+  "demos": {
+    "cindercrypt": {
+      "sourceRunId": "f585fb66-cd90-4302-abe7-c067cd28eb7a",
+      "sourceHash": "45f847656c5ed0c93d79f2d8499d26a1d28d9186e7d57a00849baf64dcd10081",
+      "entry": "demos/cindercrypt/index.html"
+    },
+    "skyfeather": {
+      "sourceRunId": "d7337068-a2fd-4b70-a8ea-1a59053a0119",
+      "sourceHash": "24f6842462e087561ae9d4bb9035cdb1d5923d54e73c8072f340938cd7077468",
+      "entry": "demos/skyfeather/index.html"
+    }
+  },
+  "unity": {
+    "exportId": "30f465d0-2390-4f65-9e68-edb3f64af0ef",
+    "runtimeSmokeVerified": true,
+    "fullParityVerified": false,
+    "entry": "downloads/cindercrypt-unity.zip"
+  },
+  "files": {
+    "app.js": "ca278dda5a0e7a3c377c419b0f5388457b50a3111e092cc60d3836a56bf33bc0",
+    "assets/cindercrypt.png": "b97c398fc7958e1d8655aa7e9bdb9bf6248afb9ac62bfcaf2802b8326242436a",
+    "assets/skyfeather.png": "5ee1abac491256d0432ffd436b5bb251711f3e7ac3eec12a4d3901f0ee805e65",
+    "demos/cindercrypt/assets.json": "246c1a6a84dd3222806982eec1b9fd846ddf633151e82598e39f68f71261bf19",
+    "demos/cindercrypt/game.js": "e325569a043681b1378fb269502680ad4f313be578cf23a74e7aa8608d86c9ba",
+    "demos/cindercrypt/index.html": "d69f3bb775e5096c4cf11805c9cb597b5ddbe482e3d6e8170ed1f9000004ec65",
+    "demos/cindercrypt/playtest.js": "b0a2ec6aa1af10e2f0fde335cdd263d19f096920c8e284d1bbec887bb321ca64",
+    "demos/skyfeather/index.html": "59906e59f246c1cca631fd780541c9ebe7c7d70130a5789e3e992f0b5a7e0dfe",
+    "downloads/cindercrypt-unity.zip": "437f1334b654aab513f30d2ad7b598c6f026b0da5bc69b32237e05e38f472518",
+    "index.html": "372f2b733337b471a971a8e34249cff53b381caae80dca9cb7feb765dd09f985",
+    "licenses/three-LICENSE.txt": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc",
+    "README.md": "a333ee67e1cd0c196a624bb26fa05c57415309bd2c0f6a89ff3959cfe8f81e10",
+    "style.css": "8b9709480e7ac74ac3c892223f0e5bca8c2414dcc6bfe311b183e046b34fdf20",
+    "THIRD_PARTY_NOTICES.md": "5c7760358769d0f4f071e5b75ecc65ab41f090e8ee714c646e69f117390459af"
+  }
+}
