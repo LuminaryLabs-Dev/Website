@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-const pages=['index.html','nexus-arcade/index.html','opensource.html','services.html','services/apex-benchworks/index.html','portfolio.html','team.html','contact.html','nexus-arcade/play/index.html','arcade/index.html','articles/index.html','articles/prompt-engineering-isnt-dead/index.html'];
+const pages=['index.html','nexus-arcade/index.html','opensource.html','services.html','services/apex-benchworks/index.html','portfolio.html','team.html','contact.html','nexus-arcade/play/index.html','arcade/index.html','articles/index.html','articles/prompt-engineering-isnt-dead/index.html','privacy/cosmic-crafter/index.html'];
 const links=[['Home','/index.html'],['Nexus Arcade','/nexus-arcade/'],['Engine Studio','/nexus-engine-studio/'],['Open Source','/opensource.html'],['Services','/services.html'],['Portfolio','/portfolio.html'],['Articles','/articles/'],['Team','/team.html'],['Contact','/contact.html']];
 const header=await fs.readFile(path.join(root,'templates/site-header.html'),'utf8');
 const footer=await fs.readFile(path.join(root,'templates/site-footer.html'),'utf8');
