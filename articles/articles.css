@@ -1,0 +1,24 @@
+.articles-content {
+  max-width: 72ch;
+  padding-block: clamp(2rem, 6vw, 5rem);
+  line-height: 1.65;
+}
+
+.articles-content h1,
+.articles-content h2 {
+  line-height: 1.2;
+}
+
+.articles-content a {
+  text-decoration: underline;
+}
+
+.article-card {
+  border: 1px solid currentColor;
+  border-radius: 1rem;
+  padding: clamp(1rem, 4vw, 2rem);
+}
+
+.article-status {
+  font-weight: 700;
+}
