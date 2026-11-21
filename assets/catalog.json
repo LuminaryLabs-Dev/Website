@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "checkout": {
+    "provider": "stripe",
+    "configured": false,
+    "paid_downloads_enabled": false
+  },
+  "products": [
+    {
+      "id": "LAU-PACK-018",
+      "slug": "medieval-marketplace",
+      "name": "Medieval Marketplace",
+      "category": "models",
+      "status": "draft-preview",
+      "product_url": "/assets/medieval-marketplace/",
+      "full_collection": {
+        "draft_models": 66,
+        "glb_sources": 66,
+        "blender_sources": 66,
+        "render_previews": 66,
+        "paid_release_available": false
+      },
+      "sampler": {
+        "label": "Four-Model Evaluation Sampler",
+        "version": "0.1",
+        "file": "/assets/downloads/Medieval-Marketplace-4-Model-Evaluation-Sampler.zip",
+        "format": "GLB",
+        "model_ids": [
+          "MMK-001",
+          "MMK-009",
+          "MMK-020",
+          "MMK-027"
+        ],
+        "bytes": 13329,
+        "sha256": "29b0ccf74252649743184496eeb63eb324acdeee07c9cbc51e412fa92642de32",
+        "license": "private evaluation only; no commercial use granted"
+      },
+      "preview": "/assets/media/medieval-marketplace-preview.webp",
+      "engine_certification": "unverified"
+    }
+  ]
+}
