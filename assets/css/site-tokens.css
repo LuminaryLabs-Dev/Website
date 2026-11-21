@@ -8,4 +8,4 @@
 .ll-site :where(a,button,input,select,textarea,summary):focus-visible{outline:2px solid #ad731e;outline-offset:5px}
 .ll-site main:focus{outline:0}.ll-site :where(section,[id]){scroll-margin-top:calc(var(--header-height) + 24px)}
 .ll-site .site-inner,.ll-site .container{width:min(var(--site-width),calc(100% - 2 * var(--gutter)));margin-inline:auto}
-@media(max-width:760px){.ll-site{--header-height:48px}}@media(max-width:400px){.ll-site{--gutter:20px}}
+@media(max-width:960px){.ll-site{--header-height:48px}}@media(max-width:400px){.ll-site{--gutter:20px}}

@@ -21,7 +21,7 @@
 @keyframes site-bulb-glow{0%,100%{filter:brightness(1.05) drop-shadow(0 0 3px #ffb54038)}50%{filter:brightness(1.16) drop-shadow(0 0 6px #ffb54060)}}
 .ll-site .universal-signature:focus-visible img{animation:site-bulb-glow 1.8s ease-in-out infinite}
 @media(hover:hover){.ll-site .site-header .site-nav a:hover::after{transform:scaleX(1)}.ll-site .universal-signature:hover img{animation:site-bulb-glow 1.8s ease-in-out infinite}}
-@media(max-width:760px){
+@media(max-width:960px){
  .ll-site .site-header .universal-signature{height:44px}.ll-site .site-header .universal-signature img{width:36px;height:36px}
  .ll-site .site-header .nav-toggle:not([hidden]){display:inline-flex;align-items:center}
  .ll-site .site-header .site-nav{display:none;position:absolute;top:48px;left:0;right:0;max-height:calc(100svh - 72px);overflow-y:auto;flex-direction:column;align-items:stretch;padding:12px;background:#10171c;border:1px solid #354047;gap:2px}

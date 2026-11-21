@@ -23,5 +23,5 @@
   header.addEventListener('focusout', () => requestAnimationFrame(() => {
     if (!header.contains(document.activeElement)) close();
   }));
-  matchMedia('(max-width: 760px)').addEventListener('change', () => close());
+  matchMedia('(max-width: 960px)').addEventListener('change', () => close());
 })();
