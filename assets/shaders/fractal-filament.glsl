@@ -807,6 +807,11 @@ vec4 render(vec2 fragCoord)
         3.75
     );
 
+    // Brief physical camera approach creates the bulb-flying-at-you beat.
+    // The spark renderer applies the exact same forward displacement.
+    if (uLoadingCover < 0.5 && uVfxTime >= 0.0) {
+        ro.z -= 1.28 * smoothstep(0.62, 1.13, uVfxTime);
+    }
     vec3 target = vec3(0.018 * sin(iTime * 1.35), -0.06 + 0.014 * sin(iTime * 1.72), 0.0);
     if (uLoadingCover > 0.5) {
         ro = vec3(0.0, 0.045, 3.75);
