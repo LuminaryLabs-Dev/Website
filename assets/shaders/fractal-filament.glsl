@@ -771,18 +771,6 @@ vec3 shadeGlass(vec3 p, vec3 rd)
     return glass;
 }
 
-float starBurst(vec2 p, float size, float phase)
-{
-    p /= size;
-    vec2 q = abs(p);
-    float pulse = 0.72 + 0.28 * sin(iTime * 3.4 + phase);
-    float core = exp(-17.0 * length(p));
-    // Compact flares only; long rays inside the glass read as marching artifacts.
-    float rays = exp(-34.0 * q.x - 5.0 * q.y)
-               + exp(-34.0 * q.y - 5.0 * q.x);
-    return (core * 2.0 + rays) * pulse;
-}
-
 float segmentDistance2D(vec2 p, vec2 a, vec2 b)
 {
     vec2 v=b-a;
@@ -895,21 +883,6 @@ vec4 render(vec2 fragCoord)
         color = mix(transmission,transmission+glass*0.78,opacity);
         color += glass*0.11;
         coverage = max(coverage, sat(opacity + max(glass.r, max(glass.g, glass.b)) * 0.18));
-    }
-
-    if (uLoadingCover < 0.5 && uVfxTime >= 0.0) {
-    // Keep the interactive stars inside narrow portrait viewports.
-    float starX = min(0.76, max(0.18, (iResolution.x / iResolution.y) * 0.34));
-    float starA = starBurst(uv - vec2(-starX, 0.62), 0.050 * (1.0 + uStarA), 0.0);
-    float starB = starBurst(uv - vec2(starX, 0.52), 0.044 * (1.0 + uStarB), 2.2);
-    float starC = starBurst(uv - vec2(starX, -0.30), 0.040 * (1.0 + uStarC), 4.4);
-    color += mix(vec3(1.0, 0.16, 0.02), vec3(0.12, 0.72, 1.0), 0.5 + 0.5 * sin(iTime * 1.7)) * starA * 0.9;
-    color += mix(vec3(0.22, 0.45, 1.0), vec3(1.0, 0.22, 0.04), 0.5 + 0.5 * sin(iTime * 1.5 + 2.2)) * starB * 0.9;
-    color += mix(vec3(1.0, 0.75, 0.08), vec3(0.15, 1.0, 0.62), 0.5 + 0.5 * sin(iTime * 1.9 + 4.4)) * starC * 0.9;
-    float stars = starA + starB + starC;
-    color += vec3(1.0, 1.0, 0.55) * stars * stars * 0.36;
-    coverage = max(coverage, sat(stars));
-
     }
 
     // Projected conductor-to-filament micro-arcs; fragment-space light stays
