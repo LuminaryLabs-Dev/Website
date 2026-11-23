@@ -12,8 +12,11 @@
     ['/opensource.html', 'Open Source', '<path d="m8 8-4 4 4 4m8-8 4 4-4 4m-3-11-2 18"/>'],
     ['/assets/', 'Assets', '<path d="m12 2 9 5-9 5-9-5 9-5Zm-9 5v10l9 5 9-5V7M12 12v10"/>'],
     ['/articles/', 'Articles', '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/><path d="M9 7h7m-7 4h7"/>'],
-    ['/team.html', 'Team', '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m14-13a4 4 0 0 1 0 8m6 5v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/>']
+    ['/nexus-arcade/', 'Nexus Arcade', '<rect x="3" y="8" width="18" height="11" rx="5"/><path d="M8 11v5m-2.5-2.5h5M15.5 12.5h.01M18 15h.01"/>']
   ];
+  const arcadeLink = Array.from(nav.querySelectorAll('a')).find(a => a.getAttribute('href') === '/nexus-arcade/');
+  const teamLink = Array.from(nav.querySelectorAll('a')).find(a => a.getAttribute('href') === '/team.html');
+  if (arcadeLink && teamLink) nav.insertBefore(teamLink, arcadeLink);
   const links = extras.map(([href]) => Array.from(nav.querySelectorAll('a')).find(a => a.getAttribute('href') === href));
   if (links.every(Boolean) && !document.querySelector('.extras-rail')) {
     const rail = document.createElement('aside');
