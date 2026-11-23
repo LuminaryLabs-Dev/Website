@@ -611,6 +611,35 @@ vec2 raySphere(vec3 ro, vec3 rd, vec3 center, float radius)
     return vec2(-b - h, -b + h);
 }
 
+// Distance to 3D arcs grounded on the physical conductor and coil points.
+float electricalField3D(vec3 p,float time,float seed)
+{
+    float tick=floor(time*36.0);
+    float field=0.0;
+    for(int side=0;side<2;side++) {
+        float direction=side==0?-1.0:1.0;
+        vec3 a=vec3(direction*0.226,0.086,0.0);
+        vec3 b=vec3(direction*0.065,0.112,0.012);
+        vec3 delta=b-a;
+        float u=clamp(dot(p-a,delta)/max(dot(delta,delta),0.0001),0.0,1.0);
+        vec3 nearest=a+delta*u;
+        float jitter=hash21(vec2(floor(u*9.0)+seed+float(side)*11.0,tick))-0.5;
+        nearest.z+=jitter*0.055*sin(u*PI);
+        nearest.y+=jitter*0.014*sin(u*PI);
+        field=max(field,exp(-length(p-nearest)*125.0));
+    }
+    return field;
+}
+
+// Cracks are attached to 3D glass surface coordinates, never screen UVs.
+float glassFracture3D(vec3 p,float seed)
+{
+    float theta=atan(p.z,p.x);
+    float lineA=abs(sin(theta*8.0+p.y*12.0+seed*0.13));
+    float lineB=abs(sin(theta*13.0-p.y*8.0-seed*0.09));
+    return 1.0-smoothstep(0.0,0.075,min(lineA,lineB));
+}
+
 vec3 integrateFilamentGlow(vec3 ro, vec3 rd, vec2 pixel)
 {
     vec2 bounds = raySphere(ro, rd, vec3(0.0, 0.18, 0.0), 0.86);
@@ -641,6 +670,16 @@ vec3 integrateFilamentGlow(vec3 ro, vec3 rd, vec2 pixel)
 
         glow += energyColor(signal) * aura * stepSize * 0.64;
         glow += vec3(1.5, 1.03, 0.34) * core * stepSize * 1.5;
+        // Hover makes small crackles; click drives a brighter discharge.
+        float idleArc=uVfxTime < 0.0 ? uHover*(0.13+0.32*uPointerSpeed) : 0.0;
+        float hitArc=uVfxTime >= 0.0
+            ? (1.0-smoothstep(0.42,0.85,uVfxTime)) : 0.0;
+        float electrical=(idleArc+hitArc);
+        if(uLoadingCover < 0.5 && electrical > 0.005) {
+            float flicker=step(0.20,hash21(vec2(floor(iTime*43.0),uBurstSeed+3.0)));
+            float arc=electricalField3D(p,iTime,uBurstSeed);
+            glow += vec3(0.50,0.83,1.32)*arc*flicker*electrical*stepSize*1.45;
+        }
     }
 
     return glow;
@@ -780,32 +819,6 @@ vec3 shadeGlass(vec3 p, vec3 rd)
     return glass;
 }
 
-float segmentDistance2D(vec2 p, vec2 a, vec2 b)
-{
-    vec2 v=b-a;
-    return length(p-a-v*clamp(dot(p-a,v)/max(dot(v,v),0.00001),0.0,1.0));
-}
-
-// Time-varying branching arc, with endpoints fixed to existing metal terminals.
-float electricalArc(vec2 uv, vec2 a, vec2 b, float time, float seed)
-{
-    float dist=10.0;
-    vec2 prev=a;
-    vec2 side=normalize(vec2(-(b-a).y,(b-a).x));
-    float tick=floor(time*52.0);
-    for(int i=1;i<=9;i++)
-    {
-        float u=float(i)/9.0;
-        float noise=hash21(vec2(float(i)*1.19+seed,tick));
-        float bend=(noise-0.5)*0.045*sin(u*PI);
-        vec2 curr=mix(a,b,u)+side*bend;
-        dist=min(dist,segmentDistance2D(uv,prev,curr));
-        prev=curr;
-    }
-    float pixelWidth=2.0/max(iResolution.y,1.0);
-    return exp(-dist/(pixelWidth*2.1+0.002));
-}
-
 vec4 render(vec2 fragCoord)
 {
     vec2 uv = (2.0 * fragCoord - iResolution.xy) / iResolution.y;
@@ -858,28 +871,17 @@ vec4 render(vec2 fragCoord)
     vec3 color = vec3(0.0);
     float coverage = 0.0;
 
-    if (uLoadingCover < 0.5 && uVfxTime >= 0.0) {
-    // One-cell procedural dust: no particle loop.
-    vec2 grid = uv * 22.0;
-    vec2 id = floor(grid);
-    vec2 local = fract(grid) - 0.5;
-    float h = hash21(id);
-    vec2 offset = vec2(hash21(id + 3.1), hash21(id + 8.7)) - 0.5;
-    float dust = exp(-110.0 * length(local - offset * 0.55));
-    dust *= smoothstep(0.955, 1.0, h);
-    dust *= max(0.0, 0.45 + 0.55 * sin(iTime * (1.0 + h * 2.0) + h * 50.0));
-    color += vec3(1.0, 0.43, 0.025) * dust * 0.8;
-    coverage = max(coverage, sat(dust * 0.8));
-
-    }
-
-    float ignitionGlow = uVfxTime < 0.0 ? 0.0 : smoothstep(0.015,0.19,uVfxTime);
-    float overload = uVfxTime < 0.0 ? 0.0 : smoothstep(0.19,0.56,uVfxTime);
-    float burst = smoothstep(0.50,0.76,uVfxTime) * (1.0-smoothstep(1.02,1.30,uVfxTime));
-    vec3 glow = vec3(0.0);
-    if (uLoadingCover > 0.5 || uVfxTime >= 0.0) {
-        glow = integrateFilamentGlow(ro,rd,fragCoord)
-             * (uLoadingCover > 0.5 ? 0.23 : 0.20*ignitionGlow + 0.55*overload + 1.2*burst);
+    float ignitionGlow=uVfxTime < 0.0 ? 0.0 : smoothstep(0.015,0.27,uVfxTime);
+    float overload=uVfxTime < 0.0 ? 0.0 : smoothstep(0.27,0.68,uVfxTime);
+    float burst=smoothstep(0.50,0.75,uVfxTime)
+            *(1.0-smoothstep(1.05,1.55,uVfxTime));
+    float idleGlow=uVfxTime < 0.0
+            ? uHover*(0.045+0.10*uPointerSpeed) : 0.0;
+    vec3 glow=vec3(0.0);
+    if(uLoadingCover > 0.5 || uVfxTime >= 0.0 || uHover > 0.02) {
+        glow=integrateFilamentGlow(ro,rd,fragCoord)
+             *(uLoadingCover > 0.5 ? 0.23 : idleGlow
+               +0.20*ignitionGlow+0.55*overload+1.2*burst);
     }
     color += glow;
     coverage = max(coverage, sat(max(glow.r, max(glow.g, glow.b))));
@@ -905,42 +907,26 @@ vec4 render(vec2 fragCoord)
         vec3 glass = shadeGlass(p,rd);
         float glassPath = 0.032/max(facing,0.16);
         vec3 transmission = color*exp(-vec3(0.09,0.05,0.035)*glassPath);
-        float opacity = 0.035+0.26*fresnel;
+        float opacity=0.035+0.26*fresnel;
+        if(uLoadingCover < 0.5 && uVfxTime >= 0.0) {
+            float fracture=smoothstep(0.47,0.77,uVfxTime)
+                         *(1.0-smoothstep(1.10,1.66,uVfxTime));
+            glass+=vec3(1.0,0.75,0.36)*glassFracture3D(p,uBurstSeed)*fracture*1.5;
+            // The transparent shell dissolves where world-space fragments depart.
+            float vanish=smoothstep(0.72,1.44,uVfxTime);
+            float patch=hash21(vec2(floor(atan(p.z,p.x)*7.0+uBurstSeed),floor(p.y*8.0)));
+            opacity*=1.0-vanish*(0.72+0.24*patch);
+        }
         color = mix(transmission,transmission+glass*0.78,opacity);
         color += glass*0.11;
         coverage = max(coverage, sat(opacity + max(glass.r, max(glass.g, glass.b)) * 0.18));
     }
 
-    // Projected conductor-to-filament micro-arcs; fragment-space light stays
-    // synchronized with the object's physical lead positions.
-    if (uLoadingCover < 0.5 && uVfxTime >= 0.0) {
-        float t = uVfxTime;
-        float arcs = (1.0-smoothstep(0.44,0.72,t));
-        float flicker = step(0.33,hash21(vec2(floor(t*55.0),2.7)));
-        float discharge = arcs * flicker;
-        float leftArc = electricalArc(uv,vec2(-0.11,-0.045),vec2(-0.10,0.075),t,3.0);
-        float rightArc = electricalArc(uv,vec2(0.11,-0.045),vec2(0.10,0.075),t,9.0);
-        float arc = max(leftArc,rightArc);
-        // Bright white plasma cores, cool halos, warm spill on glass.
-        vec3 arcLight = vec3(1.8,2.15,2.5)*pow(arc,4.0)
-                      +vec3(0.22,0.70,1.6)*arc*0.38;
-        color += discharge*arcLight;
-        float radial = length(uv);
-        float glassSpill = exp(-radial*5.0)*discharge*0.16;
-        color += vec3(0.32,0.67,1.0)*glassSpill;
-        // A physically motivated overload flash around the filament first,
-        // followed by a short camera-filling wash. No permanent white screen.
-        float flash = smoothstep(0.59,0.70,t)*(1.0-smoothstep(0.79,0.96,t));
-        color += vec3(1.5,1.17,0.82)*flash*exp(-radial*2.7)*1.25;
-        // Light streaks are emitted only after the bulb erupts.
-        float expansion = smoothstep(0.60,0.84,t)*(1.0-smoothstep(1.12,1.42,t));
-        float angle = atan(uv.y,uv.x);
-        float stripe = pow(max(0.0,sin(angle*45.0+floor(t*35.0)*0.12)),30.0);
-        float trail = exp(-abs(radial-(t-0.62)*2.1)*4.0);
-        color += mix(vec3(1.2,0.48,0.08),vec3(0.2,0.84,1.1),0.35)
-                 *stripe*trail*expansion*0.55;
-        // A controlled exposure roll-off blends into the homepage via CSS.
-        color *= 1.0-0.16*smoothstep(1.2,1.75,t);
+    // Brief exposure flash, applied only to the physically lit object.
+    if(uLoadingCover < 0.5 && uVfxTime >= 0.0) {
+        float flash=smoothstep(0.60,0.72,uVfxTime)
+                   *(1.0-smoothstep(0.76,0.93,uVfxTime));
+        color *= 1.0+flash*1.65;
     }
 
     float bloom = smoothstep(0.70, 2.2, max(color.r, max(color.g, color.b)));
