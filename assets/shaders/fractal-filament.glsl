@@ -409,22 +409,32 @@ float baseSDF(vec3 p)
         0.345
     );
 
-    float contact = sdEllipsoid(
-        p - vec3(0.0, -1.285, 0.0),
-        vec3(0.19, 0.13, 0.19)
-    );
-
-    // Retain the conservative factor for solid tracing.
-    return min(min(body, collar), contact) * 0.72;
+    // Separate electrical contact and non-conductive spacer are traced below.
+    return min(body, collar) * 0.72;
 }
 
-// x = distance, y = material: 1 base, 2 support, 3 filament
+float insulatorSDF(vec3 p)
+{
+    return sdCappedCylinder(p-vec3(0.0,-1.225,0.0),0.033,0.215);
+}
+float contactSDF(vec3 p)
+{
+    return sdEllipsoid(p-vec3(0.0,-1.285,0.0),vec3(0.105,0.085,0.105));
+}
+
+// Material IDs: 1 brass shell, 2 leads, 3 tungsten, 4 glass,
+// 5 electrical insulator, 6 bottom electrical contact.
 vec2 solidScene(vec3 p)
 {
     vec2 result = vec2(FAR_CLIP, 0.0);
 
     float base = baseSDF(p);
     if (base < result.x) result = vec2(base, 1.0);
+
+    float insulator = insulatorSDF(p)*0.75;
+    if (insulator < result.x) result = vec2(insulator, 5.0);
+    float contact = contactSDF(p)*0.75;
+    if (contact < result.x) result = vec2(contact, 6.0);
 
     float support = supportSDF(p);
     if (support < result.x) result = vec2(support, 2.0);
@@ -691,6 +701,14 @@ vec3 shadeSolid(vec3 p, vec3 rd, float material)
              + vec3(1.0, 0.48, 0.05) * specular;
     }
 
+    if (material > 5.5) {
+        return vec3(0.60,0.40,0.16)*(0.35+diffuse*0.65)
+             +vec3(1.0,0.90,0.62)*specular*0.85;
+    }
+    if (material > 4.5) {
+        return vec3(0.085,0.075,0.068)*(0.55+diffuse*0.45)
+             +vec3(0.2)*specular*0.16;
+    }
     if (material > 3.5)
     {
         // Translucent lamp stem, distinct from conducting wires and brass.
