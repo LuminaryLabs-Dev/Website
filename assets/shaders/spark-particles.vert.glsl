@@ -21,6 +21,7 @@ varying float vColorClass;
 vec2 projectBulbPoint(vec3 point)
 {
     vec3 ro = vec3(0.055*sin(uSceneTime*0.23),0.045+0.025*sin(uSceneTime*0.19),3.75);
+    ro.z -= 1.28 * smoothstep(0.62,1.13,max(uTime,0.0));
     vec3 target = vec3(0.018*sin(uSceneTime*1.35),-0.06+0.014*sin(uSceneTime*1.72),0.0);
     vec3 forward = normalize(target-ro);
     vec3 right = normalize(cross(forward,vec3(0.0,1.0,0.0)));
