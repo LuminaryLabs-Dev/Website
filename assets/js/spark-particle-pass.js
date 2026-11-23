@@ -1,10 +1,10 @@
 (function () {
-  const MAX_PARTICLE_COUNT = 96;
+  const MAX_PARTICLE_COUNT = 128;
   const PROFILE_SAMPLES = 384;
   const SURFACE_MIN_Y = -0.440;
   const TOP_Y = 1.200;
   const SURFACE_ANGLE_MARGIN = 0.100;
-  const LIFETIME = 2.6;
+  const LIFETIME = 1.05;
   const TAU = Math.PI * 2;
 
   function hash(value) {
@@ -130,53 +130,31 @@
   }
 
   function buildBurstSchedule(sampleSurface) {
+    // A single electrical rupture, never a cyclic ambient particle fountain.
     const particles = [];
-    const bursts = [];
-    let nextBurstTime = 0;
-    let burstNumber = 0;
-
-    while (particles.length < MAX_PARTICLE_COUNT) {
-      const requestedCount = 5 + Math.floor(6 * hash(burstNumber));
-      if (particles.length + requestedCount > MAX_PARTICLE_COUNT) break;
-
-      const burst = {
-        index: burstNumber,
-        birthTime: nextBurstTime,
-        count: requestedCount,
-      };
-
-      for (let member = 0; member < requestedCount; member += 1) {
-        const index = particles.length;
-        const surfaceHeight = hash(burstNumber * 131 + member * 17 + 401);
-        const surfaceAngle = hash(burstNumber * 197 + member * 29 + 503);
-        const sizeMix = Math.pow(hash(index), 2.2);
-        const colorSeed = hash(index + 211);
-        let colorClass = colorSeed < 0.55 ? 0 : colorSeed < 0.85 ? 1 : 2;
-
-        // Keep warm white concentrated in the smallest, sharpest sparks.
-        if (colorClass === 1 && sizeMix > 0.42) {
-          colorClass = hash(index + 307) < 0.72 ? 0 : 2;
-        }
-
-        particles.push({
-          spawn: sampleSurface(surfaceHeight, surfaceAngle),
-          birthTime: nextBurstTime,
-          speed: 0.16 * (0.85 + 0.30 * hash(index + 17)),
-          curlPhase: hash(index + 1) * TAU,
-          sizeMix,
-          colorClass,
-        });
-      }
-
-      bursts.push(burst);
-      nextBurstTime += 0.35 + (1.10 - 0.35) * hash(burstNumber + 19);
-      burstNumber += 1;
+    for (let index = 0; index < MAX_PARTICLE_COUNT; index += 1) {
+      const h = hash(index * 19 + 11);
+      const fromGlass = index % 5 === 0;
+      const surface = sampleSurface(hash(index * 37 + 21), hash(index * 43 + 41));
+      const contact = index % 2 === 0 ? -1 : 1;
+      const spawn = fromGlass ? surface : [
+        contact * (0.175 + 0.04 * hash(index + 30)),
+        0.105 + 0.022 * hash(index + 14),
+        0.026 * Math.cos(hash(index + 9) * TAU),
+      ];
+      particles.push({
+        spawn,
+        birthTime: (fromGlass ? 0.61 : 0.17) + 0.52 * hash(index * 7 + 73),
+        speed: 0.7 + 1.55 * hash(index * 23 + 18),
+        curlPhase: TAU * hash(index * 29 + 5),
+        sizeMix: Math.pow(hash(index * 3 + 15), 2.2),
+        colorClass: h < 0.68 ? 0 : h < 0.96 ? 1 : 2,
+      });
     }
-
     return {
       particles,
-      bursts,
-      cycleDuration: nextBurstTime,
+      bursts: [{ index: 0, birthTime: 0.17, count: particles.length }],
+      cycleDuration: 2.0,
     };
   }
 
@@ -258,6 +236,7 @@
       colorClass: gl.getAttribLocation(program, "aColorClass"),
       resolution: gl.getUniformLocation(program, "uResolution"),
       time: gl.getUniformLocation(program, "uTime"),
+      sceneTime: gl.getUniformLocation(program, "uSceneTime"),
       lifetime: gl.getUniformLocation(program, "uLifetime"),
       cycleDuration: gl.getUniformLocation(program, "uCycleDuration"),
     };
@@ -274,7 +253,14 @@
       );
     }
 
+    let activationStart = null;
+
+    function activate(rendererTime) {
+      if (activationStart === null) activationStart = rendererTime;
+    }
+
     function render(time, width, height) {
+      if (activationStart === null || time < activationStart || time - activationStart > 1.9) return;
       const previousProgram = gl.getParameter(gl.CURRENT_PROGRAM);
       const previousBuffer = gl.getParameter(gl.ARRAY_BUFFER_BINDING);
       const blendWasEnabled = gl.isEnabled(gl.BLEND);
@@ -293,7 +279,8 @@
       bindAttribute(locations.colorClass, 1, 7);
 
       gl.uniform2f(locations.resolution, width, height);
-      gl.uniform1f(locations.time, time);
+      gl.uniform1f(locations.time, time - activationStart);
+      gl.uniform1f(locations.sceneTime, time);
       gl.uniform1f(locations.lifetime, LIFETIME);
       gl.uniform1f(locations.cycleDuration, schedule.cycleDuration);
 
@@ -329,6 +316,7 @@
       surfaceMinY: SURFACE_MIN_Y,
       topY: TOP_Y,
       surfacePoints,
+      activate,
       render,
       dispose,
     };
