@@ -23,6 +23,7 @@
       this.finishReason = "";
       this.startedAt = 0;
       this.activationAt = null;
+      this.activationRequested = null;
       this.boundReplayClick = event => this.onReplayRequest(event);
     }
 
@@ -60,6 +61,7 @@
       this.finishReason = "";
       this.startedAt = performance.now();
       this.activationAt = null;
+      this.activationRequested = null;
       this.hidden = false;
       this.classList.remove("is-exiting");
       this.setAttribute("role", "dialog");
@@ -155,6 +157,8 @@
           <shader-renderer
             fragment-src="${this.escapeAttribute(fragmentSource)}"
             passes="${this.escapeAttribute(passes)}"
+            max-pixels="520000"
+            max-fps="30"
             pixel-ratio-cap="1.5"
             transparent
             aria-hidden="true"></shader-renderer>
@@ -204,10 +208,13 @@
       this.renderer?.setUniform("uStarA", 0);
       this.renderer?.setUniform("uStarB", 0);
       this.renderer?.setUniform("uStarC", 0);
+      if (this.activationRequested) this.activate(this.activationRequested);
     }
 
     activate(reason) {
-      if (!this.running || this.finished || this.finishing || !this.ready || this.activationAt !== null) return;
+      if (!this.running || this.finished || this.finishing || this.activationAt !== null) return;
+      if (!this.ready) { this.activationRequested = reason; return; }
+      this.activationRequested = null;
       this.activationAt = this.renderer.lastElapsed || 0;
       this.dataset.state = "activating";
       if (this.status) this.status.textContent = "Light ignited";
