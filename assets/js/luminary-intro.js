@@ -1,10 +1,10 @@
 (function () {
   const STORAGE_KEY = "luminary:intro:seen";
-  const DEFAULT_VERSION = "20261123-vfx-2";
+  const DEFAULT_VERSION = "20261123-interactive-3";
   const READY_DEADLINE_MS = 2500;
-  const IGNITION_TO_REVEAL_MS = 1200;
-  const EXIT_MS = 600;
-  const ACTIVATION_FAILSAFE_MS = 2800;
+  const IGNITION_TO_REVEAL_MS = 2950;
+  const EXIT_MS = 550;
+  const ACTIVATION_FAILSAFE_MS = 4700;
 
   class LuminaryIntro extends HTMLElement {
     constructor() {
@@ -24,6 +24,8 @@
       this.startedAt = 0;
       this.activationAt = null;
       this.activationRequested = null;
+      this.activationSeed = 0;
+      this.motion = null;
       this.boundReplayClick = event => this.onReplayRequest(event);
     }
 
@@ -62,6 +64,8 @@
       this.startedAt = performance.now();
       this.activationAt = null;
       this.activationRequested = null;
+      this.activationSeed = 0;
+      this.resetMotion();
       this.hidden = false;
       this.classList.remove("is-exiting");
       this.setAttribute("role", "dialog");
@@ -141,6 +145,68 @@
       if (this.replay()) event.preventDefault();
     }
 
+
+    resetMotion() {
+      this.motion = {
+        pitch: 0, yaw: 0, pitchVelocity: 0, yawVelocity: 0,
+        targetPitch: 0, targetYaw: 0, hover: 0, targetHover: 0,
+        pointerSpeed: 0, lastPointer: null, lastElapsed: null
+      };
+    }
+
+    updatePointer(event) {
+      if (event.pointerType === "touch" || this.activationAt !== null) return;
+      const rect = event.currentTarget.getBoundingClientRect();
+      const scale = Math.max(1, rect.height * 0.5);
+      const x = (event.clientX - rect.left - rect.width * 0.5) / scale;
+      const y = (rect.top + rect.height * 0.5 - event.clientY) / scale;
+      const distance = Math.hypot(x / 0.66, y / 0.94);
+      const near = Math.max(0, Math.min(1, (1.45 - distance) / 0.7));
+      const hover = near * near * (3 - 2 * near);
+      this.motion.targetHover = hover;
+      this.motion.targetPitch = y * 0.075 * hover;
+      this.motion.targetYaw = -x * 0.10 * hover;
+      const now = performance.now();
+      const previous = this.motion.lastPointer;
+      if (previous) {
+        const dt = Math.max(now - previous.time, 8);
+        const speed = Math.hypot(event.clientX - previous.x, event.clientY - previous.y) / dt;
+        this.motion.pointerSpeed = Math.max(this.motion.pointerSpeed, Math.min(1, speed / 1.1) * hover);
+      }
+      this.motion.lastPointer = { x: event.clientX, y: event.clientY, time: now };
+    }
+
+    clearPointer() {
+      if (!this.motion || this.activationAt !== null) return;
+      this.motion.targetHover = 0;
+      this.motion.targetPitch = 0;
+      this.motion.targetYaw = 0;
+      this.motion.lastPointer = null;
+    }
+
+    advanceMotion(elapsed) {
+      const m = this.motion;
+      if (!m) return;
+      const delta = m.lastElapsed === null ? 0 : elapsed - m.lastElapsed;
+      m.lastElapsed = elapsed;
+      const dt = Math.max(0, Math.min(0.045, delta));
+      if (dt <= 0) return;
+      // Critically damped near idle, with a short visible overshoot on fast movement.
+      const spring = 66;
+      const damping = 12.8;
+      m.pitchVelocity += (spring * (m.targetPitch - m.pitch) - damping * m.pitchVelocity) * dt;
+      m.yawVelocity += (spring * (m.targetYaw - m.yaw) - damping * m.yawVelocity) * dt;
+      m.pitch = Math.max(-0.15, Math.min(0.15, m.pitch + m.pitchVelocity * dt));
+      m.yaw = Math.max(-0.18, Math.min(0.18, m.yaw + m.yawVelocity * dt));
+      m.hover += (m.targetHover - m.hover) * (1 - Math.exp(-13 * dt));
+      m.pointerSpeed *= Math.exp(-5.5 * dt);
+      if (this.activationAt !== null) {
+        m.targetPitch = 0;
+        m.targetYaw = 0;
+        m.targetHover = 0;
+      }
+    }
+
     mount() {
       this.abortController = new AbortController();
       const signal = this.abortController.signal;
@@ -173,12 +239,23 @@
       this.status = this.querySelector(".luminary-intro__status");
       this.renderer.setAttribute("max-pixels", matchMedia("(max-width: 700px)").matches ? "260000" : "520000");
       this.renderer.setUniform("uVfxTime", -1, false);
+      this.renderer.setUniform("uHover", 0, false);
+      this.renderer.setUniform("uPointerSpeed", 0, false);
+      this.renderer.setUniform("uBulbTilt", [0, 0], false);
+      this.renderer.setUniform("uBurstSeed", 0, false);
       this.renderer.beforeDraw = elapsed => {
+        this.advanceMotion(elapsed);
         this.renderer.setUniform("uVfxTime", this.activationAt === null ? -1 : Math.max(0, elapsed - this.activationAt), false);
+        this.renderer.setUniform("uHover", this.motion.hover, false);
+        this.renderer.setUniform("uPointerSpeed", this.motion.pointerSpeed, false);
+        this.renderer.setUniform("uBulbTilt", [this.motion.pitch, this.motion.yaw], false);
+        this.renderer.setUniform("uBurstSeed", this.activationSeed, false);
       };
-      this.querySelector(".luminary-intro__activate")?.addEventListener("click", () => {
-        this.activate("interaction");
-      }, { signal });
+      const activationSurface = this.querySelector(".luminary-intro__activate");
+      activationSurface?.addEventListener("pointermove", event => this.updatePointer(event), { passive: true, signal });
+      activationSurface?.addEventListener("pointerleave", () => this.clearPointer(), { signal });
+      activationSurface?.addEventListener("pointercancel", () => this.clearPointer(), { signal });
+      activationSurface?.addEventListener("click", () => this.activate("interaction"), { signal });
       this.querySelector(".luminary-intro__skip")?.addEventListener("click", event => {
         event.stopPropagation();
         this.finishIntro({ immediate: true, reason: "skip" });
@@ -217,12 +294,18 @@
       if (!this.ready) { this.activationRequested = reason; return; }
       this.activationRequested = null;
       this.activationAt = this.renderer.lastElapsed || 0;
+      this.activationSeed = Math.random() * 10000;
+      this.motion.pitchVelocity -= 0.8;
+      this.motion.yawVelocity += 0.35 * (this.motion.yaw >= 0 ? 1 : -1);
       this.dataset.state = "activating";
       if (this.status) this.status.textContent = "Light ignited";
       const guide = this.querySelector(".luminary-intro__guide");
       if (guide) guide.textContent = "Luminary Labs";
       this.renderer.setUniform("uVfxTime", 0, false);
-      this.renderer.passes?.forEach(pass => pass.activate?.(this.activationAt));
+      this.renderer.setUniform("uBurstSeed", this.activationSeed, false);
+      this.renderer.passes?.forEach(pass => pass.activate?.(
+        this.activationAt, this.activationSeed, [this.motion.pitch, this.motion.yaw]
+      ));
       this.schedule(() => this.finishIntro({ immediate: false, reason }), IGNITION_TO_REVEAL_MS);
       this.schedule(() => this.finishIntro({ immediate: true, reason: "vfx-timeout" }), ACTIVATION_FAILSAFE_MS);
     }
