@@ -17,6 +17,9 @@
 uniform float uPower;
 // Negative while idle. Seconds since deliberate visitor activation otherwise.
 uniform float uVfxTime;
+uniform float uHover;
+uniform float uPointerSpeed;
+uniform float uBurstSeed;
 // Zero defaults preserve the fullscreen intro; only the hero cover opts in.
 uniform float uLoadingCover;
 uniform vec3 uBulbOffset;
@@ -720,9 +723,15 @@ vec3 shadeSolid(vec3 p, vec3 rd, float material)
     }
 
     // Tungsten heats up during ignition before the branded energy overtakes it.
-    float ignition = uVfxTime < 0.0 ? 0.0 : smoothstep(0.02,0.20,uVfxTime);
-    vec3 tungsten = mix(vec3(0.19,0.07,0.027),vec3(1.8,1.04,0.43),ignition);
-    float energized = uVfxTime < 0.0 ? 0.0 : smoothstep(0.20,0.60,uVfxTime);
+    float idleFlicker=0.5+0.5*sin(iTime*23.0+2.0*sin(iTime*8.0));
+    float hoverHeat=uVfxTime < 0.0
+        ? uHover*(0.09+0.14*uPointerSpeed)*idleFlicker : 0.0;
+    float ignition=uVfxTime < 0.0 ? hoverHeat
+        : smoothstep(0.02,0.27,uVfxTime);
+    vec3 tungsten=mix(vec3(0.19,0.07,0.027),vec3(1.8,1.04,0.43),ignition);
+    float burnout=uVfxTime < 0.0 ? 0.0 : smoothstep(1.25,2.55,uVfxTime);
+    float energized=uVfxTime < 0.0 ? 0.0
+        : smoothstep(0.27,0.66,uVfxTime)*(1.0-burnout);
     float fractal = foldedFractal(p * 3.1 + vec3(0.0, iTime * 0.08, 0.0));
     float signal = sin(p.y * 20.0 + fractal * 8.0 - iTime * 2.5);
     vec3 hot = mix(tungsten, energyColor(signal) * 2.2 + vec3(1.6,1.15,0.52) * (0.7+fractal),energized);
@@ -807,10 +816,11 @@ vec4 render(vec2 fragCoord)
         3.75
     );
 
-    // Brief physical camera approach creates the bulb-flying-at-you beat.
-    // The spark renderer applies the exact same forward displacement.
+    // Short physical recoil followed by a deliberate forward camera push.
+    // The 3D spark shader uses this same projection formula.
     if (uLoadingCover < 0.5 && uVfxTime >= 0.0) {
-        ro.z -= 1.28 * smoothstep(0.62, 1.13, uVfxTime);
+        ro.z += 0.065*exp(-uVfxTime*13.0)*sin(uVfxTime*34.0)
+              - 1.28*smoothstep(0.95,1.85,uVfxTime);
     }
     vec3 target = vec3(0.018 * sin(iTime * 1.35), -0.06 + 0.014 * sin(iTime * 1.72), 0.0);
     if (uLoadingCover > 0.5) {
@@ -833,6 +843,17 @@ vec4 render(vec2 fragCoord)
         rd.yz = pitch * rd.yz;
         ro.xz = yaw * ro.xz;
         rd.xz = yaw * rd.xz;
+    } else {
+        // Inverse rigid rotation about the bulb's neck; every existing
+        // piece of glass, wire and metal is transformed together.
+        ro.y += 0.57;
+        float cx=cos(uBulbTilt.x),sx=sin(uBulbTilt.x);
+        float cy=cos(uBulbTilt.y),sy=sin(uBulbTilt.y);
+        ro.xz=vec2(cy*ro.x-sy*ro.z,sy*ro.x+cy*ro.z);
+        rd.xz=vec2(cy*rd.x-sy*rd.z,sy*rd.x+cy*rd.z);
+        ro.yz=vec2(cx*ro.y+sx*ro.z,-sx*ro.y+cx*ro.z);
+        rd.yz=vec2(cx*rd.y+sx*rd.z,-sx*rd.y+cx*rd.z);
+        ro.y -= 0.57;
     }
     vec3 color = vec3(0.0);
     float coverage = 0.0;
