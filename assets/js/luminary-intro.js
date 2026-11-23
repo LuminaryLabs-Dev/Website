@@ -1,12 +1,10 @@
 (function () {
   const STORAGE_KEY = "luminary:intro:seen";
-  const DEFAULT_VERSION = "20261123-anatomy-1";
-  const INTRO_MS = 5000;
-  const READY_DEADLINE_MS = 1000;
-  const AUTO_ACTIVATE_MS = 3600;
-  const FLASH_MS = 180;
-  const EXIT_MS = 1200;
-  const HARD_LIMIT_MS = INTRO_MS;
+  const DEFAULT_VERSION = "20261123-vfx-2";
+  const READY_DEADLINE_MS = 2500;
+  const IGNITION_TO_REVEAL_MS = 1200;
+  const EXIT_MS = 600;
+  const ACTIVATION_FAILSAFE_MS = 2800;
 
   class LuminaryIntro extends HTMLElement {
     constructor() {
@@ -24,6 +22,7 @@
       this.running = false;
       this.finishReason = "";
       this.startedAt = 0;
+      this.activationAt = null;
       this.boundReplayClick = event => this.onReplayRequest(event);
     }
 
@@ -60,6 +59,7 @@
       this.running = true;
       this.finishReason = "";
       this.startedAt = performance.now();
+      this.activationAt = null;
       this.hidden = false;
       this.classList.remove("is-exiting");
       this.setAttribute("role", "dialog");
@@ -74,8 +74,7 @@
       this.schedule(() => {
         if (!this.ready) this.finishIntro({ immediate: true, reason: "slow-renderer" });
       }, READY_DEADLINE_MS);
-      this.schedule(() => this.activate("automatic"), AUTO_ACTIVATE_MS);
-      this.schedule(() => this.finishIntro({ immediate: true, reason: "hard-limit" }), HARD_LIMIT_MS);
+
 
       if (this.replayFocusTarget) {
         this.schedule(() => {
@@ -160,16 +159,20 @@
             transparent
             aria-hidden="true"></shader-renderer>
         </div>
-        <button class="luminary-intro__activate" type="button" aria-label="Activate the Luminary Labs light"></button>
-        <p class="luminary-intro__guide">Light the way</p>
+        <button class="luminary-intro__activate" type="button" aria-label="Ignite the Luminary Labs lightbulb"></button>
+        <p class="luminary-intro__guide">Click to ignite</p>
         <button class="luminary-intro__skip" type="button">Skip Intro</button>
         <span class="luminary-intro__status" aria-live="polite">Loading the Luminary Labs introduction</span>
       `;
 
       this.renderer = this.querySelector("shader-renderer");
       this.status = this.querySelector(".luminary-intro__status");
+      this.renderer.setUniform("uVfxTime", -1, false);
+      this.renderer.beforeDraw = elapsed => {
+        this.renderer.setUniform("uVfxTime", this.activationAt === null ? -1 : Math.max(0, elapsed - this.activationAt), false);
+      };
       this.querySelector(".luminary-intro__activate")?.addEventListener("click", () => {
-        this.finishIntro({ immediate: true, reason: "interaction" });
+        this.activate("interaction");
       }, { signal });
       this.querySelector(".luminary-intro__skip")?.addEventListener("click", event => {
         event.stopPropagation();
@@ -188,7 +191,7 @@
         if (!isActivationKey || event.repeat || interactiveTarget) return;
 
         event.preventDefault();
-        this.finishIntro({ immediate: true, reason: "keyboard" });
+        this.activate("keyboard");
       }, { signal });
     }
 
@@ -204,14 +207,16 @@
     }
 
     activate(reason) {
-      if (!this.running || this.finished || this.finishing || this.dataset.state === "activating") return;
+      if (!this.running || this.finished || this.finishing || !this.ready || this.activationAt !== null) return;
+      this.activationAt = this.renderer.lastElapsed || 0;
       this.dataset.state = "activating";
-      if (this.status) this.status.textContent = "The light is activating";
-      this.renderer?.setUniform("uPower", 1);
-      this.renderer?.setUniform("uStarA", 1);
-      this.renderer?.setUniform("uStarB", 1);
-      this.renderer?.setUniform("uStarC", 1);
-      this.schedule(() => this.finishIntro({ immediate: false, reason }), FLASH_MS);
+      if (this.status) this.status.textContent = "Light ignited";
+      const guide = this.querySelector(".luminary-intro__guide");
+      if (guide) guide.textContent = "Luminary Labs";
+      this.renderer.setUniform("uVfxTime", 0, false);
+      this.renderer.passes?.forEach(pass => pass.activate?.(this.activationAt));
+      this.schedule(() => this.finishIntro({ immediate: false, reason }), IGNITION_TO_REVEAL_MS);
+      this.schedule(() => this.finishIntro({ immediate: true, reason: "vfx-timeout" }), ACTIVATION_FAILSAFE_MS);
     }
 
     finishIntro({ immediate = false, reason = "complete" } = {}) {
