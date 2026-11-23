@@ -87,9 +87,8 @@
 }
 .ll-site .extras-rail-links{
   display:flex;flex-direction:column;gap:6px;padding:5px;
-  border:1px solid rgba(23,33,43,.13);border-radius:13px;
-  background:rgba(250,251,252,.78);box-shadow:0 4px 20px rgba(12,20,28,.09);
-  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border:0;border-radius:0;background:transparent;box-shadow:none;
+  -webkit-backdrop-filter:none;backdrop-filter:none;
 }
 .ll-site .extras-rail-link{
   position:relative;display:flex;align-items:center;justify-content:center;
