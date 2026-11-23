@@ -171,6 +171,7 @@
 
       this.renderer = this.querySelector("shader-renderer");
       this.status = this.querySelector(".luminary-intro__status");
+      this.renderer.setAttribute("max-pixels", matchMedia("(max-width: 700px)").matches ? "260000" : "520000");
       this.renderer.setUniform("uVfxTime", -1, false);
       this.renderer.beforeDraw = elapsed => {
         this.renderer.setUniform("uVfxTime", this.activationAt === null ? -1 : Math.max(0, elapsed - this.activationAt), false);
