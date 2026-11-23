@@ -858,6 +858,35 @@ vec4 render(vec2 fragCoord)
 
     }
 
+    // Five-second opening choreography: ignition -> overcharge -> shards
+    // -> streaks -> transparent hand-off to the actual hallway beneath.
+    // The lamp SDF stays a recognizable physical object until the burst.
+    if (uLoadingCover < 0.5) {
+        float burstWindow = smoothstep(1.60,2.35,iTime)
+                          *(1.0-smoothstep(2.7,3.3,iTime));
+        float warpWindow = smoothstep(2.45,3.10,iTime)
+                         *(1.0-smoothstep(3.55,4.20,iTime));
+        float radius = length(uv);
+        float angle = atan(uv.y,uv.x);
+        float band = floor(angle*14.0+radius*20.0);
+        float hash = hash21(vec2(band,floor(radius*28.0)));
+        float shards = pow(max(0.0,sin(angle*28.0+radius*40.0-iTime*23.0)),22.0);
+        shards *= smoothstep(0.1,0.45,radius)*(1.0-smoothstep(1.4,2.4,radius));
+        vec3 shardColor = mix(vec3(1.0,0.47,0.08),vec3(0.1,0.8,0.83),hash);
+        color += shardColor*shards*burstWindow*2.8;
+        float streak = pow(max(0.0,sin(angle*66.0+hash*4.0)),34.0);
+        streak *= smoothstep(0.08,0.32,radius);
+        float rush = pow(max(0.0,sin(radius*10.0-iTime*25.0+hash*6.0)),5.0);
+        color += mix(vec3(1.0,0.48,0.10),vec3(0.18,0.78,0.94),hash)
+                 *streak*rush*warpWindow*1.4;
+        // A bright, brief flash bridges the lamp to the hallway reveal.
+        float flash = smoothstep(3.55,3.77,iTime)
+                     *(1.0-smoothstep(3.81,4.15,iTime));
+        color += vec3(1.0,0.84,0.55)*flash*0.85;
+        // Decay of the lamp's visible energy as the camera passes through it.
+        coverage *= 1.0-0.92*smoothstep(3.75,4.75,iTime);
+    }
+
     float bloom = smoothstep(0.70, 2.2, max(color.r, max(color.g, color.b)));
     color += color * bloom * 0.22;
 
