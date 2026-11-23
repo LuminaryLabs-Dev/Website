@@ -201,8 +201,18 @@
       m.hover += (m.targetHover - m.hover) * (1 - Math.exp(-13 * dt));
       m.pointerSpeed *= Math.exp(-5.5 * dt);
       if (this.activationAt !== null) {
-        m.targetPitch = 0;
-        m.targetYaw = 0;
+        // Freeze the launch pose while sparks are born, so their original
+        // physical contact points stay aligned with the bulb glass and leads.
+        const age = elapsed - this.activationAt;
+        if (age < 1.25) {
+          m.targetPitch = m.pitch;
+          m.targetYaw = m.yaw;
+          m.pitchVelocity = 0;
+          m.yawVelocity = 0;
+        } else {
+          m.targetPitch = 0;
+          m.targetYaw = 0;
+        }
         m.targetHover = 0;
       }
     }
@@ -295,8 +305,8 @@
       this.activationRequested = null;
       this.activationAt = this.renderer.lastElapsed || 0;
       this.activationSeed = Math.random() * 10000;
-      this.motion.pitchVelocity -= 0.8;
-      this.motion.yawVelocity += 0.35 * (this.motion.yaw >= 0 ? 1 : -1);
+      // Physical click recoil is handled by the shared camera response;
+      // rotating the glass here would detach the sparks at their origin.
       this.dataset.state = "activating";
       if (this.status) this.status.textContent = "Light ignited";
       const guide = this.querySelector(".luminary-intro__guide");
