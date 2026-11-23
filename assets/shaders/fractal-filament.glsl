@@ -310,77 +310,45 @@ float glassSDF(vec3 p)
     return d * 0.86;
 }
 
-float ellipseRing3D(vec3 p, vec2 radius, float thickness)
-{
-    float ring = (length(p.xy / radius) - 1.0) * min(radius.x, radius.y);
-    return length(vec2(ring, p.z)) - thickness;
-}
-
-float curvedFilamentStem(vec3 p, float side, float lane)
-{
-    float low = -0.48;
-    float high = 0.09;
-    float y = clamp(p.y, low, high);
-    float u = (y - low) / (high - low);
-    float spread = smoothstep(0.05, 1.0, u);
-
-    float x = side * mix(0.045, 0.165, spread);
-    x += lane * mix(0.042, 0.020, u);
-    x += 0.006 * sin(iTime * 13.0 + y * 44.0 + side * 2.0 + lane * 8.0);
-
-    vec3 q = vec3(p.x - x, p.y - y, p.z);
-    return length(q) - 0.012;
-}
-
+// Lamp anatomy: short helical tungsten element, lead-in conductors,
+// stabilizing hooks, and a separate clear-glass exhaust/stem assembly.
+// Geometry is intentionally static; the ignition is handled by emission.
 float filamentRawSDF(vec3 p)
 {
-    p.x += 0.005 * sin(iTime * 17.0 + p.y * 51.0);
-    p.z += 0.004 * cos(iTime * 19.0 - p.y * 46.0);
-
-    float pulse = 0.009 * sin(iTime * 4.2);
-
-    vec3 left = p - vec3(-0.17, 0.12, 0.0);
-    left.xy *= rot(0.30 + 0.035 * sin(iTime * 3.1));
-
-    vec3 right = p - vec3(0.17, 0.12, 0.0);
-    right.xy *= rot(-0.30 - 0.035 * sin(iTime * 3.1));
-
-    float leftLoop = ellipseRing3D(left, vec2(0.145 + pulse, 0.085), 0.013);
-    float rightLoop = ellipseRing3D(right, vec2(0.145 - pulse, 0.085), 0.013);
-
-    float stems = curvedFilamentStem(p, -1.0, 0.0);
-    stems = min(stems, curvedFilamentStem(p, 1.0, 0.0));
-    stems = min(stems, curvedFilamentStem(p, -1.0, 1.0));
-    stems = min(stems, curvedFilamentStem(p, 1.0, -1.0));
-    stems = min(stems, curvedFilamentStem(p, 0.0, 0.0));
-
-    float bridge = sdCapsule(
-        p,
-        vec3(-0.12, 0.025, 0.0),
-        vec3(0.12, 0.025, 0.0),
-        0.012
-    );
-
-    return min(min(leftLoop, rightLoop), min(stems, bridge));
+    // A compact horizontal tungsten coil, not decorative luminous loops.
+    const float x0 = -0.205;
+    const float x1 = 0.205;
+    const float turns = 17.0;
+    float x = clamp(p.x, x0, x1);
+    float theta = (x - x0) / (x1 - x0) * turns * TAU;
+    vec3 center = vec3(x, 0.105 + 0.028 * sin(theta),
+                              0.026 * cos(theta));
+    // A slight distance reduction prevents diagonal-coil breaks in tracing.
+    float coil = length(p-center)-0.0095;
+    // Straight conductive ends connect the coil to the two support hooks.
+    float a = sdCapsule(p,vec3(-0.230,0.095,0.0),vec3(x0,0.105,0.026),0.009);
+    float b = sdCapsule(p,vec3(x1,0.105,0.026),vec3(0.230,0.095,0.0),0.009);
+    return min(coil,min(a,b));
 }
 
 float supportSDF(vec3 p)
 {
-    float left = sdCapsule(
-        p,
-        vec3(-0.13, -0.57, 0.025),
-        vec3(-0.06, -0.44, 0.005),
-        0.013
-    );
+    // Two separate conductive lead-in wires from the glass press to coil ends.
+    float left = sdCapsule(p,vec3(-0.105,-0.47,0.0),vec3(-0.225,0.09,0.0),0.011);
+    float right = sdCapsule(p,vec3(0.105,-0.47,0.0),vec3(0.225,0.09,0.0),0.011);
+    // Small tungsten hooks at the ends of the glowing element.
+    left=min(left,sdCapsule(p,vec3(-0.225,0.09,0.0),vec3(-0.230,0.105,0.0),0.012));
+    right=min(right,sdCapsule(p,vec3(0.225,0.09,0.0),vec3(0.230,0.105,0.0),0.012));
+    return min(left,right);
+}
 
-    float right = sdCapsule(
-        p,
-        vec3(0.13, -0.57, 0.025),
-        vec3(0.06, -0.44, 0.005),
-        0.013
-    );
-
-    return min(left, right);
+float mountSDF(vec3 p)
+{
+    // Pale inner glass stem, press seal, and narrow exhaust tube.
+    float stem=sdCappedCylinder(p-vec3(0.0,-0.295,0.0),0.24,0.041);
+    float press=sdEllipsoid(p-vec3(0.0,-0.49,0.0),vec3(0.135,0.085,0.07));
+    float exhaust=sdCappedCylinder(p-vec3(0.0,-0.01,0.0),0.055,0.014);
+    return min(stem,min(press,exhaust));
 }
 
 float baseSDF(vec3 p)
@@ -461,8 +429,11 @@ vec2 solidScene(vec3 p)
     float support = supportSDF(p);
     if (support < result.x) result = vec2(support, 2.0);
 
-    // Conservative factor keeps the animated curve safe for overstepping.
-    float filament = filamentRawSDF(p) * 0.66;
+    float mount = mountSDF(p) * 0.85;
+    if (mount < result.x) result = vec2(mount, 4.0);
+
+    // Conservative step for tightly wound tungsten.
+    float filament = filamentRawSDF(p) * 0.55;
     if (filament < result.x) result = vec2(filament, 3.0);
 
     return result;
@@ -720,10 +691,21 @@ vec3 shadeSolid(vec3 p, vec3 rd, float material)
              + vec3(1.0, 0.48, 0.05) * specular;
     }
 
+    if (material > 3.5)
+    {
+        // Translucent lamp stem, distinct from conducting wires and brass.
+        return vec3(0.23,0.32,0.36) * (0.28+0.65*diffuse)
+             + vec3(0.83,0.92,1.0)*specular*0.72
+             + vec3(0.26,0.40,0.44)*rim*0.32;
+    }
+
+    // Tungsten heats up during ignition before the branded energy overtakes it.
+    float ignition = smoothstep(0.05,0.70,iTime);
+    vec3 tungsten = mix(vec3(0.19,0.07,0.027),vec3(1.8,1.04,0.43),ignition);
+    float energized = smoothstep(0.70,1.65,iTime);
     float fractal = foldedFractal(p * 3.1 + vec3(0.0, iTime * 0.08, 0.0));
     float signal = sin(p.y * 20.0 + fractal * 8.0 - iTime * 2.5);
-    vec3 hot = energyColor(signal) * 3.2;
-    hot += vec3(1.6, 1.15, 0.52) * (0.7 + fractal);
+    vec3 hot = mix(tungsten, energyColor(signal) * 2.2 + vec3(1.6,1.15,0.52) * (0.7+fractal),energized);
     return hot;
 }
 
@@ -830,7 +812,11 @@ vec4 render(vec2 fragCoord)
 
     }
 
-    vec3 glow = integrateFilamentGlow(ro, rd, fragCoord) * (1.0 + uPower * 1.6);
+    float ignitionGlow = smoothstep(0.18,0.82,iTime);
+    float overload = smoothstep(0.8,1.6,iTime);
+    float burst = smoothstep(1.6,2.3,iTime) * (1.0-smoothstep(3.1,3.7,iTime));
+    vec3 glow = integrateFilamentGlow(ro, rd, fragCoord)
+              * (0.16 + 0.62*ignitionGlow + 0.34*overload + burst*0.9 + uPower*1.1);
     color += glow;
     coverage = max(coverage, sat(max(glow.r, max(glow.g, glow.b))));
 
