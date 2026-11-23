@@ -235,8 +235,8 @@
     }
 
     const [vertexSource, fragmentSource] = await Promise.all([
-      loadSource("assets/shaders/spark-particles.vert.glsl?v=20261123-vfx-2"),
-      loadSource("assets/shaders/spark-particles.frag.glsl?v=20261123-vfx-2"),
+      loadSource("assets/shaders/spark-particles.vert.glsl?v=20261123-interactive-3"),
+      loadSource("assets/shaders/spark-particles.frag.glsl?v=20261123-interactive-3"),
     ]);
 
     const program = link(gl, vertexSource, fragmentSource);
