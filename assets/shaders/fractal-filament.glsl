@@ -417,11 +417,11 @@ float baseSDF(vec3 p)
 
 float insulatorSDF(vec3 p)
 {
-    return sdCappedCylinder(p-vec3(0.0,-1.225,0.0),0.033,0.215);
+    return sdCappedCylinder(p-vec3(0.0,-1.265,0.0),0.052,0.217);
 }
 float contactSDF(vec3 p)
 {
-    return sdEllipsoid(p-vec3(0.0,-1.285,0.0),vec3(0.105,0.085,0.105));
+    return sdEllipsoid(p-vec3(0.0,-1.345,0.0),vec3(0.108,0.075,0.108));
 }
 
 // Material IDs: 1 brass shell, 2 leads, 3 tungsten, 4 glass,
@@ -684,7 +684,7 @@ vec3 shadeSolid(vec3 p, vec3 rd, float material)
             threads * 0.68
         );
 
-        if (uLoadingCover > 0.5) {
+        if (uLoadingCover > 0.5 || uVfxTime < 0.0) {
             vec3 brass = mix(vec3(0.12, 0.09, 0.05), vec3(0.48, 0.34, 0.16), threads);
             return brass * (0.35 + diffuse * 0.65)
                  + vec3(0.85, 0.77, 0.56) * specular * 0.7
@@ -738,9 +738,10 @@ vec3 shadeGlass(vec3 p, vec3 rd)
         vec3 reflected = reflect(rd, n);
         float softbox = pow(sat(dot(reflected, normalize(vec3(-0.7, 0.4, 0.8)))), 24.0);
         float sidebox = pow(sat(dot(reflected, normalize(vec3(0.8, 0.2, 0.4)))), 40.0);
-        return vec3(0.65, 0.76, 0.84) * fresnel * 1.4
-             + vec3(0.9, 0.95, 1.0) * softbox * 1.4
-             + vec3(1.0, 0.65, 0.32) * sidebox * 0.8;
+        vec3 physicalGlass = vec3(0.50,0.65,0.76)*fresnel*1.15
+             +vec3(0.91,0.95,1.0)*softbox*0.90
+             +vec3(0.82,0.58,0.31)*sidebox*0.48;
+        return physicalGlass * (uLoadingCover > 0.5 ? 1.0 : 0.52);
     }
     vec3 fp = p * 2.35 + vec3(
         sin(iTime * 0.17) * 0.22,
@@ -883,14 +884,16 @@ vec4 render(vec2 fragCoord)
     {
         vec3 p = ro + rd * glassHit;
         vec3 n = glassNormal(p);
-        float fresnel = pow(1.0 + dot(n, rd), 3.1);
-        vec3 glass = shadeGlass(p, rd);
-        float opacity = 0.035 + 0.23 * fresnel;
-        // Grazing light stays on the outer shell; transmission preserves
-        // visibly deeper tungsten and mount geometry inside the envelope.
-        vec3 transmission = mix(color,color*vec3(0.94,0.985,1.0),0.13);
-        color = mix(transmission,transmission + glass*0.87,opacity);
-        color += glass * 0.11;
+        // Schlick Fresnel and approximate Beer-Lambert absorption through
+        // finite-thickness clear glass. Keeps internal contacts visible.
+        float facing = clamp(-dot(n,rd),0.0,1.0);
+        float fresnel = 0.04+0.96*pow(1.0-facing,5.0);
+        vec3 glass = shadeGlass(p,rd);
+        float glassPath = 0.032/max(facing,0.16);
+        vec3 transmission = color*exp(-vec3(0.09,0.05,0.035)*glassPath);
+        float opacity = 0.035+0.26*fresnel;
+        color = mix(transmission,transmission+glass*0.78,opacity);
+        color += glass*0.11;
         coverage = max(coverage, sat(opacity + max(glass.r, max(glass.g, glass.b)) * 0.18));
     }
 
