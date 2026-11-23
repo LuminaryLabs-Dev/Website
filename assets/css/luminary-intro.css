@@ -114,7 +114,7 @@ body.ll-intro-open {
 html.ll-intro-pending luminary-intro.is-exiting {
   opacity: 0;
   pointer-events: none;
-  transition: opacity 600ms ease;
+  transition: opacity 550ms ease;
 }
 
 @keyframes luminary-intro-pulse {
