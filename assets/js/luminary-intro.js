@@ -191,6 +191,12 @@
       m.lastElapsed = elapsed;
       const dt = Math.max(0, Math.min(0.045, delta));
       if (dt <= 0) return;
+      if (this.activationAt !== null && elapsed - this.activationAt < 1.25) {
+        m.targetPitch = m.pitch;
+        m.targetYaw = m.yaw;
+        m.pitchVelocity = 0;
+        m.yawVelocity = 0;
+      }
       // Critically damped near idle, with a short visible overshoot on fast movement.
       const spring = 66;
       const damping = 12.8;
