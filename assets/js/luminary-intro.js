@@ -1,11 +1,11 @@
 (function () {
   const STORAGE_KEY = "luminary:intro:seen";
-  const DEFAULT_VERSION = "20260903-1";
+  const DEFAULT_VERSION = "20261123-anatomy-1";
   const INTRO_MS = 5000;
   const READY_DEADLINE_MS = 1000;
-  const AUTO_ACTIVATE_MS = 4450;
-  const FLASH_MS = 150;
-  const EXIT_MS = 400;
+  const AUTO_ACTIVATE_MS = 3600;
+  const FLASH_MS = 180;
+  const EXIT_MS = 1200;
   const HARD_LIMIT_MS = INTRO_MS;
 
   class LuminaryIntro extends HTMLElement {
@@ -169,7 +169,7 @@
       this.renderer = this.querySelector("shader-renderer");
       this.status = this.querySelector(".luminary-intro__status");
       this.querySelector(".luminary-intro__activate")?.addEventListener("click", () => {
-        this.activate("interaction");
+        this.finishIntro({ immediate: true, reason: "interaction" });
       }, { signal });
       this.querySelector(".luminary-intro__skip")?.addEventListener("click", event => {
         event.stopPropagation();
@@ -188,7 +188,7 @@
         if (!isActivationKey || event.repeat || interactiveTarget) return;
 
         event.preventDefault();
-        this.activate("keyboard");
+        this.finishIntro({ immediate: true, reason: "keyboard" });
       }, { signal });
     }
 
