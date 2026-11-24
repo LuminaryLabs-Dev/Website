@@ -9,27 +9,37 @@
   const form = document.querySelector('[data-apex-form]');
   if (!form) return;
   const status = form.querySelector('[data-apex-status]');
-  const value = name => form.elements[name]?.value?.trim() || '';
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-    if (!form.reportValidity()) return;
+  const button = form.querySelector('[data-apex-prepare]');
+  if (!button || !status) return;
+  const value = name => form.querySelector(`[name="${name}"]`)?.value?.trim() || '';
+  button.addEventListener('click', () => {
+    status.textContent = '';
+    for (const field of form.querySelectorAll('input, select, textarea')) {
+      if (!field.reportValidity()) return;
+    }
     const services = [...form.querySelectorAll('input[name="service"]:checked')].map(input => input.value).join(', ') || 'Not selected';
     const body = [
       'APEX Benchworks repair request',
       '',
-      \`Name: \${value('name')}\`,
-      \`Email: \${value('email')}\`,
-      \`Computer: \${value('computer')}\`,
-      \`Operating system: \${value('os')}\`,
-      \`Known specifications: \${value('specs') || 'Not provided'}\`,
-      \`Requested work: \${services}\`,
-      \`Problem / desired outcome: \${value('goal')}\`,
-      \`Approximate budget: \${value('budget')}\`,
-      \`Main priority: \${value('priority')}\`,
-      \`Additional notes: \${value('notes') || 'None'}\`
-    ].join('\\n');
-    const subject = \`APEX Benchworks repair request — \${value('name')}\`;
+      `Name: ${value('name')}`,
+      `Email: ${value('email')}`,
+      `Computer: ${value('computer')}`,
+      `Operating system: ${value('os')}`,
+      `Known specifications: ${value('specs') || 'Not provided'}`,
+      `Requested work: ${services}`,
+      `Problem / desired outcome: ${value('goal')}`,
+      `Approximate budget: ${value('budget')}`,
+      `Main priority: ${value('priority')}`,
+      `Additional notes: ${value('notes') || 'None'}`
+    ].join('\r\n');
+    const subject = `APEX Benchworks repair request — ${value('name')}`;
     status.textContent = 'Opening a draft in your email app. Review the message before sending.';
-    window.location.href = \`mailto:admin@luminarylabs.dev?subject=\${encodeURIComponent(subject)}&body=\${encodeURIComponent(body)}\`;
+    const draft = document.createElement('a');
+    draft.href = `mailto:admin@luminarylabs.dev?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    draft.hidden = true;
+    form.append(draft);
+    draft.click();
+    draft.remove();
   });
+  button.disabled = false;
 })();

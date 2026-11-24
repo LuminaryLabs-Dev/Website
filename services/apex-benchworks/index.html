@@ -16,7 +16,7 @@
   <link href="/assets/css/site-motion.css?v=20260906-unified-1" rel="stylesheet"/>
   <link rel="preload" href="/public/fonts/rajdhani-semibold.woff2" as="font" type="font/woff2" crossorigin/>
   <link rel="stylesheet" href="/assets/css/page-presentation.css?v=20260908-loading-1"/>
-  <link rel="stylesheet" href="/assets/css/apex-benchworks.css?v=20261001-2"/>
+  <link rel="stylesheet" href="/assets/css/apex-benchworks.css?v=20261124-1"/>
 </head>
 <body class="presentation-page ll-site apex-benchworks-page">
   <!-- site:header:start -->
@@ -186,15 +186,16 @@
         <p>You do not need to diagnose it yourself. Give us the useful facts, what is happening, and the outcome you want.</p>
         <p class="apex-form-note">This form prepares an email draft addressed to Luminary Labs. Nothing is submitted automatically; you review and send the message from your email app.</p>
       </div>
-      <form class="apex-request-form" data-apex-form>
+      <div class="apex-request-form" data-apex-form role="group" aria-label="Repair request details">
         <fieldset><legend>Contact</legend><div class="apex-fields two"><label>Name<input name="name" autocomplete="name" required></label><label>Email<input name="email" type="email" autocomplete="email" required></label></div></fieldset>
         <fieldset><legend>Your computer</legend><div class="apex-fields two"><label>Computer type<select name="computer"><option>Gaming desktop</option><option>Custom desktop</option><option>Workstation</option><option>Prebuilt desktop</option><option>Other desktop PC</option></select></label><label>Current operating system<select name="os"><option>Windows 11</option><option>Windows 10</option><option>Linux</option><option>Multiple / dual boot</option><option>Unknown / will not boot</option></select></label></div><label>Known specifications<textarea name="specs" placeholder="CPU, GPU, RAM, motherboard, storage, power supply, case — include whatever you know."></textarea></label></fieldset>
         <fieldset><legend>What do you need?</legend><div class="apex-service-checks"><label><input type="checkbox" name="service" value="Hardware repair">Hardware repair</label><label><input type="checkbox" name="service" value="Performance upgrade">Performance upgrade</label><label><input type="checkbox" name="service" value="System rebuild">System rebuild</label><label><input type="checkbox" name="service" value="Cooling / airflow">Cooling / airflow</label><label><input type="checkbox" name="service" value="Lighting / customization">Lighting / customization</label><label><input type="checkbox" name="service" value="BIOS / configuration">BIOS / configuration</label></div></fieldset>
         <fieldset><legend>Problem or desired outcome</legend><label>What is happening, or what do you want the PC to do?<textarea name="goal" required placeholder="Example: It shuts down during games, or I want reliable 1440p high-refresh gaming without replacing the entire system."></textarea></label><div class="apex-fields two"><label>Approximate budget<select name="budget"><option>Not sure yet</option><option>Under $250</option><option>$250–$500</option><option>$500–$1,000</option><option>$1,000–$2,000</option><option>$2,000+</option></select></label><label>Main priority<select name="priority"><option>Fix the problem</option><option>Maximum performance</option><option>Best value</option><option>Lower temperatures / noise</option><option>Appearance / customization</option><option>Linux migration</option></select></label></div></fieldset>
         <fieldset><legend>Additional information</legend><label>Notes<textarea name="notes" placeholder="Prior repairs, unusual symptoms, damaged case parts, preferred brands, appearance goals, or anything else we should know."></textarea></label></fieldset>
-        <button class="site-button apex-submit" type="submit">Prepare repair request <span aria-hidden="true">↗</span></button>
+        <button class="site-button apex-submit" type="button" data-apex-prepare aria-describedby="apex-email-fallback" disabled>Prepare repair request <span aria-hidden="true">↗</span></button>
         <p class="apex-form-status" data-apex-status aria-live="polite"></p>
-      </form>
+        <p class="apex-form-note" id="apex-email-fallback">If the form is unavailable, <a href="mailto:admin@luminarylabs.dev?subject=APEX%20Benchworks%20repair%20request">email Luminary Labs directly</a>.</p>
+      </div>
     </div>
   </section>
 </main>
@@ -216,6 +217,6 @@
 <script src="/assets/js/site-nav.js?v=20260906-unified-1"></script>
 <script src="/assets/js/site-motion.js?v=20260906-unified-1"></script>
 <script src="/assets/js/site-ui.js?v=20260906-unified-1"></script>
-<script src="/assets/js/apex-benchworks.js?v=20261001-1"></script>
+<script src="/assets/js/apex-benchworks.js?v=20261123-1"></script>
 </body>
 </html>
