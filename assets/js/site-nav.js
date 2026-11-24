@@ -17,7 +17,16 @@
   const arcadeLink = Array.from(nav.querySelectorAll('a')).find(a => a.getAttribute('href') === '/nexus-arcade/');
   const teamLink = Array.from(nav.querySelectorAll('a')).find(a => a.getAttribute('href') === '/team.html');
   if (arcadeLink && teamLink) nav.insertBefore(teamLink, arcadeLink);
-  const links = extras.map(([href]) => Array.from(nav.querySelectorAll('a')).find(a => a.getAttribute('href') === href));
+  extras.push(['/apex', 'APEX Benchworks', '<path d="m3 18 9-13 9 13M8 15h8"/>']);
+  const links = extras.map(([href]) => {
+    if (href !== '/apex') return Array.from(nav.querySelectorAll('a')).find(a => a.getAttribute('href') === href);
+    const link = document.createElement('a');
+    link.setAttribute('href', href);
+    if (/^\/(?:apex|services\/apex-benchworks)(?:\/index\.html|\/)?$/.test(location.pathname)) {
+      link.setAttribute('aria-current', 'page');
+    }
+    return link;
+  });
   if (links.every(Boolean) && !document.querySelector('.extras-rail')) {
     const rail = document.createElement('aside');
     rail.className = 'extras-rail';
