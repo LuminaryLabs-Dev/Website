@@ -1,4 +1,4 @@
-/* WOVEN V6 — dependency-free GLB / WebGL2 renderer.
+/* WOVEN V11 — dependency-free GLB / WebGL2 workshop renderer.
    The scene is preserved from assets/models/Millyard_Loom_Reference_Yarn.glb.
    Exported from Blender under Luminary Labs' own production workflow.
 */
@@ -44,7 +44,7 @@ layout(location=0) in vec3 aPosition;
 layout(location=1) in vec3 aNormal;
 layout(location=2) in vec2 aUV;
 uniform mat4 uModel;uniform mat4 uPV;uniform int uWarpMode;uniform int uLiftMask;uniform int uPattern;uniform float uShedAmount;
-out vec3 vN;out vec3 vP;out vec2 vUV;
+out vec3 vN;out vec3 vP;out vec3 vLocal;out vec2 vUV;
 void main(){vec3 p=aPosition;
  if(uWarpMode==1 && uShedAmount>0.001){
    float slot=clamp(floor((p.x+1.6365)/0.03637+0.5),0.0,90.0);
@@ -53,25 +53,107 @@ void main(){vec3 p=aPosition;
    p.z+=uShedAmount*(raised?0.075:-0.026);
    p.y+=uShedAmount*(raised?0.042:-0.012);
  }
- vec4 world=uModel*vec4(p,1.0);vP=world.xyz;vN=normalize(mat3(uModel)*aNormal);vUV=aUV;gl_Position=uPV*world;}
+ vec4 world=uModel*vec4(p,1.0);vP=world.xyz;vLocal=aPosition;vN=normalize(transpose(inverse(mat3(uModel)))*aNormal);vUV=aUV;gl_Position=uPV*world;}
 `;
 const FRAG=`#version 300 es
 precision highp float;
-in vec3 vN;in vec3 vP;in vec2 vUV;
+in vec3 vN;in vec3 vP;in vec3 vLocal;in vec2 vUV;
 uniform vec4 uBase;uniform vec3 uCamera;uniform float uRoughness;uniform float uMetallic;
 uniform float uHighlight;uniform float uDim;uniform float uTime;uniform int uTextureMode;uniform sampler2D uCloth;
+uniform int uMaterialKind;uniform int uGrainAxis;
 out vec4 fragColor;
+const float PI=3.14159265;
+// Analytic materials: object-local grain for moving parts, world coordinates for architectural surfaces.
+float hash31(vec3 p){p=fract(p*0.1031);p+=dot(p,p.yzx+33.33);return fract((p.x+p.y)*p.z);}
+float noise3(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(mix(hash31(i),hash31(i+vec3(1,0,0)),f.x),mix(hash31(i+vec3(0,1,0)),hash31(i+vec3(1,1,0)),f.x),f.y),mix(mix(hash31(i+vec3(0,0,1)),hash31(i+vec3(1,0,1)),f.x),mix(hash31(i+vec3(0,1,1)),hash31(i+vec3(1,1,1)),f.x),f.y),f.z);}
+float band(float x){return sin(x)*clamp(1.0-fwidth(x)/3.14159,0.0,1.0);}
+float softBox(vec2 p,vec2 c,vec2 halfSize,float softness){vec2 q=abs(p-c)-halfSize;float sd=length(max(q,0.0))+min(max(q.x,q.y),0.0);return 1.0-smoothstep(-softness,softness,sd);}
+float boxOcclusion(vec3 p,vec3 light,vec3 c,vec3 h){
+ vec3 ray=light-p;vec3 dir=normalize(ray);vec3 inv=mix(vec3(-1.0),vec3(1.0),step(vec3(0.0),dir))/max(abs(dir),vec3(.00001));
+ vec3 a=(c-h-p)*inv,b=(c+h-p)*inv;vec3 near=min(a,b),far=max(a,b);
+ float tn=max(max(near.x,near.y),near.z),tf=min(min(far.x,far.y),far.z);
+ float edge=min(tf-tn,min(tf-.008,length(ray)-tn));return smoothstep(-.16,.09,edge);
+}
+float staticOccluders(vec3 p,vec3 light){float occ=0.0;
+ occ=max(occ,boxOcclusion(p,light,vec3(-1.98,1.48,.12),vec3(.135,1.415,.17)));
+ occ=max(occ,boxOcclusion(p,light,vec3(1.98,1.48,.12),vec3(.135,1.415,.17)));
+ occ=max(occ,boxOcclusion(p,light,vec3(0,.44,.04),vec3(1.93,.105,.105)));
+ occ=max(occ,boxOcclusion(p,light,vec3(0,2.69,.04),vec3(1.93,.105,.105)));
+ occ=max(occ,boxOcclusion(p,light,vec3(0,2.99,.03),vec3(1.83,.09,.09)));
+ occ=max(occ,boxOcclusion(p,light,vec3(-3.24,.31,.10),vec3(.69,.24,.59))*.78);
+ return occ;
+}
+float roomKeyVisibility(vec3 p){
+ // Three fixed samples of a broad light; only the room's static receiving surfaces use this approximation.
+ return 1.0-.60*(staticOccluders(p,vec3(-4.6,5.0,4.6))*.30+staticOccluders(p,vec3(-3.9,4.6,3.9))*.40+staticOccluders(p,vec3(-3.0,4.2,4.2))*.30);
+}
+float aoFloor(vec3 p){vec2 q=p.xz;float a=0.0;
+ a=max(a,softBox(q,vec2(-1.98,.22),vec2(.25,.45),.22));a=max(a,softBox(q,vec2(1.98,.22),vec2(.25,.45),.22));
+ a=max(a,softBox(q,vec2(-3.24,.10),vec2(.68,.57),.35));
+ for(int i=0;i<4;i++)a=max(a,.65*softBox(q,vec2(-.80+float(i)*.53,.72),vec2(.16,.53),.12));
+ a=max(a,.40*softBox(q,vec2(.2,-.06),vec2(2.2,.45),.48));
+ return (1.0-.47*a)*(1.0-.35*exp(-max(0.0,p.z+.62)*6.0));
+}
+float aoWall(vec3 p){vec2 q=p.xy;float a=0.0;
+ a=max(a,softBox(q,vec2(-1.70,1.43),vec2(.15,1.43),.26));a=max(a,softBox(q,vec2(2.25,1.43),vec2(.15,1.43),.26));
+ for(int i=0;i<3;i++)a=max(a,.73*softBox(q,vec2(3.24,.76+float(i)*1.04),vec2(.57,.47),.14));
+ a=max(a,.7*softBox(q,vec2(-3.16,2.68),vec2(.73,1.02),.20));
+ a=max(a,.64*softBox(q,vec2(.28,2.61),vec2(1.9,.105),.19));
+ a=max(a,.48*softBox(q,vec2(.3,1.42),vec2(1.9,.11),.24));
+ a=max(a,.34*softBox(q,vec2(.25,.82),vec2(1.67,.33),.24));
+ a=max(a,.55*softBox(q,vec2(-3.16,.88),vec2(.76,.24),.18));
+ return (1.0-.43*a)*(1.0-.25*exp(-max(0.0,p.y)*4.8));
+}
+// Physically inspired, bounded roughness/metallic BRDF with energy-conserving Fresnel.
+vec3 brdf(vec3 N,vec3 V,vec3 L,vec3 base,float rough,float metal){vec3 H=normalize(L+V);float nl=max(dot(N,L),0.0),nv=max(dot(N,V),.001),nh=max(dot(N,H),0.0),vh=max(dot(V,H),0.0);float a=rough*rough,a2=a*a;float d=a2/(PI*pow(max(.0001,nh*nh*(a2-1.0)+1.0),2.0));float k=pow(rough+1.0,2.0)*.125;float vis=nl/(nl*(1.0-k)+k)*nv/(nv*(1.0-k)+k);vec3 f0=mix(vec3(.04),base,metal),f=f0+(1.0-f0)*pow(1.0-vh,5.0);return ((1.0-f)*(1.0-metal)*base/PI + d*vis*f/max(.004,4.0*nl*nv))*nl;}
 void main(){
  vec3 N=normalize(vN);if(!gl_FrontFacing)N=-N;
- vec3 L=normalize(vec3(-0.35,0.68,0.63));vec3 L2=normalize(vec3(0.62,0.25,0.2));
- vec3 V=normalize(uCamera-vP);vec3 H=normalize(L+V);
- float d=max(dot(N,L),0.0), d2=max(dot(N,L2),0.0);
- vec3 base=uBase.rgb;
- if(uTextureMode==1){vec3 tex=texture(uCloth,vUV).rgb;base=pow(tex,vec3(2.2));}
- // Tonal studio lighting and warm wood highlights
- vec3 diffuse=base*(vec3(0.54,0.59,0.62)+vec3(1.16,1.09,0.94)*d+vec3(0.23,0.3,0.35)*d2);
- float sp=pow(max(dot(N,H),0.0),mix(12.0,80.0,1.0-uRoughness));
- vec3 highlightColor=mix(vec3(0.07),base,uMetallic)*sp*(0.27+uMetallic*0.7);
+ vec3 V=normalize(uCamera-vP);vec3 base=uBase.rgb;float rough=clamp(uRoughness,.22,.98),metal=uMetallic,height=0.0,ao=1.0;
+ int kind=uMaterialKind;
+ if(uTextureMode==1){base=pow(texture(uCloth,vUV).rgb,vec3(2.2));}
+ if(kind==1||kind==2){
+   vec3 p=vLocal;vec3 grain=uGrainAxis==0?p.yzx:(uGrainAxis==2?p.xyz:p.xzy);
+   if(kind==2){grain=vec3(vP.x,vP.y,vP.z);float lane=(vP.x+4.0)/.48,board=floor(lane);float seam=min(fract(lane),1.0-fract(lane));float joint=abs(fract((vP.z+hash31(vec3(board,4.0,1.0))*2.3)/2.3)-.5);base*=mix(.73,1.20,hash31(vec3(board,7.0,3.0)));base*=mix(.45,1.0,smoothstep(.006,.026+fwidth(lane),seam));base*=mix(.65,1.0,smoothstep(.002,.009+fwidth(joint),joint));grain.x+=board*.47;}
+   float sway=noise3(grain*vec3(3.2,3.2,.65));float pores=noise3(grain*vec3(113.0,113.0,8.0));
+   float warp=noise3(grain*vec3(11.0,11.0,1.15));
+   float ring=(grain.x+grain.y*.48+sway*.12+warp*.037)*118.0;
+   float growth=.5+.5*band(ring);float fine=.5+.5*band((grain.x-grain.y*.33+sway*.045)*350.0);
+   float streak=noise3(grain*vec3(39.0,39.0,1.45));float broad=noise3(grain*vec3(7.0,7.0,.55));
+   float tint=.68+.17*growth+.21*streak+.10*broad+.055*fine-.06*pores;
+   base*=tint;rough=clamp(rough+.07*(1.0-growth),.35,.91);height=(growth*.45+pores*.55)*.00085;
+   if(kind==2){ao=aoFloor(vP);}
+ }else if(kind==3){ // sage plaster, subtle mineral roughness
+   float broad=noise3(vP*2.8), grit=noise3(vP*65.0);base*=.81+.28*broad+.065*grit;height=grit*.0006;ao=aoWall(vP);
+ }else if(kind==4){ // burnished brass / iron, worn recess variation
+   float mott=noise3(vLocal*47.0),patina=noise3(vLocal*12.0);base*=.76+.25*mott+.12*patina;rough=clamp(rough+.17*(1.0-patina),.28,.74);height=mott*.0007;
+ }else if(kind==5){ // dyed yarn, warp and woven samples
+   float twist=.5+.5*band(dot(vLocal,vec3(88.0,151.0,107.0)));
+   float fuzz=noise3(vLocal*147.0);base*=.86+.17*twist+.12*fuzz;height=(twist*.65+fuzz*.35)*.00075;rough=max(.83,rough);
+   if(uTextureMode==1){vec2 cell=vUV*vec2(48.0,16.0);vec2 sub=fract(cell);float crossing=.5+.5*band((sub.x+sub.y)*19.0);base*=.91+.12*crossing;height+=crossing*.0005;}
+ }else if(kind==10){
+   float wind=.5+.5*band(vLocal.y*520.0+atan(vLocal.z,vLocal.x+1e-6)*2.0);
+   float wool=noise3(vLocal*vec3(180.0,200.0,180.0));
+   base*=.83+.21*wind+.10*wool;rough=.91;height=(wind*.7+wool*.3)*.00065;
+ }else if(kind==6){float theta=atan(vLocal.z,vLocal.x);float course=floor((vLocal.y+.24)*12.5);float woven=.5+.5*band(theta*24.0+course*PI);float fibers=noise3(vLocal*vec3(95.0,160.0,30.0));base*=.71+.23*woven+.12*fibers;rough=.78;height=(woven*.5+fibers*.5)*.0007;}
+ else if(kind==7){float paper=noise3(vLocal*70.0);base*=.93+.10*paper;height=paper*.0007;rough=.88;}
+ // Screen-derivative height field; uses actual surface positions and no external normal textures.
+ vec3 dpdx=dFdx(vP),dpdy=dFdy(vP);vec3 r1=cross(dpdy,N),r2=cross(N,dpdx);float det=dot(dpdx,r1);
+ if(abs(det)>1e-10){vec3 grad=sign(det)*(dFdx(height)*r1+dFdy(height)*r2);N=normalize(abs(det)*N-grad);}
+ // The visible window supplies a broad warm key, with cool skylight and floor bounce.
+ vec3 key=normalize(vec3(-3.9,4.6,3.9)-vP);vec3 fill=normalize(vec3(4.2,2.9,4.5)-vP);vec3 rim=normalize(vec3(-1.6,4.8,-2.5)-vP);
+ float falloff=.77+.23*exp(-length(vP-vec3(-3.2,2.7,0.0))*.28);
+ float hemi=.38+.62*max(N.y,0.0);vec3 ambient=mix(vec3(.115,.10,.075),vec3(.25,.29,.32),hemi);
+ vec3 lit=base*ambient*(1.0-metal*.65)*ao;
+ float keyVisibility=(kind==2||kind==3)?roomKeyVisibility(vP):1.0;
+ lit+=brdf(N,V,key,base,rough,metal)*vec3(3.85,3.12,2.24)*falloff*ao*keyVisibility;
+ lit+=brdf(N,V,fill,base,rough,metal)*vec3(.81,1.02,1.22)*ao;
+ lit+=brdf(N,V,rim,base,rough,metal)*vec3(.69,.64,.49)*ao;
+ if(kind==5||kind==10){lit+=base*pow(1.0-clamp(dot(N,V),0.0,1.0),3.0)*.105;}
+ if(kind==8){float sky=smoothstep(1.6,3.7,vP.y);lit=mix(vec3(.75,.66,.47),vec3(.35,.48,.59),sky);float glassLine=(vP.x+3.24)+(vP.y-2.73)*.25;float refl=exp(-glassLine*glassLine*18.0);lit+=vec3(.065,.075,.075)*refl;}
+ if(kind==9){lit=base*vec3(.62,.75,.76)+vec3(.07,.09,.085);}
+ // Warm window illumination across the left side of the room; softer towards the samples.
+ if(kind==3){float pool=exp(-dot((vP.xy-vec2(-2.8,2.75))*vec2(.40,.56),(vP.xy-vec2(-2.8,2.75))*vec2(.40,.56)));lit*=.73+.46*pool;}
+ if(kind==2){vec2 glow=(vP.xz-vec2(-2.5,.9))*vec2(.40,.55);lit*=.82+.34*exp(-dot(glow,glow));}
  // A traveling, view-dependent glimmer lives on the *actual* active GLB surfaces.
  // Two moving light bands prevent flat pulsation; the narrow bands read as metallic
  // yarn glints rather than a screen-space painted highlight.
@@ -82,15 +164,30 @@ void main(){
  float glimmer=uHighlight*(0.20*fresnel+0.76*shimmerBand+0.41*counterBand);
  vec3 glimmerTint=mix(vec3(1.16,0.77,0.38),vec3(0.51,0.81,1.02),0.5+0.5*sin(uTime*0.7+vP.x*1.3));
  float glow=uHighlight*(0.62+0.38*sin(uTime*3.8));
- vec3 linear=(diffuse+highlightColor)*(mix(0.55,1.0,uDim))
+ vec3 linear=(lit)*(mix(0.55,1.0,uDim))
              +vec3(0.94,0.66,0.31)*glow*0.27
              +glimmerTint*glimmer*0.92;
+
  float distance=length(vP-uCamera);
- float fog=clamp((distance-12.5)/17.0,0.0,0.17);
- linear=mix(linear,vec3(0.14,0.18,0.17),fog);
- linear=linear/(linear+vec3(0.52));
+ float fog=clamp((distance-12.5)/17.0,0.0,0.12);
+ linear=mix(linear,vec3(.065,.082,.08),fog);
+ // Preserve highlight detail and retain contrast (film-like exposure, no full-screen overlay).
+ linear=max(linear,vec3(0.0));linear=linear/(linear+vec3(.72));
  fragColor=vec4(pow(clamp(linear,0.0,1.0),vec3(1.0/2.2)),1.0);
 }`;
+function materialKind(name){
+ if(name==='Walnut plank flooring')return 2;
+ if(name==='Muted sage plaster')return 3;
+ if(/brass|iron/i.test(name))return 4;
+ if(/willow/i.test(name))return 6;
+ if(/parchment/i.test(name))return 7;
+ if(/Hazy window sky/.test(name))return 8;
+ if(/haze|distant|drifting smoke|factory dusty|mill facade/i.test(name))return 9;
+ if(/oak|walnut|endgrain/i.test(name))return 1;
+ if(/reference yarn|madder yarn/i.test(name))return 10;
+ if(/yarn|linen|cloth|weave|fiber|thread/i.test(name))return 5;
+ return 0;
+}
 function makeShader(gl,type,src){const sh=gl.createShader(type);gl.shaderSource(sh,src);gl.compileShader(sh);if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(sh));return sh;}
 function createProgram(gl){const p=gl.createProgram();gl.attachShader(p,makeShader(gl,gl.VERTEX_SHADER,VERT));gl.attachShader(p,makeShader(gl,gl.FRAGMENT_SHADER,FRAG));gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(p));return p;}
 class Renderer{
@@ -98,7 +195,7 @@ class Renderer{
    this.canvas=canvas;this.gl=canvas.getContext('webgl2',{alpha:false,antialias:true,depth:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});
    if(!this.gl)throw Error('This browser does not support WebGL 2.');
    const gl=this.gl; this.program=createProgram(gl);this.locations={};
-   for(const n of ['uModel','uPV','uBase','uCamera','uRoughness','uMetallic','uHighlight','uDim','uTime','uTextureMode','uCloth','uWarpMode','uLiftMask','uPattern','uShedAmount'])this.locations[n]=gl.getUniformLocation(this.program,n);
+   for(const n of ['uModel','uPV','uBase','uCamera','uRoughness','uMetallic','uHighlight','uDim','uTime','uTextureMode','uCloth','uWarpMode','uLiftMask','uPattern','uShedAmount','uMaterialKind','uGrainAxis'])this.locations[n]=gl.getUniformLocation(this.program,n);
    this.camera=[0,2.04,12.1];this.look=[0,1.87,-0.42];this.pv=M.identity();this.focusTarget=[0,1.85];this.focusSmooth=[0,1.85];this.manualPan=[0,0];this.zoomLevel=1;this.reducedMotion=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
    this.nodes=[];this.byName=new Map();this.planes=[];this.size=[0,0];this.elapsed=0;
    this.materials=[];this.texture=null;this.clothCanvas=null;this.game=null;this.modelLoaded=false;
@@ -106,7 +203,7 @@ class Renderer{
  }
  load(b64){
    const {json,binary}=parseGLB(b64),gl=this.gl;
-   this.materials=(json.materials||[]).map(m=>({name:m.name||'',base:m.pbrMetallicRoughness?.baseColorFactor||[1,1,1,1],metallic:m.pbrMetallicRoughness?.metallicFactor||0,rough:m.pbrMetallicRoughness?.roughnessFactor??1}));
+   this.materials=(json.materials||[]).map(m=>({name:m.name||'',kind:materialKind(m.name||''),base:m.pbrMetallicRoughness?.baseColorFactor||[1,1,1,1],metallic:m.pbrMetallicRoughness?.metallicFactor||0,rough:m.pbrMetallicRoughness?.roughnessFactor??1}));
    const access=j=>{
      const a=json.accessors[j],v=json.bufferViews[a.bufferView];
      const num=a.type==='VEC3'?3:a.type==='VEC2'?2:a.type==='VEC4'?4:1;
@@ -124,12 +221,19 @@ class Renderer{
      att(0,pos);att(1,normal);att(2,uv);
      const ibo=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ibo);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,ind.data,gl.STATIC_DRAW);
      gl.bindVertexArray(null);
-     return {vao,buffers,ibo,count:ind.count,type:ind.type,mat:prim.material||0,hasUV:!!uv};
+     const bounds=json.accessors[prim.attributes.POSITION],size=(bounds.max||[1,1,1]).map((v,i)=>v-(bounds.min||[0,0,0])[i]);
+     const grainAxis=size.indexOf(Math.max(...size));
+     return {vao,buffers,ibo,count:ind.count,type:ind.type,mat:prim.material||0,hasUV:!!uv,grainAxis};
    };
    const meshes=json.meshes.map(m=>m.primitives.map(makeGeometry));
    const transformNode=(i,parent)=>{
-     const n=json.nodes[i],base=n.matrix?new Float32Array(n.matrix):M.compose(n.translation,n.rotation,n.scale);
-     const world=M.mul(parent,base),obj={name:n.name||`node-${i}`,base,world,parent,parts:meshes[n.mesh]||[],transform:{dx:0,dy:0,dz:0,rx:0},hover:0,highlight:0,dim:1,visible:true};
+     const n=json.nodes[i];let base=n.matrix?new Float32Array(n.matrix):M.compose(n.translation,n.rotation,n.scale);
+     // Expand only the noninteractive architectural planes, eliminating the floating-stage edges.
+     // Keep the floor top and wall front surfaces in their original positions.
+     if(n.name==='Back wall'){base=M.mul(base,M.compose([0,1.4,0],[0,0,0,1],[1.75,1.70,1]));}
+     if(n.name==='Floor'){base=M.mul(base,M.compose([0,0,1.4],[0,0,0,1],[1.85,1,1.7]));}
+     if(n.name==='Wall baseboard'||n.name==='Baseboard trim'){base=M.mul(base,M.compose([0,0,0],[0,0,0,1],[1.8,1,1]));}
+     const world=M.mul(parent,base),obj={name:n.name||`node-${i}`,base,world,parent,parts:meshes[n.mesh]||[],transform:{dx:0,dy:0,dz:0,rx:0},hover:0,highlight:0,dim:1,visible:!n.name?.startsWith('Floorboard seam')};
      this.nodes.push(obj);this.byName.set(obj.name,obj);
      for(const child of n.children||[])transformNode(child,world);
    };
@@ -163,7 +267,7 @@ class Renderer{
    const useFocus=ratio<1.12;
    const fx=(useFocus?this.focusSmooth[0]:0)+(this.manualPan?.[0]||0);
    const fy=(useFocus?this.focusSmooth[1]:1.88)+(this.manualPan?.[1]||0);
-   this.camera=[fx,fy+.25,dist];this.look=[fx,fy,-.42];
+   this.camera=[fx+(useFocus?.20:.83),fy+.52,dist];this.look=[fx,fy,-.42];
    const projection=M.perspective(35*Math.PI/180,ratio,.1,70),view=M.lookAt(this.camera,this.look);
    this.pv=M.mul(projection,view);
  }
@@ -199,7 +303,7 @@ class Renderer{
    this.focusSmooth[1]+=(this.focusTarget[1]-this.focusSmooth[1])*k;
    this.resize();this.elapsed+=dt;this.updateScene();
    const gl=this.gl;gl.viewport(0,0,this.canvas.width,this.canvas.height);
-   gl.clearColor(.094,.128,.122,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+   gl.clearColor(.075,.096,.088,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
    gl.useProgram(this.program);gl.uniformMatrix4fv(this.locations.uPV,false,this.pv);gl.uniform3fv(this.locations.uCamera,new Float32Array(this.camera));
    gl.uniform1f(this.locations.uTime,this.reducedMotion?0:this.elapsed);
    gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,this.texture);gl.uniform1i(this.locations.uCloth,0);
@@ -214,6 +318,7 @@ class Renderer{
        const material=this.materials[part.mat]||{base:[1,1,1,1],rough:1,metallic:0};
        gl.uniform4fv(this.locations.uBase,new Float32Array(material.base));gl.uniform1f(this.locations.uRoughness,material.rough);
        gl.uniform1f(this.locations.uMetallic,material.metallic);
+       gl.uniform1i(this.locations.uMaterialKind,material.kind||0);gl.uniform1i(this.locations.uGrainAxis,part.grainAxis??1);
        gl.uniform1i(this.locations.uTextureMode,n.name==='Partly woven cloth' && this.texture && part.hasUV?1:0);
        gl.bindVertexArray(part.vao);gl.drawElements(gl.TRIANGLES,part.count,part.type,0);
      }
