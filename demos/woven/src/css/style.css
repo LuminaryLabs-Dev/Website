@@ -1,0 +1,173 @@
+:root{--paper:#f1e6ce;--ink:#2c3b36;--gold:#f2ce84;--outline:rgba(254,224,163,.6)}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#1a2320;color:#eee;font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
+#app{position:fixed;inset:0;isolation:isolate}
+#scene{position:absolute;width:100%;height:100%;display:block;background:radial-gradient(circle at center,#63716c,#263630 70%);touch-action:none;cursor:grab}
+#lighting{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 11vmin rgba(13,19,18,.17)}
+#targets{position:absolute;inset:0;pointer-events:none}
+.target{position:absolute;display:grid;place-items:center;transform:translate(-50%,-50%);border:0;background:none;color:#fff;cursor:pointer;pointer-events:auto;touch-action:manipulation;z-index:2;padding:0}
+.target[hidden]{display:none!important}
+.target.yarn{width:49px;height:56px}
+.target.treadle{width:79px;height:54px}
+.target.shuttle{width:107px;height:59px}
+.target.beater{width:150px;height:60px}
+.target.pattern{width:140px;height:123px}
+.target.help{width:76px;height:87px}
+.target .halo{display:block;width:70%;height:70%;border:1px solid rgba(238,218,163,.32);border-radius:30px;background:radial-gradient(circle,rgba(255,220,128,.13),rgba(255,206,102,.04) 60%,transparent 100%);box-shadow:0 0 0 2px rgba(0,0,0,.12),0 0 10px rgba(255,207,117,.09);transition:opacity .16s,transform .16s,background .16s;pointer-events:none}
+.target.pattern .halo{height:92%;width:90%;border-radius:5px;border-color:rgba(236,215,163,.17);background:transparent}
+.target.help .halo{border-radius:5px}
+.target .tip{pointer-events:none;position:absolute;bottom:calc(100% + 5px);left:50%;transform:translate(-50%,6px);opacity:0;white-space:nowrap;background:rgba(19,25,23,.94);border:1px solid rgba(243,222,175,.52);color:#faefd4;font-size:12px;letter-spacing:.01em;font-weight:600;border-radius:9px;padding:8px 11px;transition:transform .15s,opacity .15s;filter:drop-shadow(0 5px 7px rgba(0,0,0,.3))}
+.target:hover .tip,.target:focus-visible .tip{opacity:1;transform:translate(-50%,0)}
+.target:hover .halo,.target:focus-visible .halo{transform:scale(1.16);box-shadow:0 0 0 2px rgba(0,0,0,.22),0 0 22px rgba(247,213,152,.3);background:rgba(252,210,124,.09)}
+.target:focus-visible{outline:2px dashed #fff3d3;outline-offset:4px}
+.target.active .halo{border:2px solid #fff0bc;box-shadow:0 0 0 6px rgba(255,216,137,.14),0 0 27px rgba(255,211,122,.47),inset 0 0 25px rgba(255,205,137,.17);animation:breath 1.55s ease-in-out infinite}
+.target.active .tip{opacity:1;transform:translate(-50%,0)}
+.target.dim .halo{opacity:.11;filter:grayscale(1)}
+.target.dim:not(.pattern) {cursor:default}
+.target.dim .tip{display:none}
+.target.selected:not(.active) .halo{border-color:rgba(219,192,139,.37)}
+.target.clicked .halo{animation:confirm .4s cubic-bezier(.15,.7,.15,1)}
+@keyframes breath{0%,100%{transform:scale(.96);filter:brightness(1)}50%{transform:scale(1.15);filter:brightness(1.3)}}
+@keyframes confirm{0%{opacity:1;transform:scale(.7)}100%{opacity:0;transform:scale(1.7)}}
+#bubble{position:absolute;z-index:1;pointer-events:none;transform:translate(-50%,-100%);background:rgba(243,228,198,.96);color:#3d4a40;border:1px solid rgba(150,111,56,.4);border-radius:18px;padding:8px 15px;font:600 13px/1.2 system-ui,sans-serif;white-space:nowrap;box-shadow:0 10px 29px rgba(10,20,17,.25);transition:left .18s ease,top .18s ease}
+#bubble[hidden]{display:none}
+#bubble:after{content:'';position:absolute;bottom:-5px;left:50%;width:9px;height:9px;transform:translateX(-50%) rotate(45deg);background:#f3e4c6;border-right:1px solid rgba(150,111,56,.4);border-bottom:1px solid rgba(150,111,56,.4)}
+#toast{position:absolute;left:50%;top:5%;transform:translate(-50%,-10px);padding:9px 16px;background:rgba(240,225,195,.95);color:#354238;border:1px solid #ad9065;border-radius:11px;opacity:0;transition:opacity .18s,transform .18s;pointer-events:none;font:600 13px system-ui;z-index:4}
+#toast.visible{opacity:1;transform:translate(-50%,0)}
+#dialog[hidden]{display:none}
+#dialog{position:absolute;inset:0;display:grid;place-items:center;background:rgba(11,18,17,.62);backdrop-filter:blur(4px);z-index:10;padding:18px}
+#dialogPanel{width:min(500px,94vw);max-height:92vh;overflow:auto;background:linear-gradient(160deg,#f7ead0,#e9d4ab);color:var(--ink);border-radius:17px;border:2px solid #ceb58c;box-shadow:0 25px 78px rgba(0,0,0,.46);padding:28px 33px 29px;position:relative}
+#dialogPanel:before{content:'';position:absolute;inset:9px;border:1px solid rgba(123,94,50,.25);border-radius:10px;pointer-events:none}
+#dialogEyebrow{font:700 11px system-ui;letter-spacing:.24em;text-transform:uppercase;color:#806140}
+#dialog h1{font:500 clamp(27px,5vw,39px)/1.12 Georgia,'Times New Roman',serif;margin:10px 0 16px;color:#2b4237}
+#dialogBody p,#dialogBody li{font:15px/1.6 system-ui;color:#3d4b43}
+#dialogBody ol{padding-left:23px}
+#dialogBody .subtext{font-size:12px;color:#697368;font-style:italic}
+#dialogActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:23px}
+#dialogActions button{font:650 13px system-ui;cursor:pointer;padding:11px 17px;border-radius:8px;border:1px solid #4b6455;background:#426451;color:#fff8e5}
+#dialogActions button.secondary{background:transparent;color:#355344;border-color:#baa687}
+#dialogActions button:hover,#dialogActions button:focus-visible{outline:2px solid #a2773d;outline-offset:2px}
+#loading,#fatal{position:absolute;inset:0;display:grid;place-content:center;z-index:20;text-align:center;color:#ffedc7;background:#20312c;font-size:14px}
+#loading[hidden],#fatal[hidden]{display:none}
+#loading strong{font:500 30px Georgia;display:block;margin-bottom:10px}
+#orientation{display:none;position:absolute;bottom:10px;left:50%;transform:translateX(-50%);z-index:3;white-space:nowrap;max-width:90vw;background:rgba(20,29,27,.8);color:#f0dfc1;padding:7px 11px;border-radius:20px;font:11px system-ui;pointer-events:none}
+#srOnly,#status,#pickCount,#modelMeta,#announcer{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+#helpBtn{position:absolute;bottom:10px;right:10px;background:transparent;border:0;color:rgba(244,228,193,.62);cursor:pointer;z-index:3;font:13px Georgia}
+#helpBtn:hover,#helpBtn:focus-visible{color:#fff0c9}
+@media (max-aspect-ratio: 4/5){#orientation{display:block}#dialogPanel{padding:23px 22px 21px}}
+@media (max-width:550px){.target .tip{font-size:11px}.target.pattern{width:76px;height:70px}.target.treadle{width:55px;height:45px}.target.beater{width:100px;height:50px}.target.shuttle{width:72px;height:47px}.target.yarn{width:39px;height:45px}}
+@media (prefers-reduced-motion:reduce){.target.active .halo{animation:none}.target,.tip,#bubble,#toast{transition:none}}
+
+/* The bin itself supplies the instruction; avoid six simultaneous permanent yarn labels. */
+.target.yarn.active .tip{opacity:0}
+.target.yarn.active:hover .tip,.target.yarn.active:focus-visible .tip{opacity:1}
+
+/* V7 full-bleed 3D workshop and focused particle field */
+#scene{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+#glimmer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;display:block}
+#lighting{z-index:1;box-shadow:inset 0 0 8vmin rgba(8,15,16,.12)}
+#targets{z-index:2}
+#bubble{z-index:3;max-width:min(320px,75vw);white-space:normal;text-align:center;line-height:1.35}
+#bubble strong{color:#774f1d}
+#bubble .tutStep{display:block;font-size:10px;letter-spacing:.13em;color:#8a6238;text-transform:uppercase;margin-bottom:4px}
+.target.active .halo{border-color:#fff1c5;box-shadow:0 0 0 6px rgba(255,218,151,.14),0 0 34px rgba(255,221,160,.56),inset 0 0 23px rgba(255,202,121,.24)}
+@media (min-width:900px){.target.active .halo{filter:brightness(1.13)}}
+@media (prefers-reduced-motion:reduce){#glimmer{opacity:.3}.target.active .halo{animation:none}}
+
+
+/* After the first complete guided cycle, the tutorial retires to glimmer-only mode.
+   Click zones remain, but words and outline halos disappear until the tutorial is replayed. */
+body.glimmerOnly .target .halo,
+body.glimmerOnly .target .tip{
+ opacity:0 !important;
+ visibility:hidden;
+ animation:none !important;
+ box-shadow:none !important;
+}
+body.glimmerOnly .target:hover .halo,
+body.glimmerOnly .target:focus-visible .halo,
+body.glimmerOnly .target.active .halo,
+body.glimmerOnly .target.clicked .halo{
+ opacity:0 !important;
+ transform:none !important;
+}
+body.glimmerOnly .target:focus-visible{outline:none}
+
+/* V8 — Free exploration and non-modal museum notes. No permanent HUD. */
+.target.explore{width:80px;height:69px;cursor:pointer}
+.target.explore .halo{opacity:.1;border-radius:999px}
+.target.explore .tip{font-size:11px}
+.target.dim:not(.pattern){cursor:pointer}
+.target.dim:hover .tip,.target.dim:focus-visible .tip{display:block;opacity:1}
+body.glimmerOnly .target .halo,body.glimmerOnly .target .tip{
+ opacity:0 !important;visibility:hidden !important;animation:none !important;
+ background:transparent !important;box-shadow:none !important;
+}
+body.glimmerOnly .target:focus-visible{outline:0}
+#infoPanel[hidden]{display:none}
+#infoPanel{
+ position:absolute;right:clamp(12px,2.1vw,28px);bottom:clamp(18px,3vh,28px);
+ z-index:6;width:min(370px,calc(100vw - 28px));max-height:min(50vh,360px);
+ padding:18px 20px 16px;border-radius:15px;overflow:auto;
+ background:linear-gradient(160deg,rgba(247,233,200,.985),rgba(233,211,165,.97));
+ border:1px solid rgba(133,101,54,.7);box-shadow:0 14px 46px rgba(10,18,16,.4);
+ color:#314337;
+}
+.inspectorEyebrow{font:700 10px system-ui;letter-spacing:.19em;color:#82603e}
+#infoPanel h2{font:500 23px/1.17 Georgia,serif;margin:8px 22px 9px 0;color:#304437}
+#infoPanel p{font:14px/1.52 system-ui;margin:0;color:#3d4d42}
+#infoPanel .inspectorFooter{margin-top:12px;font-size:11px;color:#897350}
+#infoClose{position:absolute;right:10px;top:8px;background:transparent;border:0;border-radius:50%;color:#6d563a;cursor:pointer;font-size:25px;line-height:1;padding:6px 10px}
+#infoClose:hover,#infoClose:focus-visible{background:rgba(91,79,54,.12);outline:2px solid #7f946d}
+@media(max-width:600px){
+ #infoPanel{left:12px;right:12px;bottom:12px;width:auto;max-height:39vh;padding:14px 16px}
+ #infoPanel h2{font-size:20px}#infoPanel p{font-size:13px}
+ .target.explore{width:51px;height:51px}
+}
+
+#scene:active{cursor:grabbing}
+
+/* Only keyboard focus retains a visible boundary after the tutorial. */
+body.glimmerOnly .target:focus-visible{outline:2px dashed #f6dda7;outline-offset:4px}
+
+
+/* V9 — one coherent visual fabric representation and clear earned outcomes.
+   Completion checks sit beside their physical framed weave patterns. */
+#patternMarks{position:absolute;inset:0;pointer-events:none;z-index:4}
+.patternCheck{
+ position:absolute;transform:translate(-50%,-50%);display:grid;place-items:center;
+ width:37px;height:37px;border-radius:50%;pointer-events:auto;cursor:pointer;
+ border:2px solid #e9e1c5;color:#f8f6df;background:linear-gradient(145deg,#427c61,#24583f);
+ box-shadow:0 2px 0 #143d2d,0 7px 19px #08191480,0 0 0 2px #b9a07766;
+ font:800 23px/1 system-ui;transition:filter .18s,transform .18s;
+}
+.patternCheck[hidden]{display:none}
+.patternCheck:hover,.patternCheck:focus-visible{filter:brightness(1.18);transform:translate(-50%,-50%) scale(1.13);outline:2px solid #f9e7a8;outline-offset:3px}
+.patternCheck span{transform:translateY(-1px)}
+#swatchDock[hidden]{display:none}
+#swatchDock{
+ position:absolute;left:50%;top:clamp(9px,1.5vh,17px);transform:translateX(-50%);z-index:5;
+ width:clamp(145px,15vw,216px);background:linear-gradient(170deg,#efe6d1f7,#ddc9a8f5);
+ border:1px solid #9c8056;border-radius:14px;box-shadow:0 15px 38px #131d1aa1;
+ padding:9px;color:#32463a;
+}
+.swatchTop{display:flex;align-items:center;justify-content:space-between;padding:0 2px 6px 5px}
+.swatchEyebrow{font:750 9px/1.3 system-ui;letter-spacing:.14em;color:#755536}
+#swatchHide{border:0;background:transparent;color:#6c553b;font-size:19px;line-height:1;cursor:pointer;padding:0 3px}
+#swatchOpen{width:100%;cursor:pointer;background:none;border:0;padding:0 0 5px;display:flex;flex-direction:column;align-items:stretch;color:#314839;text-align:left}
+#swatchOpen img{aspect-ratio:3/2;width:100%;height:auto;object-fit:cover;border:4px solid #f8efd9;border-radius:5px;box-shadow:0 2px 8px #4d3d355c}
+#swatchOpen:hover img,#swatchOpen:focus-visible img{border-color:#b9cb9b;box-shadow:0 0 0 2px #718868}
+#swatchName{font:650 13px/1.1 Georgia,serif;margin:7px 5px 2px}
+#swatchProgress{font:550 10px/1.3 system-ui;color:#687267;margin:0 5px}
+#swatchOpen:focus-visible{outline:2px solid #356b51;outline-offset:3px;border-radius:5px}
+.swatchFigure{margin:11px 0 14px;background:#dec9a7;border-radius:11px;padding:12px;box-shadow:inset 0 1px 4px #5b42252e}
+.swatchFigure img{display:block;width:100%;height:auto;max-height:40vh;object-fit:contain;border:7px solid #fff4e0;border-radius:3px;box-shadow:0 5px 15px #49321f4a}
+.swatchFigure figcaption{text-align:center;margin-top:9px;color:#614d34;font:600 12px system-ui;letter-spacing:.03em}
+@media(max-width:650px){
+ .patternCheck{width:29px;height:29px;font-size:19px;border-width:1.5px}
+ #swatchDock{width:126px;padding:6px;top:8px;left:auto;right:8px;transform:none}
+ .swatchEyebrow{font-size:8px}
+ #swatchName{font-size:11px}
+ .swatchFigure{padding:7px}
+}
+@media(max-height:550px){#swatchDock{width:124px;top:7px;padding:5px}.swatchEyebrow{font-size:8px}}

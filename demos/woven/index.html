@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>WOVEN — The Loom Room · Woven V9</title><link rel="stylesheet" href="src/css/style.css"></head>
+<body><main id="app">
+ <canvas id="scene" aria-label="Interactive three-dimensional wooden handloom in a weaving workshop"></canvas>
+ <div id="lighting" aria-hidden="true"></div>
+ <canvas id="glimmer" aria-hidden="true"></canvas>
+ <div id="targets" aria-label="Interactive loom objects"></div>
+ <div id="patternMarks" aria-label="Completed weaving patterns"></div>
+ <div id="bubble" hidden role="note"></div>
+ <div id="toast" role="status" aria-live="polite"></div>
+ <aside id="infoPanel" role="region" aria-labelledby="infoTitle" hidden>
+   <div class="inspectorEyebrow">WORKSHOP NOTE</div>
+   <button type="button" id="infoClose" aria-label="Close workshop note">×</button>
+   <h2 id="infoTitle"></h2><p id="infoText"></p>
+   <p class="inspectorFooter">Right-click or long-press any object to inspect again.</p>
+ </aside>
+ <aside id="swatchDock" aria-label="Live fabric preview" hidden>
+   <div class="swatchTop"><span class="swatchEyebrow">YOUR WOVEN FABRIC</span><button type="button" id="swatchHide" aria-label="Hide fabric preview">×</button></div>
+   <button type="button" id="swatchOpen" aria-label="Enlarge woven fabric preview">
+     <img id="swatchThumbnail" width="384" height="256" alt="Current woven fabric" />
+     <span id="swatchName"></span><span id="swatchProgress"></span>
+   </button>
+ </aside>
+ <div id="orientation" role="note">For a larger view, turn your device sideways.</div>
+ <button id="helpBtn" type="button" aria-label="Open instructions">?</button>
+ <div id="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" aria-hidden="false">
+   <article id="dialogPanel"><div id="dialogEyebrow">WOVEN / MANCHESTER TEXTILES</div><h1 id="dialogTitle">Weave a little history</h1><section id="dialogBody"><p>Loading the handloom...</p></section><div id="dialogActions"></div></article>
+ </div>
+ <div id="loading"><strong>WOVEN</strong><span>Preparing the workshop…</span></div>
+ <div id="fatal" hidden role="alert"></div>
+ <div id="srOnly"><span id="status"></span><span id="pickCount"></span><span id="modelMeta"></span><span id="announcer" role="status" aria-live="polite"></span></div>
+</main>
+<!-- Completely local scripts. model-data.js is generated from the editable GLB asset. -->
+<script src="src/js/model-data.js"></script>
+<script src="src/js/engine.js"></script>
+<script src="src/js/attention.js"></script>
+<script src="src/js/sound.js"></script>
+<script src="src/js/game.js"></script>
+</body></html>
