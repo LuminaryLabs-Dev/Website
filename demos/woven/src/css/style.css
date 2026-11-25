@@ -75,35 +75,12 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#1a2320;col
 @media (prefers-reduced-motion:reduce){#glimmer{opacity:.3}.target.active .halo{animation:none}}
 
 
-/* After the first complete guided cycle, the tutorial retires to glimmer-only mode.
-   Click zones remain, but words and outline halos disappear until the tutorial is replayed. */
-body.glimmerOnly .target .halo,
-body.glimmerOnly .target .tip{
- opacity:0 !important;
- visibility:hidden;
- animation:none !important;
- box-shadow:none !important;
-}
-body.glimmerOnly .target:hover .halo,
-body.glimmerOnly .target:focus-visible .halo,
-body.glimmerOnly .target.active .halo,
-body.glimmerOnly .target.clicked .halo{
- opacity:0 !important;
- transform:none !important;
-}
-body.glimmerOnly .target:focus-visible{outline:none}
-
 /* V8 — Free exploration and non-modal museum notes. No permanent HUD. */
 .target.explore{width:80px;height:69px;cursor:pointer}
 .target.explore .halo{opacity:.1;border-radius:999px}
 .target.explore .tip{font-size:11px}
 .target.dim:not(.pattern){cursor:pointer}
 .target.dim:hover .tip,.target.dim:focus-visible .tip{display:block;opacity:1}
-body.glimmerOnly .target .halo,body.glimmerOnly .target .tip{
- opacity:0 !important;visibility:hidden !important;animation:none !important;
- background:transparent !important;box-shadow:none !important;
-}
-body.glimmerOnly .target:focus-visible{outline:0}
 #infoPanel[hidden]{display:none}
 #infoPanel{
  position:absolute;right:clamp(12px,2.1vw,28px);bottom:clamp(18px,3vh,28px);
@@ -126,9 +103,6 @@ body.glimmerOnly .target:focus-visible{outline:0}
 }
 
 #scene:active{cursor:grabbing}
-
-/* Only keyboard focus retains a visible boundary after the tutorial. */
-body.glimmerOnly .target:focus-visible{outline:2px dashed #f6dda7;outline-offset:4px}
 
 
 /* V9 — one coherent visual fabric representation and clear earned outcomes.
@@ -171,3 +145,33 @@ body.glimmerOnly .target:focus-visible{outline:2px dashed #f6dda7;outline-offset
  .swatchFigure{padding:7px}
 }
 @media(max-height:550px){#swatchDock{width:124px;top:7px;padding:5px}.swatchEyebrow{font-size:8px}}
+
+/* V10 Pass 1 — a small, readable action control, with physical-object interaction retained. */
+#actionDock[hidden]{display:none}
+#actionDock{position:absolute;left:16px;bottom:max(16px,env(safe-area-inset-bottom));z-index:5;display:flex;align-items:center;gap:13px;max-width:calc(100% - 100px);padding:9px 10px 9px 14px;background:#20332dec;border:1px solid #bfa47b;border-radius:12px;box-shadow:0 4px 20px #0007;color:#f5e8cc}
+.actionCopy{display:flex;flex-direction:column;gap:4px;min-width:0}
+#actionContext{font:700 10px/1.25 system-ui;letter-spacing:.045em;color:#e4cda0}
+#actionHint{font:13px/1.35 system-ui;color:#fff1d9}
+#nextAction{min-height:44px;padding:9px 13px;font:650 13px/1.25 system-ui;background:#f2e2bd;color:#25392e;border:1px solid #ddc79d;border-radius:7px;white-space:nowrap;cursor:pointer}
+#nextAction[aria-disabled="true"]{background:#475a4c;color:#f0e4cb;border-color:#768779;cursor:wait}
+#nextAction:focus-visible,#helpBtn:focus-visible{outline:3px solid #ffe4a4;outline-offset:3px}
+#helpBtn{bottom:max(16px,env(safe-area-inset-bottom));right:16px;min-width:52px;min-height:44px;background:#20332dec;border:1px solid #bfa47b;border-radius:9px;color:#f8ecd3;font:650 12px system-ui;z-index:7}
+#toast{top:14px;left:14px;transform:translateY(-8px);max-width:min(360px,calc(100vw - 28px));font-size:13px;z-index:8}
+#toast.visible{transform:translateY(0)}
+.target.active{z-index:5}
+.freeWeaving .target:not(.active):not(:hover):not(:focus-visible) .halo{opacity:0}
+.freeWeaving .target.active .halo{opacity:.8;animation:none;box-shadow:0 0 16px #ffe1a46b;border-width:2px}
+.freeWeaving .target.active:not(:hover):not(:focus-visible) .tip{opacity:0}
+.target:focus-visible{outline:2px dashed #fff3d3;outline-offset:4px}
+#infoPanel{bottom:76px}
+#orientation{bottom:auto;top:8px;left:50%;font-size:10px}
+@media(max-width:600px){
+ #actionDock{left:8px;bottom:max(8px,env(safe-area-inset-bottom));max-width:calc(100% - 76px);gap:8px;padding:8px;flex-wrap:wrap}
+ .actionCopy{flex:1 1 110px} #actionContext{font-size:10px} #actionHint{font-size:11px}
+ #nextAction{flex:1 1 auto;white-space:normal;padding:8px;min-height:44px}
+ #helpBtn{right:8px;bottom:max(8px,env(safe-area-inset-bottom))}
+ #infoPanel{bottom:118px;max-height:36vh}
+ .target.yarn{min-width:44px;min-height:44px}
+ #toast{top:36px;max-width:calc(100% - 150px)}
+}
+@media(max-height:480px) and (min-width:601px){#actionDock{bottom:8px;padding:6px;gap:8px} #actionHint{font-size:11px} #infoPanel{bottom:67px;max-height:55vh}}

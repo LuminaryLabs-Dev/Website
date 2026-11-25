@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>WOVEN — The Loom Room · Woven V9</title><link rel="stylesheet" href="src/css/style.css"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>WOVEN — The Loom Room · Woven V10 · Usability</title><link rel="stylesheet" href="src/css/style.css"></head>
 <body><main id="app">
  <canvas id="scene" aria-label="Interactive three-dimensional wooden handloom in a weaving workshop"></canvas>
  <div id="lighting" aria-hidden="true"></div>
@@ -22,7 +22,11 @@
    </button>
  </aside>
  <div id="orientation" role="note">For a larger view, turn your device sideways.</div>
- <button id="helpBtn" type="button" aria-label="Open instructions">?</button>
+ <section id="actionDock" hidden aria-label="Weaving controls">
+   <div class="actionCopy"><span id="actionContext"></span><span id="actionHint"></span></div>
+   <button id="nextAction" type="button">Open shed</button>
+ </section>
+ <button id="helpBtn" type="button" aria-label="Open instructions">Help</button>
  <div id="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" aria-hidden="false">
    <article id="dialogPanel"><div id="dialogEyebrow">WOVEN / MANCHESTER TEXTILES</div><h1 id="dialogTitle">Weave a little history</h1><section id="dialogBody"><p>Loading the handloom...</p></section><div id="dialogActions"></div></article>
  </div>

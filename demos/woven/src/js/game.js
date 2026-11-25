@@ -23,7 +23,9 @@ const FX=window.WovenAttention ? new window.WovenAttention.Attention($('#glimmer
 const SFX=window.WovenSound ? new window.WovenSound.SoundBank() : {play(){return false},muted:false,toggleMuted(){this.muted=!this.muted;return this.muted}};
 const infoPanel=$('#infoPanel'),infoTitle=$('#infoTitle'),infoText=$('#infoText'),infoClose=$('#infoClose');
 const swatchDock=$('#swatchDock'),swatchThumbnail=$('#swatchThumbnail'),swatchName=$('#swatchName'),swatchProgress=$('#swatchProgress'),swatchOpen=$('#swatchOpen'),swatchHide=$('#swatchHide'),marksLayer=$('#patternMarks');
+const actionDock=$('#actionDock'),nextAction=$('#nextAction'),actionContext=$('#actionContext'),actionHint=$('#actionHint');
 const IDLE_GLIMMER_DELAY_MS=7000;
+let controlsVisible=true,previousFocus=null;
 let lastVisitorInteraction=performance.now(),attentionShown=false,lastCueSignature='',pendingFocus=[];
 const visitedInfo=new Set();
 let inspectorTimer=null;
@@ -33,14 +35,12 @@ let previousTutorial=false;
 try{previousTutorial=window.localStorage?.getItem(TUTORIAL_KEY)==='1';}catch(_){};
 const tutorial={active:!previousTutorial,step:0,completed:previousTutorial};
 const TUTORIAL_STEPS=[
-  {kind:'pattern',anchor:'sample_twill',title:'Choose your weave',instruction:'Select one framed cloth sample. Each pattern raises different warp threads.'},
-  {kind:'yarn',anchor:'yarn1',title:'Choose your yarn',instruction:'Touch a colorful bobbin in the yarn basket. It will become the weft.'},
-  {kind:'treadle',anchor:'treadle',title:'Open the shed',instruction:'Press the outlined foot treadle to separate the warp threads.'},
-  {kind:'shuttle',anchor:'shuttle',title:'Pass the weft',instruction:'Click the shuttle to carry the weft across the open shed.'},
-  {kind:'beater',anchor:'beater',title:'Beat the cloth',instruction:'Click the outlined reed to pack the weft against the woven edge.'}
+  {kind:'treadle',anchor:'treadle',title:'Open the shed',instruction:'Separate the warp threads.'},
+  {kind:'shuttle',anchor:'shuttle',title:'Pass the shuttle',instruction:'Carry the weft across the opening.'},
+  {kind:'beater',anchor:'beater',title:'Beat the weft',instruction:'Pack the new thread into the cloth.'}
 ];
 function applyGuidancePresentation(){
- document.body?.classList?.toggle('glimmerOnly', tutorial.completed && !tutorial.active);
+ document.body?.classList?.toggle('freeWeaving', !tutorial.active);
 }
 const S={phase:'choose',pattern:'plain',selected:0,pick:0,rows:[],shedAmount:0,liftMask:0,patternIndex:0,anim:[],direction:1,started:false};
 r.game=S;
@@ -130,7 +130,7 @@ function showInfo(def,always=false){
  announce(info.title+'. '+info.text);
 }
 function hushHintsUntilIdle(now){
- const inactive=!S.started || !dialog.hidden || (infoPanel && !infoPanel.hidden) || now-lastVisitorInteraction<IDLE_GLIMMER_DELAY_MS;
+ const inactive=!S.started || S.anim.length>0 || !dialog.hidden || (infoPanel && !infoPanel.hidden) || now-lastVisitorInteraction<IDLE_GLIMMER_DELAY_MS;
  if(inactive){
   if(attentionShown){FX.suspend?.();attentionShown=false;lastCueSignature='';}
   for(const node of (r.nodes||[])) if(node.highlight>0) node.highlight=0;
@@ -155,27 +155,49 @@ function hushHintsUntilIdle(now){
 const reedNames=['Reed frame','Reed frame.001','Reed edge','Reed edge.001','Reed edge.002','Reed edge.003'];
 const shuttleNames=['Shuttle body','Shuttle bobbin'];
 function announce(str){$('#announcer').textContent=str;}
-function toastMsg(str,force=false){if(tutorial.completed&&!tutorial.active&&!force)return;toast.textContent=str;toast.classList.add('visible');clearTimeout(toastMsg.t);toastMsg.t=setTimeout(()=>toast.classList.remove('visible'),1050);}
+function toastMsg(str){toast.textContent=str;toast.classList.add('visible');clearTimeout(toastMsg.t);toastMsg.t=setTimeout(()=>toast.classList.remove('visible'),2400);}
 function anim(dur,onMove,onDone=()=>{}){S.anim.push({duration:dur,age:0,onMove,onDone});}
 function ease(t){return t*t*(3-2*t)}
 function nextTutorialStage(expected){
  if(!tutorial.active||TUTORIAL_STEPS[tutorial.step]?.kind!==expected)return;
- tutorial.step=Math.min(5,tutorial.step+1);
+ tutorial.step=Math.min(2,tutorial.step+1);
 }
 function completeTutorial(){
- if(!tutorial.active||tutorial.step!==4)return;
- tutorial.step=5;tutorial.active=false;tutorial.completed=true;
+ if(!tutorial.active||tutorial.step!==2)return;
+ tutorial.step=3;tutorial.active=false;tutorial.completed=true;
  try{window.localStorage?.setItem(TUTORIAL_KEY,'1')}catch(_){}
  applyGuidancePresentation();
- r.resetView?.();announce('Guided tutorial complete. You have woven your first pick. Continue weaving freely; glimmers wait seven seconds.');
+ r.resetView?.();toastMsg('First pick complete. Keep weaving!');announce('First guided pick complete. Keep weaving with the next action, or explore the workshop.');
  // Attention is deliberately delayed after every visitor interaction.
 }
 function replayTutorial(){
- markVisitorInteraction();closeInfo();closePopup();S.started=true;tutorial.active=true;tutorial.step=0;tutorial.completed=false;
- applyGuidancePresentation();
- resetSample(false);S.phase='choose';updateTargets();
- announce('Tutorial restarted. Step one: choose a weaving pattern from the three framed samples.');
+ if(S.anim.length){closePopup();recoverAction();return;}
+ markVisitorInteraction();closeInfo();closePopup();S.started=true;tutorial.active=true;controlsVisible=true;
+ if(S.phase==='complete'){resetSample(true);}
+ if(S.phase==='choose')S.phase='treadle';
+ tutorial.step=S.phase==='shuttle'?1:S.phase==='beat'?2:0;
+ applyGuidancePresentation();updateTargets();
+ announce('Guidance resumed. Your current cloth is preserved. '+nextActionSpec().hint);
 }
+function nextActionSpec(){
+ if(S.phase==='complete')return {label:'View finished fabric',hint:'Your 16-pick sample is complete.',run:openLiveSwatch};
+ if(S.phase==='shuttle')return {label:'Pass the shuttle',hint:'Carry the weft through the open shed.',run:throwShuttle};
+ if(S.phase==='beat')return {label:'Beat the weft',hint:'Pack the new thread into your cloth.',run:beat};
+ return {label:'Open shed · Treadle '+(indexOfShed()+1),hint:'Separate the warp threads.',run:()=>pressTreadle(indexOfShed())};
+}
+function updateActionDock(){
+ const spec=nextActionSpec(), moving=S.anim.length>0;
+ actionDock.hidden=!S.started||!dialog.hidden||!controlsVisible;
+ actionContext.textContent=(tutorial.active?(S.pick===0?'FIRST PICK':'GUIDED PICK')+' · '+(tutorial.step+1)+'/3':WEAVES[S.pattern].name)+' · '+PALETTE[S.selected].name;
+ actionHint.textContent=moving?'Let the loom finish moving.':spec.hint;
+ nextAction.textContent=moving?'Moving…':spec.label;
+ nextAction.setAttribute('aria-disabled',String(moving));
+}
+function recoverAction(){
+ if(S.anim.length){toastMsg('Let the loom finish moving.');return;}
+ const spec=nextActionSpec();toastMsg('Next: '+spec.label);announce('Next: '+spec.label+'. '+spec.hint);
+}
+function startLoom(){S.started=true;if(S.phase==='choose')S.phase='treadle';closePopup();updateTargets();nextAction.focus?.({preventScroll:true});}
 function shaderColor(index){return PALETTE[index].hex}
 function indexOfShed(){const w=WEAVES[S.pattern];return w.sequence[S.pick%w.sequence.length]}
 function currentLiftMask(){const w=WEAVES[S.pattern];return w.lifts[indexOfShed()].reduce((m,i)=>m|(1<<i),0)}
@@ -242,7 +264,7 @@ function presentSwatch(pattern,rows,finished){
  const descriptive=finished?`Completed 16 picks. ${weave.description}`:`${rows.length} of 16 picks woven. Each colored row is preserved exactly as placed.`;
  popup(titleText,`<figure class="swatchFigure"><img src="${data}" alt="Woven ${weave.name} textile preview" width="384" height="256"><figcaption>${finished?'Finished fabric':'Live sample'} · ${rows.length} picks</figcaption></figure><p>${descriptive}</p><p><strong>Weft yarn:</strong> ${colors||'No yarn yet'}</p><p class="subtext">This enlarged preview uses the same weave calculation and yarn colors as the fabric on the loom.</p>`,[
   {label:'Back to the loom',fn:closePopup},
-  ...(finished?[{label:'Weave another',secondary:true,fn:()=>{closePopup();resetSample(false);}}]:[]),
+  ...(finished && (S.phase==='complete'||S.pick===0 && S.phase==='treadle')?[{label:'Weave another',secondary:true,fn:()=>{closePopup();if(S.anim.length){recoverAction();return;}resetSample(false);}}]:[]),
   {label:'Save sample PNG',secondary:true,fn:()=>downloadSwatch(pattern,rows)},
   {label:'Explore the pattern',secondary:true,fn:()=>{closePopup();const id='sample_'+pattern;const def=definitions.find(d=>d.id===id);if(def)showInfo(def,true);}}
  ]);
@@ -255,6 +277,7 @@ function openCompletedSwatch(pattern){
  markVisitorInteraction();SFX.play('inspect');presentSwatch(pattern,sample.rows,true);return true;
 }
 function openLiveSwatch(){
+ if(S.anim.length){recoverAction();return;}
  markVisitorInteraction();
  if(S.rows.length){presentSwatch(S.pattern,S.rows,S.pick===16);return;}
  if(lastCompletedPattern){openCompletedSwatch(lastCompletedPattern);return;}
@@ -289,40 +312,35 @@ function layOutPatternMarks(){
 }
 
 function popup(heading,text,buttons){
+ if(dialog.hidden)previousFocus=document.activeElement;
  closeInfo();markVisitorInteraction();
  title.textContent=heading;body.innerHTML=text;actions.replaceChildren();
  for(const cfg of buttons){const b=document.createElement('button');b.textContent=cfg.label;if(cfg.secondary)b.classList.add('secondary');b.addEventListener('click',cfg.fn);actions.append(b);}
- dialog.hidden=false;dialog.setAttribute('aria-hidden','false');
+ dialog.hidden=false;dialog.setAttribute('aria-hidden','false');updateActionDock();
+ actions.children[0]?.focus?.();
 }
-function closePopup(){dialog.hidden=true;dialog.setAttribute('aria-hidden','true');markVisitorInteraction();}
+function closePopup(){dialog.hidden=true;dialog.setAttribute('aria-hidden','true');markVisitorInteraction();updateActionDock();if(previousFocus?.isConnected)previousFocus.focus?.();previousFocus=null;}
 function savePNG(){downloadSwatch(S.pattern,S.rows);}
 function resetTreadles(){for(let i=0;i<4;i++){move([nameForTreadle(i)],'rx',0);move(['Treadle pin'+(i?'.'+String(i).padStart(3,'0'):'')],'dy',0);}}
-function resetSample(keepColor=true){resetTreadles();S.pick=0;S.rows=[];S.liftMask=0;S.shedAmount=0;S.anim=[];move(reedNames,'dy',0);move(reedNames,'dz',0);
+function resetSample(keepColor=true){resetTreadles();S.direction=1;S.pick=0;S.rows=[];S.liftMask=0;S.shedAmount=0;S.anim=[];move(reedNames,'dy',0);move(reedNames,'dz',0);
  move(shuttleNames,'dx',S.direction===1?0:2.7);
  previewDismissed=false;
- S.phase=keepColor&&S.started?'treadle':'choose';repaintCloth();updateTargets();}
+ S.phase=S.started?'treadle':'choose';repaintCloth();updateTargets();}
 function changePattern(value){markVisitorInteraction();if(!WEAVES[value])return;
- if(tutorial.active&&tutorial.step!==0){toastMsg('Finish this pick, or open the paper to explore.');return;}
- S.pattern=value;S.patternIndex=WEAVES[value].index;resetSample(!tutorial.active);
- SFX.play('pattern');
- if(tutorial.active){S.phase='choose';nextTutorialStage('pattern');updateTargets();}
- toastMsg(WEAVES[value].name+' selected');announce('Selected '+WEAVES[value].name+'; new fabric ready.');}
+ if(S.anim.length||S.phase==='shuttle'||S.phase==='beat'){recoverAction();return;}
+ S.pattern=value;S.patternIndex=WEAVES[value].index;resetSample(true);
+ SFX.play('pattern');toastMsg(WEAVES[value].name+' selected');announce('Selected '+WEAVES[value].name+'; new fabric ready.');}
 function chooseYarn(value){
- markVisitorInteraction();if(value<0||value>=PALETTE.length)return;
- if(tutorial.active && tutorial.step!==1){toastMsg('Choose a pattern first');return;}
+ markVisitorInteraction();if(!Number.isInteger(value)||value<0||value>=PALETTE.length)return;
+ if(S.anim.length||S.phase==='shuttle'||S.phase==='beat'){recoverAction();return;}
  S.selected=value;S.started=true;
  if(S.phase==='complete')resetSample(true);
  else if(S.phase==='choose')S.phase='treadle';
- SFX.play('yarn');
- nextTutorialStage('yarn');
- toastMsg(PALETTE[value].name+' yarn');
- announce(PALETTE[value].name+' selected. Press the highlighted treadle.');
- updateTargets();
+ SFX.play('yarn');toastMsg(PALETTE[value].name+' yarn');
+ announce(PALETTE[value].name+' selected. '+nextActionSpec().label+'.');updateTargets();
 }
 function pressTreadle(value){
- markVisitorInteraction();if(tutorial.active&&tutorial.step!==2)return;
- if(S.phase!=='treadle'){toastMsg('Follow the glowing action');return;}
- if(value!==indexOfShed()){toastMsg('Use the glowing treadle');return;}
+ markVisitorInteraction();if(S.anim.length||S.phase!=='treadle'||value!==indexOfShed()){recoverAction();return;}
  resetTreadles();
  const name='Foot treadle'+(value?'.'+String(value).padStart(3,'0'):'');
  const pin='Treadle pin'+(value?'.'+String(value).padStart(3,'0'):'');
@@ -331,19 +349,17 @@ function pressTreadle(value){
  S.phase='shuttle';SFX.play('treadle');nextTutorialStage('treadle');toastMsg('Shed opened');announce('Shed opened. Throw the shuttle through the warp threads.');updateTargets();
 }
 function throwShuttle(){
- markVisitorInteraction();if(tutorial.active&&tutorial.step!==3)return;
- if(S.phase!=='shuttle'){toastMsg('Open the shed first');return;}
+ markVisitorInteraction();if(S.anim.length||S.phase!=='shuttle'){recoverAction();return;}
  const start=S.direction===1?0:2.7,finish=S.direction===1?2.7:0;
  anim(.66,t=>{const x=start+(finish-start)*ease(t);move(shuttleNames,'dx',x);move(shuttleNames,'dy',.03*Math.sin(t*Math.PI));},()=>{move(shuttleNames,'dx',finish);move(shuttleNames,'dy',0);S.direction*=-1;});
  S.phase='beat';SFX.play('shuttle');nextTutorialStage('shuttle');toastMsg('Shuttle passed');announce('Shuttle crossed the shed. Beat the weft against the woven edge.');updateTargets();
 }
 function beat(){
- markVisitorInteraction();if(tutorial.active&&tutorial.step!==4)return;
- if(S.phase!=='beat'){toastMsg('Throw the shuttle first');return;}
+ markVisitorInteraction();if(S.anim.length||S.phase!=='beat'){recoverAction();return;}
  anim(.44,t=>{const p=Math.sin(Math.PI*t);move(reedNames,'dz',.3*p);move(reedNames,'dy',-.10*p);S.shedAmount=1-t;},()=>{move(reedNames,'dy',0);move(reedNames,'dz',0);S.shedAmount=0;S.liftMask=0;resetTreadles();});
  S.rows.push(S.selected);S.pick=S.rows.length;repaintCloth();
  SFX.play('beater');
- if(S.pick>=16){S.phase='complete';recordCompletedSwatch();const finishedPattern=S.pattern;setTimeout(()=>{if(S.phase==='complete'&&S.pick===16&&S.pattern===finishedPattern)finishSample();},470);}
+ if(S.pick>=16){S.phase='complete';recordCompletedSwatch();}
  else{S.phase='treadle';toastMsg(`Pick ${S.pick} woven`);}
  // No forced visual celebration; all glimmer cues wait seven seconds.
  announce('Pick '+S.pick+' woven. '+(S.pick>=16?'Your sample is complete.':'Now choose the next treadle.'));
@@ -359,20 +375,34 @@ function finishSample(){
 function exitGuidedMode(){
  markVisitorInteraction();tutorial.active=false;tutorial.completed=true;
  try{window.localStorage?.setItem(TUTORIAL_KEY,'1')}catch(_){}
- applyGuidancePresentation();closePopup();S.started=true;
- updateTargets();
- announce('Explore freely. The next helpful glimmer appears after seven seconds without interaction.');
+ applyGuidancePresentation();startLoom();
+ announce('Explore freely. Use the next action whenever you are ready to weave.');
+}
+function selectPatternFromMenu(key){
+ if(S.anim.length||S.phase==='shuttle'||S.phase==='beat'){closePopup();recoverAction();return;}
+ if(S.pattern===key&&S.pick>0&&S.pick<16){closePopup();toastMsg('Already weaving '+WEAVES[key].name);return;}
+ const apply=()=>{closePopup();changePattern(key);};
+ if(S.pick>0&&S.pick<16){popup('Start a new pattern?',`<p>Your current ${S.pick}-pick sample will restart.</p>`,[{label:'Keep current cloth',fn:closePopup},{label:'Start new pattern',secondary:true,fn:apply}]);}
+ else apply();
+}
+function showChoices(){
+ popup('Pattern and yarn',`<p>Choose a pattern to begin a new sample, or a yarn for your next pick. Finish any open pick before changing.</p>`,[
+  ...Object.entries(WEAVES).map(([key,w])=>({label:w.name,fn:()=>selectPatternFromMenu(key)})),
+  ...PALETTE.map((color,i)=>({label:color.name,secondary:true,fn:()=>{closePopup();chooseYarn(i);}})),
+  {label:'Back to help',secondary:true,fn:showHelp}
+ ]);
 }
 function showHelp(){
  markVisitorInteraction();SFX.play('inspect');
  const muteLabel=SFX.muted?'Turn loom sounds on':'Mute loom sounds';
  const buttons=[
-  {label:S.started?'Return to the loom':'Begin weaving',fn:()=>{S.started=true;closePopup();updateTargets();}},
-  {label:'Inspect freely',secondary:true,fn:exitGuidedMode},
-  {label:'Replay the guided pick',secondary:true,fn:replayTutorial},
+  {label:S.started?'Return to the loom':'Begin weaving',fn:startLoom},
+  {label:tutorial.active?'Explore freely':'Guide the next pick',secondary:true,fn:tutorial.active?exitGuidedMode:replayTutorial},
+  {label:'Choose pattern or yarn',secondary:true,fn:showChoices},
+  {label:controlsVisible?'Hide action controls':'Show action controls',secondary:true,fn:()=>{controlsVisible=!controlsVisible;showHelp();}},
   {label:muteLabel,secondary:true,fn:()=>{SFX.toggleMuted();showHelp();}}
  ];
- popup('Explore the loom',`<p>Click <strong>any physical part</strong> to read its museum note. When that part is ready, a click also operates it. The first guided pick is optional, and exploration never forces you to weave a particular pattern.</p><ol><li>Choose a pattern and yarn.</li><li>Press the indicated treadle to open a shed.</li><li>Pass the shuttle through the warp.</li><li>Beat the weft into the cloth.</li></ol><p>After <strong>seven seconds without interaction</strong>, shimmering yarn-like glints gently reveal the next action and another part worth investigating. They disappear as soon as you interact.</p><p>Use <strong>M</strong> to mute, <strong>F</strong> for fullscreen, <strong>drag empty space</strong> to look around and <strong>scroll</strong> to zoom. Double-click the background to reset the view. Right-click a part to reopen its explanation. A small live cloth preview grows with each pick. Completed patterns keep a check mark beside their framed sample, and your woven designs can be revisited later. The experience works locally without internet access.</p><p class="subtext">This is an educational handloom interpretation, not a specific museum loom reconstruction.</p>`,buttons);
+ popup('Explore the loom',`<p>Weave using the physical objects, or use the <strong>next-action button</strong>. Choose a framed pattern or yarn before opening a shed.</p><ol><li>Open the shed with the indicated treadle.</li><li>Pass the shuttle through the warp.</li><li>Beat the weft into the cloth.</li></ol><p>Use <strong>Space</strong> for the next action, <strong>1–6</strong> for yarn, <strong>Q/W/E/R</strong> for the treadles, <strong>M</strong> for mute and <strong>F</strong> for fullscreen. Drag empty space to look around, scroll to zoom, and double-click to reset your view.</p><p>Click an idle object or right-click it for a workshop note. Use Help to select a pattern or yarn without finding its object. Your 16-pick samples are saved locally and can be opened using their check marks.</p><p class="subtext">An educational handloom interpretation, not a reconstruction of a specific museum machine.</p>`,buttons);
 }
 function nameForYarn(i){return 'Yarn bobbin'+(i?'.'+String(i).padStart(3,'0'):'');}
 function nameForTreadle(i){return 'Foot treadle'+(i?'.'+String(i).padStart(3,'0'):'');}
@@ -411,14 +441,15 @@ function addTargets(){
    if(def.id==='cloth'&&!tutorial.active){openLiveSwatch();return;}
    if(!S.started){S.started=true;closePopup();}
    const canAct=allowedTarget(def);
-   if(def.kind==='explore'||!canAct){showInfo(def,true);return;}
+   if(def.kind==='explore'){showInfo(def,true);return;}
+   if(!canAct){recoverAction();showInfo(def,true);return;}
    // A finished pattern's frame is an invitation to inspect it again; the
    // adjacent check mark can open it even while weaving a different pattern.
    if(def.kind==='pattern'&&!tutorial.active&&S.pattern===def.id.slice(7)&&S.phase==='complete'&&completedSwatches[S.pattern]){
      openCompletedSwatch(S.pattern);return;
    }
    // Inspecting a sample should never destroy work in progress without notice.
-   if(def.kind==='pattern'&&!tutorial.active&&S.pick>0&&S.pick<16){
+   if(def.kind==='pattern'&&S.pick>0&&S.pick<16){
      const newKey=def.id.replace('sample_','');
      if(newKey===S.pattern){showInfo(def,true);return;}
      const note=noteFor(def);
@@ -428,10 +459,8 @@ function addTargets(){
      ]);
      return;
    }
-   // Working objects perform their action immediately; the first encounter also
-   // supplies a non-blocking object note. There is no forced read-next gate.
-   const wasGuided=tutorial.active;def.action();
-   if(!wasGuided)showInfo(def,false);
+   // Working objects perform their action; workshop notes remain opt-in.
+   closeInfo();def.action(); // Working parts stay unobstructed; notes are opt-in.
    button.classList.remove('clicked');void button.offsetWidth;button.classList.add('clicked');
   };
   button.addEventListener('contextmenu',e=>{e?.preventDefault?.();markVisitorInteraction();showInfo(def,true);});
@@ -440,16 +469,8 @@ function addTargets(){
 }
 const allowedTarget=def=>{
  if(def.kind==='help'||def.kind==='explore')return true;
- if(tutorial.active){
-   const step=TUTORIAL_STEPS[tutorial.step];
-   if(!step)return false;
-   if(step.kind==='pattern')return def.kind==='pattern';
-   if(step.kind==='yarn')return def.kind==='yarn';
-   if(step.kind==='treadle')return def.kind==='treadle' && S.phase==='treadle' && +def.id.slice(7)===indexOfShed();
-   return def.kind===step.kind;
- }
- if(def.kind==='pattern')return true;
- if(def.kind==='yarn')return true;
+ if(S.anim.length)return false;
+ if(def.kind==='pattern'||def.kind==='yarn')return S.phase==='choose'||S.phase==='treadle'||S.phase==='complete';
  if(def.kind==='treadle')return S.phase==='treadle' && +def.id.slice(7)===indexOfShed();
  if(def.kind==='shuttle')return S.phase==='shuttle';
  if(def.kind==='beater')return S.phase==='beat';
@@ -460,33 +481,23 @@ function updateTargets(){
  for(const def of definitions){
   const button=els.get(def.id);if(!button)continue;
   const valid=allowedTarget(def);
-  const tutorialAccent=tutorial.active && valid && def.kind!=='help' && def.kind!=='explore';
-  const normalAccent=!tutorial.active&&(def.kind==='yarn'&&(S.phase==='choose'||S.phase==='complete')||def.kind==='pattern'&&S.phase==='complete'||def.kind==='treadle'&&valid||def.kind==='shuttle'&&valid||def.kind==='beater'&&valid);
-  const highlight=tutorialAccent || normalAccent;
+  const highlight=valid && (def.kind==='treadle'||def.kind==='shuttle'||def.kind==='beater');
   button.classList.toggle('active',!!highlight);button.classList.toggle('dim',!valid);
   button.classList.toggle('selected',def.kind==='pattern'&&def.id==='sample_'+S.pattern||def.kind==='yarn'&&def.id==='yarn'+S.selected);
   button.disabled=false; // every physical hotspot can open an information note
   const node=n(def.name);
-  if(node){node.highlight=0;node.dim=tutorial.active&&!valid?.78:1;}
+  if(node){node.highlight=0;node.dim=1;}
   if(highlight && node)focus.push({name:def.name,color:def.kind==='yarn'?'#f5d3ab':def.kind==='pattern'?'#b6d9ed':'#ffe6a7',radius:def.kind==='pattern'?38:26});
  }
  // The material shimmer and canvas motes follow the same state as pointer events.
  pendingFocus=focus;
  FX.suspend?.();attentionShown=false;lastCueSignature='';
- let target=null;
- if(tutorial.active){const step=TUTORIAL_STEPS[tutorial.step];
-  target=step?.anchor==='treadle'?'Foot treadle'+(indexOfShed()?'.'+String(indexOfShed()).padStart(3,'0'):''):definitions.find(d=>d.id===step?.anchor)?.name;
- }else{
-  const main=definitions.find(d=>d.kind!=='yarn'&&els.get(d.id).classList.contains('active'))||definitions.find(d=>d.id==='yarn1'&&S.phase==='choose');
-  target=main?.name;
- }
- if(target && tutorial.active)r.focusOn?.(target);
- $('#status').textContent=tutorial.active ? `Tutorial step ${tutorial.step+1} of 5` : S.phase==='choose'?'Choose yarn':S.phase==='treadle'?'Press treadle':S.phase==='shuttle'?'Pass the shuttle':S.phase==='beat'?'Beat the weft':'Sample complete';
- if(tutorial.active){
-   const step=TUTORIAL_STEPS[tutorial.step];
-   bubble.innerHTML=`<span class="tutStep">Tutorial · ${tutorial.step+1} / 5</span><strong>${step.title}</strong> — ${step.instruction}`;
- } else bubble.textContent='';
+ const target=definitions.find(d=>els.get(d.id)?.classList.contains('active'));
+ if(target && tutorial.active && S.started)r.focusOn?.(target.name);
+ $('#status').textContent=nextActionSpec().label;
+ bubble.textContent='';bubble.hidden=true;
  $('#pickCount').textContent=String(S.pick).padStart(2,'0');
+ updateActionDock();
 }
 function layOut(){for(const def of definitions){const obj=n(def.name),button=els.get(def.id);if(!obj){button.hidden=true;continue;}
  const anchor=r.center(def.name); if(!anchor){button.hidden=true;continue;}
@@ -499,19 +510,17 @@ function layOut(){for(const def of definitions){const obj=n(def.name),button=els
   if(def.id==='frame'){anchor[1]+=.4;}
  }
  const s=r.project(anchor);if(!s||s.z>1||s.z< -1){button.hidden=true;continue;}
- button.hidden=false;button.style.left=s.x+'px';button.style.top=s.y+'px';}
- // Anchor the small instructional hint near the active physical part; no permanent HUD.
- let active=tutorial.active?definitions.find(d=>d.id===TUTORIAL_STEPS[tutorial.step]?.anchor):definitions.find(d=>els.get(d.id).classList.contains('active'));
- if(tutorial.active && TUTORIAL_STEPS[tutorial.step]?.anchor==='treadle')active=definitions.find(d=>d.id==='treadle'+indexOfShed());
- const p=active?r.project(r.center(active.name)):null;
- if(p){const half=Math.min(155,innerWidth*.32);bubble.style.left=Math.max(half,Math.min(innerWidth-half,p.x))+'px';bubble.style.top=Math.max(88,p.y-69)+'px';}
- bubble.hidden=!S.started||!tutorial.active||S.phase==='complete';
+ button.hidden=s.x<0||s.y<0||s.x>canvas.clientWidth||s.y>canvas.clientHeight;button.style.left=s.x+'px';button.style.top=s.y+'px';}
+ // The compact fixed control keeps instructions readable even when the target is off-screen.
+ bubble.hidden=true;
  layOutPatternMarks();
 }
 let initialized=false;
 function frame(now){const dt=Math.min(.05,Math.max(0,(now-tick)/1000));tick=now;
- const cuesReady=hushHintsUntilIdle(now);
+ const hadMotion=S.anim.length>0;
  for(let i=S.anim.length-1;i>=0;i--){const a=S.anim[i];a.age+=dt;let t=Math.min(1,a.age/a.duration);a.onMove(t);if(t>=1){a.onDone();S.anim.splice(i,1);}}
+ if(hadMotion&&!S.anim.length){markVisitorInteraction();updateTargets();if(S.phase==='complete'&&dialog.hidden)finishSample();}
+ const cuesReady=hushHintsUntilIdle(now);
  // Ghosted demonstrations appear only after the same seven-second inactivity gate.
  // Actual user-triggered animations take precedence over idle motion hints.
  if(S.anim.length===0){
@@ -543,11 +552,11 @@ function init(){
  $('#modelMeta').textContent=`Source: Millyard_Loom_Reference_Yarn.glb · ${stats.nodes} scene objects`;
  $('#loading').hidden=true;
  if(tutorial.active){
-  popup('Learn the loom in one pick',`<p>Follow the outlined parts through <strong>one complete weaving cycle</strong>. Begin by choosing a cloth pattern on the right, then choose yarn, open the shed, pass the shuttle, and beat the weft.</p><p>The words and outline rings retire after the first woven pick. Only after seven seconds of inactivity will glimmers gently suggest another action. You can also freely click other parts for museum notes.</p><p class="subtext">An educational interpretation of a handloom; not a reconstruction of an Amoskeag industrial loom.</p>`,[
-  {label:'Start guided tutorial',fn:()=>{S.started=true;closePopup();updateTargets();announce('Step one of five: choose a weaving pattern.');}},
+  popup('Weave your first thread',`<p>Make a piece of cloth on this working teaching loom. <strong>Open the shed, pass the shuttle, beat the weft.</strong> Choose a yarn or a different pattern before you begin.</p><p class="subtext">An educational interpretation of a handloom, not an Amoskeag industrial loom.</p>`,[
+  {label:'Start guided tutorial',fn:()=>{startLoom();announce('Step one of three: open the shed.');}},
   {label:'Explore freely instead',secondary:true,fn:exitGuidedMode}
   ]);
- }else{S.started=true;closePopup();updateTargets();}
+ }else{startLoom();}
  initialized=true;
  requestAnimationFrame(t=>{tick=t;frame(t);});
  window.__woven={ready:true,model:stats,state:S,tutorial,selectYarn:chooseYarn,pressTreadle,throwShuttle,beat,changePattern,replayTutorial,renderer:r,effects:FX,sounds:SFX,inspect:(id)=>{const def=definitions.find(d=>d.id===id);if(def){markVisitorInteraction();showInfo(def,true);}},getHintState:()=>({lastVisitorInteraction,attentionShown,delay:IDLE_GLIMMER_DELAY_MS,focusCount:pendingFocus.length}),advanceHintClock:hushHintsUntilIdle,savePNG,completedSwatches,openCompletedSwatch,openLiveSwatch,getSwatchImage:(key)=>completedSwatches[key]?swatchDataURL(key,completedSwatches[key].rows):null};
@@ -561,16 +570,18 @@ window.addEventListener('keydown',e=>{
    else app?.requestFullscreen?.().catch?.(()=>{});
    return;
  }
- if(e.key==='Escape'&&!dialog.hidden){closePopup();return;}
+ if(e.key==='Escape'&&!dialog.hidden){if(!S.started)exitGuidedMode();else closePopup();return;}
+ if(e.key==='Tab'&&!dialog.hidden){const buttons=Array.from(actions.children);const first=buttons[0],last=buttons[buttons.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus?.();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus?.();}return;}
  if(e.key==='Escape'&&infoPanel&&!infoPanel.hidden){markVisitorInteraction();closeInfo();return;}
  if(e.key.toLowerCase()==='m'&&!e.ctrlKey&&!e.altKey&&!e.metaKey){markVisitorInteraction();SFX.toggleMuted();toastMsg(SFX.muted?'Loom sounds muted':'Loom sounds on',true);return;}
  if(e.key==='?'||e.key.toLowerCase()==='h'){showHelp();return;}
- if(!dialog.hidden)return;
+ if(!dialog.hidden||e.repeat||e.ctrlKey||e.altKey||e.metaKey)return;
  if(/^[1-6]$/.test(e.key))chooseYarn(+e.key-1);
  if(['q','w','e','r'].includes(e.key.toLowerCase()))pressTreadle(['q','w','e','r'].indexOf(e.key.toLowerCase()));
- if(e.code==='Space'){e.preventDefault();if(S.phase==='shuttle')throwShuttle();else if(S.phase==='beat')beat();}
+ if(e.code==='Space'&&!e.target?.closest?.('button, input, select, textarea, a')){e.preventDefault();nextActionSpec().run();}
 });
 helpBtn.addEventListener('click',showHelp);
+nextAction.addEventListener('click',()=>{if(!dialog.hidden)return;if(S.anim.length){recoverAction();return;}closeInfo();nextActionSpec().run();});
 // Free exploration camera; drag only the bare scene, not physical-object targets.
 let drag=null;
 canvas.addEventListener?.('pointerdown',e=>{
