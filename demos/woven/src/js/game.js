@@ -42,11 +42,11 @@ const TUTORIAL_STEPS=[
 function applyGuidancePresentation(){
  document.body?.classList?.toggle('freeWeaving', !tutorial.active);
 }
-const S={phase:'choose',pattern:'plain',selected:0,pick:0,rows:[],shedAmount:0,liftMask:0,patternIndex:0,anim:[],direction:1,started:false};
+const S={phase:'choose',pattern:'plain',selected:0,pick:0,rows:[],shedAmount:0,liftMask:0,patternIndex:0,anim:[],direction:1,started:false,heldTreadle:-1,weft:{progress:0,y:1.34,direction:1,startY:.57,color:[.5,.15,.13]}};
 r.game=S;
 const els=new Map();
 const anchors=new Map();
-const colorCanvas=document.createElement('canvas');colorCanvas.width=384;colorCanvas.height=256;
+const colorCanvas=document.createElement('canvas');colorCanvas.width=728;colorCanvas.height=256;
 const clothCtx=colorCanvas.getContext('2d',{alpha:false});
 // A finished swatch is a durable sample, not the current loom state.
 // Retain exact per-pick yarn colors so changing patterns cannot rewrite old work.
@@ -84,7 +84,7 @@ function ar(ids){return ids.map(n).filter(Boolean)}
 function move(names,key,value){for(const obj of ar(names))obj.transform[key]=value;}
 const INSPECT={
  yarn:{title:'Yarn and the weft',text:'Each bobbin is a different yarn color. The warp threads are prepared on the loom before weaving; the weft is the crosswise yarn carried by the shuttle. You can change the weft color between picks to make stripes.'},
- treadle:{title:'Treadles and shafts',text:'The wooden pedals select which groups of lengthwise warp threads rise. Opening a shed creates space for the shuttle to pass. A different treadle order changes the woven pattern. This simulator uses simplified four-shaft controls.'},
+ treadle:{title:'Treadles and shafts',text:'The wooden pedals select groups of warp ends. In this vertical teaching loom the guide eyes separate those groups front to back while the top and cloth edge stay fixed. The simplified four-shaft control illustrates a shed, not a historical treadle linkage.'},
  shuttle:{title:'The shuttle',text:'A shuttle carries the weft from one side of the loom to the other through the opened shed. It returns on the next pick, so the cloth grows as a continuous sequence of crossings.'},
  beater:{title:'The reed and beater',text:'After a shuttle pass, the reed pushes the new weft against the growing edge of the fabric, called the fell. This packs the picks together and gives the cloth its structure.'},
  warp:{title:'Warp: the lengthwise threads',text:'The warp runs lengthwise, held under tension across the loom. Alternating raised warp groups create the openings needed to interlace a continuous weft. The threads are intentionally shown spaced apart so you can study the mechanism.'},
@@ -93,7 +93,7 @@ const INSPECT={
  frame:{title:'The loom frame',text:'The wooden frame supports the beams, reed, warp, and mechanism that keep threads aligned and tensioned. A handloom is operated directly by a person. Manchester’s large textile factories used mechanized and powered equipment.'},
  roller:{title:'Rollers and tension',text:'Loom beams store or take up yarn and cloth. Controlled tension matters: uneven warp tension can interfere with a clean shed and the regular packing of weft picks.'},
  ratchet:{title:'The ratchet mechanism',text:'Ratchet teeth can prevent a rotating beam from turning backward. Such mechanisms help hold a chosen tension as weaving progresses. This model illustrates the principle rather than reproducing a museum machine exactly.'},
- reed:{title:'The reed',text:'The reed separates and guides the warp ends and moves forward to beat the newly laid weft into place. It is part of the loom’s moving beater assembly.'},
+ reed:{title:'The reed',text:'The reed separates and guides the warp ends. On this vertical teaching loom its complete frame and teeth travel down together, pushing the new weft toward the growing cloth edge before returning to rest.'},
  paper:{title:'Weaving notes',text:'Use this paper to review how to weave, replay the guided pick, and mute or restore the loom sounds. You can explore objects and their explanations without advancing the weaving sequence.'},
  mill:{title:'Manchester and the mills',text:'Manchester, New Hampshire grew around water-powered textile manufacturing, including the Amoskeag mills. This playable handloom demonstrates the basic weaving principle, not the scale or machinery of industrial factory production.'},
  plain:{title:'Plain weave',text:'With two alternating sheds, the weft passes over one group of warp ends and under the next. On the following pick the interlacement reverses. The result is a balanced, familiar cloth.'},
@@ -152,7 +152,7 @@ function hushHintsUntilIdle(now){
  }
  return true;
 }
-const reedNames=['Reed frame','Reed frame.001','Reed edge','Reed edge.001','Reed edge.002','Reed edge.003'];
+const reedNames=['Reed frame','Reed frame.001','Reed edge','Reed edge.001','Reed edge.002','Reed edge.003','Reed threads','V12 reed carriage'];
 const shuttleNames=['Shuttle body','Shuttle bobbin'];
 function announce(str){$('#announcer').textContent=str;}
 function toastMsg(str){toast.textContent=str;toast.classList.add('visible');clearTimeout(toastMsg.t);toastMsg.t=setTimeout(()=>toast.classList.remove('visible'),2400);}
@@ -210,7 +210,7 @@ function drawFabric(ctx,pattern,rows){
  // This one rasterization function drives the 3D cloth, live dock, saved preview,
  // and exported PNG. It prevents inconsistent weave/color representations.
  const w=ctx.canvas?.width||colorCanvas.width,h=ctx.canvas?.height||colorCanvas.height;
- const xN=48,yN=16,cellX=w/xN,cellY=h/yN;
+ const xN=91,yN=16,cellX=w/xN,cellY=h/yN;
  ctx.fillStyle='#f0e7d5';ctx.fillRect(0,0,w,h);
  for(let x=0;x<xN;x++){
   ctx.fillStyle=x%4===0?'#cdbca4':'#e8dfce';ctx.fillRect(x*cellX,0,cellX+1,h);
@@ -234,7 +234,7 @@ function drawFabric(ctx,pattern,rows){
  ctx.strokeStyle='rgba(102,75,48,.3)';ctx.lineWidth=4;ctx.strokeRect(2,2,w-4,h-4);
 }
 function swatchDataURL(pattern,rows){
- const c=document.createElement('canvas');c.width=384;c.height=256;
+ const c=document.createElement('canvas');c.width=728;c.height=256;
  const ctx=c.getContext('2d',{alpha:false});drawFabric(ctx,pattern,rows);
  return c.toDataURL('image/png');
 }
@@ -262,7 +262,7 @@ function presentSwatch(pattern,rows,finished){
  const colors=[...new Set(rows.map(i=>PALETTE[i].name))].join(', ');
  const titleText=finished?'Your finished '+weave.name:'Your growing '+weave.name;
  const descriptive=finished?`Completed 16 picks. ${weave.description}`:`${rows.length} of 16 picks woven. Each colored row is preserved exactly as placed.`;
- popup(titleText,`<figure class="swatchFigure"><img src="${data}" alt="Woven ${weave.name} textile preview" width="384" height="256"><figcaption>${finished?'Finished fabric':'Live sample'} · ${rows.length} picks</figcaption></figure><p>${descriptive}</p><p><strong>Weft yarn:</strong> ${colors||'No yarn yet'}</p><p class="subtext">This enlarged preview uses the same weave calculation and yarn colors as the fabric on the loom.</p>`,[
+ popup(titleText,`<figure class="swatchFigure"><img src="${data}" alt="Woven ${weave.name} textile preview" width="728" height="256"><figcaption>${finished?'Finished fabric':'Live sample'} · ${rows.length} picks</figcaption></figure><p>${descriptive}</p><p><strong>Weft yarn:</strong> ${colors||'No yarn yet'}</p><p class="subtext">This enlarged preview uses the same weave calculation and yarn colors as the fabric on the loom.</p>`,[
   {label:'Back to the loom',fn:closePopup},
   ...(finished && (S.phase==='complete'||S.pick===0 && S.phase==='treadle')?[{label:'Weave another',secondary:true,fn:()=>{closePopup();if(S.anim.length){recoverAction();return;}resetSample(false);}}]:[]),
   {label:'Save sample PNG',secondary:true,fn:()=>downloadSwatch(pattern,rows)},
@@ -321,9 +321,27 @@ function popup(heading,text,buttons){
 }
 function closePopup(){dialog.hidden=true;dialog.setAttribute('aria-hidden','true');markVisitorInteraction();updateActionDock();if(previousFocus?.isConnected)previousFocus.focus?.();previousFocus=null;}
 function savePNG(){downloadSwatch(S.pattern,S.rows);}
-function resetTreadles(){for(let i=0;i<4;i++){move([nameForTreadle(i)],'rx',0);move(['Treadle pin'+(i?'.'+String(i).padStart(3,'0'):'')],'dy',0);}}
-function resetSample(keepColor=true){resetTreadles();S.direction=1;S.pick=0;S.rows=[];S.liftMask=0;S.shedAmount=0;S.anim=[];move(reedNames,'dy',0);move(reedNames,'dz',0);
- move(shuttleNames,'dx',S.direction===1?0:2.7);
+// Original teaching loom has a vertical warp; all distances use its actual GLB units.
+const FELL_BASE=.57,FELL_HEIGHT=.58,REED_REST=1.48,SHUTTLE_Y=1.34,SHUTTLE_X=1.74,WARP_EDGE=1.63;
+const fellY=()=>FELL_BASE+FELL_HEIGHT*S.pick/16;
+function pedal(index,amount){
+ const name=nameForTreadle(index),pin='Treadle pin'+(index?'.'+String(index).padStart(3,'0'):'');
+ const angle=.064*amount,c=Math.cos(angle),si=Math.sin(angle);
+ // Rotate each linked part about the fixed rear bearing, not its mesh center.
+ for(const [part,y,z] of [[name,.065,.72],[pin,.11,1.16]]){
+  const a=y-.019,b=z-.20;move([part],'rx',angle);move([part],'dy',.025+a*(c-1)-b*si);move([part],'dz',a*si+b*(c-1));
+ }
+}
+function resetTreadles(){for(let i=0;i<4;i++)pedal(i,0);S.heldTreadle=-1;}
+function reedAt(lower){
+ // All six frame pieces and the originally misaligned reed teeth move together.
+ move(reedNames.filter(name=>name!=='Reed threads'),'dy',lower-1.16);
+ move(['Reed threads'],'dy',lower-.57);move(reedNames,'dz',0);
+}
+function shuttleAt(x){move(shuttleNames,'dx',x+1.35);move(shuttleNames,'dy',SHUTTLE_Y-1.79);move(['Shuttle body'],'dz',.175-.36);move(['Shuttle bobbin'],'dz',.247-.44);}
+function threadColor(index){const h=PALETTE[index].hex;return [1,3,5].map(i=>Math.pow(parseInt(h.slice(i,i+2),16)/255,2.2));}
+function resetMechanics(){resetTreadles();S.shedAmount=0;S.liftMask=0;S.weft={progress:0,y:SHUTTLE_Y,direction:S.direction,startY:fellY(),color:threadColor(S.selected)};reedAt(REED_REST);shuttleAt(S.direction===1?-SHUTTLE_X:SHUTTLE_X);}
+function resetSample(keepColor=true){S.direction=1;S.pick=0;S.rows=[];S.anim=[];resetMechanics();
  previewDismissed=false;
  S.phase=S.started?'treadle':'choose';repaintCloth();updateTargets();}
 function changePattern(value){markVisitorInteraction();if(!WEAVES[value])return;
@@ -341,29 +359,43 @@ function chooseYarn(value){
 }
 function pressTreadle(value){
  markVisitorInteraction();if(S.anim.length||S.phase!=='treadle'||value!==indexOfShed()){recoverAction();return;}
- resetTreadles();
- const name='Foot treadle'+(value?'.'+String(value).padStart(3,'0'):'');
- const pin='Treadle pin'+(value?'.'+String(value).padStart(3,'0'):'');
- S.liftMask=currentLiftMask();S.shedAmount=0;
- anim(.36,t=>{let p=Math.sin(Math.PI*t);move([name],'rx',-.16*p);move([pin],'dy',-.04*p);S.shedAmount=ease(t);},()=>{move([name],'rx',-.10);move([pin],'dy',-.04);S.shedAmount=1;});
- S.phase='shuttle';SFX.play('treadle');nextTutorialStage('treadle');toastMsg('Shed opened');announce('Shed opened. Throw the shuttle through the warp threads.');updateTargets();
+ resetTreadles();S.heldTreadle=value;S.liftMask=currentLiftMask();S.shedAmount=0;
+ S.weft={progress:0,y:SHUTTLE_Y,direction:S.direction,startY:fellY(),color:threadColor(S.selected)};
+ anim(.40,t=>{const p=ease(t);pedal(value,p);S.shedAmount=p;},()=>{pedal(value,1);S.shedAmount=1;});
+ S.phase='shuttle';SFX.play('treadle');nextTutorialStage('treadle');toastMsg('Shed opening');announce('The selected warp groups separate. Pass the shuttle when the shed is open.');updateTargets();
 }
 function throwShuttle(){
  markVisitorInteraction();if(S.anim.length||S.phase!=='shuttle'){recoverAction();return;}
- const start=S.direction===1?0:2.7,finish=S.direction===1?2.7:0;
- anim(.66,t=>{const x=start+(finish-start)*ease(t);move(shuttleNames,'dx',x);move(shuttleNames,'dy',.03*Math.sin(t*Math.PI));},()=>{move(shuttleNames,'dx',finish);move(shuttleNames,'dy',0);S.direction*=-1;});
- S.phase='beat';SFX.play('shuttle');nextTutorialStage('shuttle');toastMsg('Shuttle passed');announce('Shuttle crossed the shed. Beat the weft against the woven edge.');updateTargets();
+ const direction=S.direction,start=-direction*SHUTTLE_X,finish=direction*SHUTTLE_X;
+ anim(.76,t=>{const x=start+(finish-start)*ease(t);shuttleAt(x);S.weft.progress=Math.max(0,Math.min(1,(direction*x+WARP_EDGE)/(2*WARP_EDGE)));},()=>{shuttleAt(finish);S.weft.progress=1;S.direction=-direction;});
+ S.phase='beat';SFX.play('shuttle');nextTutorialStage('shuttle');toastMsg('Shuttle passing');announce('The shuttle carries the selected weft through the open shed. Beat the weft against the woven edge.');updateTargets();
 }
 function beat(){
  markVisitorInteraction();if(S.anim.length||S.phase!=='beat'){recoverAction();return;}
- anim(.44,t=>{const p=Math.sin(Math.PI*t);move(reedNames,'dz',.3*p);move(reedNames,'dy',-.10*p);S.shedAmount=1-t;},()=>{move(reedNames,'dy',0);move(reedNames,'dz',0);S.shedAmount=0;S.liftMask=0;resetTreadles();});
- S.rows.push(S.selected);S.pick=S.rows.length;repaintCloth();
- SFX.play('beater');
- if(S.pick>=16){S.phase='complete';recordCompletedSwatch();}
- else{S.phase='treadle';toastMsg(`Pick ${S.pick} woven`);}
- // No forced visual celebration; all glimmer cues wait seven seconds.
- announce('Pick '+S.pick+' woven. '+(S.pick>=16?'Your sample is complete.':'Now choose the next treadle.'));
- completeTutorial();updateTargets();
+ const nextFell=FELL_BASE+FELL_HEIGHT*(S.pick+1)/16,contact=nextFell+.052,held=S.heldTreadle;
+ let packed=false;
+ function pack(){
+  if(packed)return;packed=true;
+  // One logical pick, one physical contact. Update cloth and saved samples only here.
+  S.rows.push(S.selected);S.pick=S.rows.length;S.weft.progress=0;S.shedAmount=0;S.liftMask=0;repaintCloth();
+  SFX.play('beater');
+  if(S.pick>=16){S.phase='complete';recordCompletedSwatch();}
+  else{S.phase='treadle';toastMsg(`Pick ${S.pick} woven`);}
+  announce('Pick '+S.pick+' woven. '+(S.pick>=16?'Your sample is complete.':'Now choose the next treadle.'));
+  completeTutorial();updateTargets();
+ }
+ anim(.74,t=>{
+  const approach=Math.min(1,t/.60),p=ease(approach);
+  const lower=t<=.60?REED_REST+(contact-REED_REST)*p:contact+(REED_REST-contact)*ease((t-.60)/.40);
+  reedAt(lower);
+  if(!packed){
+   S.weft.y=Math.max(nextFell,Math.min(SHUTTLE_Y,lower-.052));
+   // Keep the shed open through travel; close it gradually as the pick reaches the fell.
+   S.shedAmount=1-ease(Math.max(0,(approach-.20)/.80));if(held>=0)pedal(held,S.shedAmount);
+   if(t>=.60)pack();
+  }
+ },()=>{pack();reedAt(REED_REST);resetTreadles();S.shedAmount=0;S.liftMask=0;});
+ updateTargets();
 }
 function finishSample(){
  SFX.play('complete');
@@ -520,23 +552,8 @@ function frame(now){const dt=Math.min(.05,Math.max(0,(now-tick)/1000));tick=now;
  const hadMotion=S.anim.length>0;
  for(let i=S.anim.length-1;i>=0;i--){const a=S.anim[i];a.age+=dt;let t=Math.min(1,a.age/a.duration);a.onMove(t);if(t>=1){a.onDone();S.anim.splice(i,1);}}
  if(hadMotion&&!S.anim.length){markVisitorInteraction();updateTargets();if(S.phase==='complete'&&dialog.hidden)finishSample();}
- const cuesReady=hushHintsUntilIdle(now);
- // Ghosted demonstrations appear only after the same seven-second inactivity gate.
- // Actual user-triggered animations take precedence over idle motion hints.
- if(S.anim.length===0){
-   for(let i=0;i<6;i++){
-     const obj=n(nameForYarn(i));
-     if(obj)obj.transform.dy=cuesReady&&S.phase==='choose' ? Math.sin(now*.0025+i*.65)*.009 : 0;
-   }
-   for(let i=0;i<4;i++){
-     const obj=n(nameForTreadle(i));
-     if(obj && S.phase==='treadle')obj.transform.rx=cuesReady&&i===indexOfShed()?(-.025-.025*Math.sin(now*.004)):0;
-   }
-   if(cuesReady&&S.phase==='shuttle')move(shuttleNames,'dy',Math.sin(now*.004)*.018);
-   else move(shuttleNames,'dy',0);
-   if(cuesReady&&S.phase==='beat')move(reedNames,'dz',.035+.035*Math.sin(now*.004));
-   else move(reedNames,'dz',0);
- }
+ hushHintsUntilIdle(now);
+ // Glimmer remains the idle cue. Do not actuate real mechanisms without input.
  const cloth=n('Partly woven cloth');if(cloth?.highlight>0)cloth.highlight=Math.max(0,cloth.highlight-dt*1.65);
  r.render(dt);layOut();FX.update(dt);totalFrames++;
  requestAnimationFrame(frame);
@@ -546,7 +563,7 @@ function assertScene(){
  const missing=required.filter(k=>!n(k));if(missing.length)throw Error('The selected GLB lacks interaction nodes: '+missing.join(', '));
 }
 function init(){
- const stats=r.load(window.LOOM_MODEL_GLB_BASE64);assertScene();
+ const stats=r.load(window.LOOM_MODEL_GLB_BASE64);assertScene();resetMechanics();
  r.setClothCanvas(colorCanvas);repaintCloth();S.patternIndex=WEAVES[S.pattern].index;
  addTargets();createPatternMarks();applyGuidancePresentation();updateTargets();updateSwatchDock();
  $('#modelMeta').textContent=`Source: Millyard_Loom_Reference_Yarn.glb · ${stats.nodes} scene objects`;

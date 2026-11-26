@@ -1,4 +1,4 @@
-/* WOVEN V11 — dependency-free GLB / WebGL2 workshop renderer.
+/* WOVEN V12 — dependency-free GLB / WebGL2 workshop renderer.
    The scene is preserved from assets/models/Millyard_Loom_Reference_Yarn.glb.
    Exported from Blender under Luminary Labs' own production workflow.
 */
@@ -44,23 +44,40 @@ layout(location=0) in vec3 aPosition;
 layout(location=1) in vec3 aNormal;
 layout(location=2) in vec2 aUV;
 uniform mat4 uModel;uniform mat4 uPV;uniform int uWarpMode;uniform int uLiftMask;uniform int uPattern;uniform float uShedAmount;
+uniform float uFellY;uniform float uWeftProgress;uniform float uWeftY;uniform float uWeftStartY;uniform float uWeftDirection;uniform int uShaft;
 out vec3 vN;out vec3 vP;out vec3 vLocal;out vec2 vUV;
-void main(){vec3 p=aPosition;
- if(uWarpMode==1 && uShedAmount>0.001){
-   float slot=clamp(floor((p.x+1.6365)/0.03637+0.5),0.0,90.0);
-   int shaft=(uPattern==2)?int(mod(floor(slot/2.0),2.0)):int(mod(slot,4.0));
-   bool raised=(uLiftMask & (1<<shaft))!=0;
-   p.z+=uShedAmount*(raised?0.075:-0.026);
-   p.y+=uShedAmount*(raised?0.042:-0.012);
+int shaftOf(float x){float slot=clamp(floor((x+1.63)/(3.26/90.0)+.5),0.0,90.0);return uPattern==2?int(mod(floor(slot/2.0),2.0)):int(mod(slot,4.0));}
+float warpShift(float y,int shaft){
+ // Never translate the whole warp. Preserve its anchor at the fell and top beam.
+ float envelope=smoothstep(0.0,.18,y-uFellY)*smoothstep(0.0,.65,2.84-y);
+ bool raised=(uLiftMask & (1<<shaft))!=0;
+ return uShedAmount*envelope*(raised?.145:-.145);
+}
+void main(){vec3 p=aPosition;vec3 normal=aNormal;
+ if(uWarpMode==1){
+   int shaft=shaftOf(p.x);float dy=.002;
+   float slope=(warpShift(p.y+dy,shaft)-warpShift(p.y-dy,shaft))/(2.0*dy);
+   normal=normalize(vec3(normal.x,normal.y-slope*normal.z,normal.z));p.z+=warpShift(p.y,shaft);
+ }else if(uWarpMode==2){ // unbroken weft across the actual open shed
+   float t=clamp(p.x,0.0,1.0),along=t*uWeftProgress;
+   p.x=uWeftDirection*(-1.63+3.26*along);
+   p.y+=uWeftY-.014*sin(3.14159265*t)*uWeftProgress*clamp((uWeftY-uWeftStartY)/.45,0.0,1.0);p.z+=.18;
+   normal.x*=uWeftDirection;
+ }else if(uWarpMode==3){ // selvedge connection to the previous packed pick
+   p.x+=-uWeftDirection*1.63;p.y=mix(uWeftStartY,uWeftY,p.y);p.z+=.18;
+ }else if(uWarpMode==4){ // shaft eyelets follow the identical warp separation function
+   int shaft=shaftOf(p.x);p.y+=float(shaft)*.10;p.z+=warpShift(2.22+float(shaft)*.10,shaft);
+ }else if(uWarpMode==5){
+   int shaft=uShaft;if(uPattern!=2||shaft<2)p.z+=warpShift(2.22+float(shaft)*.10,shaft);
  }
- vec4 world=uModel*vec4(p,1.0);vP=world.xyz;vLocal=aPosition;vN=normalize(transpose(inverse(mat3(uModel)))*aNormal);vUV=aUV;gl_Position=uPV*world;}
+ vec4 world=uModel*vec4(p,1.0);vP=world.xyz;vLocal=aPosition;vN=normalize(transpose(inverse(mat3(uModel)))*normal);vUV=aUV;gl_Position=uPV*world;}
 `;
 const FRAG=`#version 300 es
 precision highp float;
 in vec3 vN;in vec3 vP;in vec3 vLocal;in vec2 vUV;
 uniform vec4 uBase;uniform vec3 uCamera;uniform float uRoughness;uniform float uMetallic;
 uniform float uHighlight;uniform float uDim;uniform float uTime;uniform int uTextureMode;uniform sampler2D uCloth;
-uniform int uMaterialKind;uniform int uGrainAxis;
+uniform int uMaterialKind;uniform int uGrainAxis;uniform float uPickFraction;
 out vec4 fragColor;
 const float PI=3.14159265;
 // Analytic materials: object-local grain for moving parts, world coordinates for architectural surfaces.
@@ -110,7 +127,7 @@ void main(){
  vec3 N=normalize(vN);if(!gl_FrontFacing)N=-N;
  vec3 V=normalize(uCamera-vP);vec3 base=uBase.rgb;float rough=clamp(uRoughness,.22,.98),metal=uMetallic,height=0.0,ao=1.0;
  int kind=uMaterialKind;
- if(uTextureMode==1){base=pow(texture(uCloth,vUV).rgb,vec3(2.2));}
+ if(uTextureMode==1){if(vUV.y>uPickFraction+.0001)discard;base=pow(texture(uCloth,vUV).rgb,vec3(2.2));}
  if(kind==1||kind==2){
    vec3 p=vLocal;vec3 grain=uGrainAxis==0?p.yzx:(uGrainAxis==2?p.xyz:p.xzy);
    if(kind==2){grain=vec3(vP.x,vP.y,vP.z);float lane=(vP.x+4.0)/.48,board=floor(lane);float seam=min(fract(lane),1.0-fract(lane));float joint=abs(fract((vP.z+hash31(vec3(board,4.0,1.0))*2.3)/2.3)-.5);base*=mix(.73,1.20,hash31(vec3(board,7.0,3.0)));base*=mix(.45,1.0,smoothstep(.006,.026+fwidth(lane),seam));base*=mix(.65,1.0,smoothstep(.002,.009+fwidth(joint),joint));grain.x+=board*.47;}
@@ -129,7 +146,7 @@ void main(){
  }else if(kind==5){ // dyed yarn, warp and woven samples
    float twist=.5+.5*band(dot(vLocal,vec3(88.0,151.0,107.0)));
    float fuzz=noise3(vLocal*147.0);base*=.86+.17*twist+.12*fuzz;height=(twist*.65+fuzz*.35)*.00075;rough=max(.83,rough);
-   if(uTextureMode==1){vec2 cell=vUV*vec2(48.0,16.0);vec2 sub=fract(cell);float crossing=.5+.5*band((sub.x+sub.y)*19.0);base*=.91+.12*crossing;height+=crossing*.0005;}
+   if(uTextureMode==1){vec2 cell=vUV*vec2(91.0,16.0);vec2 sub=fract(cell);float crossing=.5+.5*band((sub.x+sub.y)*19.0);base*=.91+.12*crossing;height+=crossing*.0005;}
  }else if(kind==10){
    float wind=.5+.5*band(vLocal.y*520.0+atan(vLocal.z,vLocal.x+1e-6)*2.0);
    float wool=noise3(vLocal*vec3(180.0,200.0,180.0));
@@ -195,7 +212,7 @@ class Renderer{
    this.canvas=canvas;this.gl=canvas.getContext('webgl2',{alpha:false,antialias:true,depth:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});
    if(!this.gl)throw Error('This browser does not support WebGL 2.');
    const gl=this.gl; this.program=createProgram(gl);this.locations={};
-   for(const n of ['uModel','uPV','uBase','uCamera','uRoughness','uMetallic','uHighlight','uDim','uTime','uTextureMode','uCloth','uWarpMode','uLiftMask','uPattern','uShedAmount','uMaterialKind','uGrainAxis'])this.locations[n]=gl.getUniformLocation(this.program,n);
+   for(const n of ['uModel','uPV','uBase','uCamera','uRoughness','uMetallic','uHighlight','uDim','uTime','uTextureMode','uCloth','uWarpMode','uLiftMask','uPattern','uShedAmount','uMaterialKind','uGrainAxis','uFellY','uWeftProgress','uWeftY','uWeftStartY','uWeftDirection','uShaft','uPickFraction'])this.locations[n]=gl.getUniformLocation(this.program,n);
    this.camera=[0,2.04,12.1];this.look=[0,1.87,-0.42];this.pv=M.identity();this.focusTarget=[0,1.85];this.focusSmooth=[0,1.85];this.manualPan=[0,0];this.zoomLevel=1;this.reducedMotion=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
    this.nodes=[];this.byName=new Map();this.planes=[];this.size=[0,0];this.elapsed=0;
    this.materials=[];this.texture=null;this.clothCanvas=null;this.game=null;this.modelLoaded=false;
@@ -307,16 +324,23 @@ class Renderer{
    gl.useProgram(this.program);gl.uniformMatrix4fv(this.locations.uPV,false,this.pv);gl.uniform3fv(this.locations.uCamera,new Float32Array(this.camera));
    gl.uniform1f(this.locations.uTime,this.reducedMotion?0:this.elapsed);
    gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,this.texture);gl.uniform1i(this.locations.uCloth,0);
+   const game=this.game,weft=game?.weft;
+   gl.uniform1f(this.locations.uFellY,.57+.58*(game?.pick||0)/16);gl.uniform1f(this.locations.uPickFraction,(game?.pick||0)/16);
+   gl.uniform1f(this.locations.uWeftProgress,weft?.progress||0);gl.uniform1f(this.locations.uWeftY,weft?.y??1.34);gl.uniform1f(this.locations.uWeftStartY,weft?.startY??.57);gl.uniform1f(this.locations.uWeftDirection,weft?.direction??1);
    for(const n of this.nodes){if(!n.visible||!n.parts.length)continue;
+     const live=n.name==='V12 pending weft'||n.name==='V12 selvedge lead';
+     if(live&&(!weft||weft.progress<.002))continue;
+     if(n.name==='Partly woven cloth'&&!(game?.pick>0))continue;
      gl.uniformMatrix4fv(this.locations.uModel,false,n.world);
      gl.uniform1f(this.locations.uHighlight,n.highlight);gl.uniform1f(this.locations.uDim,n.dim);
      const warp=n.name==='91 individually spaced warp threads';
-     gl.uniform1i(this.locations.uWarpMode,warp?1:0);gl.uniform1i(this.locations.uLiftMask,this.game?.liftMask||0);
+     const mode=warp?1:n.name==='V12 pending weft'?2:n.name==='V12 selvedge lead'?3:n.name==='V12 shaft guide eyes'?4:n.name.startsWith('V12 shaft rail ')?5:0;
+     gl.uniform1i(this.locations.uWarpMode,mode);gl.uniform1i(this.locations.uShaft,mode===5?Number(n.name.slice(-1)):0);gl.uniform1i(this.locations.uLiftMask,this.game?.liftMask||0);
      gl.uniform1i(this.locations.uPattern,this.game?.patternIndex||0);
      gl.uniform1f(this.locations.uShedAmount,this.game?.shedAmount||0);
      for(const part of n.parts){
        const material=this.materials[part.mat]||{base:[1,1,1,1],rough:1,metallic:0};
-       gl.uniform4fv(this.locations.uBase,new Float32Array(material.base));gl.uniform1f(this.locations.uRoughness,material.rough);
+       gl.uniform4fv(this.locations.uBase,new Float32Array(live?[...weft.color,1]:material.base));gl.uniform1f(this.locations.uRoughness,material.rough);
        gl.uniform1f(this.locations.uMetallic,material.metallic);
        gl.uniform1i(this.locations.uMaterialKind,material.kind||0);gl.uniform1i(this.locations.uGrainAxis,part.grainAxis??1);
        gl.uniform1i(this.locations.uTextureMode,n.name==='Partly woven cloth' && this.texture && part.hasUV?1:0);
