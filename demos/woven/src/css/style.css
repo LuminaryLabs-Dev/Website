@@ -175,3 +175,49 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#1a2320;col
  #toast{top:36px;max-width:calc(100% - 150px)}
 }
 @media(max-height:480px) and (min-width:601px){#actionDock{bottom:8px;padding:6px;gap:8px} #actionHint{font-size:11px} #infoPanel{bottom:67px;max-height:55vh}}
+
+/* V13 — opt-in workshop orders. The loom remains the main play surface. */
+#workshopBtn[hidden],#orderDock[hidden],#pedalControls[hidden],#repeatBand[hidden]{display:none}
+#workshopBtn{position:absolute;top:12px;left:12px;z-index:6;min-height:44px;padding:8px 13px;border-radius:8px;border:1px solid #bfa47b;background:#24372fef;color:#fff0d3;font:650 12px system-ui;cursor:pointer;box-shadow:0 4px 18px #101e1b88}
+#orderDock{position:absolute;top:64px;left:12px;width:min(248px,calc(100vw - 156px));z-index:5;background:linear-gradient(155deg,#f3e6c9f7,#dfc9a3f5);border:1px solid #ae9166;border-radius:11px;color:#324839;padding:11px 13px;box-shadow:0 10px 30px #12201980}
+.orderEyebrow{color:#795b3c;letter-spacing:.15em;font:750 9px system-ui;letter-spacing:.14em}
+#orderName{font:500 20px/1.12 Georgia;margin:5px 0 5px}
+#orderProgress{font:700 11px system-ui;margin:0 0 6px;color:#536a54;font-variant-numeric:tabular-nums}
+#orderBands{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:8px 0}
+.orderBand{height:13px;display:block;border:1px solid #aa916a;border-radius:3px;background:#baab8a66;color:transparent;padding:0;opacity:.63}
+.orderBand.current{outline:2px solid #3d634a;outline-offset:1px;opacity:1}
+.orderBand.done{opacity:1;border-color:#4e694c}
+#orderGoal{font:600 12px/1.35 system-ui;margin:8px 0 4px}
+#orderYarns{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:5px 0}
+.orderYarn{height:44px;border:1px solid #837355;border-radius:6px;cursor:pointer;position:relative;box-shadow:inset 0 0 0 2px #ffedc74d}
+.orderYarn[aria-pressed="true"]{outline:2px solid #2b5140;outline-offset:1px}
+.orderYarn[aria-pressed="true"]:after{content:'✓';position:absolute;inset:0;display:grid;place-items:center;color:#fffdf0;text-shadow:0 1px 4px #172e22;font:800 20px system-ui}
+.orderYarn:disabled{cursor:default;opacity:.65}
+#orderYarnLabel{font:550 10px/1.35 system-ui;margin:3px 0 6px;color:#5a634d}
+#repeatBand{width:100%;min-height:44px;border:1px solid #547456;border-radius:6px;padding:7px 8px;background:#345846;color:#fff3da;font:650 12px system-ui;cursor:pointer}
+#repeatBand:disabled{opacity:.65;cursor:wait}
+#pedalControls{display:grid;grid-template-columns:repeat(4,minmax(44px,1fr));gap:4px}
+#pedalControls button{min-height:44px;border-radius:6px;background:#344e41;color:#fff1d4;border:1px solid #a9926c;cursor:pointer;font:700 15px system-ui}
+#pedalControls button.clued{background:#ebdbb6;color:#2d4336;outline:2px solid #efd89d;outline-offset:1px}
+#pedalControls button:disabled{opacity:.5;cursor:wait}
+#pedalControls button:focus-visible,#workshopBtn:focus-visible,.orderYarn:focus-visible,#repeatBand:focus-visible{outline:3px solid #db9c41;outline-offset:2px}
+.orderCards{display:grid;gap:8px;margin:12px 0}
+.orderCard{border:1px solid #b9a181;border-radius:8px;background:#f3e9d4;padding:10px 12px;display:grid;gap:4px}
+.orderCard strong{font:600 17px Georgia;color:#314b3b}
+.orderCard span{font:650 11px system-ui;color:#6a5a40}
+#dialogBody .orderCard p{font-size:12px;margin:0;line-height:1.4}
+.orderSeal{display:inline-block;border:1px solid #779074;background:#dce7ce;color:#35593d!important;border-radius:4px;padding:4px 8px;font:750 10px system-ui;letter-spacing:.06em}
+.orderStats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0;color:#46604d;text-align:center;font:550 11px system-ui}
+.orderStats span{border:1px solid #c2ab86;border-radius:6px;background:#f2e5c8;padding:7px 5px}
+.orderStats strong{display:block;font:700 22px Georgia;color:#2f5040}
+.journalSwatch{margin:9px 0;display:flex;align-items:center;gap:9px;background:#e3d0b1;padding:8px;border-radius:6px}
+.journalSwatch img{width:38%;height:auto;border:3px solid #fff5df}
+.journalSwatch figcaption{font:650 12px/1.4 system-ui;color:#415641}
+#dialogPanel{max-height:calc(100dvh - 24px);overflow:auto}
+#toast{top:auto;bottom:clamp(102px,15vh,140px);left:12px;transform:translateY(8px);pointer-events:none}
+#toast.visible{transform:translateY(0)}
+@media(min-width:900px){#orderYarns{grid-template-columns:repeat(6,1fr)}.orderYarn{min-width:30px;height:44px}}
+@media(max-width:600px){#workshopBtn{top:8px;left:8px}#orderDock{top:58px;left:8px;padding:8px;width:min(220px,calc(100vw - 150px))}#orderName{font-size:16px}#orderGoal{font-size:11px}#orderYarns{grid-template-columns:repeat(3,minmax(44px,1fr));gap:4px}#orderYarnLabel{font-size:10px}#pedalControls{flex:1 0 100%;order:3}#toast{bottom:155px;max-width:calc(100vw - 22px)}#infoPanel{bottom:180px}}
+@media(max-height:530px) and (min-width:601px){#orderDock{top:55px;max-height:calc(100vh - 145px);overflow:auto;width:220px}#orderYarns{grid-template-columns:repeat(3,minmax(44px,1fr))}.orderYarn{height:44px}#toast{bottom:95px}}
+
+#orderRhythm{margin:0 0 7px;font:500 11px/1.35 system-ui;color:#69573d}

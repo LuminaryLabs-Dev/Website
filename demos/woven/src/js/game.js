@@ -25,6 +25,124 @@ const infoPanel=$('#infoPanel'),infoTitle=$('#infoTitle'),infoText=$('#infoText'
 const swatchDock=$('#swatchDock'),swatchThumbnail=$('#swatchThumbnail'),swatchName=$('#swatchName'),swatchProgress=$('#swatchProgress'),swatchOpen=$('#swatchOpen'),swatchHide=$('#swatchHide'),marksLayer=$('#patternMarks');
 const actionDock=$('#actionDock'),nextAction=$('#nextAction'),actionContext=$('#actionContext'),actionHint=$('#actionHint');
 const IDLE_GLIMMER_DELAY_MS=7000;
+const workshopBtn=$('#workshopBtn'),orderDock=$('#orderDock'),orderName=$('#orderName'),orderProgress=$('#orderProgress'),orderGoal=$('#orderGoal'),orderRhythm=$('#orderRhythm'),orderBands=$('#orderBands'),orderYarns=$('#orderYarns'),orderYarnLabel=$('#orderYarnLabel'),repeatBand=$('#repeatBand'),pedalControls=$('#pedalControls');
+const ORDERS={
+ plain:{name:'A place at the table',object:'table runner sample',intro:'A family is setting a new table. Create a balanced striped sample with two yarns of your choice.',lesson:'Plain weave alternates the two sheds. The frequent interlacing forms a balanced fabric.',recipe:'Four bands: A · B · A · B',rhythm:'Alternate the two treadles.',layout:[0,1,0,1],milestones:['Alternating threads lock the first stripe.','Contrasting yarn reveals the stripe boundary.','The first color returns to establish a rhythm.']},
+ twill:{name:'The maker’s apron',object:'apron fabric sample',intro:'A maker wants a diagonal pattern for an apron. Experiment with four different yarns.',lesson:'In 2/2 twill, the raised pair shifts each pick. Look for diagonal ribs and longer thread floats.',recipe:'Four bands: A · B · C · D',rhythm:'Cycle through all four treadles in order.',layout:[0,1,2,3],milestones:['The raised pair shifts into a diagonal.','The diagonal continues across a new yarn color.','Longer floats remain visible across the bands.']},
+ basket:{name:'The market basket',object:'basket-weave cloth sample',intro:'A market stall needs a cloth with a paired structure. Design a mirrored sample using two yarns.',lesson:'In basket weave, pairs of threads act together. Two consecutive picks use the same shed before switching.',recipe:'Four bands: A · B · B · A',rhythm:'Use each of the first two treadles twice before switching.',layout:[0,1,1,0],milestones:['Paired crossings form larger woven blocks.','The contrasting band makes the paired structure easier to see.','The middle bands match; return to your first color for symmetry.']}
+};
+const ORDER_KEY='woven-loom-v13-workshop-orders';
+const orderJournal={};let order=null;
+const orderYarnButtons=[],orderPedals=[],orderBandMarks=[];
+function orderRunning(){return !!order && S.pick<16;}
+function orderBand(){return Math.min(3,Math.floor(S.pick/4));}
+function validOrderRows(key,rows){
+ if(!ORDERS[key]||!cleanRows(rows))return false;
+ const chosen={};for(let band=0;band<4;band++){
+  const col=rows[band*4],slot=ORDERS[key].layout[band];
+  if(rows.slice(band*4,band*4+4).some(c=>c!==col))return false;
+  if(slot in chosen){if(chosen[slot]!==col)return false;}
+  else {if(Object.values(chosen).includes(col))return false;chosen[slot]=col;}
+ }return true;
+}
+function restoreOrders(){try{const data=JSON.parse(window.localStorage?.getItem(ORDER_KEY)||'null');if(data?.version!==1)return;
+ for(const key of Object.keys(ORDERS)){const item=data.orders?.[key];if(!item||!validOrderRows(key,item.rows))continue;
+  const counts=[item.independent,item.assisted,item.repeated];if(!counts.every(n=>Number.isInteger(n)&&n>=0&&n<=16)||counts.reduce((a,b)=>a+b,0)!==16)continue;
+  orderJournal[key]={rows:item.rows.slice(),independent:counts[0],assisted:counts[1],repeated:counts[2]};}
+ }catch(_){} }
+restoreOrders();
+function saveOrders(){try{window.localStorage?.setItem(ORDER_KEY,JSON.stringify({version:1,orders:orderJournal}));}catch(_){} }
+function orderRule(){
+ const band=orderBand(),slot=ORDERS[order.key].layout[band],past={};
+ for(let i=0;i<band;i++)past[ORDERS[order.key].layout[i]]=S.rows[i*4];
+ if(S.pick%4!==0){const c=S.rows[band*4];return {colors:[c],text:'Keep '+PALETTE[c].name+' for this band.'};}
+ if(slot in past){const c=past[slot];return {colors:[c],text:'Return to '+PALETTE[c].name+' to complete your design.'};}
+ const colors=PALETTE.map((_,i)=>i).filter(i=>!Object.values(past).includes(i));
+ return {colors,text:band===0?'Choose your first yarn.':'Choose a new, contrasting yarn.'};
+}
+function orderColorReady(){return !orderRunning() || (order.chosenBand===orderBand() && orderRule().colors.includes(S.selected));}
+function orderColorPrompt(){const msg=orderRule().text;toastMsg(msg);announce(msg);}
+function initOrderControls(){
+ for(let i=0;i<4;i++){const b=document.createElement('span');b.className='orderBand';orderBands.append(b);orderBandMarks.push(b);
+  const pedal=document.createElement('button');pedal.type='button';pedal.textContent=String(i+1);pedal.setAttribute('title','Keyboard '+['Q','W','E','R'][i]);pedal.setAttribute('aria-label','Press treadle '+(i+1));pedal.addEventListener('click',()=>{if(dialog.hidden){closeInfo();pressTreadle(i);}});pedalControls.append(pedal);orderPedals.push(pedal);}
+ for(let i=0;i<PALETTE.length;i++){const b=document.createElement('button');b.type='button';b.className='orderYarn';b.style.background=PALETTE[i].hex;b.setAttribute('title',PALETTE[i].name);b.setAttribute('aria-label','Select '+PALETTE[i].name);b.addEventListener('click',()=>{if(dialog.hidden)chooseYarn(i);});orderYarns.append(b);orderYarnButtons.push(b);}
+}
+function canRepeat(){return orderRunning()&&!order.repeatEnd&&!S.anim.length&&S.phase==='treadle'&&S.pick%4!==0&&S.pick>=WEAVES[order.key].sequence.length&&orderColorReady();}
+function updateOrderDock(){
+ const active=orderRunning(),show=active&&S.started&&dialog.hidden,busy=S.anim.length>0;
+ workshopBtn.hidden=!dialog.hidden;workshopBtn.textContent=active?'Order journal':'Workshop orders';
+ orderDock.hidden=!show;pedalControls.hidden=!show||S.phase!=='treadle'||busy||!!order?.repeatEnd;
+ if(!active){repeatBand.hidden=true;return;}
+ const band=orderBand(),rule=orderRule();
+ orderName.textContent=ORDERS[order.key].name;orderProgress.textContent=`Band ${band+1} of 4 · ${S.pick}/16 picks`;
+ orderGoal.textContent=rule.text;orderRhythm.textContent=WEAVES[order.key].name+' · '+ORDERS[order.key].rhythm+(S.pick<WEAVES[order.key].sequence.length?' Complete one full rhythm to unlock repeat.':'');orderYarnLabel.textContent=order.chosenBand===band?'Selected: '+PALETTE[S.selected].name:'Select a yarn to begin this band.';
+ orderBandMarks.forEach((b,i)=>{b.textContent=String(i+1);b.classList.toggle('done',S.pick>=(i+1)*4);b.classList.toggle('current',i===band);const c=S.rows[i*4];b.style.background=Number.isInteger(c)?PALETTE[c].hex:'';});
+ orderYarnButtons.forEach((b,i)=>{b.setAttribute('aria-pressed',String(order.chosenBand===band&&S.selected===i));b.disabled=busy||S.phase!=='treadle'||!!order.repeatEnd;});
+ orderPedals.forEach((b,i)=>{b.disabled=busy||!!order.repeatEnd;b.classList.toggle('clued',order.hint&&i===indexOfShed());});
+ repeatBand.hidden=!order.repeatEnd&&!canRepeat();repeatBand.textContent=order.repeatEnd?(order.stopRepeat?'Stopping after this pick…':'Stop after this pick'):`Finish band · ${4-S.pick%4} more picks`;
+ repeatBand.disabled=!!order.stopRepeat;
+}
+function showOrders(){
+ if(S.anim.length){recoverAction();return;}
+ const cards=Object.entries(ORDERS).map(([key,b])=>`<div class="orderCard"><strong>${b.name}</strong><span>${WEAVES[key].name} · ${b.recipe}</span><p>${b.intro}</p><p>${b.rhythm}</p>${orderJournal[key]?'<span class="orderSeal">Order fulfilled</span>':''}</div>`).join('');
+ popup('The workshop ledger',`<p>You are the weaver in a fictional small workshop. Choose an order, design four bands of yarn, and learn the pattern by operating the loom. Demonstrate a complete treadle rhythm to unlock faster repeats. No timer or penalty for asking for help.</p><div class="orderCards">${cards}</div><p class="subtext">${Object.keys(orderJournal).length} of 3 workshop seals earned on this device. Finished orders are saved; unfinished work stays in this session.</p>`,[
+  ...(S.started?[{label:orderRunning()?'Resume current order':'Return to the loom',fn:closePopup}]:[]),
+  ...Object.entries(ORDERS).map(([key,b])=>({label:(orderJournal[key]?'Weave again: ':'Take order: ')+b.name,fn:()=>confirmOrder(key)})),
+  {label:'Finished orders',secondary:true,fn:showOrderJournal},
+  {label:'Free weaving',secondary:true,fn:()=>confirmOrder(null)},
+  ...(!S.started?[{label:'Start guided tutorial',secondary:true,fn:()=>{order=null;startLoom();}}]:[])
+ ]);
+}
+function confirmOrder(key){
+ if(S.anim.length||S.phase==='shuttle'||S.phase==='beat'){closePopup();recoverAction();return;}
+ if(orderRunning()&&key===order.key){closePopup();return;}
+ if(S.pick>0&&S.pick<16||orderRunning()){
+  popup('Start a different project?',`<p>This will discard the unfinished ${S.pick}-pick sample. Finished samples and workshop seals stay saved.</p>`,[{label:'Keep current cloth',fn:closePopup},{label:key?'Start new order':'Switch to free weaving',secondary:true,fn:()=>beginOrder(key)}]);return;
+ }
+ beginOrder(key);
+}
+function beginOrder(key){
+ if(S.anim.length||S.phase==='shuttle'||S.phase==='beat'||(key!==null&&!ORDERS[key]))return;
+ order=null;tutorial.active=false;controlsVisible=true;applyGuidancePresentation();S.started=true;
+ if(key){S.pattern=key;S.patternIndex=WEAVES[key].index;order={key,chosenBand:-1,hint:false,independent:0,assisted:0,repeated:0,kind:'independent',repeatEnd:0,stopRepeat:false};}
+ resetSample(true);startLoom();
+ if(order){toastMsg('New order: '+ORDERS[key].name);announce(ORDERS[key].intro+' '+ORDERS[key].recipe+'. Choose yarn for band one.');}
+}
+function revealOrderClue(){
+ if(!orderRunning()||S.phase!=='treadle'||S.anim.length)return;
+ if(!orderColorReady()){orderColorPrompt();return;}
+ order.hint=true;const msg=ORDERS[order.key].rhythm+' Next: treadle '+(indexOfShed()+1)+'.';toastMsg(msg);announce(msg);updateTargets();
+}
+function repeatCurrentBand(){
+ if(order?.repeatEnd){order.stopRepeat=true;updateOrderDock();return;}
+ if(!canRepeat())return;
+ order.repeatEnd=Math.min(16,4*(orderBand()+1));order.stopRepeat=false;toastMsg('Repeating the remaining picks in this band.');driveRepeat();
+}
+function driveRepeat(){
+ if(!order?.repeatEnd||S.anim.length)return false;
+ if(S.phase==='complete'||S.phase==='treadle'&&(S.pick>=order.repeatEnd||order.stopRepeat)){
+  order.repeatEnd=0;order.stopRepeat=false;updateTargets();return false;
+ }
+ if(S.phase==='treadle')pressTreadle(indexOfShed(),true);else if(S.phase==='shuttle')throwShuttle();else if(S.phase==='beat')beat();
+ return true;
+}
+function recordOrderPick(){
+ if(!order)return;
+ order[order.kind]++;order.hint=false;
+ if(S.pick===16&&validOrderRows(order.key,S.rows)){
+  orderJournal[order.key]={rows:S.rows.slice(),independent:order.independent,assisted:order.assisted,repeated:order.repeated};saveOrders();
+ }
+}
+function presentOrder(key,sample){
+ const b=ORDERS[key],data=swatchDataURL(key,sample.rows),colors=[...new Set(sample.rows.map(i=>PALETTE[i].name))].join(', ');
+ popup('Order fulfilled — '+b.name,`<p class="orderSeal">WORKSHOP SEAL · ${Object.keys(orderJournal).length}/3</p><figure class="swatchFigure"><img src="${data}" alt="Your finished ${WEAVES[key].name} sample" width="728" height="256"><figcaption>${b.object} · ${b.recipe}</figcaption></figure><p>${b.lesson} Your yarn choices: ${colors}.</p><div class="orderStats"><span><strong>${sample.independent}</strong> independent picks</span><span><strong>${sample.assisted}</strong> with clues</span><span><strong>${sample.repeated}</strong> repeated</span></div><p class="subtext">This is a teaching sample from a fictional commission. The interlacing principle also underlies mechanized textile production, including Manchester’s mills.</p>`,[
+  {label:'Choose another order',fn:showOrders},{label:'Save sample PNG',secondary:true,fn:()=>downloadSwatch(key,sample.rows)},{label:'Back to the loom',secondary:true,fn:closePopup}]);
+}
+function showOrderJournal(){const keys=Object.keys(orderJournal);
+ popup('Your workshop journal',`<p>${keys.length} of 3 workshop seals earned. Compare your own patterns, or try an order again with new yarns.</p>${keys.map(key=>`<figure class="journalSwatch"><img src="${swatchDataURL(key,orderJournal[key].rows)}" alt="${WEAVES[key].name} sample"><figcaption>${ORDERS[key].name} · ${orderJournal[key].independent} independent picks</figcaption></figure>`).join('')||'<p>No finished orders yet. The first one is yours to choose.</p>'}`,[
+ ...keys.map(key=>({label:'View '+ORDERS[key].name,fn:()=>presentOrder(key,orderJournal[key])})),{label:'Back to orders',secondary:true,fn:showOrders}]);
+}
+
 let controlsVisible=true,previousFocus=null;
 let lastVisitorInteraction=performance.now(),attentionShown=false,lastCueSignature='',pendingFocus=[];
 const visitedInfo=new Set();
@@ -171,6 +289,7 @@ function completeTutorial(){
  // Attention is deliberately delayed after every visitor interaction.
 }
 function replayTutorial(){
+ if(orderRunning()){closePopup();revealOrderClue();return;}
  if(S.anim.length){closePopup();recoverAction();return;}
  markVisitorInteraction();closeInfo();closePopup();S.started=true;tutorial.active=true;controlsVisible=true;
  if(S.phase==='complete'){resetSample(true);}
@@ -181,6 +300,7 @@ function replayTutorial(){
 }
 function nextActionSpec(){
  if(S.phase==='complete')return {label:'View finished fabric',hint:'Your 16-pick sample is complete.',run:openLiveSwatch};
+ if(orderRunning()&&S.phase==='treadle'&&!order.hint)return {label:'Reveal treadle',hint:orderColorReady()?'Choose the treadle yourself, or request a clue.':'Select a yarn for the current band first.',run:revealOrderClue};
  if(S.phase==='shuttle')return {label:'Pass the shuttle',hint:'Carry the weft through the open shed.',run:throwShuttle};
  if(S.phase==='beat')return {label:'Beat the weft',hint:'Pack the new thread into your cloth.',run:beat};
  return {label:'Open shed · Treadle '+(indexOfShed()+1),hint:'Separate the warp threads.',run:()=>pressTreadle(indexOfShed())};
@@ -192,9 +312,11 @@ function updateActionDock(){
  actionHint.textContent=moving?'Let the loom finish moving.':spec.hint;
  nextAction.textContent=moving?'Moving…':spec.label;
  nextAction.setAttribute('aria-disabled',String(moving));
+ updateOrderDock();
 }
 function recoverAction(){
  if(S.anim.length){toastMsg('Let the loom finish moving.');return;}
+ if(orderRunning()&&S.phase==='treadle'){const msg=orderColorReady()?'Try a treadle from the pattern rhythm, or reveal a clue.':orderRule().text;toastMsg(msg);announce(msg);return;}
  const spec=nextActionSpec();toastMsg('Next: '+spec.label);announce('Next: '+spec.label+'. '+spec.hint);
 }
 function startLoom(){S.started=true;if(S.phase==='choose')S.phase='treadle';closePopup();updateTargets();nextAction.focus?.({preventScroll:true});}
@@ -264,7 +386,7 @@ function presentSwatch(pattern,rows,finished){
  const descriptive=finished?`Completed 16 picks. ${weave.description}`:`${rows.length} of 16 picks woven. Each colored row is preserved exactly as placed.`;
  popup(titleText,`<figure class="swatchFigure"><img src="${data}" alt="Woven ${weave.name} textile preview" width="728" height="256"><figcaption>${finished?'Finished fabric':'Live sample'} · ${rows.length} picks</figcaption></figure><p>${descriptive}</p><p><strong>Weft yarn:</strong> ${colors||'No yarn yet'}</p><p class="subtext">This enlarged preview uses the same weave calculation and yarn colors as the fabric on the loom.</p>`,[
   {label:'Back to the loom',fn:closePopup},
-  ...(finished && (S.phase==='complete'||S.pick===0 && S.phase==='treadle')?[{label:'Weave another',secondary:true,fn:()=>{closePopup();if(S.anim.length){recoverAction();return;}resetSample(false);}}]:[]),
+  ...(finished && !orderRunning() && (S.phase==='complete'||S.pick===0 && S.phase==='treadle')?[{label:'Weave another',secondary:true,fn:()=>{closePopup();if(S.anim.length){recoverAction();return;}resetSample(false);}}]:[]),
   {label:'Save sample PNG',secondary:true,fn:()=>downloadSwatch(pattern,rows)},
   {label:'Explore the pattern',secondary:true,fn:()=>{closePopup();const id='sample_'+pattern;const def=definitions.find(d=>d.id===id);if(def)showInfo(def,true);}}
  ]);
@@ -273,6 +395,7 @@ function downloadSwatch(pattern,rows){
  const data=swatchDataURL(pattern,rows);const a=document.createElement('a');a.href=data;a.download=`Woven-${pattern}-${rows.length}-picks.png`;a.click();
 }
 function openCompletedSwatch(pattern){
+ if(order&&S.anim.length){recoverAction();return false;}
  const sample=completedSwatches[pattern];if(!sample)return false;
  markVisitorInteraction();SFX.play('inspect');presentSwatch(pattern,sample.rows,true);return true;
 }
@@ -345,6 +468,7 @@ function resetSample(keepColor=true){S.direction=1;S.pick=0;S.rows=[];S.anim=[];
  previewDismissed=false;
  S.phase=S.started?'treadle':'choose';repaintCloth();updateTargets();}
 function changePattern(value){markVisitorInteraction();if(!WEAVES[value])return;
+ if(orderRunning()){toastMsg('This order uses '+WEAVES[order.key].name+'. Use the order journal to switch projects.');return;}
  if(S.anim.length||S.phase==='shuttle'||S.phase==='beat'){recoverAction();return;}
  S.pattern=value;S.patternIndex=WEAVES[value].index;resetSample(true);
  SFX.play('pattern');toastMsg(WEAVES[value].name+' selected');announce('Selected '+WEAVES[value].name+'; new fabric ready.');}
@@ -352,13 +476,16 @@ function chooseYarn(value){
  markVisitorInteraction();if(!Number.isInteger(value)||value<0||value>=PALETTE.length)return;
  if(S.anim.length||S.phase==='shuttle'||S.phase==='beat'){recoverAction();return;}
  S.selected=value;S.started=true;
+ if(orderRunning()){order.chosenBand=orderBand();}
  if(S.phase==='complete')resetSample(true);
  else if(S.phase==='choose')S.phase='treadle';
  SFX.play('yarn');toastMsg(PALETTE[value].name+' yarn');
+ if(orderRunning()&&!orderColorReady()){orderColorPrompt();updateTargets();return;}
  announce(PALETTE[value].name+' selected. '+nextActionSpec().label+'.');updateTargets();
 }
-function pressTreadle(value){
- markVisitorInteraction();if(S.anim.length||S.phase!=='treadle'||value!==indexOfShed()){recoverAction();return;}
+function pressTreadle(value,automatic=false){
+ markVisitorInteraction();if(S.anim.length||S.phase!=='treadle'||value!==indexOfShed()||(order?.repeatEnd&&!automatic)){recoverAction();return;}
+ if(orderRunning()){if(!orderColorReady()){orderColorPrompt();return;}order.kind=automatic?'repeated':order.hint?'assisted':'independent';}
  resetTreadles();S.heldTreadle=value;S.liftMask=currentLiftMask();S.shedAmount=0;
  S.weft={progress:0,y:SHUTTLE_Y,direction:S.direction,startY:fellY(),color:threadColor(S.selected)};
  anim(.40,t=>{const p=ease(t);pedal(value,p);S.shedAmount=p;},()=>{pedal(value,1);S.shedAmount=1;});
@@ -377,11 +504,11 @@ function beat(){
  function pack(){
   if(packed)return;packed=true;
   // One logical pick, one physical contact. Update cloth and saved samples only here.
-  S.rows.push(S.selected);S.pick=S.rows.length;S.weft.progress=0;S.shedAmount=0;S.liftMask=0;repaintCloth();
+  S.rows.push(S.selected);S.pick=S.rows.length;recordOrderPick();S.weft.progress=0;S.shedAmount=0;S.liftMask=0;repaintCloth();
   SFX.play('beater');
   if(S.pick>=16){S.phase='complete';recordCompletedSwatch();}
-  else{S.phase='treadle';toastMsg(`Pick ${S.pick} woven`);}
-  announce('Pick '+S.pick+' woven. '+(S.pick>=16?'Your sample is complete.':'Now choose the next treadle.'));
+  else{S.phase='treadle';toastMsg(order&&S.pick%4===0?`Band ${S.pick/4} complete. ${ORDERS[order.key].milestones[S.pick/4-1]}`:`Pick ${S.pick} woven`);}
+  announce('Pick '+S.pick+' woven. '+(S.pick>=16?'Your sample is complete.':order&&S.pick%4===0?ORDERS[order.key].milestones[S.pick/4-1]+' Choose the next band’s yarn.':'Now choose the next treadle.'));
   completeTutorial();updateTargets();
  }
  anim(.74,t=>{
@@ -399,6 +526,7 @@ function beat(){
 }
 function finishSample(){
  SFX.play('complete');
+ if(order){const key=order.key,sample=orderJournal[key];order=null;updateTargets();if(sample){presentOrder(key,sample);return;}}
  // Showcase the actual 16-pick cloth. The sample is already stored and checked.
  const saved=completedSwatches[S.pattern];
  if(saved)presentSwatch(S.pattern,saved.rows,true);
@@ -411,6 +539,7 @@ function exitGuidedMode(){
  announce('Explore freely. Use the next action whenever you are ready to weave.');
 }
 function selectPatternFromMenu(key){
+ if(orderRunning()){closePopup();toastMsg('Finish this order or switch projects in the order journal.');return;}
  if(S.anim.length||S.phase==='shuttle'||S.phase==='beat'){closePopup();recoverAction();return;}
  if(S.pattern===key&&S.pick>0&&S.pick<16){closePopup();toastMsg('Already weaving '+WEAVES[key].name);return;}
  const apply=()=>{closePopup();changePattern(key);};
@@ -425,16 +554,18 @@ function showChoices(){
  ]);
 }
 function showHelp(){
+ if(order&&S.anim.length){recoverAction();return;}
  markVisitorInteraction();SFX.play('inspect');
  const muteLabel=SFX.muted?'Turn loom sounds on':'Mute loom sounds';
  const buttons=[
   {label:S.started?'Return to the loom':'Begin weaving',fn:startLoom},
-  {label:tutorial.active?'Explore freely':'Guide the next pick',secondary:true,fn:tutorial.active?exitGuidedMode:replayTutorial},
+  {label:orderRunning()?'Reveal next treadle':tutorial.active?'Explore freely':'Guide the next pick',secondary:true,fn:tutorial.active?exitGuidedMode:replayTutorial},
+  {label:'Workshop orders',secondary:true,fn:showOrders},
   {label:'Choose pattern or yarn',secondary:true,fn:showChoices},
   {label:controlsVisible?'Hide action controls':'Show action controls',secondary:true,fn:()=>{controlsVisible=!controlsVisible;showHelp();}},
   {label:muteLabel,secondary:true,fn:()=>{SFX.toggleMuted();showHelp();}}
  ];
- popup('Explore the loom',`<p>Weave using the physical objects, or use the <strong>next-action button</strong>. Choose a framed pattern or yarn before opening a shed.</p><ol><li>Open the shed with the indicated treadle.</li><li>Pass the shuttle through the warp.</li><li>Beat the weft into the cloth.</li></ol><p>Use <strong>Space</strong> for the next action, <strong>1–6</strong> for yarn, <strong>Q/W/E/R</strong> for the treadles, <strong>M</strong> for mute and <strong>F</strong> for fullscreen. Drag empty space to look around, scroll to zoom, and double-click to reset your view.</p><p>Click an idle object or right-click it for a workshop note. Use Help to select a pattern or yarn without finding its object. Your 16-pick samples are saved locally and can be opened using their check marks.</p><p class="subtext">An educational handloom interpretation, not a reconstruction of a specific museum machine.</p>`,buttons);
+ popup('Explore the loom',`${orderRunning()?'<p><strong>Workshop order:</strong> Follow the four-band recipe, use the numbered pedals or the loom objects, and request a treadle clue only when you want one. Demonstrate one full treadle rhythm to unlock repeats. In later bands, make at least one pick yourself before repeating. Use the order journal to change projects.</p>':''}<p>Weave using the physical objects, or use the <strong>next-action button</strong>. Choose a framed pattern or yarn before opening a shed.</p><ol><li>Open the shed with the indicated treadle.</li><li>Pass the shuttle through the warp.</li><li>Beat the weft into the cloth.</li></ol><p>Use <strong>Space</strong> for the next action, <strong>1–6</strong> for yarn, <strong>Q/W/E/R</strong> for the treadles, <strong>M</strong> for mute and <strong>F</strong> for fullscreen. Drag empty space to look around, scroll to zoom, and double-click to reset your view.</p><p>Click an idle object or right-click it for a workshop note. Use Help to select a pattern or yarn without finding its object. Your 16-pick samples are saved locally and can be opened using their check marks.</p><p class="subtext">An educational handloom interpretation, not a reconstruction of a specific museum machine.</p>`,buttons);
 }
 function nameForYarn(i){return 'Yarn bobbin'+(i?'.'+String(i).padStart(3,'0'):'');}
 function nameForTreadle(i){return 'Foot treadle'+(i?'.'+String(i).padStart(3,'0'):'');}
@@ -481,6 +612,7 @@ function addTargets(){
      openCompletedSwatch(S.pattern);return;
    }
    // Inspecting a sample should never destroy work in progress without notice.
+   if(def.kind==='pattern'&&orderRunning()){showInfo(def,true);return;}
    if(def.kind==='pattern'&&S.pick>0&&S.pick<16){
      const newKey=def.id.replace('sample_','');
      if(newKey===S.pattern){showInfo(def,true);return;}
@@ -503,7 +635,7 @@ const allowedTarget=def=>{
  if(def.kind==='help'||def.kind==='explore')return true;
  if(S.anim.length)return false;
  if(def.kind==='pattern'||def.kind==='yarn')return S.phase==='choose'||S.phase==='treadle'||S.phase==='complete';
- if(def.kind==='treadle')return S.phase==='treadle' && +def.id.slice(7)===indexOfShed();
+ if(def.kind==='treadle')return S.phase==='treadle' && (orderRunning() || +def.id.slice(7)===indexOfShed());
  if(def.kind==='shuttle')return S.phase==='shuttle';
  if(def.kind==='beater')return S.phase==='beat';
  return false;
@@ -513,7 +645,7 @@ function updateTargets(){
  for(const def of definitions){
   const button=els.get(def.id);if(!button)continue;
   const valid=allowedTarget(def);
-  const highlight=valid && (def.kind==='treadle'||def.kind==='shuttle'||def.kind==='beater');
+  const highlight=valid && (def.kind==='treadle'||def.kind==='shuttle'||def.kind==='beater') && (!orderRunning()||def.kind!=='treadle'||(order.hint&&+def.id.slice(7)===indexOfShed()));
   button.classList.toggle('active',!!highlight);button.classList.toggle('dim',!valid);
   button.classList.toggle('selected',def.kind==='pattern'&&def.id==='sample_'+S.pattern||def.kind==='yarn'&&def.id==='yarn'+S.selected);
   button.disabled=false; // every physical hotspot can open an information note
@@ -550,8 +682,8 @@ function layOut(){for(const def of definitions){const obj=n(def.name),button=els
 let initialized=false;
 function frame(now){const dt=Math.min(.05,Math.max(0,(now-tick)/1000));tick=now;
  const hadMotion=S.anim.length>0;
- for(let i=S.anim.length-1;i>=0;i--){const a=S.anim[i];a.age+=dt;let t=Math.min(1,a.age/a.duration);a.onMove(t);if(t>=1){a.onDone();S.anim.splice(i,1);}}
- if(hadMotion&&!S.anim.length){markVisitorInteraction();updateTargets();if(S.phase==='complete'&&dialog.hidden)finishSample();}
+ for(let i=S.anim.length-1;i>=0;i--){const a=S.anim[i];a.age+=dt*(order?.repeatEnd?2.2:1);let t=Math.min(1,a.age/a.duration);a.onMove(t);if(t>=1){a.onDone();S.anim.splice(i,1);}}
+ if(hadMotion&&!S.anim.length){markVisitorInteraction();if(!driveRepeat()){updateTargets();if(S.phase==='complete'&&dialog.hidden)finishSample();}}
  hushHintsUntilIdle(now);
  // Glimmer remains the idle cue. Do not actuate real mechanisms without input.
  const cloth=n('Partly woven cloth');if(cloth?.highlight>0)cloth.highlight=Math.max(0,cloth.highlight-dt*1.65);
@@ -565,18 +697,20 @@ function assertScene(){
 function init(){
  const stats=r.load(window.LOOM_MODEL_GLB_BASE64);assertScene();resetMechanics();
  r.setClothCanvas(colorCanvas);repaintCloth();S.patternIndex=WEAVES[S.pattern].index;
- addTargets();createPatternMarks();applyGuidancePresentation();updateTargets();updateSwatchDock();
+ addTargets();createPatternMarks();initOrderControls();applyGuidancePresentation();updateTargets();updateSwatchDock();
  $('#modelMeta').textContent=`Source: Millyard_Loom_Reference_Yarn.glb · ${stats.nodes} scene objects`;
  $('#loading').hidden=true;
+ if(Object.keys(orderJournal).length&&!previousTutorial){tutorial.active=false;applyGuidancePresentation();}
  if(tutorial.active){
-  popup('Weave your first thread',`<p>Make a piece of cloth on this working teaching loom. <strong>Open the shed, pass the shuttle, beat the weft.</strong> Choose a yarn or a different pattern before you begin.</p><p class="subtext">An educational interpretation of a handloom, not an Amoskeag industrial loom.</p>`,[
-  {label:'Start guided tutorial',fn:()=>{startLoom();announce('Step one of three: open the shed.');}},
+  popup('Your day in the loom room',`<p>Three fictional workshop orders are waiting. Design your own yarn bands, discover the rhythm of each pattern, and make a real woven sample.</p><p>New to weaving? A single guided pick teaches the basics, or explore the loom freely.</p><p class="subtext">An educational interpretation of a handloom, not an Amoskeag industrial loom.</p>`,[
+  {label:'Take a workshop order',fn:showOrders},
+  {label:'Start guided tutorial',secondary:true,fn:()=>{startLoom();announce('Step one of three: open the shed.');}},
   {label:'Explore freely instead',secondary:true,fn:exitGuidedMode}
   ]);
  }else{startLoom();}
  initialized=true;
  requestAnimationFrame(t=>{tick=t;frame(t);});
- window.__woven={ready:true,model:stats,state:S,tutorial,selectYarn:chooseYarn,pressTreadle,throwShuttle,beat,changePattern,replayTutorial,renderer:r,effects:FX,sounds:SFX,inspect:(id)=>{const def=definitions.find(d=>d.id===id);if(def){markVisitorInteraction();showInfo(def,true);}},getHintState:()=>({lastVisitorInteraction,attentionShown,delay:IDLE_GLIMMER_DELAY_MS,focusCount:pendingFocus.length}),advanceHintClock:hushHintsUntilIdle,savePNG,completedSwatches,openCompletedSwatch,openLiveSwatch,getSwatchImage:(key)=>completedSwatches[key]?swatchDataURL(key,completedSwatches[key].rows):null};
+ window.__woven={ready:true,workshop:{get active(){return order;},journal:orderJournal,showOrders,beginOrder:confirmOrder,revealClue:revealOrderClue,repeatBand:repeatCurrentBand},model:stats,state:S,tutorial,selectYarn:chooseYarn,pressTreadle,throwShuttle,beat,changePattern,replayTutorial,renderer:r,effects:FX,sounds:SFX,inspect:(id)=>{const def=definitions.find(d=>d.id===id);if(def){markVisitorInteraction();showInfo(def,true);}},getHintState:()=>({lastVisitorInteraction,attentionShown,delay:IDLE_GLIMMER_DELAY_MS,focusCount:pendingFocus.length}),advanceHintClock:hushHintsUntilIdle,savePNG,completedSwatches,openCompletedSwatch,openLiveSwatch,getSwatchImage:(key)=>completedSwatches[key]?swatchDataURL(key,completedSwatches[key].rows):null};
 }
 function fail(err){console.error(err);$('#loading').hidden=true;$('#fatal').hidden=false;$('#fatal').textContent='Unable to start the 3D loom: '+err.message;}
 window.addEventListener('resize',()=>{r.resize();layOut();});
@@ -598,6 +732,8 @@ window.addEventListener('keydown',e=>{
  if(e.code==='Space'&&!e.target?.closest?.('button, input, select, textarea, a')){e.preventDefault();nextActionSpec().run();}
 });
 helpBtn.addEventListener('click',showHelp);
+workshopBtn.addEventListener('click',showOrders);
+repeatBand.addEventListener('click',()=>{if(dialog.hidden)repeatCurrentBand();});
 nextAction.addEventListener('click',()=>{if(!dialog.hidden)return;if(S.anim.length){recoverAction();return;}closeInfo();nextActionSpec().run();});
 // Free exploration camera; drag only the bare scene, not physical-object targets.
 let drag=null;

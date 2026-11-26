@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>WOVEN — The Loom Room · Woven V12 · Mechanical Realism</title><link rel="stylesheet" href="src/css/style.css"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>WOVEN — The Loom Room · Woven V13 · Workshop Orders</title><link rel="stylesheet" href="src/css/style.css"></head>
 <body><main id="app">
  <canvas id="scene" aria-label="Interactive three-dimensional wooden handloom in a weaving workshop"></canvas>
  <div id="lighting" aria-hidden="true"></div>
@@ -22,8 +22,20 @@
    </button>
  </aside>
  <div id="orientation" role="note">For a larger view, turn your device sideways.</div>
+ <button id="workshopBtn" type="button" aria-label="Workshop orders and journal">Workshop orders</button>
+ <aside id="orderDock" aria-label="Current workshop order" hidden>
+   <div class="orderEyebrow">THE WORKSHOP</div>
+   <h2 id="orderName"></h2><p id="orderProgress"></p>
+   <div id="orderBands" aria-hidden="true"></div>
+   <p id="orderGoal" aria-live="polite"></p>
+   <p id="orderRhythm"></p>
+   <div id="orderYarns" aria-label="Choose yarn for this band"></div>
+   <p id="orderYarnLabel"></p>
+   <button id="repeatBand" type="button" hidden>Finish this band</button>
+ </aside>
  <section id="actionDock" hidden aria-label="Weaving controls">
    <div class="actionCopy"><span id="actionContext"></span><span id="actionHint"></span></div>
+   <div id="pedalControls" aria-label="Choose a treadle" hidden></div>
    <button id="nextAction" type="button">Open shed</button>
  </section>
  <button id="helpBtn" type="button" aria-label="Open instructions">Help</button>
