@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "owner": "LuminaryLabs-Dev/MuseumMultiverse-TheLostPages",
+  "sourceCommit": "ea09603aad121a9c55ee441c59384900d1c96a15",
+  "sourceDirty": false,
+  "basePath": "/lostpages/",
+  "publicOrigin": "https://luminarylabs.dev/lostpages",
+  "kind": "legacy-link-compatibility-only",
+  "gameRelease": false,
+  "files": [
+    {
+      "path": "ar/curators-warning/index.html",
+      "bytes": 1556,
+      "sha256": "582cdecd9d7ff44ed186ffac4fcbe00c77af39827953431e3af3ca883023b75b"
+    },
+    {
+      "path": "ar/frame-that-breathes/index.html",
+      "bytes": 1559,
+      "sha256": "ddda79138b4ef40332598320c38731cce96f6d412d6c3634dccd57372a1aef48"
+    },
+    {
+      "path": "ar/in-between-exhibit/index.html",
+      "bytes": 1558,
+      "sha256": "f6e1be2b03ceb1b6ff7e2c1bea64445acb34436508f01d0bd5356ec8279fbd4c"
+    },
+    {
+      "path": "ar/lost-childs-sketchbook/index.html",
+      "bytes": 1562,
+      "sha256": "c2a1bb191a898eeafc73b15607c9154cf4999b40b8b80e399b433d48d19f00b5"
+    },
+    {
+      "path": "ar/monster-behind-canvas/index.html",
+      "bytes": 1561,
+      "sha256": "15f4edf44d1779a9591f82239e538f743e053ef067a6a1e25e8b191128761ce2"
+    },
+    {
+      "path": "ar/secret-portal-room/index.html",
+      "bytes": 1558,
+      "sha256": "8d10a5e5322a57f129eade9f6b770272280439671ac0b03bb371176d4fbbb57c"
+    },
+    {
+      "path": "ar/sleeping-gallery/index.html",
+      "bytes": 1556,
+      "sha256": "81a878f8a0f73057b3e0d5fb70e77f6b81998d6786e9fdd85d6846b88776dcf6"
+    },
+    {
+      "path": "ar/tiny-platformer-diorama/index.html",
+      "bytes": 1563,
+      "sha256": "c9d764ac07678162a5602141ea261686310a91eb08f81e3f842291e3eb02623e"
+    },
+    {
+      "path": "index.html",
+      "bytes": 1536,
+      "sha256": "269428be708728756921a62e12cb0e41ddc8ffb334739c108a58d32668499b57"
+    },
+    {
+      "path": "redirect.mjs",
+      "bytes": 1353,
+      "sha256": "5fbf92699268ddc8bfd7b9194b13bf2f5827f12d98e5f03ce4490eb818f54615"
+    }
+  ]
+}
