@@ -221,3 +221,9 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#1a2320;col
 @media(max-height:530px) and (min-width:601px){#orderDock{top:55px;max-height:calc(100vh - 145px);overflow:auto;width:220px}#orderYarns{grid-template-columns:repeat(3,minmax(44px,1fr))}.orderYarn{height:44px}#toast{bottom:95px}}
 
 #orderRhythm{margin:0 0 7px;font:500 11px/1.35 system-ui;color:#69573d}
+
+/* V14 — review candidate: accessibility, recovery, and historical context. */
+#fatal{padding:24px;gap:16px}#fatal button{justify-self:center;min-height:44px;padding:10px 20px;border:1px solid #bfa47b;border-radius:8px;background:#f2e2bd;color:#25392e;font:650 14px system-ui;cursor:pointer}
+#dialogBody a{color:#315742;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}#dialogBody a:focus-visible,#fatal button:focus-visible{outline:3px solid #a2773d;outline-offset:3px}
+#dialogActions button{min-height:44px}#infoClose,#swatchHide{min-width:44px;min-height:44px}
+@media(prefers-reduced-motion:reduce){#glimmer{display:none}.target .halo,.target.clicked .halo{animation:none!important;transition:none!important}#toast,#bubble,.tip{transition:none!important}}

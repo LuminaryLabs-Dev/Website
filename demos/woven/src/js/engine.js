@@ -315,7 +315,7 @@ class Renderer{
  }
  updateCloth(){if(!this.texture||!this.clothCanvas)return;const gl=this.gl;gl.bindTexture(gl.TEXTURE_2D,this.texture);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,this.clothCanvas);gl.generateMipmap(gl.TEXTURE_2D);}
  render(dt){
-   const k=Math.min(1,Math.max(0,dt)*4.2);
+   const k=this.reducedMotion?1:Math.min(1,Math.max(0,dt)*4.2);
    this.focusSmooth[0]+=(this.focusTarget[0]-this.focusSmooth[0])*k;
    this.focusSmooth[1]+=(this.focusTarget[1]-this.focusSmooth[1])*k;
    this.resize();this.elapsed+=dt;this.updateScene();

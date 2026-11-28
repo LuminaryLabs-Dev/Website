@@ -31,7 +31,7 @@ class Attention {
     return s && Number.isFinite(s.x)&&Number.isFinite(s.y)&&s.z>-1 && s.z<1 ? s : null;
   }
   burst(name,count=20){
-    const p=this.point(name);if(!p)return;
+    if(this.reduced)return;const p=this.point(name);if(!p)return;
     const n=this.reduced?6:Math.min(42,count);
     for(let i=0;i<n;i++){
       const theta=(i/n)*Math.PI*2+Math.random()*.24, speed=22+Math.random()*85;
