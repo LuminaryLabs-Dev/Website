@@ -1,0 +1,344 @@
+{
+  "scope": "internal first-playable R06 candidate, not public-release artifact",
+  "releaseGate": "blocked-browser-device-rights",
+  "revision": "R06",
+  "base": "/lostpages/",
+  "target": "https://luminarylabs.dev/lostpages/",
+  "enginePin": "55b7f33f6d008b2e3b120e370f09b96ed73105e9",
+  "pagesImplemented": [
+    "page01"
+  ],
+  "legacyRouteAliases": 8,
+  "files": [
+    {
+      "path": "ar/curators-warning/index.html",
+      "bytes": 330,
+      "sha256": "9e9ca7f6832dbc9526843fdcb81baf6567999e9ee77677be39d237b89a8b3e4d"
+    },
+    {
+      "path": "ar/frame-that-breathes/index.html",
+      "bytes": 330,
+      "sha256": "c1a12fc5405633971eca37c8c62d75112d47df55089e87fddae9a765591b0e70"
+    },
+    {
+      "path": "ar/in-between-exhibit/index.html",
+      "bytes": 330,
+      "sha256": "7e608bf0a43c2a2c46f5ea5d409f37535e75f20ccada2f5faf816dad0958fad5"
+    },
+    {
+      "path": "ar/lost-childs-sketchbook/index.html",
+      "bytes": 330,
+      "sha256": "156819434bac1e55ac87400d26b8bce51762d15882fa347608400c63cf7398e8"
+    },
+    {
+      "path": "ar/monster-behind-canvas/index.html",
+      "bytes": 330,
+      "sha256": "85a1d052b2e52199464a10fef9587fb17c6f7c83841260d5f8838e046599a626"
+    },
+    {
+      "path": "ar/secret-portal-room/index.html",
+      "bytes": 330,
+      "sha256": "6e91b38955d17fd5bf5dad6fd4b203456234be717947db76ac57a92abb301eb5"
+    },
+    {
+      "path": "ar/sleeping-gallery/index.html",
+      "bytes": 330,
+      "sha256": "7959534aaff1caa8fa156c22f2cb5046dfe2f2192de36649c930180ea68d1f8c"
+    },
+    {
+      "path": "ar/tiny-platformer-diorama/index.html",
+      "bytes": 330,
+      "sha256": "a201ff0792009ed7552e443142b0daffd70eafc0036db0a627f2b7dae9e58e93"
+    },
+    {
+      "path": "assets/JR.glb",
+      "bytes": 2997220,
+      "sha256": "ec645a913a148b87fb8ce32a710304c951854918ca720b2c48cc8311070aa5a6"
+    },
+    {
+      "path": "assets/Museum_P25.glb",
+      "bytes": 2537172,
+      "sha256": "cdec5b116f875580fe26316bc0bab50c6876f7499cde9d5b88dd69625800b2ef"
+    },
+    {
+      "path": "game/core.mjs",
+      "bytes": 12766,
+      "sha256": "cbf02c2a913fa76850235df59761b9a384228cac2d783c1b2daa3502734e4c37"
+    },
+    {
+      "path": "game/gltf.mjs",
+      "bytes": 4672,
+      "sha256": "169e9834b27dda0826283cfeed85a66007c28423003822787211c7c8b81e39c0"
+    },
+    {
+      "path": "game/host.mjs",
+      "bytes": 5932,
+      "sha256": "a4b1b60ea9cafec5fa0d4a9ce4b018b9a58dd5a31497b715b3bb8b161cdb3205"
+    },
+    {
+      "path": "game/input.mjs",
+      "bytes": 2303,
+      "sha256": "b039fb4d250aad7753346e4b7765d2b64b3734a6aa6113cdb9920952c0e8a2e0"
+    },
+    {
+      "path": "game/layout.mjs",
+      "bytes": 6380,
+      "sha256": "8886e8f25ce072880fa7d30fa68214c5940ec7ec8212b454745dcdff957dbe68"
+    },
+    {
+      "path": "game/presentation.mjs",
+      "bytes": 1606,
+      "sha256": "eb04613c95eb94b7a85d3b17012b0b29b36fe1c98b2b019e0615d3e63eb105f4"
+    },
+    {
+      "path": "game/renderer.mjs",
+      "bytes": 8666,
+      "sha256": "0de978bf9aac4d97d3db78d0f3649547cac5602d80adc317fee6d4597cedb78a"
+    },
+    {
+      "path": "index.html",
+      "bytes": 1961,
+      "sha256": "e90b5696229c5b3470c2c6fcdce95487c8abc8c7ca388ae277fb0520dea0fa13"
+    },
+    {
+      "path": "style.css",
+      "bytes": 4510,
+      "sha256": "22b96f3f4c3ef88b178124ca1a4652fac8ea40ab6ec8f3578f9d8e46e5df8359"
+    },
+    {
+      "path": "vendor/legacy/journey-progress.mjs",
+      "bytes": 12964,
+      "sha256": "ba0a40b3aaed5eb089e34701646ebeda9362c4ed6f93ee57f1f269b3179fdf2d"
+    },
+    {
+      "path": "vendor/legacy/storage-port.mjs",
+      "bytes": 1606,
+      "sha256": "ba1c8c9e23f5ba4e2c1a47e0c3f2991f18ae2d8cd7e6d632394995c7ab4ebb9b"
+    },
+    {
+      "path": "vendor/nexusengine/package.json",
+      "bytes": 2546,
+      "sha256": "ceeefc615f4a203d154639829fdb3017e638c8f4702aeb93a94ac338d56b65c7"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-capability-kit.js",
+      "bytes": 7202,
+      "sha256": "878d860d3b353065cd01f35040e4b40ac3c5d12c80cfdf1d6864b4317f9f3b64"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-input-kit/actions.js",
+      "bytes": 626,
+      "sha256": "6092547cc2ae2ad257ff6ae35fe694748df7fa4cd6ff8025da9b80313172086b"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-input-kit/adapters.js",
+      "bytes": 375,
+      "sha256": "144339dc93161c2c677f687205447a496abf6335a1dafaf3129f42170240150f"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-input-kit/bindings.js",
+      "bytes": 324,
+      "sha256": "a7a12c466a40cb19ced158bac9fa4b09acf87e9c85f7dd3ec2073f03ab8b1f01"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-input-kit/contexts.js",
+      "bytes": 534,
+      "sha256": "148615c1c4e0b71d83c90188d16c5f0689851bb2bef00f18bd8a8879d2d147d7"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-input-kit/index.js",
+      "bytes": 1089,
+      "sha256": "cef8a150c005f9a394c6b01f8cdbdf8cbe37feda681596c66b16ff04d13b6456"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-input-kit/intent.js",
+      "bytes": 794,
+      "sha256": "0d669bc785a485f3c17a1dbbc9664f324e87b7b2cba9a1fc894a48f843f62d4c"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-interaction-kit/activation.js",
+      "bytes": 422,
+      "sha256": "c63c09b782155386252fdb2c387af09126075d7ddff5a52770fa084441d1fc7c"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-interaction-kit/affordances.js",
+      "bytes": 511,
+      "sha256": "47d57e7eebf7cc924f7226695829cb1af61ca6176d1e32a9542406f7277ea23e"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-interaction-kit/index.js",
+      "bytes": 966,
+      "sha256": "d6aef6aaa3f9de57fda7546998cd6cbb616ea079712f08569cd97d688ec98e59"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-interaction-kit/prompts.js",
+      "bytes": 397,
+      "sha256": "36d206866b4adfb685cde28e25b728d4aa17f70dcab434465b54707d6e41646a"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-interaction-kit/results.js",
+      "bytes": 406,
+      "sha256": "ab08a3a58feb70822e53d3b7782147d2fd4403d901e09668206051e85c90876e"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-interaction-kit/targets.js",
+      "bytes": 450,
+      "sha256": "74ee50ac86a3e100a50c4d9794a00a2f12bbc5e470e7341119f9d41ed5406b9b"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-motion-kit/index.js",
+      "bytes": 587,
+      "sha256": "fa58e59e236c163f289cacd2c4b55d0d654b31261760a18792244c3dc195261e"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-persistence-kit/index.js",
+      "bytes": 609,
+      "sha256": "e668adc892ca86a31ea754c18f4cb31814a5927bb6e29e526534d691b750f575"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-physics-kit/index.js",
+      "bytes": 614,
+      "sha256": "3fee2cc82475786a0e674d966f879f224156a5b8d60658243adcc8762d1f31a7"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-scene-kit/constants.js",
+      "bytes": 1001,
+      "sha256": "222f08c9012189e47af856de9452b610abd76729358c1bf60ec7816861e3a391"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-scene-kit/descriptors.js",
+      "bytes": 2993,
+      "sha256": "8ac89d1c9e26792026bb1d036a615dc3b83d8ced2d17205fbeb5567c6d554391"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-scene-kit/host-contract.js",
+      "bytes": 2212,
+      "sha256": "125067a85bc7743cb866a046684fa32a1e64b15051f113dd83ef540da14bd1d9"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-scene-kit/hosts/headless-scene-host.js",
+      "bytes": 915,
+      "sha256": "ec89a6e5909f022fa4c8e7dc7b11c0a53ead53d3dde40b25bf7cc84638c1b933"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-scene-kit/hosts/native-scene-host.js",
+      "bytes": 596,
+      "sha256": "8535b274b64f383d6e797ecf41a09ad0bb598e18d97a235c733e2036aedb828a"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-scene-kit/hosts/web-scene-host.js",
+      "bytes": 1687,
+      "sha256": "381d4a113b7a7fcc072e8b733d005a8e9632871202828b17dabef01d33c54eba"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-scene-kit/index.js",
+      "bytes": 13110,
+      "sha256": "276effac9423e1ef47df2bc5835bcc5fee424e390529a270d5f05cb34f4816ff"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-scene-kit/ledgers.js",
+      "bytes": 546,
+      "sha256": "b66c4976111f936b50005c58dbcd317affaba87580d76bbfb544098047f958cf"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-scene-kit/state.js",
+      "bytes": 1689,
+      "sha256": "5a56c5e23183eefcd14c6f3c3a5ae0c969d48e8de9d46f20f40dd6243f374272"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-scene-kit/transitions.js",
+      "bytes": 2856,
+      "sha256": "d1e68414be771d40b74896a8a246d229357823cda3b59622702d5e9a5093c40f"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/core-scene-kit/utils.js",
+      "bytes": 900,
+      "sha256": "a6f250ac4674f214d834f38ae5f62f87431fcf3a8d51ab0af4d67033625a89db"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/realtime-core-kit/index.js",
+      "bytes": 2642,
+      "sha256": "d70686cc0e123624cc05ea73bce900567de6a2f1e0715ab75e5babbd00960b6c"
+    },
+    {
+      "path": "vendor/nexusengine/src/core-kits/sequence-core-kit/index.js",
+      "bytes": 2827,
+      "sha256": "a3e897ed9e5fec228e26089b560b02a43e2e66436eb00468657b248a94ddea8e"
+    },
+    {
+      "path": "vendor/nexusengine/src/domain-api.js",
+      "bytes": 6271,
+      "sha256": "6759caa64600c2a45f0aeb63e360081872c22e73b122c79a0541f1f98066f58f"
+    },
+    {
+      "path": "vendor/nexusengine/src/domain-path.js",
+      "bytes": 5557,
+      "sha256": "542d0fb0c9753162ae7fe3eebf7c3fc7de13197fbc04af907613b870bc8f0713"
+    },
+    {
+      "path": "vendor/nexusengine/src/domain-service-kit.js",
+      "bytes": 12808,
+      "sha256": "2f0ae50630b4fcafd60fdfea9523e90e3a8f78070b5471e8872cb130f7062fa1"
+    },
+    {
+      "path": "vendor/nexusengine/src/ecs.js",
+      "bytes": 20231,
+      "sha256": "4c4766512e737d4a64cc453de16b406ed62114120e738ff81696224572d1b002"
+    },
+    {
+      "path": "vendor/nexusengine/src/engine.js",
+      "bytes": 10687,
+      "sha256": "3c68c49cd148437e771d06cef7f9ae074ac5e7e2cc67cf927f40a3aa17cbc058"
+    },
+    {
+      "path": "vendor/nexusengine/src/input-intent-kit.js",
+      "bytes": 2887,
+      "sha256": "2d520df38c24d749ae6b4691c4840329aef9c0a2b303e167bfc6313833d5417c"
+    },
+    {
+      "path": "vendor/nexusengine/src/interaction-target-kit.js",
+      "bytes": 3731,
+      "sha256": "bf126fcbdfd739be3c3704faf0563a35892ce4c4da21af9eff0db796498b1924"
+    },
+    {
+      "path": "vendor/nexusengine/src/objective-flow-kit.js",
+      "bytes": 5041,
+      "sha256": "a17bdfd0e9b924e4fa1af5ffe8a02ea1ccee558bbb2ea817733fa25584b94b57"
+    },
+    {
+      "path": "vendor/nexusengine/src/renderers.js",
+      "bytes": 50612,
+      "sha256": "da385cfce733ea7d1815541216afc816d106042fdcf0e5d206824d0d777de6de"
+    },
+    {
+      "path": "vendor/nexusengine/src/runtime-kit.js",
+      "bytes": 7469,
+      "sha256": "794973b28bcc7859ccdfc5f209135a65cfaf500b7622b02e8f271affab7275bf"
+    },
+    {
+      "path": "vendor/nexusengine/src/sequence-node-library.js",
+      "bytes": 11833,
+      "sha256": "1d4edf5a7da704f651ea6979a85f298a662f5216ffb04884275632b34bc13c47"
+    },
+    {
+      "path": "vendor/nexusengine/src/sequence-node.js",
+      "bytes": 47782,
+      "sha256": "52a9a434948111ee5334b2c814417e6beb3ba76a3254b202f762128b34722061"
+    },
+    {
+      "path": "vendor/nexusengine/src/sequences.js",
+      "bytes": 12838,
+      "sha256": "10f501d968d4cee14c449d6627187a9aa9644d2ad85e3775e3acb300adeac9f1"
+    },
+    {
+      "path": "vendor/nexusengine/src/shaders.js",
+      "bytes": 9308,
+      "sha256": "2523c171c2d0952ecc4137e86e4788b62a7ed0532eed1a4d571d7e1d19ad6885"
+    },
+    {
+      "path": "vendor/nexusengine/src/surfaces.js",
+      "bytes": 2932,
+      "sha256": "9d845b4581049861625311622af8eab032aacbdcb4c4164934be278153b82e3d"
+    }
+  ]
+}

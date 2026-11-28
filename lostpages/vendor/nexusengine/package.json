@@ -1,0 +1,52 @@
+{
+  "name": "nexusengine",
+  "version": "0.0.3",
+  "description": "A realtime ECS runtime with subscribable engine surfaces.",
+  "type": "module",
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "bin": {
+    "nexus-editor": "./bin/nexus-editor.mjs"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./release": "./src/release.js",
+    "./foundation": "./src/foundation/index.js",
+    "./domain-path": "./src/domain-path.js",
+    "./domain-api": "./src/domain-api.js",
+    "./core-kits": "./src/core-kits/index.js",
+    "./core-kits/core-capability-kit": "./src/core-kits/core-capability-kit.js",
+    "./core-kits/core-domains": "./src/core-kits/core-domains.js",
+    "./core-kits/core-scene-kit/constants": "./src/core-kits/core-scene-kit/constants.js",
+    "./core-kits/core-scene-kit/descriptors": "./src/core-kits/core-scene-kit/descriptors.js",
+    "./core-kits/core-scene-kit/scene-registry": "./src/core-kits/core-scene-kit/scene-registry.js",
+    "./core-kits/core-scene-kit/scene-transition-ledger": "./src/core-kits/core-scene-kit/scene-transition-ledger.js",
+    "./core-kits/core-scene-kit/host-contract": "./src/core-kits/core-scene-kit/host-contract.js",
+    "./core-kits/core-scene-kit/hosts/headless-scene-host": "./src/core-kits/core-scene-kit/hosts/headless-scene-host.js",
+    "./core-kits/core-scene-kit/hosts/web-scene-host": "./src/core-kits/core-scene-kit/hosts/web-scene-host.js",
+    "./core-kits/core-scene-kit/hosts/web-html-scene-host": "./src/core-kits/core-scene-kit/hosts/web-html-scene-host.js",
+    "./core-kits/core-scene-kit/hosts/native-scene-host": "./src/core-kits/core-scene-kit/hosts/native-scene-host.js",
+    "./core-kits/core-scene-kit/hosts/rust-native-scene-host": "./src/core-kits/core-scene-kit/hosts/rust-native-scene-host.js",
+    "./core-kits/core-headless-editor-kit": "./src/core-kits/core-headless-editor-kit/index.js",
+    "./core-kits/core-headless-editor-kit/transports/stdio": "./src/core-kits/core-headless-editor-kit/transports/stdio-transport.js",
+    "./core-kits/*": "./src/core-kits/*/index.js"
+  },
+  "scripts": {
+    "automation:preflight": "node scripts/automation-preflight.mjs",
+    "test": "node tests/run-all.mjs",
+    "test:release": "node tests/release-0.0.3-run-all.mjs",
+    "benchmark:scene": "node benchmarks/core-scene-kit-loop.mjs",
+    "release:manifest": "node scripts/generate-dsk-manifest.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "docs",
+    "README.md",
+    "RELEASE_0.0.3.md"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}
