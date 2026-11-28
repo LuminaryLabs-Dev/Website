@@ -42,10 +42,26 @@ const ORDERS={
 };
 const CHAPTERS=['plain','twill','basket'];
 const STORY={
- plain:{title:'I · A place at the table',scene:'Morning. Alex has just moved into a new home in Manchester. A shared meal is planned for tonight, and the bare table needs a little warmth.',mission:'Make a balanced cloth with the tightest, most frequent crossings. Two colors return in alternating bands.',riddle:'Look for the structure where every single thread alternates over and under.',reward:'The first sample is ready for the table. Alex has found out how separate threads can hold together. Now a friend arrives to help prepare the meal.'},
- twill:{title:'II · The maker’s apron',scene:'Midday. Alex’s friend is helping in the kitchen. They bring a request for an apron fabric sample with a recognizable diagonal and room for a richer palette.',mission:'Find the pattern whose crossings travel diagonally. Design four different bands that belong together.',riddle:'Look for a raised pair that shifts one position on each new row.',reward:'The apron sample has a diagonal rhythm. The friend can recognize how changing the sequence changes the structure, not just the color. There is one more errand before dinner.'},
- basket:{title:'III · A journey to the market',scene:'Afternoon. Alex heads toward the market for bread. A cloth with larger paired crossings and a mirrored design will complete the basket.',mission:'Find the pattern made of grouped threads. Make the two middle bands match, with the outside bands matching each other.',riddle:'Look for blocks formed by two adjacent threads and two successive rows.',reward:'The basket sample brings the three experiments together. Alex returns to share the meal with a new understanding of the cloth that connects ordinary life.'}
+ plain:{title:'I · The table',scene:'Morning. Alex is preparing a meal in a new Manchester home.',mission:'Choose the closest alternating crossings.',riddle:'Look for single thread alternations.',reward:'The table has its first sample. A friend arrives.'},
+ twill:{title:'II · The apron',scene:'Midday. Alex’s friend needs an apron for the kitchen.',mission:'Find the diagonal weave. Choose four different yarns.',riddle:'A raised pair shifts each row.',reward:'The apron sample is ready. Time to visit the market.'},
+ basket:{title:'III · The market',scene:'Afternoon. Bread awaits at the market. Alex needs a basket cloth.',mission:'Find paired crossings. Mirror two colors.',riddle:'Two threads and two rows form each block.',reward:'Three samples, one shared meal. Alex heads home.'}
 };
+const TIMES={plain:'Morning',twill:'Midday',basket:'Afternoon'};
+let pendingCommission=null;
+const commissionSlip=$('#commissionSlip'),commissionTime=$('#commissionTime'),commissionTitle=$('#commissionTitle'),commissionMission=$('#commissionMission');
+function updateCommission(){
+ const key=pendingCommission||nextChapter();
+ commissionSlip.hidden=!dialog.hidden||(!pendingCommission&&orderRunning())||!key;
+ if(key){commissionTime.textContent=TIMES[key];commissionTitle.textContent=STORY[key].title;commissionMission.textContent=pendingCommission?STORY[key].mission:'Read commission';}
+ $('#loomStage').dataset.time=orderRunning()?TIMES[order.key]:(key?TIMES[key]:'Evening');
+}
+function openCommission(){if(S.anim.length){recoverAction();return;}const key=pendingCommission||nextChapter();if(orderRunning()&&!pendingCommission){showOrders();return;}if(key)showChapter(key);else showEnding();}
+function selectCommissionPattern(key){
+ if(!pendingCommission)return false;
+ const target=pendingCommission;
+ if(key!==target){SFX.play('inspect');toastMsg('Compare the crossings.');announce('Compare the crossings.');return true;}
+ pendingCommission=null;confirmOrder(key);return true;
+}
 function chapterUnlocked(key){const i=CHAPTERS.indexOf(key);return i>=0&&(!!orderJournal[key]||CHAPTERS.slice(0,i).every(k=>!!orderJournal[k]));}
 function nextChapter(){return CHAPTERS.find(k=>!orderJournal[k])||null;}
 const ORDER_KEY='woven-loom-v13-workshop-orders';
@@ -78,7 +94,7 @@ function orderRule(){
  return {colors,text:band===0?'Choose your first yarn.':'Choose a new, contrasting yarn.'};
 }
 function orderColorReady(){return !orderRunning() || (order.chosenBand===orderBand() && orderRule().colors.includes(S.selected));}
-function orderColorPrompt(){const msg=tutorial.active?orderRule().text:order.chosenBand!==orderBand()?'This band needs a yarn choice. Compare the recipe and your previous bands.':'That yarn choice doesn’t match this band’s design. Compare the recipe and your previous bands, or ask for a clue.';toastMsg(msg);announce(msg);}
+function orderColorPrompt(){const msg=tutorial.active?orderRule().text:order.chosenBand!==orderBand()?'Choose a yarn.':'Compare your bands.';toastMsg(msg);announce(msg);}
 function initOrderControls(){
  for(let i=0;i<4;i++){const b=document.createElement('span');b.className='orderBand';orderBands.append(b);orderBandMarks.push(b);
   const pedal=document.createElement('button');pedal.type='button';pedal.textContent=String(i+1);const key=document.createElement('kbd');key.textContent=['Q','W','E','R'][i];key.setAttribute('aria-hidden','true');pedal.append(key);pedal.setAttribute('title','Keyboard '+['Q','W','E','R'][i]);pedal.setAttribute('aria-label','Press treadle '+(i+1));pedal.addEventListener('click',()=>{if(dialog.hidden){closeInfo();pressTreadle(i);}});pedalControls.append(pedal);orderPedals.push(pedal);}
@@ -86,17 +102,17 @@ function initOrderControls(){
 }
 function canRepeat(){return orderRunning()&&!order.repeatEnd&&!S.anim.length&&S.phase==='treadle'&&S.pick%4!==0&&S.pick>=WEAVES[order.key].sequence.length&&orderColorReady();}
 function updateOrderDock(){
- const active=orderRunning(),show=active&&S.started&&dialog.hidden,busy=S.anim.length>0;
- workshopBtn.hidden=!dialog.hidden;workshopBtn.textContent='Adventure journal';
- clearBtn.hidden=!S.started||!dialog.hidden;clueBtn.hidden=!S.started||!dialog.hidden||S.phase==='complete';clueBtn.textContent=clueLevel===1&&clueState===currentClueState()?'Show me':'Need a clue?';
+ const active=orderRunning(),show=active&&S.started&&dialog.hidden&&!pendingCommission,busy=S.anim.length>0;
+ workshopBtn.hidden=!dialog.hidden;workshopBtn.textContent='Journal';updateCommission();
+ clearBtn.hidden=!S.started||!dialog.hidden;clueBtn.hidden=!dialog.hidden||(!pendingCommission&&(!S.started||S.phase==='complete'));clueBtn.textContent=clueLevel===1&&clueState===currentClueState()?'Show me':'Clue';
  orderDock.hidden=!show;pedalControls.hidden=!S.started||!dialog.hidden||!controlsVisible;
  orderPedals.forEach((b,i)=>{b.disabled=busy||!!order?.repeatEnd;b.classList.toggle('clued',!!explicitClueTarget()&&explicitClueTarget()==='treadle'+i);});
  shuttleBtn.disabled=beaterBtn.disabled=busy||!!order?.repeatEnd;
  if(!active){repeatBand.hidden=true;return;}
  const band=orderBand();
- orderName.textContent=STORY[order.key].title;orderProgress.textContent=`${S.pick}/16 picks · band ${band+1} of 4`;
+ orderName.textContent=STORY[order.key].title;orderProgress.textContent=`${S.pick}/16`;
  orderGoal.textContent=ORDERS[order.key].recipe;
- orderRhythm.textContent=WEAVES[order.key].name+' · '+ORDERS[order.key].object;
+ orderRhythm.textContent=STORY[order.key].mission;
  orderYarnLabel.textContent=PALETTE[S.selected].name;
  orderBandMarks.forEach((b,i)=>{b.textContent=String(i+1);b.classList.toggle('done',S.pick>=(i+1)*4);b.classList.remove('current');const c=S.rows[i*4];b.style.background=Number.isInteger(c)?PALETTE[c].hex:'';});
  orderYarnButtons.forEach((b,i)=>{b.setAttribute('aria-pressed',String(S.selected===i));b.disabled=busy||!!order.repeatEnd;});
@@ -106,46 +122,50 @@ function updateOrderDock(){
 function showOrders(){
  if(S.anim.length){recoverAction();return;}
  const next=nextChapter();
- const cards=CHAPTERS.map(key=>`<div class="orderCard"><strong>${STORY[key].title}</strong><span>${orderJournal[key]?'Sample collected':chapterUnlocked(key)?'Available chapter':'Later in the journey'}</span><p>${chapterUnlocked(key)?STORY[key].scene:'Complete the earlier chapters to open this part of the story.'}</p></div>`).join('');
- popup('A day in Manchester',`<p>Help Alex prepare for a shared meal. Discover three different woven structures, one story at a time. Every sample adds something to the day.</p><div class="orderCards">${cards}</div><p class="subtext">${Object.keys(orderJournal).length} of 3 samples collected. No timer, no penalty for exploring or requesting help. Alex and the workshop are fictional.</p>`,[
-  ...(S.started?[{label:orderRunning()?'Resume current chapter':'Return to the loom',fn:closePopup}]:[]),
-  ...CHAPTERS.filter(chapterUnlocked).map(key=>({label:(orderJournal[key]?'Revisit: ':'Begin: ')+STORY[key].title,fn:()=>showChapter(key)})),
-  {label:next?'Collected samples':'View the completed adventure',secondary:true,fn:next?showOrderJournal:showEnding},
-  {label:'Free weaving',secondary:true,fn:()=>confirmOrder(null)},
-  ...(!S.started?[{label:'Start guided tutorial',secondary:true,fn:()=>{order=null;replayTutorial();}}]:[])
+ const cards=CHAPTERS.map(key=>`<div class="orderCard"><strong>${STORY[key].title}</strong><span>${orderJournal[key]?'Collected':chapterUnlocked(key)?'Ready':'Locked'}</span></div>`).join('');
+ popup('Workshop journal',`<p>${Object.keys(orderJournal).length}/3 samples · Manchester</p><div class="orderCards">${cards}</div><p class="subtext">A fictional workshop.</p>`,[
+  ...(S.started?[{label:'Back to loom',fn:closePopup}]:[]),
+  ...CHAPTERS.filter(chapterUnlocked).map(key=>({label:STORY[key].title,fn:()=>showChapter(key)})),
+  {label:next?'Samples':'Evening',secondary:true,fn:next?showOrderJournal:showEnding},
+  {label:'Free weaving',secondary:true,fn:()=>{pendingCommission=null;confirmOrder(null);}},
+  {label:'Guided pick',secondary:true,fn:replayTutorial},
+  {label:'Close',secondary:true,fn:closePopup}
  ]);
 }
-function showChapter(key,feedback=''){
+function showChapter(key,feedback='',compare=false){
  if(!chapterUnlocked(key)){showOrders();return;}
- if(orderRunning()&&order.key===key){closePopup();return;}
+ if(orderRunning()&&order.key===key){pendingCommission=null;closePopup();return;}
+ if(S.anim.length||S.phase==='shuttle'||S.phase==='beat'){closePopup();recoverAction();return;}
  const story=STORY[key];
- const swatches=CHAPTERS.map(k=>`<figure class="chapterSwatch"><img src="${structureDataURL(k)}" alt="${WEAVES[k].name} crossing structure"><figcaption>${WEAVES[k].name}</figcaption></figure>`).join('');
- popup(story.title,`<p>${story.scene}</p><p><strong>Your challenge:</strong> ${story.mission}</p><p>Which of these woven structures fits the request?</p><div class="chapterSwatches">${swatches}</div>${feedback?`<p class="chapterFeedback" role="status">${feedback}</p>`:''}`, [
-  ...CHAPTERS.map(k=>({label:WEAVES[k].name,fn:()=>{if(k!==key){showChapter(key,'Look closely at the crossings. That structure is different from the one the request describes.');return;}confirmOrder(key);}})),
-  {label:'Ask for a clue',secondary:true,fn:()=>showChapter(key,story.riddle)},
-  {label:'Back to adventure',secondary:true,fn:showOrders}
+ const swatches=compare?`<div class="chapterSwatches">${CHAPTERS.map(k=>`<figure class="chapterSwatch"><img src="${structureDataURL(k)}" alt="${WEAVES[k].name} crossing structure"><figcaption>${WEAVES[k].name}</figcaption></figure>`).join('')}</div>`:'';
+ popup(story.title,`<p>${story.scene}</p><p class="mission">${story.mission}</p>${swatches}${feedback?`<p class="chapterFeedback" role="status">${feedback}</p>`:''}`,[
+  {label:'Use rack',fn:()=>{pendingCommission=key;closePopup();r.focusOn?.('Sample frame.001');updateTargets();}},
+  ...(compare?CHAPTERS.map(k=>({label:WEAVES[k].name,fn:()=>{if(k!==key){showChapter(key,'Compare the crossings.',true);return;}pendingCommission=null;confirmOrder(key);}})):[{label:'Compare',secondary:true,fn:()=>showChapter(key,feedback,true)}]),
+  {label:'Clue',secondary:true,fn:()=>showChapter(key,story.riddle,compare)},
+  {label:'Journal',secondary:true,fn:showOrders},
+  {label:'Close',secondary:true,fn:closePopup}
  ]);
 }
 function showEnding(){
  if(nextChapter()){showOrders();return;}
- popup('Evening · A place for us',`<p>Alex has brought three experiments home: a balanced table cloth, a diagonal apron sample and a paired market cloth. Three different structures, made by the same loom and the choices you made.</p><div class="endingGallery">${CHAPTERS.map(k=>`<figure class="journalSwatch"><img src="${swatchDataURL(k,orderJournal[k].rows)}" alt="Your ${WEAVES[k].name} sample"><figcaption>${WEAVES[k].name} · ${ORDERS[k].object}</figcaption></figure>`).join('')}</div><p>What changed between them? The arrangement of warp and weft, the order of the sheds, and your yarn design. In Manchester’s mills, related principles were used in powered textile production.</p><p class="subtext">Your three samples are collected. Real cloth would require more weaving, secured ends and finishing before use. The story is an imagined modern workshop, not a historical reconstruction.</p>`,[
- {label:'Explore Manchester’s textile history',fn:showManchester},{label:'View collected samples',fn:showOrderJournal},{label:'Back to the adventure',secondary:true,fn:showOrders},{label:'Return to the loom',secondary:true,fn:closePopup}]);
+ popup('Evening · A place for us',`<p>Three samples. One shared meal.</p><div class="endingGallery">${CHAPTERS.map(k=>`<figure class="journalSwatch"><img src="${swatchDataURL(k,orderJournal[k].rows)}" alt="Your ${WEAVES[k].name} sample"><figcaption>${WEAVES[k].name}</figcaption></figure>`).join('')}</div><p>Same loom. Different crossings.</p><p class="subtext">Teaching samples, not finished textiles.</p>`,[
+ {label:'Manchester',fn:showManchester},{label:'Samples',secondary:true,fn:showOrderJournal},{label:'Journal',secondary:true,fn:showOrders},{label:'Back to loom',secondary:true,fn:closePopup}]);
 }
-
 function confirmOrder(key){
+ pendingCommission=null;
  if(key!==null&&!chapterUnlocked(key)){showOrders();return;}
  if(S.anim.length||S.phase==='shuttle'||S.phase==='beat'){closePopup();recoverAction();return;}
  if(orderRunning()&&key===order.key){closePopup();return;}
  if(S.pick>0&&S.pick<16||orderRunning()){
-  popup('Start a different project?',`<p>This will discard the unfinished ${S.pick}-pick sample. Finished samples and workshop seals stay saved.</p>`,[{label:'Keep current cloth',fn:closePopup},{label:key?'Start new order':'Switch to free weaving',secondary:true,fn:()=>beginOrder(key)}]);return;
+  popup('Change commission?',`<p>Clear ${S.pick} unfinished picks? Collected samples stay.</p>`,[{label:'Keep cloth',fn:closePopup},{label:key?'Start commission':'Free weaving',secondary:true,fn:()=>beginOrder(key)}]);return;
  }
  beginOrder(key);
 }
 function beginOrder(key){
  if(S.anim.length||S.phase==='shuttle'||S.phase==='beat'||(key!==null&&(!ORDERS[key]||!chapterUnlocked(key))))return;
- order=null;tutorial.active=false;controlsVisible=true;clearClue();applyGuidancePresentation();S.started=true;
+ pendingCommission=null;order=null;tutorial.active=false;controlsVisible=true;clearClue();applyGuidancePresentation();S.started=true;
  if(key){S.pattern=key;S.patternIndex=WEAVES[key].index;order={key,chosenBand:-1,hint:false,independent:0,assisted:0,repeated:0,kind:'independent',repeatEnd:0,stopRepeat:false};}
- resetSample(true);startLoom();
+ resetSample(true);r.resetView?.();startLoom();
  if(order){toastMsg(WEAVES[key].name+' selected');announce(STORY[key].mission+' '+ORDERS[key].recipe+'.');}
 }
 function revealOrderClue(){requestClue(true);}
@@ -153,7 +173,7 @@ function revealOrderClue(){requestClue(true);}
 function repeatCurrentBand(){
  if(order?.repeatEnd){order.stopRepeat=true;updateOrderDock();return;}
  if(!canRepeat())return;
- order.repeatEnd=Math.min(16,4*(orderBand()+1));order.stopRepeat=false;toastMsg('Repeating the remaining picks in this band.');driveRepeat();
+ order.repeatEnd=Math.min(16,4*(orderBand()+1));order.stopRepeat=false;toastMsg('Repeating band.');driveRepeat();
 }
 function driveRepeat(){
  if(!order?.repeatEnd||S.anim.length)return false;
@@ -171,16 +191,17 @@ function recordOrderPick(){
  }
 }
 function presentOrder(key,sample){
- const b=ORDERS[key],data=swatchDataURL(key,sample.rows),colors=[...new Set(sample.rows.map(i=>PALETTE[i].name))].join(', '),next=nextChapter();
- popup('Chapter complete — '+STORY[key].title,`<p class="orderSeal">SAMPLE COLLECTED · ${Object.keys(orderJournal).length}/3</p><figure class="swatchFigure"><img src="${data}" alt="Your finished ${WEAVES[key].name} sample" width="728" height="256"><figcaption>${b.object} · ${b.recipe}</figcaption></figure><p>${STORY[key].reward}</p><p>${b.lesson}</p><p class="subtext">Your yarns: ${colors}. This is a 16-pick teaching sample, not a finished full-size textile.</p>`,[
-  {label:next?'Continue the adventure':'See the evening finale',fn:next?()=>showChapter(next):showEnding},
-  {label:'Save sample PNG',secondary:true,fn:()=>downloadSwatch(key,sample.rows)},{label:'Clear the loom',secondary:true,fn:confirmClear},{label:'Collected samples',secondary:true,fn:showOrderJournal},{label:'Back to the loom',secondary:true,fn:closePopup}]);
+ const b=ORDERS[key],data=swatchDataURL(key,sample.rows),next=nextChapter();
+ popup('Collected · '+STORY[key].title,`<p class="orderSeal">${Object.keys(orderJournal).length}/3 SAMPLES</p><figure class="swatchFigure"><img src="${data}" alt="Your finished ${WEAVES[key].name} sample" width="728" height="256"><figcaption>${WEAVES[key].name} · ${b.recipe}</figcaption></figure><p>${STORY[key].reward}</p>`,[
+  {label:next?'Next commission':'Evening',fn:next?()=>showChapter(next):showEnding},
+  {label:'Inspect weave',secondary:true,fn:()=>{closePopup();showInfo(definitions.find(d=>d.id==='sample_'+key),true);}},
+  {label:'Save PNG',secondary:true,fn:()=>downloadSwatch(key,sample.rows)},
+  {label:'Clear loom',secondary:true,fn:confirmClear},{label:'Samples',secondary:true,fn:showOrderJournal},{label:'Back to loom',secondary:true,fn:closePopup}]);
 }
 function showOrderJournal(){const keys=CHAPTERS.filter(k=>orderJournal[k]);
- popup('Your adventure journal',`<p>${keys.length} of 3 samples collected. Compare the structures you discovered.</p>${keys.map(key=>`<figure class="journalSwatch"><img src="${swatchDataURL(key,orderJournal[key].rows)}" alt="${WEAVES[key].name} sample"><figcaption>${STORY[key].title} · ${WEAVES[key].name}</figcaption></figure>`).join('')||'<p>The journey is waiting to begin.</p>'}`,[
- ...keys.map(key=>({label:'View '+STORY[key].title,fn:()=>presentOrder(key,orderJournal[key])})),{label:'Back to adventure',secondary:true,fn:showOrders}]);
+ popup('Collected cloth',`<p>${keys.length}/3 samples</p><div class="endingGallery">${keys.map(key=>`<figure class="journalSwatch"><img src="${swatchDataURL(key,orderJournal[key].rows)}" alt="${WEAVES[key].name} sample"><figcaption>${WEAVES[key].name}</figcaption></figure>`).join('')||'<p>Empty rack.</p>'}</div>`,[
+ ...keys.map(key=>({label:WEAVES[key].name,fn:()=>presentOrder(key,orderJournal[key])})),{label:'Journal',secondary:true,fn:showOrders}]);
 }
-
 let controlsVisible=true,previousFocus=null;
 let lastVisitorInteraction=performance.now(),attentionShown=false,lastCueSignature='',pendingFocus=[];
 const visitedInfo=new Set();
@@ -206,16 +227,17 @@ function explicitClueTarget(){
  return null;
 }
 function requestClue(direct=false){
+ if(pendingCommission){showChapter(pendingCommission,STORY[pendingCommission].riddle);return;}
  if(!S.started||S.anim.length||S.phase==='complete')return;
  markVisitorInteraction();closeInfo();if(!dialog.hidden)closePopup();
  const key=currentClueState();clueLevel=direct?2:(key===clueState?Math.min(2,clueLevel+1):1);clueState=key;
  if(orderRunning()&&orderColorReady()){
   if(S.phase==='treadle')order.hint=true;else if(order.kind==='independent')order.kind='assisted';
  }
- if(S.phase==='treadle'&&orderRunning()&&!orderColorReady())clueMessage=clueLevel===2?orderRule().text:'Compare this band to the letters in the recipe and the colors you have already woven.';
- else if(S.phase==='treadle')clueMessage=clueLevel===2?'Try treadle '+(indexOfShed()+1)+'.':(orderRunning()?ORDERS[order.key].rhythm: 'Study the sample’s crossing order. The treadles separate the warp into different sheds.');
- else if(S.phase==='shuttle')clueMessage=clueLevel===2?'Use the shuttle (S) to carry the weft across.':'The warp is open. What carries the crosswise thread?';
- else if(S.phase==='beat')clueMessage=clueLevel===2?'Use the beater (B) to pack the thread.':'The weft is across the opening. What brings it against the cloth edge?';
+ if(S.phase==='treadle'&&orderRunning()&&!orderColorReady())clueMessage=clueLevel===2?orderRule().text:'Compare this band with earlier colors.';
+ else if(S.phase==='treadle')clueMessage=clueLevel===2?'Try treadle '+(indexOfShed()+1)+'.':(orderRunning()?ORDERS[order.key].rhythm: 'Study the crossing order.');
+ else if(S.phase==='shuttle')clueMessage=clueLevel===2?'Pass the shuttle.':'What carries the crosswise thread?';
+ else if(S.phase==='beat')clueMessage=clueLevel===2?'Pull the beater.':'What packs the new thread?';
  clueText.textContent=clueMessage;cluePanel.hidden=false;announce(clueMessage);updateTargets();
 }
 function applyGuidancePresentation(){
@@ -294,22 +316,22 @@ const n=name=>r.node(name);
 function ar(ids){return ids.map(n).filter(Boolean)}
 function move(names,key,value){for(const obj of ar(names))obj.transform[key]=value;}
 const INSPECT={
- yarn:{title:'Yarn and the weft',text:'Each bobbin is a different yarn color. The warp threads are prepared on the loom before weaving; the weft is the crosswise yarn carried by the shuttle. You can change the weft color between picks to make stripes.'},
- treadle:{title:'Treadles and shafts',text:'The wooden pedals select groups of warp ends. In this vertical teaching loom the guide eyes separate those groups front to back while the top and cloth edge stay fixed. The simplified four-shaft control illustrates a shed, not a historical treadle linkage.'},
- shuttle:{title:'The shuttle',text:'A shuttle carries the weft from one side of the loom to the other through the opened shed. It returns on the next pick, so the cloth grows as a continuous sequence of crossings.'},
- beater:{title:'The reed and beater',text:'After a shuttle pass, the reed pushes the new weft against the growing edge of the fabric, called the fell. This packs the picks together and gives the cloth its structure.'},
- warp:{title:'Warp: the lengthwise threads',text:'The warp runs lengthwise, held under tension across the loom. Alternating raised warp groups create the openings needed to interlace a continuous weft. The threads are intentionally shown spaced apart so you can study the mechanism.'},
- cloth:{title:'Your growing cloth',text:'Each packed shuttle pass adds one pick of weft. The visible crossing order is determined by the selected weave structure and treadle sequence. Try changing yarn colors between picks and watch the fabric develop.'},
- basket:{title:'The yarn basket',text:'A working weaver keeps prepared yarn near the loom. In this activity, six original dyed or natural yarn choices let you experiment with color. Cotton, wool, and linen have different properties, though this is a simplified teaching model.'},
- frame:{title:'The loom frame',text:'The wooden frame supports the beams, reed, warp, and mechanism that keep threads aligned and tensioned. A handloom is operated directly by a person. Manchester’s large textile factories used mechanized and powered equipment.'},
- roller:{title:'Rollers and tension',text:'Loom beams store or take up yarn and cloth. Controlled tension matters: uneven warp tension can interfere with a clean shed and the regular packing of weft picks.'},
- ratchet:{title:'The ratchet mechanism',text:'Ratchet teeth can prevent a rotating beam from turning backward. Such mechanisms help hold a chosen tension as weaving progresses. This model illustrates the principle rather than reproducing a museum machine exactly.'},
- reed:{title:'The reed',text:'The reed separates and guides the warp ends. On this vertical teaching loom its complete frame and teeth travel down together, pushing the new weft toward the growing cloth edge before returning to rest.'},
- paper:{title:'Weaving notes',text:'Use this paper to review how to weave, replay the guided pick, and mute or restore the loom sounds. You can explore objects and their explanations without advancing the weaving sequence.'},
- mill:{title:'Manchester and the mills',text:'Manchester, New Hampshire grew around water-powered textile manufacturing, including the Amoskeag mills. This playable handloom demonstrates the basic weaving principle, not the scale or machinery of industrial factory production.'},
- plain:{title:'Plain weave',text:'With two alternating sheds, the weft passes over one group of warp ends and under the next. On the following pick the interlacement reverses. The result is a balanced, familiar cloth.'},
- twill:{title:'2/2 twill',text:'A twill lifts two neighboring groups of warp ends, then shifts the pairing on successive picks. This creates the recognizable diagonal rib and longer thread floats than plain weave.'},
- basketPattern:{title:'2×2 basket weave',text:'Two adjacent warp ends act together, and two weft picks repeat each shed before switching. The larger over-under blocks produce a checkerboard-like structure.'}
+ yarn:{title:'Yarn and the weft',text:'Warp is prepared lengthwise. The shuttle carries crosswise weft. Change weft colors between picks to make stripes.'},
+ treadle:{title:'Treadles and shafts',text:'Pedals separate warp groups to form a shed. This vertical teaching loom simplifies the four-shaft linkage.'},
+ shuttle:{title:'The shuttle',text:'The shuttle carries weft through the shed, returning on the next pick.'},
+ beater:{title:'The reed and beater',text:'The reed packs weft against the growing cloth edge, called the fell.'},
+ warp:{title:'Warp: the lengthwise threads',text:'Lengthwise threads under tension. Alternating groups open the shed. Threads are spaced here for study.'},
+ cloth:{title:'Your growing cloth',text:'Each packed shuttle pass adds one pick. The treadle sequence sets the crossings; yarn sets the color.'},
+ basket:{title:'The yarn basket',text:'Prepared yarn waits beside the loom. Cotton, wool and linen behave differently; this model simplifies those differences.'},
+ frame:{title:'The loom frame',text:'The frame supports warp tension, beams and reed. Manchester’s textile factories used powered machinery.'},
+ roller:{title:'Rollers and tension',text:'Beams store yarn or cloth. Even tension keeps sheds and picks regular.'},
+ ratchet:{title:'The ratchet mechanism',text:'Ratchet teeth stop a beam turning backward, helping maintain tension.'},
+ reed:{title:'The reed',text:'The reed separates warp ends and packs weft against the growing cloth.'},
+ paper:{title:'Weaving notes',text:'Read commissions or request a clue.'},
+ mill:{title:'Manchester and the mills',text:'Manchester grew around water-powered textile manufacturing. This handloom teaches interlacing, not factory operation.'},
+ plain:{title:'Plain weave',text:'Alternate two sheds. Each thread crosses over one and under one, producing balanced cloth.'},
+ twill:{title:'2/2 twill',text:'Raise two neighboring groups. Shift the pair each pick to create a diagonal and longer floats.'},
+ basketPattern:{title:'2×2 basket weave',text:'Two adjacent warp threads act together. Repeat each shed twice for paired blocks.'}
 };
 const EXPLORATION_FOCUS_IDS=['warp','cloth','frame','basket','roller','reed','ratchet','mill'];
 let explorationCycleIndex=-1;
@@ -375,6 +397,7 @@ function completeTutorial(){
  // Attention is deliberately delayed after every visitor interaction.
 }
 function replayTutorial(){
+ pendingCommission=null;
  if(orderRunning()){closePopup();requestClue();return;}
  if(S.anim.length){closePopup();recoverAction();return;}
  markVisitorInteraction();closeInfo();closePopup();S.started=true;tutorial.active=true;controlsVisible=true;
@@ -385,17 +408,17 @@ function replayTutorial(){
  announce('Guidance resumed. Your current cloth is preserved. '+nextActionSpec().hint);
 }
 function nextActionSpec(){
- if(S.phase==='complete')return {label:'View finished fabric',hint:'Your 16-pick sample is complete.',run:openLiveSwatch};
+ if(S.phase==='complete')return {label:'View cloth',hint:'Your 16-pick sample is complete.',run:openLiveSwatch};
  if(orderRunning()&&S.phase==='treadle'&&!order.hint)return {label:'Reveal treadle',hint:orderColorReady()?'Choose the treadle yourself, or request a clue.':'Select a yarn for the current band first.',run:revealOrderClue};
- if(S.phase==='shuttle')return {label:'Pass the shuttle',hint:'Carry the weft through the open shed.',run:throwShuttle};
- if(S.phase==='beat')return {label:'Beat the weft',hint:'Pack the new thread into your cloth.',run:beat};
- return {label:'Open shed · Treadle '+(indexOfShed()+1),hint:'Separate the warp threads.',run:()=>pressTreadle(indexOfShed())};
+ if(S.phase==='shuttle')return {label:'Shuttle',hint:'Carry the weft through the open shed.',run:throwShuttle};
+ if(S.phase==='beat')return {label:'Beater',hint:'Pack the new thread into your cloth.',run:beat};
+ return {label:'Treadle '+(indexOfShed()+1),hint:'Separate the warp threads.',run:()=>pressTreadle(indexOfShed())};
 }
 function updateActionDock(){
  const spec=nextActionSpec(), moving=S.anim.length>0;
  actionDock.hidden=!S.started||!dialog.hidden||!controlsVisible;
- actionContext.textContent=(tutorial.active?'GUIDED PICK · '+(tutorial.step+1)+'/3':WEAVES[S.pattern].name)+' · '+S.pick+'/16';
- actionHint.textContent=tutorial.active?(moving?'Let the loom finish moving.':spec.hint):PALETTE[S.selected].name;
+ actionContext.textContent=tutorial.active?'Guide '+(tutorial.step+1)+'/3':S.pick+'/16';
+ actionHint.textContent=tutorial.active?(moving?'Loom moving.':spec.hint):'';
  nextAction.hidden=!tutorial.active;
  nextAction.textContent=moving?'Moving…':spec.label;
  nextAction.setAttribute('aria-disabled',String(moving));
@@ -405,9 +428,9 @@ function updateActionDock(){
 function recoverAction(){
  let msg;
  if(S.anim.length)msg='Let the loom finish moving.';
- else if(S.phase==='complete')msg='This sample is complete. Clear the loom to begin another.';
+ else if(S.phase==='complete')msg='Sample complete.';
  else if(tutorial.active){const spec=nextActionSpec();msg='Next: '+spec.label+'. '+spec.hint;}
- else msg='That action does not fit the loom’s current state. Look at the warp and thread, or ask for a clue.';
+ else msg='Study the loom.';
  toastMsg(msg);announce(msg);
 }
 
@@ -473,19 +496,19 @@ function updateSwatchDock(){
  swatchThumbnail.src=hasCurrent?colorCanvas.toDataURL('image/png'):swatchDataURL(key,rows);
  swatchThumbnail.alt=WEAVES[key].name+' fabric woven with '+rows.length+' weft picks';
  swatchName.textContent=WEAVES[key].name;
- swatchProgress.textContent=complete?'Finished swatch · 16 picks':`Growing cloth · ${rows.length} / 16 picks`;
+ swatchProgress.textContent=complete?'16/16':`${rows.length}/16`;
  swatchDock.dataset.pattern=key;
 }
 function presentSwatch(pattern,rows,finished){
  const data=swatchDataURL(pattern,rows),weave=WEAVES[pattern];
  const colors=[...new Set(rows.map(i=>PALETTE[i].name))].join(', ');
  const titleText=finished?'Your finished '+weave.name:'Your growing '+weave.name;
- const descriptive=finished?`Completed 16 picks. ${weave.description}`:`${rows.length} of 16 picks woven. Each colored row is preserved exactly as placed.`;
- popup(titleText,`<figure class="swatchFigure"><img src="${data}" alt="Woven ${weave.name} textile preview" width="728" height="256"><figcaption>${finished?'Finished fabric':'Live sample'} · ${rows.length} picks</figcaption></figure><p>${descriptive}</p><p><strong>Weft yarn:</strong> ${colors||'No yarn yet'}</p><p class="subtext">This enlarged preview uses the same weave calculation and yarn colors as the fabric on the loom.</p>`,[
-  {label:'Back to the loom',fn:closePopup},
+ const descriptive=finished?weave.title:`${rows.length}/16 picks`;
+ popup(titleText,`<figure class="swatchFigure"><img src="${data}" alt="Woven ${weave.name} textile preview" width="728" height="256"><figcaption>${finished?'Finished fabric':'Live sample'} · ${rows.length} picks</figcaption></figure><p>${descriptive}</p><p><strong>Weft yarn:</strong> ${colors||'No yarn yet'}</p>`,[
+  {label:'Back to loom',fn:closePopup},
   ...(finished && !orderRunning() && (S.phase==='complete'||S.pick===0 && S.phase==='treadle')?[{label:'Weave another',secondary:true,fn:()=>{closePopup();if(S.anim.length){recoverAction();return;}resetSample(false);}}]:[]),
-  {label:'Save sample PNG',secondary:true,fn:()=>downloadSwatch(pattern,rows)},
-  {label:'Explore the pattern',secondary:true,fn:()=>{closePopup();const id='sample_'+pattern;const def=definitions.find(d=>d.id===id);if(def)showInfo(def,true);}}
+  {label:'Save PNG',secondary:true,fn:()=>downloadSwatch(pattern,rows)},
+  {label:'Inspect weave',secondary:true,fn:()=>{closePopup();const id='sample_'+pattern;const def=definitions.find(d=>d.id===id);if(def)showInfo(def,true);}}
  ]);
 }
 function downloadSwatch(pattern,rows){
@@ -518,7 +541,7 @@ function createPatternMarks(){
  updatePatternMarks();
 }
 function updatePatternMarks(){
- for(const [key,button] of marks)button.hidden=!completedSwatches[key];
+ for(const [key,button] of marks){const sample=completedSwatches[key];button.hidden=!sample;if(sample)button.innerHTML=`<img src="${swatchDataURL(key,sample.rows)}" alt=""><span aria-hidden="true">✓</span>`;}
 }
 function layOutPatternMarks(){
  for(const [key,button] of marks){
@@ -539,7 +562,7 @@ function popup(heading,text,buttons){
  closeInfo();markVisitorInteraction();
  dialog.dataset.view=text.includes('class="chapterSwatches"')?'puzzle':text.includes('class="orderCards"')?'journal':text.includes('class="endingGallery"')?'finale':text.includes('class="orderSeal"')?'completion':heading==='A day in Manchester'?'cover':'standard';
  title.textContent=heading;body.innerHTML=text;actions.replaceChildren();
- for(const cfg of buttons){const b=document.createElement('button');b.textContent=cfg.label;if(cfg.secondary)b.classList.add('secondary');b.addEventListener('click',cfg.fn);actions.append(b);}
+ for(const cfg of buttons){const b=document.createElement('button');b.textContent=cfg.label;b.setAttribute('aria-label',cfg.label);if(cfg.secondary)b.classList.add('secondary');b.addEventListener('click',cfg.fn);actions.append(b);}
  dialog.hidden=false;dialog.setAttribute('aria-hidden','false');modalBackground(true);updateActionDock();
  $('#dialogPanel').scrollTop=0;title.focus?.({preventScroll:true});
 }
@@ -569,11 +592,12 @@ function resetSample(keepColor=true){clearClue();S.direction=1;S.pick=0;S.rows=[
  previewDismissed=false;
  S.phase=S.started?'treadle':'choose';repaintCloth();updateTargets();saveCheckpoint();}
 function changePattern(value){markVisitorInteraction();if(!WEAVES[value])return;
- if(orderRunning()){toastMsg('This order uses '+WEAVES[order.key].name+'. Use the order journal to switch projects.');return;}
+ if(orderRunning()){toastMsg('Finish this commission.');return;}
  if(S.anim.length||S.phase==='shuttle'||S.phase==='beat'){recoverAction();return;}
  S.pattern=value;S.patternIndex=WEAVES[value].index;resetSample(true);
  SFX.play('pattern');toastMsg(WEAVES[value].name+' selected');announce('Selected '+WEAVES[value].name+'; new fabric ready.');}
 function chooseYarn(value){
+ if(pendingCommission){toastMsg('Choose a sample.');return;}
  markVisitorInteraction();if(!Number.isInteger(value)||value<0||value>=PALETTE.length)return;
  if(S.anim.length||S.phase==='shuttle'||S.phase==='beat'){recoverAction();return;}
  if(S.phase==='complete'){recoverAction();return;}
@@ -586,6 +610,7 @@ function chooseYarn(value){
  announce(PALETTE[value].name+' selected.');updateTargets();
 }
 function pressTreadle(value,automatic=false){
+ if(pendingCommission){toastMsg('Choose a sample.');return;}
  markVisitorInteraction();if(S.anim.length||S.phase!=='treadle'||value!==indexOfShed()||(order?.repeatEnd&&!automatic)){recoverAction();return;}
  if(orderRunning()){if(!orderColorReady()){orderColorPrompt();return;}order.kind=automatic?'repeated':order.hint?'assisted':'independent';}
  clearClue();resetTreadles();S.heldTreadle=value;S.liftMask=currentLiftMask();S.shedAmount=0;
@@ -635,30 +660,40 @@ function finishSample(){
 }
 
 function exitGuidedMode(){
+ pendingCommission=null;
  markVisitorInteraction();tutorial.active=false;tutorial.completed=true;
  try{window.localStorage?.setItem(TUTORIAL_KEY,'1')}catch(_){}
  applyGuidancePresentation();startLoom();
  announce('Explore freely. Look at the loom or use its manual controls. Clues are available on request.');
 }
 function selectPatternFromMenu(key){
- if(orderRunning()){closePopup();toastMsg('Finish this order or switch projects in the order journal.');return;}
+ if(orderRunning()){closePopup();toastMsg('Finish this commission.');return;}
  if(S.anim.length||S.phase==='shuttle'||S.phase==='beat'){closePopup();recoverAction();return;}
  if(S.pattern===key&&S.pick>0&&S.pick<16){closePopup();toastMsg('Already weaving '+WEAVES[key].name);return;}
  const apply=()=>{closePopup();changePattern(key);};
- if(S.pick>0&&S.pick<16){popup('Start a new pattern?',`<p>Your current ${S.pick}-pick sample will restart.</p>`,[{label:'Keep current cloth',fn:closePopup},{label:'Start new pattern',secondary:true,fn:apply}]);}
+ if(S.pick>0&&S.pick<16){popup('Start a new pattern?',`<p>Your current ${S.pick}-pick sample will restart.</p>`,[{label:'Keep cloth',fn:closePopup},{label:'New pattern',secondary:true,fn:apply}]);}
  else apply();
 }
 function showChoices(){
- popup('Pattern and yarn',`<p>Choose a pattern to begin a new sample, or a yarn for your next pick. Finish any open pick before changing.</p>`,[
+ popup('Pattern and yarn',`<p>Choose pattern or yarn.</p>`,[
   ...Object.entries(WEAVES).map(([key,w])=>({label:w.name,fn:()=>selectPatternFromMenu(key)})),
   ...PALETTE.map((color,i)=>({label:color.name,secondary:true,fn:()=>{closePopup();chooseYarn(i);}})),
-  {label:'Back to help',secondary:true,fn:showHelp}
+  {label:'Help',secondary:true,fn:showHelp}
  ]);
 }
-function showManchester(){
- popup('From hand weaving to Manchester’s mills',`<p>In this activity you operate a simplified handloom. A real loom holds the lengthwise warp under tension, creates a shed and packs each crosswise weft into the cloth.</p><p>Manchester’s Amoskeag Manufacturing Company used powered industrial machinery. The Manchester Historic Association’s company records describe power looms introduced in 1819 and preserve fabric sample books from 1893–1924.</p><p>Your fictional order demonstrates interlacing, not the speed, working conditions, or exact machinery of an Amoskeag mill. The 16 picks are a sample, not a completed full-size textile. In actual weaving, the cloth must be secured, removed and finished.</p><p><strong>Read more:</strong> <a href="https://manchesterhistoric.org/millyard-museum-2/" target="_blank" rel="noopener noreferrer">Millyard Museum</a> · <a href="https://manchesterhistoric.org/wp-content/uploads/2023/01/Amoskeag.pdf" target="_blank" rel="noopener noreferrer">Amoskeag records finding aid</a> · <a href="https://schachtspindle.com/blogs/faqs/weaving-terms" target="_blank" rel="noopener noreferrer">Weaving terms</a>.</p><p class="subtext">Independent Luminary Labs educational prototype. No museum endorsement or historical machine reconstruction is implied.</p>`,[{label:'Back to help',fn:showHelp},{label:'Return to the loom',secondary:true,fn:closePopup}]);
+function showManchester(page=0){
+ if(!Number.isInteger(page)||page<0||page>2)page=0;
+ const pages=[
+ ['Hand weaving','Warp runs lengthwise under tension. A shed opens; the shuttle carries weft across; the beater packs it.'],
+ ['Manchester’s mills','Amoskeag used powered machinery. Its records describe power looms introduced in 1819 and fabric sample books from 1893–1924.'],
+ ['Finishing cloth','These 16 picks are a sample. Actual weaving requires secured ends, removal and finishing. This fictional workshop is not an industrial reconstruction.']
+ ];
+ const [heading,copy]=pages[page];
+ popup(heading,`<p>${copy}</p><p class="subtext">${page+1}/3 · <a href="https://manchesterhistoric.org/millyard-museum-2/" target="_blank" rel="noopener noreferrer">Millyard Museum</a> · <a href="https://manchesterhistoric.org/wp-content/uploads/2023/01/Amoskeag.pdf" target="_blank" rel="noopener noreferrer">Amoskeag records</a> · <a href="https://schachtspindle.com/blogs/faqs/weaving-terms" target="_blank" rel="noopener noreferrer">Weaving terms</a></p>`,[
+ ...(page<2?[{label:'Next note',fn:()=>showManchester(page+1)}]:[]),...(page>0?[{label:'Previous note',secondary:true,fn:()=>showManchester(page-1)}]:[]),{label:'Help',secondary:true,fn:showHelp},{label:'Close',secondary:true,fn:closePopup}]);
 }
 function clearLoom(){
+ pendingCommission=null;
  // Cancel uncommitted mechanical movement, never delete completed records.
  const key=orderRunning()?order.key:null;
  order=key?{key,chosenBand:-1,hint:false,independent:0,assisted:0,repeated:0,kind:'independent',repeatEnd:0,stopRepeat:false}:null;
@@ -666,38 +701,36 @@ function clearLoom(){
  resetSample(true);previewDismissed=true;updateSwatchDock();closePopup();updateTargets();saveCheckpoint();toastMsg('The loom is clear.');announce('The loom is clear. Your collected samples are preserved.');
 }
 function confirmClear(){
- popup('Clear the loom?',`<p>${S.pick===16?'Remove the finished sample from the loom.':S.pick||S.anim.length||S.phase==='shuttle'||S.phase==='beat'?'Remove the current unfinished cloth and cancel any open pick.':'Reset the empty loom to its starting position.'} Your collected samples and completed chapters will remain.</p>`,[{label:'Keep current cloth',fn:closePopup},{label:'Clear loom',secondary:true,fn:clearLoom}]);
+ popup('Clear the loom?',`<p>Remove current cloth? Collected samples stay.</p>`,[{label:'Keep cloth',fn:closePopup},{label:'Clear loom',secondary:true,fn:clearLoom}]);
 }
 function confirmRestart(){confirmClear();}
 function showHelp(){
  markVisitorInteraction();SFX.play('inspect');
- const muteLabel=SFX.muted?'Turn loom sounds on':'Mute loom sounds';
- const buttons=[
-  {label:S.started?'Return to the loom':'Begin weaving',fn:startLoom},
-  ...(S.started&&S.phase!=='complete'?[{label:'Ask for a clue',fn:()=>requestClue()}]:[]),
-  ...(!orderRunning()?[{label:tutorial.active?'Explore freely':'Guide one pick',secondary:true,fn:tutorial.active?exitGuidedMode:replayTutorial}]:[]),
-  ...(canRepeat()?[{label:'Repeat remaining band (assisted)',secondary:true,fn:()=>{closePopup();repeatCurrentBand();}}]:[]),
-  {label:'Adventure journal',secondary:true,fn:showOrders},
-  {label:'Choose pattern or yarn',secondary:true,fn:showChoices},
-  {label:controlsVisible?'Hide manual controls':'Show manual controls',secondary:true,fn:()=>{controlsVisible=!controlsVisible;showHelp();}},
-  {label:muteLabel,secondary:true,fn:()=>{toggleSound();showHelp();}},
-  {label:'Manchester textile history',secondary:true,fn:showManchester},
-  {label:'Clear the loom',secondary:true,fn:confirmClear}
- ];
- popup('Explore the loom',`<p>The loom responds to what you do. Study the warp, the shuttle and the cloth. Use the workshop’s sample frames to compare structures. Ask for a clue once for a suggestion, then again for a direct answer.</p><p><strong>Controls:</strong> Click or tap the physical parts, or use the manual buttons. <strong>1–6</strong> select yarn, <strong>Q/W/E/R</strong> select treadles, <strong>S</strong> moves the shuttle and <strong>B</strong> operates the beater. <strong>M</strong> mutes, <strong>F</strong> toggles fullscreen. Drag to look around; scroll to zoom.</p><p>Right-click or inspect workshop objects for notes. Clear the loom whenever needed; collected samples stay in your journal.</p><p class="subtext">An educational handloom interpretation, not a reconstruction of a specific museum machine.</p>`,buttons);
+ popup('Workshop notes','<p>Explore the machinery. Ask only when needed.</p>',[
+ {label:'Close',fn:closePopup},
+ ...(S.started&&S.phase!=='complete'?[{label:'Clue',fn:()=>requestClue()}]:[]),
+ ...(!orderRunning()?[{label:tutorial.active?'Free weaving':'Guided pick',secondary:true,fn:tutorial.active?exitGuidedMode:replayTutorial}]:[]),
+ ...(canRepeat()?[{label:'Repeat band',secondary:true,fn:()=>{closePopup();repeatCurrentBand();}}]:[]),
+ {label:'Keys',secondary:true,fn:showKeys},{label:'Materials',secondary:true,fn:showChoices},
+ {label:'Manchester',secondary:true,fn:()=>showManchester(0)},{label:'Clear loom',secondary:true,fn:confirmClear}
+ ]);
 }
-
+function showKeys(){
+ popup('Workshop keys','<dl class="keyList"><dt>1–6</dt><dd>Yarn</dd><dt>Q W E R</dt><dd>Treadles</dd><dt>S</dt><dd>Shuttle</dd><dt>B</dt><dd>Beater</dd><dt>M / F</dt><dd>Sound / fullscreen</dd><dt>Drag / scroll</dt><dd>View / zoom</dd><dt>Right-click</dt><dd>Inspect</dd></dl>',[
+ {label:controlsVisible?'Hide tools':'Show tools',fn:()=>{controlsVisible=!controlsVisible;showKeys();}},
+ {label:'Help',secondary:true,fn:showHelp},{label:'Close',secondary:true,fn:closePopup}]);
+}
 function nameForYarn(i){return 'Yarn bobbin'+(i?'.'+String(i).padStart(3,'0'):'');}
 function nameForTreadle(i){return 'Foot treadle'+(i?'.'+String(i).padStart(3,'0'):'');}
 const definitions=[];
-for(let i=0;i<6;i++)definitions.push({id:'yarn'+i,name:nameForYarn(i),label:'Use '+PALETTE[i].name,kind:'yarn',action:()=>chooseYarn(i)});
-for(let i=0;i<4;i++)definitions.push({id:'treadle'+i,name:nameForTreadle(i),label:'Press treadle '+(i+1),kind:'treadle',action:()=>pressTreadle(i)});
-definitions.push({id:'shuttle',name:'Shuttle body',label:'Pass the shuttle',kind:'shuttle',action:throwShuttle});
-definitions.push({id:'beater',name:'Reed frame.001',label:'Beat the weft',kind:'beater',action:beat});
-definitions.push({id:'sample_plain',name:'Sample frame',label:'Try plain weave',kind:'pattern',action:()=>changePattern('plain')});
-definitions.push({id:'sample_twill',name:'Sample frame.001',label:'Try 2/2 twill',kind:'pattern',action:()=>changePattern('twill')});
-definitions.push({id:'sample_basket',name:'Sample frame.002',label:'Try basket weave',kind:'pattern',action:()=>changePattern('basket')});
-definitions.push({id:'help',name:'Pinned paper',label:'How to weave',kind:'help',action:showHelp});
+for(let i=0;i<6;i++)definitions.push({id:'yarn'+i,name:nameForYarn(i),label:PALETTE[i].name,kind:'yarn',action:()=>chooseYarn(i)});
+for(let i=0;i<4;i++)definitions.push({id:'treadle'+i,name:nameForTreadle(i),label:'Treadle '+(i+1),kind:'treadle',action:()=>pressTreadle(i)});
+definitions.push({id:'shuttle',name:'Shuttle body',label:'Shuttle',kind:'shuttle',action:throwShuttle});
+definitions.push({id:'beater',name:'Reed frame.001',label:'Beater',kind:'beater',action:beat});
+definitions.push({id:'sample_plain',name:'Sample frame',label:'Plain weave',kind:'pattern',action:()=>changePattern('plain')});
+definitions.push({id:'sample_twill',name:'Sample frame.001',label:'2/2 twill',kind:'pattern',action:()=>changePattern('twill')});
+definitions.push({id:'sample_basket',name:'Sample frame.002',label:'Basket weave',kind:'pattern',action:()=>changePattern('basket')});
+definitions.push({id:'help',name:'Pinned paper',label:'Commission',kind:'help',action:openCommission});
 // Discovery targets remain readable even when they are not the current weaving action.
 for(const [id,name,label,topic] of [
  ['warp','91 individually spaced warp threads','Inspect the warp','warp'],
@@ -720,9 +753,12 @@ function addTargets(){
   button.setAttribute('aria-label',def.label);
   button.onclick=()=>{
    markVisitorInteraction();
-   if(def.kind==='help'){showHelp();return;}
+   if(def.kind==='help'){openCommission();return;}
+   if(def.id==='paper'){showHelp();return;}
+   if(def.id==='mill'){showManchester();return;}
+   if(def.kind==='pattern'&&selectCommissionPattern(def.id.slice(7)))return;
    if(def.id==='cloth'&&!tutorial.active){openLiveSwatch();return;}
-   if(!S.started){S.started=true;closePopup();}
+   if(!S.started){S.started=true;if(S.phase==='choose')S.phase='treadle';closePopup();}
    const canAct=allowedTarget(def);
    if(def.kind==='explore'){showInfo(def,true);return;}
    if(!canAct){recoverAction();return;}
@@ -733,13 +769,14 @@ function addTargets(){
    }
    // Inspecting a sample should never destroy work in progress without notice.
    if(def.kind==='pattern'&&orderRunning()){showInfo(def,true);return;}
+   if(pendingCommission&&def.kind!=='explore'){toastMsg('Choose a sample.');return;}
    if(def.kind==='pattern'&&S.pick>0&&S.pick<16){
      const newKey=def.id.replace('sample_','');
      if(newKey===S.pattern){showInfo(def,true);return;}
      const note=noteFor(def);
-     popup('Try '+note.title+'?',`<p>${note.text}</p><p><strong>Switching will restart your current ${S.pick}-pick sample.</strong> You can keep weaving instead.</p>`,[
-      {label:'Keep my current cloth',fn:closePopup},
-      {label:'Start new pattern',secondary:true,fn:()=>{closePopup();def.action();showInfo(def,true);}}
+     popup('Try '+note.title+'?',`<p>Clear ${S.pick} unfinished picks?</p>`,[
+      {label:'Keep cloth',fn:closePopup},
+      {label:'New pattern',secondary:true,fn:()=>{closePopup();def.action();showInfo(def,true);}}
      ]);
      return;
    }
@@ -823,13 +860,9 @@ function init(){
  if(Object.keys(orderJournal).length&&!previousTutorial){tutorial.active=false;applyGuidancePresentation();}
  checkpointReady=true;
  if(resumed){
-  popup('Continue your weaving',`<p>Your ${WEAVES[S.pattern].name} sample has ${S.pick} of 16 picks. Any interrupted shuttle movement was returned to the last completed pick.</p><p class="subtext">Finished swatches and workshop seals are preserved on this device.</p>`,[{label:'Resume weaving',fn:startLoom},{label:'Clear the loom',secondary:true,fn:confirmClear}]);
+  popup('Continue your weaving',`<p>${WEAVES[S.pattern].name} · ${S.pick}/16 picks</p>`,[{label:'Resume weaving',fn:startLoom},{label:'Clear loom',secondary:true,fn:confirmClear}]);
  }else{
-  popup('A day in Manchester',`<p>Morning light fills the loom room. Alex is preparing for a shared meal in a new home, and three textile requests will take you through the day.</p><p>Discover which pattern each request needs, choose yarns, and learn how to make the threads hold together. The loom is yours to investigate. Help is always available if you want it.</p><p class="subtext">A fictional workshop inspired by Manchester’s textile heritage.</p>`,[
-  {label:'Begin the adventure',fn:showOrders},
-  {label:'Explore freely instead',secondary:true,fn:exitGuidedMode},
-  {label:'Start guided tutorial',secondary:true,fn:replayTutorial}
- ]);
+  closePopup();updateTargets();commissionSlip.focus?.({preventScroll:true});
  }
 
  initialized=true;
@@ -846,8 +879,9 @@ window.addEventListener('keydown',e=>{
    else app?.requestFullscreen?.().catch?.(()=>{});
    return;
  }
- if(e.key==='Escape'&&!dialog.hidden){if(!S.started)exitGuidedMode();else closePopup();return;}
+ if(e.key==='Escape'&&!dialog.hidden){closePopup();return;}
  if(e.key==='Tab'&&!dialog.hidden){const items=Array.from(dialog.querySelectorAll?.('a[href],button:not([disabled]),[tabindex="0"]')||actions.children);const first=items[0],last=items[items.length-1];if(e.shiftKey&&(document.activeElement===first||!items.includes(document.activeElement))){e.preventDefault();last?.focus?.();}else if(!e.shiftKey&&(document.activeElement===last||!items.includes(document.activeElement))){e.preventDefault();first?.focus?.();}return;}
+ if(e.key==='Escape'&&pendingCommission){pendingCommission=null;updateTargets();return;}
  if(e.key==='Escape'&&infoPanel&&!infoPanel.hidden){markVisitorInteraction();closeInfo();return;}
  if(e.key.toLowerCase()==='m'&&!e.ctrlKey&&!e.altKey&&!e.metaKey){markVisitorInteraction();toggleSound();toastMsg(SFX.muted?'Loom sounds muted':'Loom sounds on',true);return;}
  if(e.key==='?'||e.key.toLowerCase()==='h'){showHelp();return;}
@@ -862,6 +896,7 @@ helpBtn.addEventListener('click',showHelp);
 soundBtn.addEventListener('click',()=>{markVisitorInteraction();toggleSound();});
 resetViewBtn.addEventListener('click',()=>{markVisitorInteraction();r.resetView?.();});
 workshopBtn.addEventListener('click',showOrders);
+commissionSlip.addEventListener('click',openCommission);
 clearBtn.addEventListener('click',confirmClear);
 clueBtn.addEventListener('click',()=>requestClue());
 clueClose.addEventListener('click',()=>{clearClue();updateTargets();clueBtn.focus?.();});
