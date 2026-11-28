@@ -1,50 +1,60 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>WOVEN — The Loom Room · Woven V15 · A Day in Manchester</title><link rel="stylesheet" href="src/css/style.css"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>WOVEN — A Day in Manchester · V16</title><meta name="theme-color" content="#f6f3eb"><link rel="stylesheet" href="src/css/typeface.css"><link rel="stylesheet" href="src/css/style.css"></head>
 <body><main id="app">
- <canvas id="scene" aria-label="Interactive three-dimensional wooden handloom in a weaving workshop"></canvas>
- <div id="lighting" aria-hidden="true"></div>
- <canvas id="glimmer" aria-hidden="true"></canvas>
- <div id="targets" aria-label="Interactive loom objects"></div>
- <div id="patternMarks" aria-label="Completed weaving patterns"></div>
- <div id="bubble" hidden role="note"></div>
- <div id="toast" role="status" aria-live="polite"></div>
- <aside id="infoPanel" role="region" aria-labelledby="infoTitle" hidden>
-   <div class="inspectorEyebrow">WORKSHOP NOTE</div>
-   <button type="button" id="infoClose" aria-label="Close workshop note">×</button>
-   <h2 id="infoTitle"></h2><p id="infoText"></p>
-   <p class="inspectorFooter">Close when you finish reading. Right-click an object to inspect it again.</p>
- </aside>
- <aside id="swatchDock" aria-label="Live fabric preview" hidden>
-   <div class="swatchTop"><span class="swatchEyebrow">YOUR WOVEN FABRIC</span><button type="button" id="swatchHide" aria-label="Hide fabric preview">×</button></div>
-   <button type="button" id="swatchOpen" aria-label="Enlarge woven fabric preview">
-     <img id="swatchThumbnail" width="384" height="256" alt="Current woven fabric" />
-     <span id="swatchName"></span><span id="swatchProgress"></span>
-   </button>
- </aside>
- <div id="orientation" role="note">For a larger view, turn your device sideways.</div>
- <nav id="workshopBar" aria-label="Workshop actions"><button id="workshopBtn" type="button" aria-label="Adventure journal">Adventure journal</button>
- <button id="clearLoom" type="button" hidden>Clear loom</button>
- <button id="clueBtn" type="button" hidden>Need a clue?</button></nav>
- <aside id="cluePanel" role="region" aria-label="Requested clue" hidden><strong>Workshop clue</strong><p id="clueText" aria-live="polite"></p><button id="clueClose" type="button">Dismiss</button></aside>
- <aside id="orderDock" aria-label="Current workshop order" hidden>
-   <div class="orderEyebrow">THE WORKSHOP</div>
-   <h2 id="orderName"></h2><p id="orderProgress"></p>
-   <div id="orderBands" aria-hidden="true"></div>
-   <p id="orderGoal" aria-live="polite"></p>
-   <p id="orderRhythm"></p>
-   <div id="orderYarns" aria-label="Choose yarn for this band"></div>
-   <p id="orderYarnLabel"></p>
-   <button id="repeatBand" type="button" hidden>Finish this band</button>
- </aside>
+ <header id="masthead">
+   <div class="identity" aria-label="Woven — A day in Manchester"><div class="wordmark">WOVEN<span class="threadmark" aria-hidden="true"></span></div><div class="identityCopy"><span>A day in Manchester</span><small>Interactive textile experience</small></div></div>
+   <nav id="workshopBar" aria-label="Workshop actions">
+     <button id="workshopBtn" type="button" aria-label="Adventure journal">Adventure journal</button>
+     <button id="clearLoom" type="button" hidden>Clear loom</button>
+     <button id="clueBtn" type="button" hidden>Need a clue?</button>
+     <button id="soundBtn" type="button" aria-pressed="true" aria-label="Loom sound">Sound on</button>
+     <button id="helpBtn" type="button" aria-label="Open instructions">Help</button>
+   </nav>
+ </header>
+ <div id="workspace">
+   <section id="loomStage" aria-label="Interactive loom room">
+     <canvas id="scene" aria-label="Interactive three-dimensional wooden handloom in a weaving workshop"></canvas>
+     <div id="lighting" aria-hidden="true"></div>
+     <canvas id="glimmer" aria-hidden="true"></canvas>
+     <div id="targets" aria-label="Interactive loom objects"></div>
+     <div id="patternMarks" aria-label="Completed weaving patterns"></div>
+     <div class="stageCaption"><span>THE LOOM ROOM</span><span>Drag to explore · Scroll to zoom</span><button id="resetViewBtn" type="button" aria-label="Reset loom room view">Reset view</button></div>
+     <div id="bubble" hidden role="note"></div>
+     <div id="toast" role="status" aria-live="polite"></div>
+     <aside id="infoPanel" role="region" aria-labelledby="infoTitle" hidden>
+       <div class="inspectorEyebrow">FROM THE WORKSHOP</div>
+       <button type="button" id="infoClose" aria-label="Close workshop note">×</button>
+       <h2 id="infoTitle"></h2><p id="infoText"></p>
+       <p class="inspectorFooter">Close when you finish reading. Right-click an object to inspect it again.</p>
+     </aside>
+     <aside id="cluePanel" role="region" aria-label="Requested clue" hidden><div class="inspectorEyebrow">A LITTLE GUIDANCE</div><strong>Workshop clue</strong><p id="clueText" aria-live="polite"></p><button id="clueClose" type="button">Dismiss</button></aside>
+     <div id="orientation" role="note">A wider screen gives you more room to explore.</div>
+   </section>
+   <aside id="exhibitRail" aria-label="Current chapter and fabric">
+     <section id="orderDock" aria-label="Current workshop order" hidden>
+       <div class="orderEyebrow">YOUR CURRENT CHAPTER</div>
+       <h2 id="orderName"></h2><p id="orderRhythm"></p>
+       <div class="progressHeading"><span class="fieldLabel">Weaving progress</span><p id="orderProgress"></p></div>
+       <div id="orderBands" aria-hidden="true"></div>
+       <div class="recipeBox"><span class="fieldLabel">Design brief</span><p id="orderGoal" aria-live="polite"></p></div>
+       <div class="yarnHeading"><span class="fieldLabel">Yarn palette</span><p id="orderYarnLabel"></p></div>
+       <div id="orderYarns" aria-label="Choose yarn for this band"></div>
+       <button id="repeatBand" type="button" hidden>Finish this band</button>
+     </section>
+     <section id="swatchDock" aria-label="Live fabric preview" hidden>
+       <div class="swatchTop"><span class="swatchEyebrow">YOUR WOVEN FABRIC</span><button type="button" id="swatchHide" aria-label="Hide fabric preview">×</button></div>
+       <button type="button" id="swatchOpen" aria-label="Enlarge woven fabric preview"><img id="swatchThumbnail" width="384" height="256" alt="Current woven fabric" /><span id="swatchName"></span><span id="swatchProgress"></span><span class="swatchInspect">Examine fabric <span aria-hidden="true">↗</span></span></button>
+     </section>
+   </aside>
+ </div>
  <section id="actionDock" hidden aria-label="Weaving controls">
-   <div class="actionCopy"><span id="actionContext"></span><span id="actionHint"></span></div>
-   <div id="pedalControls" aria-label="Choose a treadle" hidden></div>
-   <div id="manualTools" aria-label="Manual loom controls"><button id="shuttleBtn" type="button" aria-label="Pass the shuttle">Shuttle</button><button id="beaterBtn" type="button" aria-label="Operate the beater">Beater</button></div>
+   <div class="actionCopy"><span class="controlEyebrow">ON THE LOOM</span><span id="actionContext"></span><span id="actionHint"></span></div>
+   <div class="controlGroup"><span class="controlEyebrow">TREADLES</span><div id="pedalControls" aria-label="Choose a treadle" hidden></div></div>
+   <div class="controlGroup"><span class="controlEyebrow">TOOLS</span><div id="manualTools" aria-label="Manual loom controls"><button id="shuttleBtn" type="button" aria-label="Pass the shuttle">Shuttle <kbd>S</kbd></button><button id="beaterBtn" type="button" aria-label="Operate the beater">Beater <kbd>B</kbd></button></div></div>
    <button id="nextAction" type="button" hidden>Guided action</button>
  </section>
- <button id="helpBtn" type="button" aria-label="Open instructions">Help</button>
  <div id="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" aria-hidden="false">
-   <article id="dialogPanel"><div id="dialogEyebrow">WOVEN / MANCHESTER TEXTILES</div><h1 id="dialogTitle">Weave a little history</h1><section id="dialogBody"><p>Loading the handloom...</p></section><div id="dialogActions"></div></article>
+   <article id="dialogPanel"><div id="dialogEyebrow">WOVEN <span aria-hidden="true">/</span> MANCHESTER TEXTILES</div><h1 id="dialogTitle" tabindex="-1">Weave a little history</h1><section id="dialogBody"><p>Loading the handloom...</p></section><div id="dialogActions"></div></article>
  </div>
  <div id="loading"><strong>WOVEN</strong><span>Preparing the workshop…</span></div>
  <div id="fatal" hidden role="alert"></div>

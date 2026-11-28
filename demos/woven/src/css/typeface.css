@@ -1,0 +1,8 @@
+/* MFB Oldstyle, Daniel Benjamin Miller. CC0 1.0. Century Oldstyle (1909) revival.
+   Official source: https://ctan.org/pkg/mfb-oldstyle
+   No network or font binary required to run WOVEN. If the typeface is installed
+   on the device, use it; otherwise the editorial serif stack remains readable.
+   Optional webfont preparation: see TYPEFACE.md. */
+@font-face{font-family:'Woven Oldstyle';src:local('MFB Oldstyle Regular'),local('MFBOldstyle-Regular'),local('MFB Oldstyle');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Woven Oldstyle';src:local('MFB Oldstyle Bold'),local('MFBOldstyle-Bold');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Woven Oldstyle';src:local('MFB Oldstyle Italic'),local('MFBOldstyle-Italic');font-weight:400;font-style:italic;font-display:swap}

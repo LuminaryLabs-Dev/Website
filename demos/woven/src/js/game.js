@@ -29,6 +29,9 @@ const SFX=window.WovenSound ? new window.WovenSound.SoundBank() : {play(){return
 const infoPanel=$('#infoPanel'),infoTitle=$('#infoTitle'),infoText=$('#infoText'),infoClose=$('#infoClose');
 const swatchDock=$('#swatchDock'),swatchThumbnail=$('#swatchThumbnail'),swatchName=$('#swatchName'),swatchProgress=$('#swatchProgress'),swatchOpen=$('#swatchOpen'),swatchHide=$('#swatchHide'),marksLayer=$('#patternMarks');
 const actionDock=$('#actionDock'),nextAction=$('#nextAction'),actionContext=$('#actionContext'),actionHint=$('#actionHint');
+const soundBtn=$('#soundBtn'),resetViewBtn=$('#resetViewBtn');
+function syncSoundControl(){soundBtn.textContent=SFX.muted?'Sound off':'Sound on';soundBtn.setAttribute('aria-pressed',String(!SFX.muted));}
+function toggleSound(){SFX.toggleMuted();syncSoundControl();}
 const clearBtn=$('#clearLoom'),clueBtn=$('#clueBtn'),cluePanel=$('#cluePanel'),clueText=$('#clueText'),clueClose=$('#clueClose'),shuttleBtn=$('#shuttleBtn'),beaterBtn=$('#beaterBtn');
 const IDLE_GLIMMER_DELAY_MS=7000;
 const workshopBtn=$('#workshopBtn'),orderDock=$('#orderDock'),orderName=$('#orderName'),orderProgress=$('#orderProgress'),orderGoal=$('#orderGoal'),orderRhythm=$('#orderRhythm'),orderBands=$('#orderBands'),orderYarns=$('#orderYarns'),orderYarnLabel=$('#orderYarnLabel'),repeatBand=$('#repeatBand'),pedalControls=$('#pedalControls');
@@ -78,8 +81,8 @@ function orderColorReady(){return !orderRunning() || (order.chosenBand===orderBa
 function orderColorPrompt(){const msg=tutorial.active?orderRule().text:order.chosenBand!==orderBand()?'This band needs a yarn choice. Compare the recipe and your previous bands.':'That yarn choice doesn’t match this band’s design. Compare the recipe and your previous bands, or ask for a clue.';toastMsg(msg);announce(msg);}
 function initOrderControls(){
  for(let i=0;i<4;i++){const b=document.createElement('span');b.className='orderBand';orderBands.append(b);orderBandMarks.push(b);
-  const pedal=document.createElement('button');pedal.type='button';pedal.textContent=String(i+1);pedal.setAttribute('title','Keyboard '+['Q','W','E','R'][i]);pedal.setAttribute('aria-label','Press treadle '+(i+1));pedal.addEventListener('click',()=>{if(dialog.hidden){closeInfo();pressTreadle(i);}});pedalControls.append(pedal);orderPedals.push(pedal);}
- for(let i=0;i<PALETTE.length;i++){const b=document.createElement('button');b.type='button';b.className='orderYarn';b.style.background=PALETTE[i].hex;b.setAttribute('title',PALETTE[i].name);b.setAttribute('aria-label','Select '+PALETTE[i].name);b.addEventListener('click',()=>{if(dialog.hidden)chooseYarn(i);});orderYarns.append(b);orderYarnButtons.push(b);}
+  const pedal=document.createElement('button');pedal.type='button';pedal.textContent=String(i+1);const key=document.createElement('kbd');key.textContent=['Q','W','E','R'][i];key.setAttribute('aria-hidden','true');pedal.append(key);pedal.setAttribute('title','Keyboard '+['Q','W','E','R'][i]);pedal.setAttribute('aria-label','Press treadle '+(i+1));pedal.addEventListener('click',()=>{if(dialog.hidden){closeInfo();pressTreadle(i);}});pedalControls.append(pedal);orderPedals.push(pedal);}
+ for(let i=0;i<PALETTE.length;i++){const b=document.createElement('button');b.type='button';b.className='orderYarn';const chip=document.createElement('span');chip.className='yarnChip';chip.style.background=PALETTE[i].hex;chip.setAttribute('aria-hidden','true');const label=document.createElement('span');label.className='yarnLabel';label.textContent=PALETTE[i].name;b.append(chip,label);b.setAttribute('title',PALETTE[i].name);b.setAttribute('aria-label','Select '+PALETTE[i].name);b.addEventListener('click',()=>{if(dialog.hidden)chooseYarn(i);});orderYarns.append(b);orderYarnButtons.push(b);}
 }
 function canRepeat(){return orderRunning()&&!order.repeatEnd&&!S.anim.length&&S.phase==='treadle'&&S.pick%4!==0&&S.pick>=WEAVES[order.key].sequence.length&&orderColorReady();}
 function updateOrderDock(){
@@ -534,10 +537,11 @@ function modalBackground(inert){
 function popup(heading,text,buttons){
  if(dialog.hidden)previousFocus=document.activeElement;
  closeInfo();markVisitorInteraction();
+ dialog.dataset.view=text.includes('class="chapterSwatches"')?'puzzle':text.includes('class="orderCards"')?'journal':text.includes('class="endingGallery"')?'finale':text.includes('class="orderSeal"')?'completion':heading==='A day in Manchester'?'cover':'standard';
  title.textContent=heading;body.innerHTML=text;actions.replaceChildren();
  for(const cfg of buttons){const b=document.createElement('button');b.textContent=cfg.label;if(cfg.secondary)b.classList.add('secondary');b.addEventListener('click',cfg.fn);actions.append(b);}
  dialog.hidden=false;dialog.setAttribute('aria-hidden','false');modalBackground(true);updateActionDock();
- actions.children[0]?.focus?.();
+ $('#dialogPanel').scrollTop=0;title.focus?.({preventScroll:true});
 }
 function closePopup(){dialog.hidden=true;dialog.setAttribute('aria-hidden','true');modalBackground(false);markVisitorInteraction();updateActionDock();if(previousFocus?.isConnected&&!previousFocus.hidden)previousFocus.focus?.();else if(S.started)(tutorial.active&&controlsVisible?nextAction:helpBtn).focus?.();previousFocus=null;}
 function savePNG(){downloadSwatch(S.pattern,S.rows);}
@@ -676,7 +680,7 @@ function showHelp(){
   {label:'Adventure journal',secondary:true,fn:showOrders},
   {label:'Choose pattern or yarn',secondary:true,fn:showChoices},
   {label:controlsVisible?'Hide manual controls':'Show manual controls',secondary:true,fn:()=>{controlsVisible=!controlsVisible;showHelp();}},
-  {label:muteLabel,secondary:true,fn:()=>{SFX.toggleMuted();showHelp();}},
+  {label:muteLabel,secondary:true,fn:()=>{toggleSound();showHelp();}},
   {label:'Manchester textile history',secondary:true,fn:showManchester},
   {label:'Clear the loom',secondary:true,fn:confirmClear}
  ];
@@ -813,7 +817,7 @@ function assertScene(){
 function init(){
  const stats=r.load(window.LOOM_MODEL_GLB_BASE64);assertScene();const resumed=restoreCheckpoint();if(resumed&&S.pick===0)previewDismissed=true;resetMechanics();
  r.setClothCanvas(colorCanvas);repaintCloth();S.patternIndex=WEAVES[S.pattern].index;
- addTargets();createPatternMarks();initOrderControls();applyGuidancePresentation();updateTargets();updateSwatchDock();
+ addTargets();createPatternMarks();initOrderControls();syncSoundControl();applyGuidancePresentation();updateTargets();updateSwatchDock();
  $('#modelMeta').textContent=`Source: Millyard_Loom_Reference_Yarn.glb · ${stats.nodes} scene objects`;
  $('#loading').hidden=true;
  if(Object.keys(orderJournal).length&&!previousTutorial){tutorial.active=false;applyGuidancePresentation();}
@@ -845,7 +849,7 @@ window.addEventListener('keydown',e=>{
  if(e.key==='Escape'&&!dialog.hidden){if(!S.started)exitGuidedMode();else closePopup();return;}
  if(e.key==='Tab'&&!dialog.hidden){const items=Array.from(dialog.querySelectorAll?.('a[href],button:not([disabled]),[tabindex="0"]')||actions.children);const first=items[0],last=items[items.length-1];if(e.shiftKey&&(document.activeElement===first||!items.includes(document.activeElement))){e.preventDefault();last?.focus?.();}else if(!e.shiftKey&&(document.activeElement===last||!items.includes(document.activeElement))){e.preventDefault();first?.focus?.();}return;}
  if(e.key==='Escape'&&infoPanel&&!infoPanel.hidden){markVisitorInteraction();closeInfo();return;}
- if(e.key.toLowerCase()==='m'&&!e.ctrlKey&&!e.altKey&&!e.metaKey){markVisitorInteraction();SFX.toggleMuted();toastMsg(SFX.muted?'Loom sounds muted':'Loom sounds on',true);return;}
+ if(e.key.toLowerCase()==='m'&&!e.ctrlKey&&!e.altKey&&!e.metaKey){markVisitorInteraction();toggleSound();toastMsg(SFX.muted?'Loom sounds muted':'Loom sounds on',true);return;}
  if(e.key==='?'||e.key.toLowerCase()==='h'){showHelp();return;}
  if(!dialog.hidden||e.repeat||e.ctrlKey||e.altKey||e.metaKey)return;
  if(/^[1-6]$/.test(e.key))chooseYarn(+e.key-1);
@@ -855,6 +859,8 @@ window.addEventListener('keydown',e=>{
  if(tutorial.active&&e.code==='Space'&&!e.target?.closest?.('button, input, select, textarea, a')){e.preventDefault();nextActionSpec().run();}
 });
 helpBtn.addEventListener('click',showHelp);
+soundBtn.addEventListener('click',()=>{markVisitorInteraction();toggleSound();});
+resetViewBtn.addEventListener('click',()=>{markVisitorInteraction();r.resetView?.();});
 workshopBtn.addEventListener('click',showOrders);
 clearBtn.addEventListener('click',confirmClear);
 clueBtn.addEventListener('click',()=>requestClue());
