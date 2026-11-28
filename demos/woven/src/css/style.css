@@ -227,3 +227,19 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#1a2320;col
 #dialogBody a{color:#315742;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}#dialogBody a:focus-visible,#fatal button:focus-visible{outline:3px solid #a2773d;outline-offset:3px}
 #dialogActions button{min-height:44px}#infoClose,#swatchHide{min-width:44px;min-height:44px}
 @media(prefers-reduced-motion:reduce){#glimmer{display:none}.target .halo,.target.clicked .halo{animation:none!important;transition:none!important}#toast,#bubble,.tip{transition:none!important}}
+
+/* V15 — discovery-first museum experience; no state-revealing affordance until requested. */
+#clearLoom[hidden],#clueBtn[hidden],#cluePanel[hidden],#nextAction[hidden]{display:none!important}
+#clearLoom,#clueBtn{position:absolute;top:12px;min-height:44px;padding:8px 12px;border:1px solid #bfa47b;border-radius:8px;background:#24372fef;color:#fff0d3;font:650 12px system-ui;cursor:pointer;z-index:6}
+#clearLoom{left:156px}#clueBtn{left:250px}
+#clearLoom:focus-visible,#clueBtn:focus-visible,#clueClose:focus-visible,#manualTools button:focus-visible{outline:3px solid #ffe4a4;outline-offset:2px}
+#cluePanel{position:absolute;bottom:92px;right:16px;width:min(290px,calc(100% - 32px));background:#f2e5c9;color:#324839;border:1px solid #bfa47b;border-radius:10px;padding:13px;z-index:7;box-shadow:0 8px 24px #101e1b88}
+#cluePanel strong{font:600 16px Georgia}#cluePanel p{font:13px/1.5 system-ui;margin:7px 0}#clueClose{min-height:44px;padding:8px 14px;border:1px solid #a9926c;border-radius:6px;background:#344e41;color:#fff1d4;cursor:pointer}
+#manualTools{display:flex;gap:5px}#manualTools button{min-height:44px;padding:8px 12px;border-radius:6px;background:#344e41;color:#fff1d4;border:1px solid #a9926c;cursor:pointer;font:650 13px system-ui}#manualTools button:disabled{opacity:.5;cursor:wait}
+.freeWeaving .target:not(.active):not(:hover):not(:focus-visible) .halo{opacity:0}.freeWeaving .target.active .tip{opacity:1}
+.freeWeaving .target.clicked:not(.active) .halo{animation:none}
+.chapterSwatches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}.chapterSwatch{margin:0;min-width:0;text-align:center}.chapterSwatch img{display:block;width:100%;border:2px solid #bfa47b;border-radius:4px}.chapterSwatch figcaption{font:650 11px/1.35 system-ui;color:#455b4b;margin-top:4px}.chapterFeedback{padding:9px 12px;border-left:2px solid #8d9c74;background:#e7dcc1}.endingGallery{display:grid;gap:2px}
+@media(max-width:600px){#clearLoom,#clueBtn{top:8px;padding:8px;font-size:11px}#clearLoom{left:140px}#clueBtn{left:218px}#actionDock{gap:6px}#manualTools{flex:1 1 auto}#manualTools button{flex:1 1 auto}#pedalControls{order:0;flex:1 1 100%}#cluePanel{bottom:190px;right:8px;width:min(270px,calc(100% - 16px))}}
+
+#workshopBar{position:absolute;top:12px;left:12px;display:flex;flex-wrap:wrap;gap:5px;max-width:calc(100% - 24px);z-index:6}#workshopBar button{position:static;white-space:nowrap}#workshopBar #workshopBtn{padding:8px 12px}#workshopBar #clueBtn{min-width:94px}
+@media(max-width:600px){#workshopBar{top:8px;left:8px;gap:4px;max-width:calc(100% - 16px)}#workshopBar #workshopBtn{font-size:11px;padding:8px 9px}#workshopBar #clueBtn{min-width:0}}

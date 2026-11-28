@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>WOVEN — The Loom Room · Woven V14 · Workshop Orders</title><link rel="stylesheet" href="src/css/style.css"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>WOVEN — The Loom Room · Woven V15 · A Day in Manchester</title><link rel="stylesheet" href="src/css/style.css"></head>
 <body><main id="app">
  <canvas id="scene" aria-label="Interactive three-dimensional wooden handloom in a weaving workshop"></canvas>
  <div id="lighting" aria-hidden="true"></div>
@@ -22,7 +22,10 @@
    </button>
  </aside>
  <div id="orientation" role="note">For a larger view, turn your device sideways.</div>
- <button id="workshopBtn" type="button" aria-label="Workshop orders and journal">Workshop orders</button>
+ <nav id="workshopBar" aria-label="Workshop actions"><button id="workshopBtn" type="button" aria-label="Adventure journal">Adventure journal</button>
+ <button id="clearLoom" type="button" hidden>Clear loom</button>
+ <button id="clueBtn" type="button" hidden>Need a clue?</button></nav>
+ <aside id="cluePanel" role="region" aria-label="Requested clue" hidden><strong>Workshop clue</strong><p id="clueText" aria-live="polite"></p><button id="clueClose" type="button">Dismiss</button></aside>
  <aside id="orderDock" aria-label="Current workshop order" hidden>
    <div class="orderEyebrow">THE WORKSHOP</div>
    <h2 id="orderName"></h2><p id="orderProgress"></p>
@@ -36,7 +39,8 @@
  <section id="actionDock" hidden aria-label="Weaving controls">
    <div class="actionCopy"><span id="actionContext"></span><span id="actionHint"></span></div>
    <div id="pedalControls" aria-label="Choose a treadle" hidden></div>
-   <button id="nextAction" type="button">Open shed</button>
+   <div id="manualTools" aria-label="Manual loom controls"><button id="shuttleBtn" type="button" aria-label="Pass the shuttle">Shuttle</button><button id="beaterBtn" type="button" aria-label="Operate the beater">Beater</button></div>
+   <button id="nextAction" type="button" hidden>Guided action</button>
  </section>
  <button id="helpBtn" type="button" aria-label="Open instructions">Help</button>
  <div id="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" aria-hidden="false">
